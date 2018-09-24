@@ -1,0 +1,169 @@
+<div ng-include src="'views/header.html'"></div>
+<div class="page-header">
+	<h3>ข้อมูลกิจการโคนม  >  ข้อมูลจำนวนเกษตรกร สมาชิกผู้เลี้ยงโค และปริมาณน้ำนม</h3>
+</div>
+<div class="row form-group">
+	<div class="col-lg-12">
+		<button class="btn btn-danger pull-right" ng-click="goUpdate('')">
+			<span class="glyphicon glyphicon-plus"></span> 
+			บันทึกข้อมูลรายเดือน
+		</button>
+	</div>
+</div>
+<div class="row form-group">
+	<div class="col-lg-12 text-center">
+		<form name="search_form" class="form-inline">
+	  		<div class="form-group">
+			    <label for="exampleInputName2">&nbsp; ภูมิภาค : </label>
+			    &nbsp; <select name="Year" class="form-control" ng-model="condition.Region" ng-options="region.RegionID as region.RegionName for region in PersonRegion" required="required">
+			    	<option value="">กรุณาเลือก..</option>
+				</select>
+		  	</div>
+			<div class="form-group">
+			    <label for="exampleInputName2">&nbsp; เดือน : </label>
+			    &nbsp; <select name="Year" class="form-control" ng-model="condition.MonthFrom" ng-options="month.monthValue as month.monthText for month in MonthList" required="required">
+					<option value="">กรุณาเลือก..</option>
+				</select>
+		  	</div>
+			<div class="form-group">
+			    <label for="exampleInputName2">&nbsp; ปี : </label>
+			    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearFrom" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
+					<option value="">กรุณาเลือก..</option>
+				</select>
+		  	</div>
+		  	<div class="form-group">
+			    <label for="exampleInputName2">&nbsp; ถึง </label>
+		  	</div>
+		  	<div class="form-group">
+			    <label for="exampleInputName2">&nbsp; เดือน : </label>
+			    &nbsp; <select name="Year" class="form-control" ng-model="condition.MonthTo" ng-options="month.monthValue as month.monthText for month in MonthList" required="required">
+					<option value="">กรุณาเลือก..</option>
+				</select>
+		  	</div>
+			<div class="form-group">
+			    <label for="exampleInputName2">&nbsp; ปี : </label>
+			    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearTo" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
+					<option value="">กรุณาเลือก..</option>
+				</select>
+		  	</div>
+		  	<button class="btn btn-primary" ng-click="goSearch()"><span class="glyphicon glyphicon-search"></span> ค้นหา</button>
+		</form>
+	</div>
+</div>
+
+<div class="col-lg-12 table-responsive" ng-show="ViewType == 'MAIN'">
+	<table class="table table-bordered table-striped">
+		<caption>
+			
+		</caption>
+		<thead style="background-color: #BD1212; color: #FFF;">
+			<tr>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">ภูมิภาค</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">สหกรณ์</th>
+				<th colspan="2" style="text-align: center;">
+					เกษตรกร / สมาชิก<br>(ราย)
+				</th>
+				<th colspan="2" style="text-align: center;">
+					โค
+					<br>(ตัว)
+				</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">ปริมาณน้ำนม (กิโลกรัม)</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">มูลค่า (บาท)</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">ราคาเฉลี่ย (บาท / กิโลกรัม)</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">รายละเอียด</th>
+			</tr>
+			<tr>
+				<th style="text-align: center;">ทั้งหมด</th>
+				<th style="text-align: center;">ส่ง</th>
+				<th style="text-align: center;">ทั้งหมด</th>
+				<th style="text-align: center;">รีดนม</th>
+			</tr>
+		</thead>
+		<tbody >
+			<!--<tr style="background-color: #B6CCFF; padding: 5px;">
+				<td colspan="7">{{getRegionName(data.region_id)}}</td>
+			</tr>-->
+			<tr ng-repeat="data in List">
+				<td>{{data.RegionName}}</td>
+				<td>{{data.CooperativeName}}</td>
+				<td>{{data.TotalMilk}}</td>
+				<td>{{data.TotalMilkSent}}</td>
+				<td>{{data.TotalMilkBeeb}}</td>
+				<td>{{data.TotalMilkBeebSent}}</td>
+				<td>{{data.TotalMilkAmount}}</td>
+				<td>{{data.TotalValues}}</td>
+				<td>{{data.AverageValues}}</td>
+				<td>
+					<button class="btn btn-success" ng-click="viewDetail(data.Description)">
+						<span class="glyphicon glyphicon-zoom-in"></span> 
+						รายละเอียด
+					</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<div class="col-lg-12 table-responsive" ng-show="ViewType == 'DETAIL'">
+	<table class="table table-bordered table-striped">
+		<caption>
+			
+		</caption>
+		<thead style="background-color: #BD1212; color: #FFF;">
+			<tr>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">ภูมิภาค</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">สหกรณ์</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">สมาชิก</th>
+				
+				<th colspan="2" style="text-align: center;">
+					เกษตรกร / สมาชิก<br>(ราย)
+				</th>
+				<th colspan="2" style="text-align: center;">
+					โค
+					<br>(ตัว)
+				</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">ปริมาณน้ำนม (กิโลกรัม)</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">มูลค่า (บาท)</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">ราคาเฉลี่ย (บาท / กิโลกรัม)</th>
+				
+			</tr>
+			<tr>
+				<th style="text-align: center;">ราย</th>
+				<th style="text-align: center;">ส่งนม</th>
+				<th style="text-align: center;">ทั้งหมด</th>
+				<th style="text-align: center;">รีดนม</th>
+			</tr>
+		</thead>
+		<tbody >
+			<tr ng-repeat="data in DetailList">
+				<td>{{data.RegionName}}</td>
+				<td>{{data.CooperativeName}}</td>
+				<td>{{data.MemberName}}</td>
+				<td>{{data.TotalMilk}}</td>
+				<td>{{data.TotalMilkSent}}</td>
+				<td>{{data.TotalMilkBeeb}}</td>
+				<td>{{data.TotalMilkBeebSent}}</td>
+				<td>{{data.TotalMilkAmount}}</td>
+				<td>{{data.TotalValues}}</td>
+				<td>{{data.AverageValues}}</td>
+				
+			</tr>
+		</tbody>
+		<tr>
+			<td></td>
+			<td>รวม</td>
+			<td></td>
+			<td ng-repeat="data in DetailSummary" style="text-align: center; vertical-align: middle;">
+				{{data.values}}
+			</td>
+		</tr>
+	</table>
+</div>
+<div class="page-header">
+&nbsp;
+</div>
+<style type="text/css">
+	a{
+		color: #FFF;
+	}
+</style>

@@ -1,0 +1,119 @@
+<div ng-include src="'views/header.html'"></div>
+<div class="page-header">
+	<h3>ข้อมูลกิจการโคนม  >  ข้อมูลผสมเทียม</h3>
+</div>
+<div class="col-lg-10 col-lg-offset-1" ng-form="form_data">
+	<div class="row form-group">
+		<div class="field-label col-lg-1 col-md-1 col-sm-12 col-xs-12">
+			ชื่อสหกรณ์
+		</div>
+		<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+			<select class="form-control" ng-model="Insemination.cooperative_id" ng-options="data.id as data.cooperative_name for data in Cooperative" required="required">
+				<option value="">กรุณาเลือก..</option>
+			</select>
+		</div>
+		<div class="field-label col-lg-1 col-md-1 col-sm-12 col-xs-12">
+			เดือน
+		</div>
+		<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+			<select name="Year" class="form-control" ng-model="Insemination.months" ng-options="month.monthValue as month.monthText for month in MonthList" required="required">
+					<option value="">กรุณาเลือก..</option>
+				</select>
+		</div>
+		<div class="field-label col-lg-1 col-md-1 col-sm-12 col-xs-12">
+			ปี
+		</div>
+		<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+			<select name="Year" class="form-control" ng-model="Insemination.years" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
+					<option value="">กรุณาเลือก..</option>
+				</select>
+		</div>
+		<div class="field-label col-lg-1 col-md-1 col-sm-12 col-xs-12">
+			<button class="btn btn-info" ng-click="goSearch(Insemination)" ng-disabled="!form_data.$valid">
+				<span class="glyphicon glyphicon-search"></span> 
+				ค้นหา
+			</button>
+		</div>
+	</div>
+	<hr>
+	<div ng-show="Search || InseminationDetailList.length > 0">
+		<div class="row form-group">
+			<div class="col-lg-12">
+				<button class="btn btn-danger  pull-right" ng-click="addInseminationDetail()" ><!--ng-disabled="!form_data.$valid"-->
+				<span class="glyphicon glyphicon-plus"></span> 
+				เพิม
+			</button>
+			</div>
+		</div>
+		<div ng-repeat="InseminationDetail in InseminationDetailList" ng-init="parentIndex = $index">
+			<fieldset style="border: 1px solid #999; padding: 10px; margin-top: 10px;">
+			<div ng-form="sub_form_data">
+				<div class="row form-group">
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						จำนวนโคที่ได้รับบริการ (ตัว)
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+						<input type="text" class="form-control" ng-model="InseminationDetail.cow_amount">
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						ค่าบริการ (บาท)
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+						<input type="text" class="form-control" ng-model="InseminationDetail.service_cost">
+					</div>
+					<div class="col-lg-2">
+						<button class="btn btn-danger" ng-click="removeDetail(InseminationDetail.id, parentIndex)">
+							<span class="glyphicon glyphicon-trash"></span> 
+							
+						</button>
+					</div>
+				</div>
+				<div class="row form-group">
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						ค่าน้ำเชื้อ (บาท)
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+						<input type="text" class="form-control" ng-model="InseminationDetail.sperm_cost">
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						ค่าวัสดุ (บาท)
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+						<input type="text" class="form-control" ng-model="InseminationDetail.material_cost">
+					</div>
+					<div class="col-lg-2">
+						<button class="btn btn-danger" ng-click="removeDetail(InseminationDetail.id, parentIndex)">
+							<span class="glyphicon glyphicon-trash"></span> 
+							
+						</button>
+					</div>
+				</div>
+				
+				<div class="row form-group">
+					<div class="col-lg-12">
+						<button class="btn btn-primary pull-right" ng-click="addInseminationItem($index)">
+							<span class="glyphicon glyphicon-plus"></span> 
+							เพิ่มรายการ
+						</button>
+					</div>
+				</div>
+			</div>
+			<br><br>
+			</fieldset>
+		</div>
+	</div>
+	<hr>
+	<div class="row form-group">
+		<div class="col-lg-12 text-center">
+			<button class="btn btn-primary" ng-click="save(Insemination, InseminationDetailList)" ng-disabled="!form_data.$valid">
+				<span class="glyphicon glyphicon-floppy-save"></span> 
+				บันทึก
+			</button>
+			<button class="btn btn-default" ng-click="cancelUpdate()">
+				<span class="glyphicon glyphicon-arrow-left"></span> 
+				กลับหน้าหลัก
+			</button>
+		</div>
+	</div>
+	
+</div>

@@ -1,0 +1,167 @@
+<div ng-include src="'views/header.html'"></div>
+<div class="page-header">
+	<h3>ข้อมูลกิจการโคนม  >  ข้อมูลการท่องเที่ยว</h3>
+</div>
+<div class="row form-group">
+	<div class="col-lg-12">
+		<button class="btn btn-danger pull-right" ng-click="goUpdate('')">
+			<span class="glyphicon glyphicon-plus"></span> 
+			บันทึกข้อมูลรายเดือน
+		</button>
+	</div>
+</div>
+<div class="row form-group">
+	<div class="col-lg-12 text-center">
+		<form name="search_form" class="form-inline">
+	  		<div class="form-group">
+			    <label for="exampleInputName2">&nbsp; ภูมิภาค : </label>
+			    &nbsp; <select name="Year" class="form-control" ng-model="condition.Region" ng-options="region.RegionID as region.RegionName for region in PersonRegion" required="required">
+			    	<option value="">กรุณาเลือก..</option>
+				</select>
+		  	</div>
+			<div class="form-group">
+			    <label for="exampleInputName2">&nbsp; เดือน : </label>
+			    &nbsp; <select name="Year" class="form-control" ng-model="condition.MonthFrom" ng-options="month.monthValue as month.monthText for month in MonthList" required="required">
+					<option value="">กรุณาเลือก..</option>
+				</select>
+		  	</div>
+			<div class="form-group">
+			    <label for="exampleInputName2">&nbsp; ปี : </label>
+			    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearFrom" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
+					<option value="">กรุณาเลือก..</option>
+				</select>
+		  	</div>
+		  	<div class="form-group">
+			    <label for="exampleInputName2">&nbsp; ถึง </label>
+		  	</div>
+		  	<div class="form-group">
+			    <label for="exampleInputName2">&nbsp; เดือน : </label>
+			    &nbsp; <select name="Year" class="form-control" ng-model="condition.MonthTo" ng-options="month.monthValue as month.monthText for month in MonthList" required="required">
+					<option value="">กรุณาเลือก..</option>
+				</select>
+		  	</div>
+			<div class="form-group">
+			    <label for="exampleInputName2">&nbsp; ปี : </label>
+			    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearTo" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
+					<option value="">กรุณาเลือก..</option>
+				</select>
+		  	</div>
+		  	<button class="btn btn-primary" ng-click="goSearch()"><span class="glyphicon glyphicon-search"></span> ค้นหา</button>
+		</form>
+	</div>
+</div>
+<div class="row form-group">
+	<div class="col-lg-6 col-lg-offset-3" style=""> 
+		<div class="row"  style="background-color: #BD1212; padding: 10px; color: #FFF;border-top:solid 1px #000;border-right:solid 1px #000;border-left:solid 1px #000;">
+			<div class="col-lg-12 text-center">
+				สรุปข้อมูล
+			</div>
+		</div>
+		<div class="row" style="">
+			<div class="col-lg-6" style="padding: 20px; border:solid 1px #000;">
+				จำนวนนักท่องเที่ยว &nbsp; {{SummaryData.SummaryCurrentMineralAmount}}
+				<br>
+				รายได้จากค่าบริการ &nbsp; {{SummaryData.SummaryCurrentMineralIncome}}
+			</div>
+			<div class="col-lg-6" style="padding: 20px; border:solid 1px #000;">
+				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{SummaryData.SummaryMineralAmountPercentage}} %
+				<br>
+				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{SummaryData.SummaryMineralIncomePercentage}} %
+			</div>
+		</div>
+	</div>
+</div>
+<div class="col-lg-12 table-responsive" ng-show="ViewType == 'MAIN'">
+	<table class="table table-bordered table-striped">
+		<caption class="caption-bg">
+			<button class="btn btn-info pull-right" ng-click="ViewType = 'DETAIL'">รายละเอียด</button>
+			<button class="btn btn-primary pull-right" ng-click="ViewType = 'MAIN'">ข้อมูลโดยรวม</button>
+			<a class="pull-right" style="padding-right: 20px;" href="../files/files/download/Export-travel.xlsx" target="_self" download="Export-ท่องเที่ยว.xlsx"><img src="../files/img/excel.png" style="height: 40px;"></a>
+		</caption>
+		<thead style="background-color: #BD1212; color: #FFF;">
+			<tr>
+				
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">รายการ</th>
+				<th colspan="2" style="text-align: center;" ng-repeat="year in ResultYearList">
+					{{year.years}}
+				</th>
+				<th colspan="4" style="text-align: center;">ผลต่าง</th>
+			</tr>
+			<tr>
+				<th style="text-align: center;">ราย</th>
+				<th style="text-align: center;">บาท</th>
+				<th style="text-align: center;">ราย</th>
+				<th style="text-align: center;">บาท</th>
+				<th style="text-align: center;">ราย</th>
+				<th style="text-align: center;">% เพิ่ม / ลด</th>
+				<th style="text-align: center;">บาท</th>
+				<th style="text-align: center;">% เพิ่ม / ลด</th>
+			</tr>
+		</thead>
+		<tbody >
+			<!--<tr style="background-color: #B6CCFF; padding: 5px;">
+				<td colspan="7">{{getRegionName(data.region_id)}}</td>
+			</tr>-->
+			<tr ng-repeat="data in List">
+				<td>{{data.SpermName}}</td>
+				<td>{{data.CurrentAmount}}</td>
+				<td>{{data.CurrentBaht}}</td>
+				<td>{{data.BeforeAmount}}</td>
+				<td>{{data.BeforeBaht}}</td>
+				<td>{{data.DiffAmount}}</td>
+				<td>{{data.DiffAmountPercentage}}</td>
+				<td>{{data.DiffBaht}}</td>
+				<td>{{data.DiffBahtPercentage}}</td>
+				
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<div class="col-lg-12 table-responsive" ng-show="ViewType == 'DETAIL'">
+	<table class="table table-bordered table-striped">
+		<caption>
+			<button class="btn btn-info pull-right" ng-click="ViewType = 'DETAIL'">รายละเอียด</button>
+			<button class="btn btn-primary pull-right" ng-click="ViewType = 'MAIN'">ข้อมูลโดยรวม</button>
+		</caption>
+		<thead style="background-color: #BD1212; color: #FFF;">
+			<tr>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">วันที่</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">หน่วยงานที่เข้าชม</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">ส่วนลด</th>
+				<th colspan="{{data.unit.length}}" style="text-align: center; vertical-align: middle;" ng-repeat="data in Item">
+					{{data.label}}
+				</th>
+			</tr>
+			<tr>
+				<th style="text-align: center; vertical-align: middle;" ng-repeat="data in ItemUnit">
+					{{data.label}}
+				</th>
+			</tr>
+		</thead>
+		<tbody >
+			<tr ng-repeat="data in DetailList"">
+				<td>{{data.TravelDate}}</td>
+				<td>{{data.Organization}}</td>
+				<td>{{data.Discount}}</td>
+				<td ng-repeat="item in data.ValueList" style="text-align: center; vertical-align: middle;">
+					{{item.values}}
+				</td>
+			</tr>
+		</tbody>
+		<tr>
+			<td>รวม</td>
+			<td ng-repeat="data in DetailSummary" style="text-align: center; vertical-align: middle;">
+				{{data.values}}
+			</td>
+		</tr>
+	</table>
+</div>
+<div class="page-header">
+&nbsp;
+</div>
+<style type="text/css">
+	a{
+		color: #FFF;
+	}
+</style>

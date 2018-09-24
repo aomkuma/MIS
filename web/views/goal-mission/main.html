@@ -1,0 +1,74 @@
+<div ng-include src="'views/header.html'"></div>
+<div class="page-header">
+	<h3>บริหารจัดการข้อมูล > เป้าหมายการดำเนินงาน</h3>
+</div>
+<div class="row form-group">
+	<div class="col-lg-12">
+		<form name="search_form" class="form-inline">
+			<div class="form-group">
+			    <label for="exampleInputName2">&nbsp; ปีงบประมาณ : </label>
+			    &nbsp; <select name="Year" class="form-control" ng-model="condition.Year" ng-options="year.yearValue for year in YearList track by year.yearText">
+					<option value="">กรุณาเลือก</option>
+				</select>
+		  	</div>
+			<div class="form-group">
+			    <label for="exampleInputName2">&nbsp; พื้นที่ : </label>
+			    &nbsp; <select name="Year" class="form-control" ng-model="condition.Region" ng-options="region.RegionName for region in PersonRegion track by region.RegionID">
+					<option value="">กรุณาเลือก</option>
+				</select>
+		  	</div>
+		  	<div class="form-group">
+			    <label for="exampleInputName2">&nbsp; รายการ : </label>
+			    &nbsp; <select name="Year" class="form-control" ng-model="condition.Goal" ng-options="goal.goal_name for goal in MasterGoalList track by goal.id">
+					<option value="">กรุณาเลือก</option>
+				</select>
+		  	</div>
+			<button class="btn btn-primary" ng-click="loadList('goal-mission/list')"><span class="glyphicon glyphicon-search"></span> ค้นหา</button>
+		</form>
+	</div>
+</div>
+<div class="row form-group">
+	<div class="col-lg-12 table-responsive">
+		<table class="table table-bordered table-striped">
+			<caption>
+				<button class="btn btn-danger pull-right" ng-click="goUpdate('')">
+					<span class="glyphicon glyphicon-plus"></span> 
+					เพิ่มเป้าหมาย
+				</button>
+			</caption>
+			<thead>
+				<tr>
+					<th>Last Update</th>
+					<th>ปีงบประมาณ</th>
+					<th>พื้นที่รับผิดชอบ</th>
+					<th>ด้านกิจการ</th>
+					<th>รายการ</th>
+					<th>ปริมาณ / หน่วย</th>
+					<th>มูลค่า (บาท)</th>
+					<th>บริหารจัดการ</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="data in List">
+					<td>{{data.update_date}}</td>
+					<td>{{data.years + 543}}</td>
+					<td>{{getRegionName(data.region_id)}}</td>
+					<td>{{findGoalType(data.goal_id)}}</td>
+					<td>{{getGoalName(data.goal_id)}}</td>
+					<td>{{data.amount}} {{data.unit}}</td>
+					<td>{{data.price_value}}</td>
+					<td>
+						<button class="btn btn-success" ng-click="goUpdate(data.id)">
+							<span class="glyphicon glyphicon-edit"></span> 
+							แก้ไข
+						</button>
+						<button class="btn btn-default" ng-click="removeData(data.id)">
+							<span class="glyphicon glyphicon-trash"></span> 
+							ลบ
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

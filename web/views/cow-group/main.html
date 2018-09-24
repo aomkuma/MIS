@@ -1,0 +1,139 @@
+<div ng-include src="'views/header.html'"></div>
+<div class="page-header">
+	<h3>ข้อมูลกิจการโคนม  >  ข้อมูลฝูงโค อ.ส.ค.</h3>
+</div>
+<div class="row form-group">
+	<div class="col-lg-12">
+		<button class="btn btn-danger pull-right" ng-click="goUpdate('')">
+			<span class="glyphicon glyphicon-plus"></span> 
+			บันทึกข้อมูลรายเดือน
+		</button>
+	</div>
+</div>
+<div class="row form-group">
+	<div class="col-lg-12 text-center">
+		<form name="search_form" class="form-inline">
+	  		<div class="form-group">
+			    <label for="exampleInputName2">&nbsp; ภูมิภาค : </label>
+			    &nbsp; <select name="Year" class="form-control" ng-model="condition.Region" ng-options="region.RegionID as region.RegionName for region in PersonRegion" required="required">
+			    	<option value="">กรุณาเลือก..</option>
+				</select>
+		  	</div>
+			<div class="form-group">
+			    <label for="exampleInputName2">&nbsp; เดือน : </label>
+			    &nbsp; <select name="Year" class="form-control" ng-model="condition.MonthFrom" ng-options="month.monthValue as month.monthText for month in MonthList" required="required">
+					<option value="">กรุณาเลือก..</option>
+				</select>
+		  	</div>
+			<div class="form-group">
+			    <label for="exampleInputName2">&nbsp; ปี : </label>
+			    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearFrom" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
+					<option value="">กรุณาเลือก..</option>
+				</select>
+		  	</div>
+		  	<div class="form-group">
+			    <label for="exampleInputName2">&nbsp; ถึง </label>
+		  	</div>
+		  	<div class="form-group">
+			    <label for="exampleInputName2">&nbsp; เดือน : </label>
+			    &nbsp; <select name="Year" class="form-control" ng-model="condition.MonthTo" ng-options="month.monthValue as month.monthText for month in MonthList" required="required">
+					<option value="">กรุณาเลือก..</option>
+				</select>
+		  	</div>
+			<div class="form-group">
+			    <label for="exampleInputName2">&nbsp; ปี : </label>
+			    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearTo" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
+					<option value="">กรุณาเลือก..</option>
+				</select>
+		  	</div>
+		  	<button class="btn btn-primary" ng-click="goSearch()"><span class="glyphicon glyphicon-search"></span> ค้นหา</button>
+		</form>
+	</div>
+</div>
+
+<div class="col-lg-12 table-responsive" ng-show="ViewType == 'MAIN'">
+	<table class="table table-bordered table-striped">
+		<caption class="caption-bg">
+			<a class="pull-right" style="padding-right: 20px;" href="../files/files/download/Export-cow-group.xlsx" target="_self" download="Export-จำนวนโค.xlsx"><img src="../files/img/excel.png" style="height: 40px;"></a>
+		</caption>
+		<thead style="background-color: #BD1212; color: #FFF;">
+			<tr>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">รายการหลัก</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">รายการย่อย</th>
+				<th colspan="2" style="text-align: center;" ng-repeat="year in ResultYearList">
+					{{year.years}}
+				</th>
+				<th colspan="2" style="text-align: center;">ผลต่าง</th>
+			</tr>
+			<tr>
+				<th style="text-align: center;">หน่วย</th>
+				<th style="text-align: center;">%</th>
+				<th style="text-align: center;">หน่วย</th>
+				<th style="text-align: center;">%</th>
+				<th style="text-align: center;">หน่วย</th>
+				<th style="text-align: center;">%</th>
+			</tr>
+		</thead>
+		<tbody ng-repeat="data in List">
+			<!--<tr style="background-color: #B6CCFF; padding: 5px;">
+				<td colspan="7">{{getRegionName(data.region_id)}}</td>
+			</tr>-->
+			<tr ng-repeat="sub_data in data.SubItem">
+				<td rowspan="{{$index==0?4:0}}" ng-show="$index==0">{{data.MainItem}}</td>
+				<td>{{sub_data.SubItem}}</td>
+				<td>{{sub_data.CurrentUnit}}</td>
+				<td>{{sub_data.CurrentPercentage}}</td>
+				<td>{{sub_data.BeforeUnit}}</td>
+				<td>{{sub_data.BeforePercentage}}</td>
+				<td>{{sub_data.DiffUnit}}</td>
+				<td>{{sub_data.DiffPercentage}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<div class="col-lg-12 table-responsive" ng-show="ViewType == 'DETAIL'">
+	<table class="table table-bordered table-striped">
+		<caption>
+			
+		</caption>
+		<thead style="background-color: #BD1212; color: #FFF;">
+			<tr>
+				<th rowspan="3" style="text-align: center; vertical-align: middle;">สหกรณ์</th>
+				<th colspan="{{ItemUnit.length}}" style="text-align: center; vertical-align: middle;">รายการ</th>
+			</tr>
+			<tr>
+				<th colspan="{{data.unit.length}}" style="text-align: center; vertical-align: middle;" ng-repeat="data in Item">
+					{{data.label}}
+				</th>
+			</tr>
+			<tr>
+				<th style="text-align: center; vertical-align: middle;" ng-repeat="data in ItemUnit">
+					{{data.label}}
+				</th>
+			</tr>
+		</thead>
+		<tbody >
+			<tr ng-repeat="data in DetailList"">
+				<td>{{data.RegionName}}</td>
+				<td ng-repeat="item in data.ValueList" style="text-align: center; vertical-align: middle;">
+					{{item.values}}
+				</td>
+			</tr>
+		</tbody>
+		<tr>
+			<td>รวม</td>
+			<td ng-repeat="data in DetailSummary" style="text-align: center; vertical-align: middle;">
+				{{data.values}}
+			</td>
+		</tr>
+	</table>
+</div>
+<div class="page-header">
+&nbsp;
+</div>
+<style type="text/css">
+	a{
+		color: #FFF;
+	}
+</style>
