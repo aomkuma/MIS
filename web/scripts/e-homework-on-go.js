@@ -76,11 +76,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/account-permission", {
         templateUrl : "views/account-permission/main.html",
-        controller : "MainController",
+        controller : "MainAccController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/account-permission/MainController.js" ]
+					files : [ "scripts/controllers/account-permission/MainAccController.js" ]
 				});
 			} ]
 		}
@@ -88,11 +88,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/account-permission/update/:id?", {
         templateUrl : "views/account-permission/update.html",
-        controller : "UpdateController",
+        controller : "UpdateAccController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/account-permission/UpdateController.js" ]
+					files : [ "scripts/controllers/account-permission/UpdateAccController.js" ]
 				});
 			} ]
 		}
@@ -100,11 +100,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/master-goal", {
         templateUrl : "views/master-goal/main.html",
-        controller : "MainController",
+        controller : "MainMGController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/master-goal/MainController.js" ]
+					files : [ "scripts/controllers/master-goal/MainMGController.js" ]
 				});
 			} ]
 		}
@@ -112,11 +112,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/master-goal/update/:id?", {
         templateUrl : "views/master-goal/update.html",
-        controller : "UpdateController",
+        controller : "UpdateMGController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/master-goal/UpdateController.js" ]
+					files : [ "scripts/controllers/master-goal/UpdateMGController.js" ]
 				});
 			} ]
 		}
@@ -124,11 +124,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/goal-mission", {
         templateUrl : "views/goal-mission/main.html",
-        controller : "MainController",
+        controller : "MainGMController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/goal-mission/MainController.js" ]
+					files : [ "scripts/controllers/goal-mission/MainGMController.js" ]
 				});
 			} ]
 		}
@@ -136,11 +136,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/goal-mission/update/:id?", {
         templateUrl : "views/goal-mission/update.html",
-        controller : "UpdateController",
+        controller : "UpdateGMController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/goal-mission/UpdateController.js" ]
+					files : [ "scripts/controllers/goal-mission/UpdateGMController.js" ]
 				});
 			} ]
 		}
@@ -148,11 +148,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/mou", {
         templateUrl : "views/mou/main.html",
-        controller : "MainController",
+        controller : "MainMOUController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/mou/MainController.js" ]
+					files : [ "scripts/controllers/mou/MainMOUController.js" ]
 				});
 			} ]
 		}
@@ -160,11 +160,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/mou/update/:id?", {
         templateUrl : "views/mou/update.html",
-        controller : "UpdateController",
+        controller : "UpdateMOUController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/mou/UpdateController.js" ]
+					files : [ "scripts/controllers/mou/UpdateMOUController.js" ]
 				});
 			} ]
 		}
@@ -172,11 +172,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/dairy-farming", {
         templateUrl : "views/dairy-farming/main.html",
-        controller : "MainController",
+        controller : "MainDFController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/dairy-farming/MainController.js" ]
+					files : [ "scripts/controllers/dairy-farming/MainDFController.js" ]
 				});
 			} ]
 		}
@@ -184,11 +184,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/dairy-farming/update/:id?", {
         templateUrl : "views/dairy-farming/update.html",
-        controller : "UpdateController",
+        controller : "UpdateDFController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/dairy-farming/UpdateController.js" ]
+					files : [ "scripts/controllers/dairy-farming/UpdateDFController.js" ]
 				});
 			} ]
 		}
@@ -196,11 +196,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/veterinary", {
         templateUrl : "views/veterinary/main.html",
-        controller : "MainController",
+        controller : "MainVTController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/veterinary/MainController.js" ]
+					files : [ "scripts/controllers/veterinary/MainVTController.js" ]
 				});
 			} ]
 		}
@@ -208,11 +208,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/veterinary/update/:id?", {
         templateUrl : "views/veterinary/update.html",
-        controller : "UpdateController",
+        controller : "UpdateVTController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/veterinary/UpdateController.js" ]
+					files : [ "scripts/controllers/veterinary/UpdateVTController.js" ]
 				});
 			} ]
 		}
@@ -220,11 +220,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/production-factor", {
         templateUrl : "views/production-factor/main.html",
-        controller : "MainController",
+        controller : "MainPFController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/production-factor/MainController.js" ]
+					files : [ "scripts/controllers/production-factor/MainPFController.js" ]
 				});
 			} ]
 		}
@@ -232,11 +232,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/production-factor/update/:id?", {
         templateUrl : "views/production-factor/update.html",
-        controller : "UpdateController",
+        controller : "UpdatePFController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/production-factor/UpdateController.js" ]
+					files : [ "scripts/controllers/production-factor/UpdatePFController.js" ]
 				});
 			} ]
 		}
@@ -244,11 +244,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/food", {
         templateUrl : "views/food/main.html",
-        controller : "MainController",
+        controller : "MainFController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/food/MainController.js" ]
+					files : [ "scripts/controllers/food/MainFController.js" ]
 				});
 			} ]
 		}
@@ -256,11 +256,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/food/update/:id?", {
         templateUrl : "views/food/update.html",
-        controller : "UpdateController",
+        controller : "UpdateFController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/food/UpdateController.js" ]
+					files : [ "scripts/controllers/food/UpdateFController.js" ]
 				});
 			} ]
 		}
@@ -268,11 +268,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/cow-food", {
         templateUrl : "views/cow-food/main.html",
-        controller : "MainController",
+        controller : "MainCFController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/cow-food/MainController.js" ]
+					files : [ "scripts/controllers/cow-food/MainCFController.js" ]
 				});
 			} ]
 		}
@@ -280,11 +280,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/cow-food/update/:id?", {
         templateUrl : "views/cow-food/update.html",
-        controller : "UpdateController",
+        controller : "UpdateCFController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/cow-food/UpdateController.js" ]
+					files : [ "scripts/controllers/cow-food/UpdateCFController.js" ]
 				});
 			} ]
 		}
@@ -292,11 +292,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/training", {
         templateUrl : "views/training/main.html",
-        controller : "MainController",
+        controller : "MainTNController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/training/MainController.js" ]
+					files : [ "scripts/controllers/training/MainTNController.js" ]
 				});
 			} ]
 		}
@@ -304,11 +304,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/training/update/:id?", {
         templateUrl : "views/training/update.html",
-        controller : "UpdateController",
+        controller : "UpdateTNController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/training/UpdateController.js" ]
+					files : [ "scripts/controllers/training/UpdateTNController.js" ]
 				});
 			} ]
 		}
@@ -316,11 +316,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/insemination", {
         templateUrl : "views/insemination/main.html",
-        controller : "MainController",
+        controller : "MainISController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/insemination/MainController.js" ]
+					files : [ "scripts/controllers/insemination/MainISController.js" ]
 				});
 			} ]
 		}
@@ -328,11 +328,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/insemination/update/:id?", {
         templateUrl : "views/insemination/update.html",
-        controller : "UpdateController",
+        controller : "UpdateISController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/insemination/UpdateController.js" ]
+					files : [ "scripts/controllers/insemination/UpdateISController.js" ]
 				});
 			} ]
 		}
@@ -340,11 +340,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/mineral", {
         templateUrl : "views/mineral/main.html",
-        controller : "MainController",
+        controller : "MainMNController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/mineral/MainController.js" ]
+					files : [ "scripts/controllers/mineral/MainMNController.js" ]
 				});
 			} ]
 		}
@@ -352,11 +352,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/mineral/update/:id?", {
         templateUrl : "views/mineral/update.html",
-        controller : "UpdateController",
+        controller : "UpdateMNController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/mineral/UpdateController.js" ]
+					files : [ "scripts/controllers/mineral/UpdateMNController.js" ]
 				});
 			} ]
 		}
@@ -364,11 +364,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/sperm", {
         templateUrl : "views/sperm/main.html",
-        controller : "MainController",
+        controller : "MainSPController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/sperm/MainController.js" ]
+					files : [ "scripts/controllers/sperm/MainSPController.js" ]
 				});
 			} ]
 		}
@@ -376,11 +376,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/sperm/update/:id?", {
         templateUrl : "views/sperm/update.html",
-        controller : "UpdateController",
+        controller : "UpdateSPController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/sperm/UpdateController.js" ]
+					files : [ "scripts/controllers/sperm/UpdateSPController.js" ]
 				});
 			} ]
 		}
@@ -388,11 +388,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/sperm-sale", {
         templateUrl : "views/sperm-sale/main.html",
-        controller : "MainController",
+        controller : "MainSPSController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/sperm-sale/MainController.js" ]
+					files : [ "scripts/controllers/sperm-sale/MainSPSController.js" ]
 				});
 			} ]
 		}
@@ -400,11 +400,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/sperm-sale/update/:id?", {
         templateUrl : "views/sperm-sale/update.html",
-        controller : "UpdateController",
+        controller : "UpdateSPSController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/sperm-sale/UpdateController.js" ]
+					files : [ "scripts/controllers/sperm-sale/UpdateSPSController.js" ]
 				});
 			} ]
 		}
@@ -412,11 +412,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/material", {
         templateUrl : "views/material/main.html",
-        controller : "MainController",
+        controller : "MainMTController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/material/MainController.js" ]
+					files : [ "scripts/controllers/material/MainMTController.js" ]
 				});
 			} ]
 		}
@@ -424,11 +424,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/material/update/:id?", {
         templateUrl : "views/material/update.html",
-        controller : "UpdateController",
+        controller : "UpdateMTController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/material/UpdateController.js" ]
+					files : [ "scripts/controllers/material/UpdateMTController.js" ]
 				});
 			} ]
 		}
@@ -436,11 +436,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/cow-breed", {
         templateUrl : "views/cow-breed/main.html",
-        controller : "MainController",
+        controller : "MainCBController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/cow-breed/MainController.js" ]
+					files : [ "scripts/controllers/cow-breed/MainCBController.js" ]
 				});
 			} ]
 		}
@@ -448,11 +448,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/cow-breed/update/:id?", {
         templateUrl : "views/cow-breed/update.html",
-        controller : "UpdateController",
+        controller : "UpdateCBController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/cow-breed/UpdateController.js" ]
+					files : [ "scripts/controllers/cow-breed/UpdateCBController.js" ]
 				});
 			} ]
 		}
@@ -460,11 +460,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/training-cowbreed", {
         templateUrl : "views/training-cowbreed/main.html",
-        controller : "MainController",
+        controller : "MainTCBController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/training-cowbreed/MainController.js" ]
+					files : [ "scripts/controllers/training-cowbreed/MainTCBController.js" ]
 				});
 			} ]
 		}
@@ -472,11 +472,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/training-cowbreed/update/:id?", {
         templateUrl : "views/training-cowbreed/update.html",
-        controller : "UpdateController",
+        controller : "UpdateTCBController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/training-cowbreed/UpdateController.js" ]
+					files : [ "scripts/controllers/training-cowbreed/UpdateTCBController.js" ]
 				});
 			} ]
 		}
@@ -484,11 +484,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/travel", {
         templateUrl : "views/travel/main.html",
-        controller : "MainController",
+        controller : "MainTVController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/travel/MainController.js" ]
+					files : [ "scripts/controllers/travel/MainTVController.js" ]
 				});
 			} ]
 		}
@@ -496,11 +496,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/travel/update/:id?", {
         templateUrl : "views/travel/update.html",
-        controller : "UpdateController",
+        controller : "UpdateTVController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/travel/UpdateController.js" ]
+					files : [ "scripts/controllers/travel/UpdateTVController.js" ]
 				});
 			} ]
 		}
@@ -508,11 +508,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/cooperative-milk", {
         templateUrl : "views/cooperative-milk/main.html",
-        controller : "MainController",
+        controller : "MainCMController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/cooperative-milk/MainController.js" ]
+					files : [ "scripts/controllers/cooperative-milk/MainCMController.js" ]
 				});
 			} ]
 		}
@@ -520,11 +520,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/cooperative-milk/update/:id?", {
         templateUrl : "views/cooperative-milk/update.html",
-        controller : "UpdateController",
+        controller : "UpdateCMController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/cooperative-milk/UpdateController.js" ]
+					files : [ "scripts/controllers/cooperative-milk/UpdateCMController.js" ]
 				});
 			} ]
 		}
@@ -532,11 +532,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/cow-group", {
         templateUrl : "views/cow-group/main.html",
-        controller : "MainController",
+        controller : "MainCGController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/cow-group/MainController.js" ]
+					files : [ "scripts/controllers/cow-group/MainCGController.js" ]
 				});
 			} ]
 		}
@@ -544,11 +544,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/cow-group/update/:id?", {
         templateUrl : "views/cow-group/update.html",
-        controller : "UpdateController",
+        controller : "UpdateCGController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/cow-group/UpdateController.js" ]
+					files : [ "scripts/controllers/cow-group/UpdateCGController.js" ]
 				});
 			} ]
 		}
@@ -604,11 +604,11 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 
 	.when("/production-info", {
         templateUrl : "views/production-info/main.html",
-        controller : "MainController",
+        controller : "MainPFController",
         resolve : {
 			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
 				return $ocLazyLoad.load({
-					files : [ "scripts/controllers/production-info/MainController.js" ]
+					files : [ "scripts/controllers/production-info/MainPFController.js" ]
 				});
 			} ]
 		}

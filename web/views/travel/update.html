@@ -60,7 +60,12 @@
 						วันที่
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<input type="text" class="form-control" ng-model="SpermDetail.travel_date">
+						<p class="input-group">
+							<input type="text" class="form-control" ng-model="SpermDetail.travel_date" uib-datepicker-popup="yyyy-MM-dd" is-open="SpermDetail.open_date">
+							<span class="input-group-btn">
+				            	<button type="button" class="btn btn-default" ng-click="openDateObj($index)"><i class="glyphicon glyphicon-calendar"></i></button>
+				          </span>
+				        </p>
 					</div>
 					<div class="col-lg-4 col-md-4">
 						<button class="btn btn-danger pull-right" ng-click="removeDetail(SpermDetail.id, parentIndex)">
@@ -79,19 +84,19 @@
 						ผู้ใหญ่
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<input type="text" class="form-control" ng-model="SpermDetail.Pay.adult">
+						<input type="text" class="form-control" ng-model="SpermDetail.adult_pay">
 					</div>
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						เด็ก
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<input type="text" class="form-control" ng-model="SpermDetail.Pay.child">
+						<input type="text" class="form-control" ng-model="SpermDetail.child_pay">
 					</div>
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						นักศึกษา
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<input type="text" class="form-control" ng-model="SpermDetail.Pay.student">
+						<input type="text" class="form-control" ng-model="SpermDetail.student_pay">
 					</div>
 				</div>
 				<div class="row form-group">
@@ -104,19 +109,19 @@
 						ผู้ใหญ่
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<input type="text" class="form-control" ng-model="SpermDetail.Price.adult">
+						<input type="text" class="form-control" ng-model="SpermDetail.adult_price">
 					</div>
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						เด็ก
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<input type="text" class="form-control" ng-model="SpermDetail.Price.child">
+						<input type="text" class="form-control" ng-model="SpermDetail.child_price">
 					</div>
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						นักศึกษา
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<input type="text" class="form-control" ng-model="SpermDetail.Price.student">
+						<input type="text" class="form-control" ng-model="SpermDetail.student_price">
 					</div>
 				</div>
 				<div class="row form-group">
@@ -129,19 +134,19 @@
 						ผู้ใหญ่
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<input type="text" class="form-control" ng-model="SpermDetail.Except.adult">
+						<input type="text" class="form-control" ng-model="SpermDetail.adult_except">
 					</div>
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						เด็ก
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<input type="text" class="form-control" ng-model="SpermDetail.Except.child">
+						<input type="text" class="form-control" ng-model="SpermDetail.child_except">
 					</div>
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						นักศึกษา
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<input type="text" class="form-control" ng-model="SpermDetail.Except.student">
+						<input type="text" class="form-control" ng-model="SpermDetail.student_except">
 					</div>
 				</div>
 			</div>

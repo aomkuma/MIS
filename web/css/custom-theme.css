@@ -5,8 +5,7 @@ a{
 html {
     position: relative;
     min-height: 100%;
-    background: url('../../files/img/461.jpg');
-	color: #FFF;
+    
 	
 }
 caption.caption-bg{
@@ -15,8 +14,7 @@ caption.caption-bg{
 
 .container{
 	width: 100%;
-	background: url('../../files/img/461.jpg');
-	color: #FFF;
+	
 	
 }
 

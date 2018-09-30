@@ -83,3 +83,43 @@ $container['CowFoodController'] = function ($c) {
 $container['TrainingController'] = function ($c) {
     return new \App\Controller\TrainingController($c->get('logger'), $c->get('db'));
 };
+
+$container['InseminationController'] = function ($c) {
+    return new \App\Controller\InseminationController($c->get('logger'), $c->get('db'));
+};
+
+$container['MineralController'] = function ($c) {
+    return new \App\Controller\MineralController($c->get('logger'), $c->get('db'));
+};
+
+$container['SpermSaleController'] = function ($c) {
+    return new \App\Controller\SpermSaleController($c->get('logger'), $c->get('db'));
+};
+
+$container['MaterialController'] = function ($c) {
+    return new \App\Controller\MaterialController($c->get('logger'), $c->get('db'));
+};
+
+$container['CowBreedController'] = function ($c) {
+    return new \App\Controller\CowBreedController($c->get('logger'), $c->get('db'));
+};
+
+$container['TrainingCowBreedController'] = function ($c) {
+    return new \App\Controller\TrainingCowBreedController($c->get('logger'), $c->get('db'));
+};
+
+$container['SpermController'] = function ($c) {
+    return new \App\Controller\SpermController($c->get('logger'), $c->get('db'));
+};
+
+$container['TravelController'] = function ($c) {
+    return new \App\Controller\TravelController($c->get('logger'), $c->get('db'));
+};
+
+$container['CooperativeMilkController'] = function ($c) {
+    return new \App\Controller\CooperativeMilkController($c->get('logger'), $c->get('db'));
+};
+
+$container['CowGroupController'] = function ($c) {
+    return new \App\Controller\CowGroupController($c->get('logger'), $c->get('db'));
+};

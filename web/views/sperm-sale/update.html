@@ -53,7 +53,7 @@
 						รายการ
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select class="form-control" ng-model="SpermDetail.sperm_id" ng-options="data.id as data.name for data in SpermList" ><!--ng-change="loadDairyFarming('CHILD', SpermDetail.dairy_farming_id)" -->
+						<select class="form-control" ng-model="SpermDetail.sperm_sale_type_id" ng-options="data.id as data.name for data in SpermList" ><!--ng-change="loadDairyFarming('CHILD', SpermDetail.dairy_farming_id)" -->
 							<option value="">กรุณาเลือก..</option>
 						</select>
 					</div>
@@ -61,13 +61,13 @@
 						จำนวน (หลอด)
 					</div>
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						<input type="text" class="form-control" ng-model="SpermDetail.amount">
+						<input type="text" class="form-control" ng-model="SpermDetail.amount" ng-blur="calcTotalValues(SpermDetail)">
 					</div>
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						ราคาต่อหลอด
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<input type="text" class="form-control" ng-model="SpermDetail.price">
+						<input type="text" class="form-control" ng-model="SpermDetail.price" ng-blur="calcTotalValues(SpermDetail)">
 					</div>
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						มูลค่า (บาท)

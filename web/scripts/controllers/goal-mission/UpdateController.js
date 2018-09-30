@@ -1,4 +1,4 @@
-angular.module('e-homework').controller('UpdateController', function($scope, $cookies, $filter, $state, $routeParams, $uibModal, HTTPService, IndexOverlayFactory) {
+angular.module('e-homework').controller('UpdateGMController', function($scope, $cookies, $filter, $state, $routeParams, $uibModal, HTTPService, IndexOverlayFactory) {
 	//console.log('Hello !');
     $scope.DEFAULT_LANGUAGE = 'TH';
     $scope.menu_selected = 'management';

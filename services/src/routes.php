@@ -69,6 +69,46 @@ $app->post('/training/get/', 'TrainingController:getData');
 $app->post('/training/update/', 'TrainingController:updateData');
 $app->post('/training/delete/', 'TrainingController:removeData');
 
+$app->post('/insemination/get/', 'InseminationController:getData');
+$app->post('/insemination/update/', 'InseminationController:updateData');
+$app->post('/insemination/delete/detail/', 'InseminationController:removeDetailData');
+
+$app->post('/mineral/get/', 'MineralController:getData');
+$app->post('/mineral/update/', 'MineralController:updateData');
+$app->post('/mineral/delete/detail/', 'MineralController:removeDetailData');
+
+$app->post('/sperm-sale/get/', 'SpermSaleController:getData');
+$app->post('/sperm-sale/update/', 'SpermSaleController:updateData');
+$app->post('/sperm-sale/delete/detail/', 'SpermSaleController:removeDetailData');
+
+$app->post('/material/get/', 'MaterialController:getData');
+$app->post('/material/update/', 'MaterialController:updateData');
+$app->post('/material/delete/detail/', 'MaterialController:removeDetailData');
+
+$app->post('/cow-breed/get/', 'CowBreedController:getData');
+$app->post('/cow-breed/update/', 'CowBreedController:updateData');
+$app->post('/cow-breed/delete/detail/', 'CowBreedController:removeDetailData');
+
+$app->post('/training-cowbreed/get/', 'TrainingCowBreedController:getData');
+$app->post('/training-cowbreed/update/', 'TrainingCowBreedController:updateData');
+$app->post('/training-cowbreed/delete/detail/','TrainingCowBreedController:removeDetailData');
+
+$app->post('/sperm/get/', 'SpermController:getData');
+$app->post('/sperm/update/', 'SpermController:updateData');
+$app->post('/sperm/delete/detail/', 'SpermController:removeDetailData');
+
+$app->post('/travel/get/', 'TravelController:getData');
+$app->post('/travel/update/', 'TravelController:updateData');
+$app->post('/travel/delete/detail/', 'TravelController:removeDetailData');
+
+$app->post('/cooperative-milk/get/', 'CooperativeMilkController:getData');
+$app->post('/cooperative-milk/update/', 'CooperativeMilkController:updateData');
+$app->post('/cooperative-milk/delete/detail/', 'CooperativeMilkController:removeDetailData');
+
+$app->post('/cow-group/get/', 'CowGroupController:getData');
+$app->post('/cow-group/update/', 'CowGroupController:updateData');
+$app->post('/cow-group/delete/detail/', 'CowGroupController:removeDetailData');
+
 
 // Default action
 $app->get('/[{name}]', function ($request, $response, $args) {
