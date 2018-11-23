@@ -31,11 +31,11 @@ angular.module('e-homework').controller('UpdateFController', function($scope, $c
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('food/update', params).then(function(result){
             if(result.data.STATUS == 'OK'){
-                if($scope.ID !== undefined && $scope.ID !== null){
+                // if($scope.ID !== undefined && $scope.ID !== null){
                     window.location.href = '#/food/update/' + result.data.DATA.id;
-                }else{
-                    location.reload();    
-                }
+                // }else{
+                //     location.reload();    
+                // }
                 
                 IndexOverlayFactory.overlayHide();
             }

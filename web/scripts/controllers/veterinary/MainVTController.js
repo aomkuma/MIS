@@ -14,6 +14,8 @@ angular.module('e-homework').controller('MainVTController', function($scope, $co
     $scope.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));   
 
     $scope.loadList = function(action){
+        $scope.CurYear = $scope.condition.YearFrom + 543;
+        $scope.LastYear = $scope.CurYear - 1;
         var params = {
             'condition' : $scope.condition
             , 'region' : $scope.PersonRegion
@@ -24,6 +26,44 @@ angular.module('e-homework').controller('MainVTController', function($scope, $co
                 $scope.List = result.data.DATA.DataList;
                 $scope.SummaryData = result.data.DATA.Summary;
                 console.log($scope.List);
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+
+    $scope.loadListDetail = function(action, description){
+        var params = {
+            'condition' : $scope.condition
+            , 'region' : $scope.PersonRegion
+            , 'description' : description
+        };
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest(action, params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.DetailList = result.data.DATA.DetailList;
+                $scope.CooperativeList = result.data.DATA.CooperativeList;
+                // $scope.SummaryData = result.data.DATA.Summary;
+                // console.log($scope.List);
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+
+    $scope.loadListSubDetail = function(action, cooperative_id, description){
+        var params = {
+            'condition' : $scope.condition
+            , 'region' : $scope.PersonRegion
+            , 'description' : description
+            , 'cooperative_id' : cooperative_id
+        };
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest(action, params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.DetailList = result.data.DATA.SubDetailList;
+                $scope.Cooperative = result.data.DATA.Cooperative;
+                $scope.Header =  result.data.DATA.MonthNameList;
+                // $scope.SummaryData = result.data.DATA.Summary;
+                // console.log($scope.List);
             }
             IndexOverlayFactory.overlayHide();
         });
@@ -43,9 +83,9 @@ angular.module('e-homework').controller('MainVTController', function($scope, $co
         $scope.loadList('veterinary/list/main');
     }
 
-    $scope.viewDetail2 = function(){
+    $scope.viewDetail2 = function(cooperative_id, description){
         $scope.ViewType = 'DETAIL2';
-        console.log($scope.condition.DisplayType);
+        // console.log($scope.condition.DisplayType);
         if($scope.condition.DisplayType == 'quarter'){
             $scope.Header = [
                             {'month':'มกราคม'}
@@ -475,294 +515,14 @@ angular.module('e-homework').controller('MainVTController', function($scope, $co
         }
         ];
         }
+
+        $scope.loadListSubDetail('veterinary/list/subdetail', cooperative_id, description);
     }
 
-    $scope.viewDetail = function(){
+    $scope.viewDetail = function(description){
         $scope.ViewType = 'DETAIL';
-        $scope.DetailList = [
-            {'DairyFarmingName':'การรักษาโคป่วย'
-            ,'BGColor':'#B6CCFF'
-            ,'Data':[
-               {
-                    'ItemName' : 'สมาชิก '
-                    ,'Unit':'คน'
-                    ,'Dataset':[
-                                {'Amount':150}
-                                ,{'Amount':200}
-                                ,{'Amount':110}
-                                ,{'Amount':97}
-                                ,{'Amount':52}
-                                ,{'Amount':121}
-                                ,{'Amount':23}
-                                ,{'Amount':48}
-                                ,{'Amount':90}
-                                ,{'Amount':87}
-                                ,{'Amount':65}
-                                ,{'Amount':117}
-                                ,{'Amount':190}
-                                ,{'Amount':320}
-                                ,{'Amount':111}
-                                ]
-                    ,'Summary':1245
-                },
-                {
-                    'ItemName' : 'โคนม '
-                    ,'Unit':'ตัว'
-                    ,'Dataset':[
-                                {'Amount':150}
-                                ,{'Amount':200}
-                                ,{'Amount':110}
-                                ,{'Amount':97}
-                                ,{'Amount':52}
-                                ,{'Amount':121}
-                                ,{'Amount':23}
-                                ,{'Amount':48}
-                                ,{'Amount':90}
-                                ,{'Amount':87}
-                                ,{'Amount':65}
-                                ,{'Amount':117}
-                                ,{'Amount':190}
-                                ,{'Amount':320}
-                                ,{'Amount':111}
-                                ]
-                    ,'Summary':1245
-                },
-                {
-                    'ItemName' : 'ค่าเวชภัณฑ์ '
-                    ,'Unit':'บาท'
-                    ,'Dataset':[
-                                {'Amount':150}
-                                ,{'Amount':200}
-                                ,{'Amount':110}
-                                ,{'Amount':97}
-                                ,{'Amount':52}
-                                ,{'Amount':121}
-                                ,{'Amount':23}
-                                ,{'Amount':48}
-                                ,{'Amount':90}
-                                ,{'Amount':87}
-                                ,{'Amount':65}
-                                ,{'Amount':117}
-                                ,{'Amount':190}
-                                ,{'Amount':320}
-                                ,{'Amount':111}
-                                ]
-                    ,'Summary':1245
-                },
-                {
-                    'ItemName' : 'ค่าบริการ '
-                    ,'Unit':'บาท'
-                    ,'Dataset':[
-                                {'Amount':150}
-                                ,{'Amount':200}
-                                ,{'Amount':110}
-                                ,{'Amount':97}
-                                ,{'Amount':52}
-                                ,{'Amount':121}
-                                ,{'Amount':23}
-                                ,{'Amount':48}
-                                ,{'Amount':90}
-                                ,{'Amount':87}
-                                ,{'Amount':65}
-                                ,{'Amount':117}
-                                ,{'Amount':190}
-                                ,{'Amount':320}
-                                ,{'Amount':111}
-                                ]
-                    ,'Summary':1245
-                } 
-            ]
-        },
-        {'DairyFarmingName':'การควบคุมโรค'
-        ,'BGColor':'#B6CCFF'
-        },
-        {'DairyFarmingName':'วัณโรค/โรคแท้งติดต่อ'
-            ,'BGColor':'#BBECA9'
-            ,'Data':[
-               {
-                    'ItemName' : 'สมาชิก '
-                    ,'Unit':'คน'
-                    ,'Dataset':[
-                                {'Amount':150}
-                                ,{'Amount':200}
-                                ,{'Amount':110}
-                                ,{'Amount':97}
-                                ,{'Amount':52}
-                                ,{'Amount':121}
-                                ,{'Amount':23}
-                                ,{'Amount':48}
-                                ,{'Amount':90}
-                                ,{'Amount':87}
-                                ,{'Amount':65}
-                                ,{'Amount':117}
-                                ,{'Amount':190}
-                                ,{'Amount':320}
-                                ,{'Amount':111}
-                                ]
-                    ,'Summary':1245
-                },
-                {
-                    'ItemName' : 'โคนม '
-                    ,'Unit':'ตัว'
-                    ,'Dataset':[
-                                {'Amount':150}
-                                ,{'Amount':200}
-                                ,{'Amount':110}
-                                ,{'Amount':97}
-                                ,{'Amount':52}
-                                ,{'Amount':121}
-                                ,{'Amount':23}
-                                ,{'Amount':48}
-                                ,{'Amount':90}
-                                ,{'Amount':87}
-                                ,{'Amount':65}
-                                ,{'Amount':117}
-                                ,{'Amount':190}
-                                ,{'Amount':320}
-                                ,{'Amount':111}
-                                ]
-                    ,'Summary':1245
-                },
-                {
-                    'ItemName' : 'ค่าเวชภัณฑ์ '
-                    ,'Unit':'บาท'
-                    ,'Dataset':[
-                                {'Amount':150}
-                                ,{'Amount':200}
-                                ,{'Amount':110}
-                                ,{'Amount':97}
-                                ,{'Amount':52}
-                                ,{'Amount':121}
-                                ,{'Amount':23}
-                                ,{'Amount':48}
-                                ,{'Amount':90}
-                                ,{'Amount':87}
-                                ,{'Amount':65}
-                                ,{'Amount':117}
-                                ,{'Amount':190}
-                                ,{'Amount':320}
-                                ,{'Amount':111}
-                                ]
-                    ,'Summary':1245
-                },
-                {
-                    'ItemName' : 'ค่าบริการ '
-                    ,'Unit':'บาท'
-                    ,'Dataset':[
-                                {'Amount':150}
-                                ,{'Amount':200}
-                                ,{'Amount':110}
-                                ,{'Amount':97}
-                                ,{'Amount':52}
-                                ,{'Amount':121}
-                                ,{'Amount':23}
-                                ,{'Amount':48}
-                                ,{'Amount':90}
-                                ,{'Amount':87}
-                                ,{'Amount':65}
-                                ,{'Amount':117}
-                                ,{'Amount':190}
-                                ,{'Amount':320}
-                                ,{'Amount':111}
-                                ]
-                    ,'Summary':1245
-                } 
-            ]
-        },
-        {'DairyFarmingName':'ปากเท้าเปื่อย'
-            ,'BGColor':'#BBECA9'
-            ,'Data':[
-               {
-                    'ItemName' : 'สมาชิก '
-                    ,'Unit':'คน'
-                    ,'Dataset':[
-                                {'Amount':150}
-                                ,{'Amount':200}
-                                ,{'Amount':110}
-                                ,{'Amount':97}
-                                ,{'Amount':52}
-                                ,{'Amount':121}
-                                ,{'Amount':23}
-                                ,{'Amount':48}
-                                ,{'Amount':90}
-                                ,{'Amount':87}
-                                ,{'Amount':65}
-                                ,{'Amount':117}
-                                ,{'Amount':190}
-                                ,{'Amount':320}
-                                ,{'Amount':111}
-                                ]
-                    ,'Summary':1245
-                },
-                {
-                    'ItemName' : 'โคนม '
-                    ,'Unit':'ตัว'
-                    ,'Dataset':[
-                                {'Amount':150}
-                                ,{'Amount':200}
-                                ,{'Amount':110}
-                                ,{'Amount':97}
-                                ,{'Amount':52}
-                                ,{'Amount':121}
-                                ,{'Amount':23}
-                                ,{'Amount':48}
-                                ,{'Amount':90}
-                                ,{'Amount':87}
-                                ,{'Amount':65}
-                                ,{'Amount':117}
-                                ,{'Amount':190}
-                                ,{'Amount':320}
-                                ,{'Amount':111}
-                                ]
-                    ,'Summary':1245
-                },
-                {
-                    'ItemName' : 'ค่าเวชภัณฑ์ '
-                    ,'Unit':'บาท'
-                    ,'Dataset':[
-                                {'Amount':150}
-                                ,{'Amount':200}
-                                ,{'Amount':110}
-                                ,{'Amount':97}
-                                ,{'Amount':52}
-                                ,{'Amount':121}
-                                ,{'Amount':23}
-                                ,{'Amount':48}
-                                ,{'Amount':90}
-                                ,{'Amount':87}
-                                ,{'Amount':65}
-                                ,{'Amount':117}
-                                ,{'Amount':190}
-                                ,{'Amount':320}
-                                ,{'Amount':111}
-                                ]
-                    ,'Summary':1245
-                },
-                {
-                    'ItemName' : 'ค่าบริการ '
-                    ,'Unit':'บาท'
-                    ,'Dataset':[
-                                {'Amount':150}
-                                ,{'Amount':200}
-                                ,{'Amount':110}
-                                ,{'Amount':97}
-                                ,{'Amount':52}
-                                ,{'Amount':121}
-                                ,{'Amount':23}
-                                ,{'Amount':48}
-                                ,{'Amount':90}
-                                ,{'Amount':87}
-                                ,{'Amount':65}
-                                ,{'Amount':117}
-                                ,{'Amount':190}
-                                ,{'Amount':320}
-                                ,{'Amount':111}
-                                ]
-                    ,'Summary':1245
-                } 
-            ]
-        }
-        ];
+        $scope.description = description;
+        $scope.loadListDetail('veterinary/list/detail', description);
     }
 
     $scope.getRegionName = function(region_id){
@@ -785,9 +545,9 @@ angular.module('e-homework').controller('MainVTController', function($scope, $co
     var curDate = new Date();
     $scope.condition = {
                         'DisplayType':'monthly'
-                        ,'MonthFrom' : 1//curDate.getMonth()
+                        ,'MonthFrom' : curDate.getMonth() + 1
                         ,'YearFrom': curDate.getFullYear()
-                        ,'MonthTo' : 4//curDate.getMonth()
+                        ,'MonthTo' : curDate.getMonth() + 1
                         ,'YearTo': curDate.getFullYear()
                         ,'QuarterFrom':'1'
                         ,'QuarterTo':'4'

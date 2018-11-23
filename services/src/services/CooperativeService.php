@@ -18,6 +18,12 @@
                     ->get();      
         }
 
+        public static function getListByRegion($region_id){
+            return Cooperative::where('region_id', $region_id)
+                    ->orderBy("id", 'ASC')
+                    ->get();      
+        }
+
         public static function getData($id){
             return Cooperative::find($id);      
         }

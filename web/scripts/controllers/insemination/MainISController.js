@@ -13,6 +13,8 @@ angular.module('e-homework').controller('MainISController', function($scope, $co
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));    
     $scope.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));   
     $scope.loadList = function(action){
+        $scope.CurYear = $scope.condition.YearFrom + 543;
+        $scope.LastYear = $scope.CurYear - 1;
         var params = {
             'condition' : $scope.condition
             , 'region' : $scope.PersonRegion
@@ -39,7 +41,7 @@ angular.module('e-homework').controller('MainISController', function($scope, $co
 
     $scope.goSearch = function(){
         $scope.ViewType = 'MAIN';
-        // $scope.loadList('insemination/list/main');
+        $scope.loadList('insemination/list/main');
     }
 
 
@@ -206,6 +208,32 @@ angular.module('e-homework').controller('MainISController', function($scope, $co
         ,{'values':'72'}
         ,{'values':'151500'}
     ];
-    // $scope.loadList('insemination/list/main');
+
+    $scope.ViewType = 'MAIN';
+    $scope.YearList = getYearList(20);
+    $scope.MonthList = getMonthList();
+    var curDate = new Date();
+    $scope.condition = {
+                        'DisplayType':'monthly'
+                        ,'MonthFrom' : curDate.getMonth() + 1
+                        ,'YearFrom': curDate.getFullYear()
+                        ,'MonthTo' : curDate.getMonth() + 1
+                        ,'YearTo': curDate.getFullYear()
+                        ,'QuarterFrom':'1'
+                        ,'QuarterTo':'4'
+                    };
+
+    $scope.SummaryData = {
+                    'SummaryCurrentCow':''
+                    ,'SummaryCurrentService':''
+                    ,'SummaryCowPercentage':''
+                    ,'SummaryServicePercentage':''
+                    };
+
+    $scope.ResultYearList = [
+                {'years' : (curDate.getFullYear() + 543)}
+                ,{'years' : (curDate.getFullYear() + 543) - 1}
+            ];
+    $scope.loadList('insemination/list/main');
 
 });

@@ -43,6 +43,8 @@ $app->post('/dairy-farming/get/', 'DairyFarmingController:getData');
 $app->post('/dairy-farming/update/', 'DairyFarmingController:updateData');
 
 $app->post('/veterinary/list/main/', 'VeterinaryController:getMainList');
+$app->post('/veterinary/list/detail/', 'VeterinaryController:getDetailList');
+$app->post('/veterinary/list/subdetail/', 'VeterinaryController:getSubDetailList');
 $app->post('/veterinary/get/', 'VeterinaryController:getData');
 $app->post('/veterinary/update/', 'VeterinaryController:updateData');
 $app->post('/veterinary/delete/', 'VeterinaryController:removeData');
@@ -69,10 +71,13 @@ $app->post('/training/get/', 'TrainingController:getData');
 $app->post('/training/update/', 'TrainingController:updateData');
 $app->post('/training/delete/', 'TrainingController:removeData');
 
+$app->post('/insemination/list/main/', 'InseminationController:getMainList');
 $app->post('/insemination/get/', 'InseminationController:getData');
 $app->post('/insemination/update/', 'InseminationController:updateData');
 $app->post('/insemination/delete/detail/', 'InseminationController:removeDetailData');
 
+$app->post('/mineral/list/main/', 'MineralController:getMainList');
+$app->post('/mineral/list/detail/', 'MineralController:getDetailList');
 $app->post('/mineral/get/', 'MineralController:getData');
 $app->post('/mineral/update/', 'MineralController:updateData');
 $app->post('/mineral/delete/detail/', 'MineralController:removeDetailData');
@@ -93,6 +98,8 @@ $app->post('/training-cowbreed/get/', 'TrainingCowBreedController:getData');
 $app->post('/training-cowbreed/update/', 'TrainingCowBreedController:updateData');
 $app->post('/training-cowbreed/delete/detail/','TrainingCowBreedController:removeDetailData');
 
+$app->post('/sperm/list/main/', 'SpermController:getMainList');
+$app->post('/sperm/list/detail/', 'SpermController:getDetailList');
 $app->post('/sperm/get/', 'SpermController:getData');
 $app->post('/sperm/update/', 'SpermController:updateData');
 $app->post('/sperm/delete/detail/', 'SpermController:removeDetailData');

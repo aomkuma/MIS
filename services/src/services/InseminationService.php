@@ -10,6 +10,18 @@
     
     class InseminationService {
 
+        public static function getMainList($years, $months, $region_id, $farm_type, $item_type){
+            return Insemination::select(DB::raw("SUM(cow_amount) AS sum_cow_amount")
+                                        ,DB::raw("SUM(service_cost + sperm_cost + material_cost) AS sum_income_amount")
+                                        ,"insemination.update_date")
+                            ->join("insemination_detail", 'insemination_detail.insemination_id', '=', 'insemination.id')
+                            ->where("years", $years)
+                            ->where("months", $months)
+                            ->where("region_id", $region_id)
+                            ->first()
+                            ->toArray();
+        }
+
         public static function getDataByID($id){
             return Insemination::where('id', $id)
                     //->with('mouHistories')

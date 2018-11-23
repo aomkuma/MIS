@@ -160,9 +160,8 @@
 			<tr>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">ภูมิภาค</th>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">เดือน</th>
-				<th colspan="2" style="text-align: center;" ng-repeat="year in ResultYearList">
-					{{year.years}}
-				</th>
+				<th colspan="2" style="text-align: center; vertical-align: middle;">{{CurYear}}</th>
+				<th colspan="2" style="text-align: center; vertical-align: middle;">{{LastYear}}</th>
 				<th colspan="4" style="text-align: center;">ผลต่าง</th>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">วันที่บันทึกข้อมูล</th>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">วันที่อนุมัติ</th>
@@ -221,9 +220,8 @@
 				<th colspan="2" style="text-align: center;">2560</th>
 				<th colspan="2" style="text-align: center;">2561</th>
 			-->
-				<th colspan="2" style="text-align: center;" ng-repeat="year in ResultYearList">
-					{{year.years}}
-				</th>
+				<th colspan="2" style="text-align: center; vertical-align: middle;">{{CurYear}}</th>
+				<th colspan="2" style="text-align: center; vertical-align: middle;">{{LastYear}}</th>
 				<th colspan="4" style="text-align: center;">ผลต่าง</th>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">วันที่บันทึกข้อมูล</th>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">วันที่อนุมัติ</th>
@@ -329,21 +327,11 @@
 			<tr>
 				<th style="text-align: center; vertical-align: middle;">รายการ</th>
 				<th style="text-align: center; vertical-align: middle;">หน่วย</th>
-				<th style="text-align: center; vertical-align: middle;"><a ng-click="viewDetail2()">มิตรภาพ</a></th>
-				<th style="text-align: center; vertical-align: middle;"><a ng-click="viewDetail2()">ซับกระดาน</a></th>
-				<th style="text-align: center; vertical-align: middle;"><a ng-click="viewDetail2()">พระพุทธบาท</a></th>
-				<th style="text-align: center; vertical-align: middle;"><a ng-click="viewDetail2()">ซับสนุ่น</a></th>
-				<th style="text-align: center; vertical-align: middle;"><a ng-click="viewDetail2()">สวนมะเดื่อ</a></th>
-				<th style="text-align: center; vertical-align: middle;"><a ng-click="viewDetail2()">ชอนม่วง</a></th>
-				<th style="text-align: center; vertical-align: middle;"><a ng-click="viewDetail2()">หนองรี</a></th>
-				<th style="text-align: center; vertical-align: middle;"><a ng-click="viewDetail2()">พัฒนานิคม</a></th>
-				<th style="text-align: center; vertical-align: middle;"><a ng-click="viewDetail2()">ปากช่อง</a></th>
-				<th style="text-align: center; vertical-align: middle;"><a ng-click="viewDetail2()">การเกษตรสีคิ้ว</a></th>
-				<th style="text-align: center; vertical-align: middle;"><a ng-click="viewDetail2()">โคนมสีคิ้ว</a></th>
-				<th style="text-align: center; vertical-align: middle;"><a ng-click="viewDetail2()">สูงเนิน</a></th>
-				<th style="text-align: center; vertical-align: middle;"><a ng-click="viewDetail2()">ขามทะเลสอ</a></th>
-				<th style="text-align: center; vertical-align: middle;"><a ng-click="viewDetail2()">เสิงสาง</a></th>
-				<th style="text-align: center; vertical-align: middle;"><a ng-click="viewDetail2()">ปักธงชัย</a></th>
+				<th style="text-align: center; vertical-align: middle;" ng-repeat="data in CooperativeList">
+					<a ng-show="condition.DisplayType != 'monthly'" ng-click="viewDetail2(data.id, description)">{{data.cooperative_name}}</a>
+					<span ng-show="condition.DisplayType == 'monthly'">{{data.cooperative_name}}</span>
+				</th>
+				
 				<th style="text-align: center; vertical-align: middle;"><a ng-click="viewDetail2()">รวม</a></th>
 			</tr>
 			
@@ -374,7 +362,7 @@
 			<tr>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">รายการ</th>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">หน่วย</th>
-				<th colspan="{{Header.length}}" style="text-align: center; vertical-align: middle;">มิตรภาพ</th>
+				<th colspan="{{Header.length}}" style="text-align: center; vertical-align: middle;">{{Cooperative.cooperative_name}}</th>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">รวม</th>
 			</tr>
 			<tr>

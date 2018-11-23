@@ -4,11 +4,35 @@
     
     use App\Model\Mineral;
     use App\Model\MineralDetail;
-    
+    use App\Model\Food;
 
     use Illuminate\Database\Capsule\Manager as DB;
     
     class MineralService {
+
+        public static function getMainList($years, $months, $region_id){
+            return Mineral::select(DB::raw("SUM(amount) AS sum_weight")
+                                        ,DB::raw("SUM(`values`) AS sum_baht")
+                                        ,"mineral.update_date")
+                            ->join("mineral_detail", 'mineral_detail.mineral_id', '=', 'mineral.id')
+                            ->where("years", $years)
+                            ->where("months", $months)
+                            ->where("region_id", $region_id)
+                            ->first()
+                            ->toArray();
+        }
+
+        public static function getDetailList($years, $months, $cooperative_id, $food_id){
+            return Mineral::select(DB::raw("SUM(amount) AS sum_weight")
+                                        ,DB::raw("SUM(`values`) AS sum_baht"))
+                            ->join("mineral_detail", 'mineral_detail.mineral_id', '=', 'mineral.id')
+                            ->where("years", $years)
+                            ->where("months", $months)
+                            ->where("cooperative_id", $cooperative_id)
+                            ->where("food_id", $food_id)
+                            ->first()
+                            ->toArray();
+        }
 
         public static function getDataByID($id){
             return Mineral::where('id', $id)
@@ -65,5 +89,11 @@
 		public static function removeData($id){
 
 		}
+
+        public static function getFoodList(){
+            return Food::where('actives' , 'Y')
+                    ->orderBy("id", 'DESC')
+                    ->get();   
+        }
 		
     }

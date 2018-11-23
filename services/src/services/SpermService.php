@@ -10,6 +10,30 @@
     
     class SpermService {
 
+        public static function getMainList($years, $months, $region_id){
+            return Sperm::select(DB::raw("SUM(amount) AS sum_amount")
+                                        ,DB::raw("SUM(`price`) AS sum_baht")
+                                        ,"sperm.update_date")
+                            ->join("sperm_detail", 'sperm_detail.sperm_id', '=', 'sperm.id')
+                            ->where("years", $years)
+                            ->where("months", $months)
+                            ->where("region_id", $region_id)
+                            ->first()
+                            ->toArray();
+        }
+
+        public static function getDetailList($years, $months, $cooperative_id, $sperm_item_id){
+            return Sperm::select(DB::raw("SUM(amount) AS sum_amount")
+                                        ,DB::raw("SUM(`price`) AS sum_baht"))
+                            ->join("sperm_detail", 'sperm_detail.sperm_id', '=', 'sperm.id')
+                            ->where("years", $years)
+                            ->where("months", $months)
+                            ->where("cooperative_id", $cooperative_id)
+                            ->where("sperm_item_id", $sperm_item_id)
+                            ->first()
+                            ->toArray();
+        }
+
         public static function getDataByID($id){
             return Sperm::where('id', $id)
                     //->with('mouHistories')

@@ -13,40 +13,125 @@
 <div class="row form-group">
 	<div class="col-lg-12 text-center">
 		<form name="search_form" class="form-inline">
-	  		<div class="form-group">
+	  		<!--<div class="form-group">
 			    <label for="exampleInputName2">&nbsp; ภูมิภาค : </label>
 			    &nbsp; <select name="Year" class="form-control" ng-model="condition.Region" ng-options="region.RegionID as region.RegionName for region in PersonRegion" required="required">
 			    	<option value="">กรุณาเลือก..</option>
 				</select>
-		  	</div>
-			<div class="form-group">
-			    <label for="exampleInputName2">&nbsp; เดือน : </label>
-			    &nbsp; <select name="Year" class="form-control" ng-model="condition.MonthFrom" ng-options="month.monthValue as month.monthText for month in MonthList" required="required">
-					<option value="">กรุณาเลือก..</option>
-				</select>
-		  	</div>
-			<div class="form-group">
-			    <label for="exampleInputName2">&nbsp; ปี : </label>
-			    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearFrom" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
-					<option value="">กรุณาเลือก..</option>
-				</select>
-		  	</div>
-		  	<div class="form-group">
-			    <label for="exampleInputName2">&nbsp; ถึง </label>
-		  	</div>
-		  	<div class="form-group">
-			    <label for="exampleInputName2">&nbsp; เดือน : </label>
-			    &nbsp; <select name="Year" class="form-control" ng-model="condition.MonthTo" ng-options="month.monthValue as month.monthText for month in MonthList" required="required">
-					<option value="">กรุณาเลือก..</option>
-				</select>
-		  	</div>
-			<div class="form-group">
-			    <label for="exampleInputName2">&nbsp; ปี : </label>
-			    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearTo" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
-					<option value="">กรุณาเลือก..</option>
-				</select>
-		  	</div>
-		  	<button class="btn btn-primary" ng-click="goSearch()"><span class="glyphicon glyphicon-search"></span> ค้นหา</button>
+		  	</div>-->
+			<div ng-show="condition.DisplayType == 'monthly'">
+		  		<div class="form-group">
+				    <label for="exampleInputName2">&nbsp; การแสดงข้อมูล : </label>
+				    &nbsp; <select name="Year" class="form-control" ng-model="condition.DisplayType">
+						<option value="">กรุณาเลือก</option>
+						<option value="monthly">รายเดือน</option>
+						<option value="quarter">รายไตรมาส</option>
+						<option value="annually">รายปี</option>
+					</select>
+			  	</div>
+				<div class="form-group">
+				    <label for="exampleInputName2">&nbsp; เดือน : </label>
+				    &nbsp; <select name="Year" class="form-control" ng-model="condition.MonthFrom" ng-options="month.monthValue as month.monthText for month in MonthList" required="required">
+						<option value="">กรุณาเลือก..</option>
+					</select>
+			  	</div>
+				<div class="form-group">
+				    <label for="exampleInputName2">&nbsp; ปี : </label>
+				    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearFrom" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
+						<option value="">กรุณาเลือก..</option>
+					</select>
+			  	</div>
+			  	<div class="form-group">
+				    <label for="exampleInputName2">&nbsp; ถึง </label>
+			  	</div>
+			  	<div class="form-group">
+				    <label for="exampleInputName2">&nbsp; เดือน : </label>
+				    &nbsp; <select name="Year" class="form-control" ng-model="condition.MonthTo" ng-options="month.monthValue as month.monthText for month in MonthList" required="required">
+						<option value="">กรุณาเลือก..</option>
+					</select>
+			  	</div>
+				<div class="form-group">
+				    <label for="exampleInputName2">&nbsp; ปี : </label>
+				    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearTo" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
+						<option value="">กรุณาเลือก..</option>
+					</select>
+			  	</div>
+			  	<button class="btn btn-primary" ng-click="goSearch()"><span class="glyphicon glyphicon-search"></span> ค้นหา</button>
+			</div>
+			<div ng-show="condition.DisplayType == 'quarter'">
+				<div class="form-group">
+				    <label for="exampleInputName2">&nbsp; การแสดงข้อมูล : </label>
+				    &nbsp; <select name="Year" class="form-control" ng-model="condition.DisplayType">
+						<option value="">กรุณาเลือก</option>
+						<option value="monthly">รายเดือน</option>
+						<option value="quarter">รายไตรมาส</option>
+						<option value="annually">รายปี</option>
+					</select>
+			  	</div>
+				<div class="form-group">
+				    <label for="exampleInputName2">&nbsp; ไตรมาสที่: </label>
+				    &nbsp; <select name="Year" class="form-control" ng-model="condition.QuarterFrom" required="required">
+						<option value="">กรุณาเลือก..</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+					</select>
+			  	</div>
+				<div class="form-group">
+				    <label for="exampleInputName2">&nbsp; ปีงบประมาณ: </label>
+				    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearFrom" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
+						<option value="">กรุณาเลือก..</option>
+					</select>
+			  	</div>
+			  	<div class="form-group">
+				    <label for="exampleInputName2">&nbsp; ถึง </label>
+			  	</div>
+			  	<div class="form-group">
+				    <label for="exampleInputName2">&nbsp; ไตรมาสที่: </label>
+				    &nbsp; <select name="Year" class="form-control" ng-model="condition.QuarterTo" required="required">
+						<option value="">กรุณาเลือก..</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+					</select>
+			  	</div>
+				<div class="form-group">
+				    <label for="exampleInputName2">&nbsp; ปีงบประมาณ: </label>
+				    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearTo" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
+						<option value="">กรุณาเลือก..</option>
+					</select>
+			  	</div>
+			  	<button class="btn btn-primary" ng-click="goSearch()"><span class="glyphicon glyphicon-search"></span> ค้นหา</button>
+			</div>
+			<div ng-show="condition.DisplayType == 'annually'">
+				<div class="form-group">
+				    <label for="exampleInputName2">&nbsp; การแสดงข้อมูล : </label>
+				    &nbsp; <select name="Year" class="form-control" ng-model="condition.DisplayType">
+						<option value="">กรุณาเลือก</option>
+						<option value="monthly">รายเดือน</option>
+						<option value="quarter">รายไตรมาส</option>
+						<option value="annually">รายปี</option>
+					</select>
+			  	</div>
+				<div class="form-group">
+				    <label for="exampleInputName2">&nbsp; ปีงบประมาณ: </label>
+				    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearFrom" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
+						<option value="">กรุณาเลือก..</option>
+					</select>
+			  	</div>
+			  	<div class="form-group">
+				    <label for="exampleInputName2">&nbsp; ถึง </label>
+			  	</div>
+				<div class="form-group">
+				    <label for="exampleInputName2">&nbsp; ปีงบประมาณ: </label>
+				    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearTo" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
+						<option value="">กรุณาเลือก..</option>
+					</select>
+			  	</div>
+			  	<button class="btn btn-primary" ng-click="goSearch()"><span class="glyphicon glyphicon-search"></span> ค้นหา</button>
+			</div>
 		</form>
 	</div>
 </div>

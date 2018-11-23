@@ -31,11 +31,11 @@ angular.module('e-homework').controller('UpdatePFController', function($scope, $
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('production-factor/update', params).then(function(result){
             if(result.data.STATUS == 'OK'){
-                if($scope.ID !== undefined && $scope.ID !== null){
+                // if($scope.ID !== undefined && $scope.ID !== null){
                     window.location.href = '#/production-factor/update/' + result.data.DATA.id;
-                }else{
-                    location.reload();    
-                }
+                // }else{
+                //     location.reload();    
+                // }
                 IndexOverlayFactory.overlayHide();
             }
         });

@@ -10,6 +10,7 @@ class SpermDetail extends \Illuminate\Database\Eloquent\Model {
                   , 'sperm_item_id'
                   , 'amount'
                   , 'amount_unit'
+                  , 'price'
                   , 'create_date'
                   , 'update_date'
                 );

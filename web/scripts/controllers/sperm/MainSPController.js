@@ -13,6 +13,8 @@ angular.module('e-homework').controller('MainSPController', function($scope, $co
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));    
     $scope.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));   
     $scope.loadList = function(action){
+        $scope.CurYear = $scope.condition.YearFrom + 543;
+        $scope.LastYear = $scope.CurYear - 1;
         var params = {
             'condition' : $scope.condition
             , 'region' : $scope.PersonRegion
@@ -23,6 +25,26 @@ angular.module('e-homework').controller('MainSPController', function($scope, $co
                 $scope.List = result.data.DATA.DataList;
                 $scope.SummaryData = result.data.DATA.Summary;
                 console.log($scope.List);
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+
+    $scope.loadListDetail = function(action, description){
+        var params = {
+            'condition' : $scope.condition
+            , 'region' : $scope.PersonRegion
+            , 'description' : description
+        };
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest(action, params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.DetailList = result.data.DATA.DetailList;
+                $scope.Item = result.data.DATA.Item;
+                $scope.ItemUnit = result.data.DATA.ItemUnit;
+                $scope.DetailSummary = result.data.DATA.SummaryList;
+                // $scope.SummaryData = result.data.DATA.Summary;
+                // console.log($scope.List);
             }
             IndexOverlayFactory.overlayHide();
         });
@@ -39,13 +61,14 @@ angular.module('e-homework').controller('MainSPController', function($scope, $co
 
     $scope.goSearch = function(){
         $scope.ViewType = 'MAIN';
-        // $scope.loadList('sperm/list/main');
+        $scope.loadList('sperm/list/main');
     }
 
 
-    $scope.viewDetail = function(){
+    $scope.viewDetail = function(description){
         $scope.ViewType = 'DETAIL';
         console.log($scope.DetailList);
+        $scope.loadListDetail('mineral/list/detail', description);
     }
 
     $scope.getRegionName = function(region_id){
@@ -221,6 +244,21 @@ angular.module('e-homework').controller('MainSPController', function($scope, $co
         ,{'values':'7200'}
         ,{'values':'151500'}
     ];
-    // $scope.loadList('sperm/list/main');
+
+    $scope.ViewType = 'MAIN';
+    $scope.YearList = getYearList(20);
+    $scope.MonthList = getMonthList();
+    var curDate = new Date();
+    $scope.condition = {
+                        'DisplayType':'monthly'
+                        ,'MonthFrom' : curDate.getMonth() + 1
+                        ,'YearFrom': curDate.getFullYear()
+                        ,'MonthTo' : curDate.getMonth() + 1
+                        ,'YearTo': curDate.getFullYear()
+                        ,'QuarterFrom':'1'
+                        ,'QuarterTo':'4'
+                    };
+
+    $scope.loadList('sperm/list/main');
 
 });
