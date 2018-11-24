@@ -32,6 +32,7 @@ angular.module('e-homework').controller('MainVTController', function($scope, $co
     }
 
     $scope.loadListDetail = function(action, description){
+        $scope.data_description = description;
         var params = {
             'condition' : $scope.condition
             , 'region' : $scope.PersonRegion
@@ -536,6 +537,23 @@ angular.module('e-homework').controller('MainVTController', function($scope, $co
             case 7 : return 'อ.ส.ค. ภาคเหนือตอนบน (เชียงใหม่)';
             default : return '';
         }
+    }
+
+    $scope.exportReport = function(DetailList, CooperativeList){
+        console.log(DetailList, CooperativeList, $scope.data_description);
+        // return;
+        IndexOverlayFactory.overlayHide();
+        var params = {
+            'DetailList' : DetailList
+            , 'CooperativeList' : CooperativeList
+            , 'data_description' : $scope.data_description
+        };
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('veterinary/report', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                window.location.href="downloads/" + result.data.DATA;
+            }
+        });
     }
 
     $scope.Header = [];

@@ -50,11 +50,13 @@ $app->post('/veterinary/update/', 'VeterinaryController:updateData');
 $app->post('/veterinary/delete/', 'VeterinaryController:removeData');
 $app->post('/veterinary/delete/detail/', 'VeterinaryController:removeDetailData');
 $app->post('/veterinary/delete/item/', 'VeterinaryController:removeItemData');
+$app->post('/veterinary/report/', 'ReportController:exportVeterinaryExcel');
 
 $app->post('/production-factor/list/', 'ProductionFactorController:getList');
 $app->post('/production-factor/get/', 'ProductionFactorController:getData');
 $app->post('/production-factor/update/', 'ProductionFactorController:updateData');
 $app->post('/production-factor/delete/', 'ProductionFactorController:removeData');
+$app->post('/production-factor/report/', 'ReportController:exportProductFactorReport');
 
 $app->post('/food/list/', 'FoodController:getList');
 $app->post('/food/get/', 'FoodController:getData');
