@@ -547,6 +547,7 @@ angular.module('e-homework').controller('MainVTController', function($scope, $co
             'DetailList' : DetailList
             , 'CooperativeList' : CooperativeList
             , 'data_description' : $scope.data_description
+            , 'condition' : $scope.condition
         };
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('veterinary/report', params).then(function(result){
