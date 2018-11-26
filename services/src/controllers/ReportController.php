@@ -40,6 +40,7 @@ class ReportController extends Controller {
             $condition = $obj['obj']['condition'];
             $cooperative = $obj['obj']['CooperativeList'];
             $data = $obj['obj']['DetailList'];
+            $description = $obj['obj']['data_description'];
             //$summary = $obj['summary'];
 
             $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_in_memory_gzip;
@@ -52,7 +53,7 @@ class ReportController extends Controller {
                 case 'annually' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม ปี ' . ($condition['YearFrom'] + 543);
                     $objPHPExcel = $this->generateExcel($objPHPExcel, $condition, $data, $cooperative, $header);
                     break;
-                case 'monthly' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม เดือน ' .$this->getMonthName( $condition['MonthFrom']) . ' ปี ' . ($condition['YearFrom'] + 543) . ' ถึง เดือน ' . $this->getMonthName( $condition['MonthTo']) . ' ปี ' . ($condition['YearTo'] + 543);
+                case 'monthly' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม เดือน ' . $this->getMonthName($description['months']) . ' ปี ' . ($description['years'] + 543);
                     $objPHPExcel = $this->generateExcel($objPHPExcel, $condition, $data, $cooperative, $header);
                     break;
                 case 'quarter' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม ไตรมาสที่ ' . $condition['QuarterFrom'] . ' ปี ' . ($condition['YearFrom'] + 543) . ' ถึง ไตรมาสที่ ' . $condition['QuarterTo'] . ' ปี ' . ($condition['YearTo'] + 543);
@@ -62,7 +63,7 @@ class ReportController extends Controller {
                 default : $result = null;
             }
 
-            $filename = 'Export-'.$condition['DisplayType']. '_' . date('YmdHis') .'.xlsx';
+            $filename = 'Export-' . $condition['DisplayType'] . '_' . date('YmdHis') . '.xlsx';
             $filepath = '../../files/files/download/' . $filename;
 
             $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
@@ -175,8 +176,8 @@ class ReportController extends Controller {
                 'name' => 'AngsanaUPC',
                 'size' => '16'
         ));
-        $objPHPExcel->getDefaultStyle()
-                ->applyFromArray($styleArray);
+//        $objPHPExcel->getDefaultStyle()
+//                ->applyFromArray($styleArray);
 
 
 
@@ -184,14 +185,20 @@ class ReportController extends Controller {
         $objPHPExcel->getActiveSheet()->mergeCells('A1:' . $highestColumm . '1');
         $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:A'.$con_row)->getFont()->setSize(16);
         $objPHPExcel->getActiveSheet()->getStyle('A2:B3')->getFont()->setBold(true);
         $objPHPExcel->getActiveSheet()->getStyle('A2:B3')->getFont()->setSize(14);
         $objPHPExcel->getActiveSheet()->mergeCells('D2:' . $highestColumm . '2');
         $objPHPExcel->getActiveSheet()->getStyle('D2')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+       
+        $objPHPExcel->getActiveSheet()->getStyle('D2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('D2')->getFont()->setSize(12);
+        
         $objPHPExcel->getActiveSheet()->getStyle('D3:' . $highestColumm . '3')->getFont()->setBold(true);
         $objPHPExcel->getActiveSheet()->getStyle('D3:' . $highestColumm . '3')->getFont()->setSize(12);
+        
         $objPHPExcel->getActiveSheet()->getStyle('D3:' . $highestColumm . '3')->getAlignment()->setWrapText(true);
+         $objPHPExcel->getActiveSheet()->getStyle('B3:' . $highestColumm . $con_row)->getFont()->setSize(12);
         $objPHPExcel->getActiveSheet()->getStyle($highestColumm . '3')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()
                 ->getStyle("A2:" . $highestColumm . "3")
@@ -221,6 +228,9 @@ class ReportController extends Controller {
                         'allborders' => array(
                             'style' => (\PHPExcel_Style_Border::BORDER_THIN)
                         )
+                    ),
+                    'font' => array(
+                        'name' => 'AngsanaUPC'
                     )
                 )
         );
