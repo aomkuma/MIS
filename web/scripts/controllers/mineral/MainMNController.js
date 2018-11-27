@@ -69,6 +69,25 @@ angular.module('e-homework').controller('MainMNController', function($scope, $co
         $scope.ViewType = 'DETAIL';
         console.log($scope.DetailList);
         $scope.loadListDetail('mineral/list/detail', description);
+        $scope.data_description = description;
+    }
+    $scope.exportReport = function(DetailList, Item, ItemUnit){
+        console.log(DetailList, $scope.data_description);
+        // return;
+        IndexOverlayFactory.overlayHide();
+        var params = {
+            'DetailList' : DetailList
+            , 'Item' : Item
+            , 'ItemUnit' : ItemUnit
+            , 'data_description' : $scope.data_description
+            , 'condition' : $scope.condition
+        };
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('mineral/report', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                window.location.href="../" + result.data.DATA;
+            }
+        });
     }
 
     $scope.getRegionName = function(region_id){

@@ -552,7 +552,7 @@ angular.module('e-homework').controller('MainVTController', function($scope, $co
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('veterinary/report', params).then(function(result){
             if(result.data.STATUS == 'OK'){
-                window.location.href="downloads/" + result.data.DATA;
+                window.location.href="../" + result.data.DATA;
             }
         });
     }

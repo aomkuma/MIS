@@ -83,6 +83,7 @@ $app->post('/mineral/list/detail/', 'MineralController:getDetailList');
 $app->post('/mineral/get/', 'MineralController:getData');
 $app->post('/mineral/update/', 'MineralController:updateData');
 $app->post('/mineral/delete/detail/', 'MineralController:removeDetailData');
+$app->post('/mineral/report/', 'ReportController:exportMineralExcel');
 
 $app->post('/sperm-sale/get/', 'SpermSaleController:getData');
 $app->post('/sperm-sale/update/', 'SpermSaleController:updateData');
