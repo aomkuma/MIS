@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\FoodService;
+
 use PHPExcel;
 
 class ReportController extends Controller {
@@ -41,7 +42,7 @@ class ReportController extends Controller {
             $data = $obj['obj']['DetailList'];
             $description = $obj['obj']['data_description'];
             //$summary = $obj['summary'];
-
+            
             $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_in_memory_gzip;
 
             $catch_result = \PHPExcel_Settings::setCacheStorageMethod($cacheMethod);
@@ -439,6 +440,58 @@ class ReportController extends Controller {
         );
 
         return $objPHPExcel;
+    }
+    
+    public function exportSpermExcel($request, $response) {
+        // error_reporting(E_ERROR);
+        // error_reporting(E_ALL);
+        // ini_set('display_errors','On');           
+        try {
+            $obj = $request->getParsedBody();
+
+//            $condition = $obj['obj']['condition'];
+//            $cooperative = $obj['obj']['CooperativeList'];
+            $data = $obj['obj']['data'];
+//            $description = $obj['obj']['data_description'];
+            //$summary = $obj['summary'];
+            print_r($obj);
+            die();
+            $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_in_memory_gzip;
+
+            $catch_result = \PHPExcel_Settings::setCacheStorageMethod($cacheMethod);
+
+            $objPHPExcel = new PHPExcel();
+
+            switch ($condition['DisplayType']) {
+                case 'annually' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม ปี ' . ($condition['YearFrom'] + 543);
+                    $objPHPExcel = $this->generateVeterinaryExcel($objPHPExcel, $condition, $data, $cooperative, $header);
+                    break;
+                case 'monthly' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม เดือน ' . $this->getMonthName($description['months']) . ' ปี ' . ($description['years'] + 543);
+                    $objPHPExcel = $this->generateVeterinaryExcel($objPHPExcel, $condition, $data, $cooperative, $header);
+                    break;
+                case 'quarter' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม ไตรมาสที่ ' . $condition['QuarterFrom'] . ' ปี ' . ($condition['YearFrom'] + 543) . ' ถึง ไตรมาสที่ ' . $condition['QuarterTo'] . ' ปี ' . ($condition['YearTo'] + 543);
+                    $objPHPExcel = $this->generateVeterinaryExcel($objPHPExcel, $condition, $data, $cooperative, $header);
+                    break;
+
+                default : $result = null;
+            }
+
+            $filename = 'Veterinary-' . $condition['DisplayType'] . '_' . date('YmdHis') . '.xlsx';
+            $filepath = '../../files/files/download/' . $filename;
+
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+
+            $objWriter->setPreCalculateFormulas();
+
+
+            $objWriter->save($filepath);
+
+            $this->data_result['DATA'] = 'files/files/download/' . $filename;
+
+            return $this->returnResponse(200, $this->data_result, $response);
+        } catch (\Exception $e) {
+            return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+        }
     }
 
 }

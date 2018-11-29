@@ -106,6 +106,7 @@ $app->post('/sperm/list/detail/', 'SpermController:getDetailList');
 $app->post('/sperm/get/', 'SpermController:getData');
 $app->post('/sperm/update/', 'SpermController:updateData');
 $app->post('/sperm/delete/detail/', 'SpermController:removeDetailData');
+$app->post('/sperm/report/', 'ReportController:exportSpermExcel');
 
 $app->post('/travel/get/', 'TravelController:getData');
 $app->post('/travel/update/', 'TravelController:updateData');
