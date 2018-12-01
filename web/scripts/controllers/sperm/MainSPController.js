@@ -70,13 +70,13 @@ angular.module('e-homework').controller('MainSPController', function($scope, $co
         console.log($scope.DetailList);
         $scope.loadListDetail('mineral/list/detail', description);
     }
-    $scope.exportReport = function(data){
+    $scope.exportReport = function(data,condition){
        // console.log(DetailList, $scope.data_description);
         // return;
         IndexOverlayFactory.overlayHide();
         var params = {
             'data' : data
-           
+           , 'condition' : condition
         };
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('sperm/report', params).then(function(result){
@@ -85,6 +85,7 @@ angular.module('e-homework').controller('MainSPController', function($scope, $co
             }
         });
     }
+    
 
     $scope.getRegionName = function(region_id){
         switch(region_id){

@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Service\FoodService;
-
+use App\Service\MasterGoalService;
+use App\Service\SpermService;
+use App\Service\GoalMissionService;
 use PHPExcel;
 
 class ReportController extends Controller {
@@ -42,7 +44,7 @@ class ReportController extends Controller {
             $data = $obj['obj']['DetailList'];
             $description = $obj['obj']['data_description'];
             //$summary = $obj['summary'];
-            
+
             $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_in_memory_gzip;
 
             $catch_result = \PHPExcel_Settings::setCacheStorageMethod($cacheMethod);
@@ -56,7 +58,7 @@ class ReportController extends Controller {
                 case 'monthly' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม เดือน ' . $this->getMonthName($description['months']) . ' ปี ' . ($description['years'] + 543);
                     $objPHPExcel = $this->generateVeterinaryExcel($objPHPExcel, $condition, $data, $cooperative, $header);
                     break;
-                case 'quarter' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม ไตรมาสที่ ' . $condition['QuarterFrom'] . ' ปี ' . ($condition['YearFrom'] + 543) . ' ถึง ไตรมาสที่ ' . $condition['QuarterTo'] . ' ปี ' . ($condition['YearTo'] + 543);
+                case 'quarter' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม ไตรมาสที่ ' . $description['quarter'] . ' ปี ' . ($condition['YearFrom'] + 543);
                     $objPHPExcel = $this->generateVeterinaryExcel($objPHPExcel, $condition, $data, $cooperative, $header);
                     break;
 
@@ -294,7 +296,7 @@ class ReportController extends Controller {
                 case 'monthly' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม เดือน ' . $this->getMonthName($description['months']) . ' ปี ' . ($description['years'] + 543);
                     $objPHPExcel = $this->generateMineralExcel($objPHPExcel, $condition, $data, $header, $item, $itemunit);
                     break;
-                case 'quarter' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม ไตรมาสที่ ' . $condition['QuarterFrom'] . ' ปี ' . ($condition['YearFrom'] + 543) . ' ถึง ไตรมาสที่ ' . $condition['QuarterTo'] . ' ปี ' . ($condition['YearTo'] + 543);
+                case 'quarter' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม ไตรมาสที่ ' . $description['quarter'] . ' ปี ' . ($condition['YearFrom'] + 543);
                     $objPHPExcel = $this->generateMineralExcel($objPHPExcel, $condition, $data, $header, $item, $itemunit);
                     break;
 
@@ -351,7 +353,7 @@ class ReportController extends Controller {
             $objPHPExcel->getActiveSheet()->setCellValue('A' . $con_row, $valueitem['label']);
             if ($itemunit[$key + $key]['label'] == 'กิโลกรัม') {
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . $con_row, 'กก.');
-                 $objPHPExcel->getActiveSheet()->getStyle('B' . $con_row)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $objPHPExcel->getActiveSheet()->getStyle('B' . $con_row)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
             } else {
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . $con_row, $itemunit[$key + $key]['label']);
             }
@@ -378,9 +380,9 @@ class ReportController extends Controller {
                 'name' => 'AngsanaUPC'
         ));
         $objPHPExcel->getActiveSheet()->getStyle('A' . $con_row)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-       $objPHPExcel->getActiveSheet()->getStyle('A' . $con_row)->applyFromArray($styleArraysum);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $con_row)->applyFromArray($styleArraysum);
         $objPHPExcel->getActiveSheet()->setCellValue('B' . $con_row, 'บาท');
-       
+
         $objPHPExcel->getActiveSheet()->getStyle('B' . $con_row)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         foreach ($sum as $keysum => $sums) {
             $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3 + $keysum, $con_row, $sums);
@@ -441,21 +443,21 @@ class ReportController extends Controller {
 
         return $objPHPExcel;
     }
-    
+
     public function exportSpermExcel($request, $response) {
         // error_reporting(E_ERROR);
         // error_reporting(E_ALL);
         // ini_set('display_errors','On');           
         try {
             $obj = $request->getParsedBody();
+            $mastesgoallist = MasterGoalService::getList('Y');
+            //  print_r($mastesgoallist->toArray());
 
-//            $condition = $obj['obj']['condition'];
+            $condition = $obj['obj']['condition'];
 //            $cooperative = $obj['obj']['CooperativeList'];
             $data = $obj['obj']['data'];
 //            $description = $obj['obj']['data_description'];
-            //$summary = $obj['summary'];
-            print_r($obj);
-            die();
+
             $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_in_memory_gzip;
 
             $catch_result = \PHPExcel_Settings::setCacheStorageMethod($cacheMethod);
@@ -463,20 +465,21 @@ class ReportController extends Controller {
             $objPHPExcel = new PHPExcel();
 
             switch ($condition['DisplayType']) {
-                case 'annually' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม ปี ' . ($condition['YearFrom'] + 543);
-                    $objPHPExcel = $this->generateVeterinaryExcel($objPHPExcel, $condition, $data, $cooperative, $header);
+                case 'annually' :$header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม ปี ' . ($data['Description']['years'] + 543);
+                    $objPHPExcel = $this->generateSpermExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
                     break;
-                case 'monthly' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม เดือน ' . $this->getMonthName($description['months']) . ' ปี ' . ($description['years'] + 543);
-                    $objPHPExcel = $this->generateVeterinaryExcel($objPHPExcel, $condition, $data, $cooperative, $header);
+                case 'monthly' : $header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม เดือน ' . $this->getMonthName($data['Description']['months']) . ' ปี ' . ($data['Description']['years'] + 543);
+                    $objPHPExcel = $this->generateSpermExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
                     break;
-                case 'quarter' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม ไตรมาสที่ ' . $condition['QuarterFrom'] . ' ปี ' . ($condition['YearFrom'] + 543) . ' ถึง ไตรมาสที่ ' . $condition['QuarterTo'] . ' ปี ' . ($condition['YearTo'] + 543);
-                    $objPHPExcel = $this->generateVeterinaryExcel($objPHPExcel, $condition, $data, $cooperative, $header);
+                case 'quarter' :$header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม ไตรมาสที่ ' . $data['Quarter'] . ' ปี ' . ($data['Description']['years'] + 543);
+                    $objPHPExcel = $this->generateSpermExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
                     break;
 
                 default : $result = null;
             }
-
-            $filename = 'Veterinary-' . $condition['DisplayType'] . '_' . date('YmdHis') . '.xlsx';
+//            $header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม เดือน ' . $this->getMonthName($data['Description']['months']) . ' ปี ' . ($data['Description']['years'] + 543);
+//            $objPHPExcel = $this->generateSpermExcel($objPHPExcel, $mastesgoallist, $header, $data);
+            $filename = 'Sperm-' . $condition['DisplayType'] . '_' . date('YmdHis') . '.xlsx';
             $filepath = '../../files/files/download/' . $filename;
 
             $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
@@ -492,6 +495,159 @@ class ReportController extends Controller {
         } catch (\Exception $e) {
             return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
         }
+    }
+
+    private function generateSpermExcel($objPHPExcel, $mastesgoallist, $header, $data, $type) {
+
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', $header);
+
+
+
+        $objPHPExcel->getActiveSheet()->setCellValue('A2', 'การผลิตน้ำเชื้อแช่แข็ง');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('A3', 'กิจกรรม/ผลิตภัณฑ์/สินค้า/บริการ');
+        $objPHPExcel->getActiveSheet()->setCellValue('B3', 'หน่วย');
+        $objPHPExcel->getActiveSheet()->setCellValue('C3', 'เป้าหมายทั้งปี');
+
+        $row = 0;
+        $goal = GoalMissionService::getyearGoal($data['Description']['region_id'], $data['Description']['years']);
+
+
+        if ($type == 'annually') {
+            //  $objPHPExcel->getActiveSheet()->setCellValue('D3', 'เป้าหมาย ประจำเดือน');
+            $objPHPExcel->getActiveSheet()->setCellValue('D3', 'ผลการดำเนินงานประจำปี');
+            $objPHPExcel->getActiveSheet()->setCellValue('E3', 'เปรียบเทียบเป้าหมาย');
+            foreach ($goal as $key => $value) {
+
+                $mastesgoallist = MasterGoalService::getData($value['goal_id']);
+                $spmonth = SpermService::getDetailyear($data['Description']['years'], $value['goal_id'], $data['Description']['region_id']);
+
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . (4 + $row), $mastesgoallist['goal_name']);
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), '        มูลค่า' . $mastesgoallist['goal_name']);
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), 'บาท');
+                ///goal
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . (4 + $row), $value['unit']);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . (4 + $row), $value['amount']);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $value['price_value']);
+//                $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), round($value['amount'] , 2));
+//                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), round($value['price_value'] , 2));
+/// month
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), $spmonth['amount']);
+
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $spmonth['price']);
+//compare
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . (4 + $row), $spmonth['amount'] - round($value['amount'], 2));
+
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $spmonth['price'] - round($value['price_value'], 2));
+                $row += 2;
+            }
+        } else if ($type == 'monthly') {
+           
+            $objPHPExcel->getActiveSheet()->setCellValue('D3', 'เป้าหมาย ประจำเดือน');
+            $objPHPExcel->getActiveSheet()->setCellValue('E3', 'ผลการดำเนินงานประจำเดือน');
+            $objPHPExcel->getActiveSheet()->setCellValue('F3', 'เปรียบเทียบเป้าหมาย');
+            foreach ($goal as $key => $value) {
+                $mastesgoallist = MasterGoalService::getData($value['goal_id']);
+                $spmonth = SpermService::getDetailmonth($data['Description']['years'], $data['Description']['months'], $value['goal_id'], $data['Description']['region_id']);
+
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . (4 + $row), $mastesgoallist['goal_name']);
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), '        มูลค่า' . $mastesgoallist['goal_name']);
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), 'บาท');
+                ///goal
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . (4 + $row), $value['unit']);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . (4 + $row), $value['amount']);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $value['price_value']);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), round($value['amount'] / 12, 2));
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), round($value['price_value'] / 12, 2));
+/// month
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . (4 + $row), $spmonth['amount']);
+
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $spmonth['price']);
+//compare
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . (4 + $row), $spmonth['amount'] - round($value['amount'] / 12, 2));
+
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $spmonth['price'] - round($value['price_value'] / 12, 2));
+                $row += 2;
+            }
+        } else {
+            $objPHPExcel->getActiveSheet()->setCellValue('D3', 'เป้าหมาย ประจำไตรมาส');
+            $objPHPExcel->getActiveSheet()->setCellValue('E3', 'ผลการดำเนินงานประจำไตรมาส');
+            $objPHPExcel->getActiveSheet()->setCellValue('F3', 'เปรียบเทียบเป้าหมาย');
+            foreach ($goal as $key => $value) {
+                $mastesgoallist = MasterGoalService::getData($value['goal_id']);
+                $spmonth = SpermService::getDetailquar($data['Description']['years'], $value['goal_id'], $data['Description']['region_id'],$data['Quarter']);
+
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . (4 + $row), $mastesgoallist['goal_name']);
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), '        มูลค่า' . $mastesgoallist['goal_name']);
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), 'บาท');
+                ///goal
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . (4 + $row), $value['unit']);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . (4 + $row), $value['amount']);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $value['price_value']);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), round($value['amount'] / 3, 2));
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), round($value['price_value'] / 3, 2));
+/// month
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . (4 + $row), $spmonth['amount']);
+
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $spmonth['price']);
+//compare
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . (4 + $row), $spmonth['amount'] - round($value['amount'] / 3, 2));
+
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $spmonth['price'] - round($value['price_value'] / 3, 2));
+                $row += 2;
+            }
+        }
+
+
+        $highestRow = $objPHPExcel->setActiveSheetIndex(0)->getHighestRow();
+        $highestColum = $objPHPExcel->setActiveSheetIndex(0)->getHighestColumn();
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:' . $highestColum . '1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:' . $highestColum . '2');
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:A2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:A2')->getFont()->setSize(18);
+
+
+        $objPHPExcel->getActiveSheet()->getStyle('A3:' . $highestColum . '3')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:' . $highestColum . '3')->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:' . $highestColum . '3')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A4:A' . $highestRow)->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A4:A' . $highestRow)->getFont()->setSize(14);
+
+        $objPHPExcel->getActiveSheet()->getStyle('B4:' . $highestColum . $highestRow)->getFont()->setSize(14);
+        $objPHPExcel->getActiveSheet()->getStyle('B4:B' . $highestRow)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(30);
+          $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A3:' . $highestColum . '3')->applyFromArray(
+                array(
+                    'fill' => array(
+                        'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                        'color' => array('rgb' => 'BFBFBF')
+                    )
+                )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A1:' . $highestColum . $highestRow)->applyFromArray(
+                array(
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => (\PHPExcel_Style_Border::BORDER_THIN)
+                        )
+                    ),
+                    'font' => array(
+                        'name' => 'AngsanaUPC'
+                    )
+                )
+        );
+
+        return $objPHPExcel;
     }
 
 }
