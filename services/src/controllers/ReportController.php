@@ -770,8 +770,7 @@ class ReportController extends Controller {
         $objPHPExcel->getActiveSheet()->setCellValue('A10', 'รวมรายได้ทั้งสิ้น');
         $objPHPExcel->getActiveSheet()->getStyle('A6:A9')->getFont()->setSize(16);
         $row = 0;
-//        $goal = GoalMissionService::getyearGoal($data['Description']['region_id'], $data['Description']['years']);
-//        foreach ($goal as $key => $value) {
+
         $mastesgoaladult = MasterGoalService::getmisiontravel('ท่องเที่ยวผู้ใหญ่');
         $missionad = GoalMissionService::getGoaltravel($mastesgoaladult[0]['id'], $data['Description']['region_id'], $data['Description']['years']);
         $mastesgoalchild = MasterGoalService::getmisiontravel('ท่องเที่ยวเด็ก');
