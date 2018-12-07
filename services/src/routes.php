@@ -111,6 +111,7 @@ $app->post('/sperm/report/', 'ReportController:exportSpermExcel');
 $app->post('/travel/get/', 'TravelController:getData');
 $app->post('/travel/update/', 'TravelController:updateData');
 $app->post('/travel/delete/detail/', 'TravelController:removeDetailData');
+$app->post('/travel/report/', 'ReportController:exportTravelExcel');
 
 $app->post('/cooperative-milk/get/', 'CooperativeMilkController:getData');
 $app->post('/cooperative-milk/update/', 'CooperativeMilkController:updateData');

@@ -39,7 +39,7 @@ angular.module('e-homework').controller('MainTVController', function($scope, $co
 
     $scope.goSearch = function(){
         $scope.ViewType = 'MAIN';
-        // $scope.loadList('travel/list/main');
+         $scope.loadList('travel/list/main');
     }
 
 
@@ -47,6 +47,22 @@ angular.module('e-homework').controller('MainTVController', function($scope, $co
         $scope.ViewType = 'DETAIL';
         console.log($scope.DetailList);
     }
+    $scope.exportReport = function(data,condition){
+       // console.log(DetailList, $scope.data_description);
+        // return;
+        IndexOverlayFactory.overlayHide();
+        var params = {
+            'data' : data
+           , 'condition' : condition
+        }; 
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('travel/report', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                window.location.href="../" + result.data.DATA;
+            }
+        });
+    }
+
 
     $scope.getRegionName = function(region_id){
         switch(region_id){

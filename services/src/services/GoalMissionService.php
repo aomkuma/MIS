@@ -80,5 +80,12 @@ class GoalMissionService {
     public static function removeData($id) {
         return AccountRole::find($id)->delete();
     }
+     public static function getGoaltravel($goalid,$regid, $year) {
+        return GoalMission::where('years', $year)
+                        ->where('region_id', $regid)
+                        ->where('goal_id', $goalid)
+                        ->get()
+                        ->toArray();
+    }
 
 }

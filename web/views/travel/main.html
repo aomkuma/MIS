@@ -76,7 +76,7 @@
 		<caption class="caption-bg">
 			<button class="btn btn-info pull-right" ng-click="ViewType = 'DETAIL'">รายละเอียด</button>
 			<button class="btn btn-primary pull-right" ng-click="ViewType = 'MAIN'">ข้อมูลโดยรวม</button>
-			<a class="pull-right" style="padding-right: 20px;" href="../files/files/download/Export-travel.xlsx" target="_self" download="Export-ท่องเที่ยว.xlsx"><img src="../files/img/excel.png" style="height: 40px;"></a>
+			<a class="pull-right" style="padding-right: 20px;" ng-click="exportReport( data,condition)"><img src="../files/img/excel.png" style="height: 40px;"></a>
 		</caption>
 		<thead style="background-color: #BD1212; color: #FFF;">
 			<tr>
