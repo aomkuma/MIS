@@ -8,6 +8,8 @@ class GoalMission extends \Illuminate\Database\Eloquent\Model {
   	protected $fillable = array('id'
                   , 'region_id'
   								, 'years'
+                  , 'goal_type'
+                  , 'menu_type'
   								, 'goal_id'
   								, 'amount'
   								, 'unit'

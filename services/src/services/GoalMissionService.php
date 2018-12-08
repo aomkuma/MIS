@@ -60,6 +60,14 @@ class GoalMissionService {
         }
     }
 
+    public static function updateDataEditable($id, $editable) {
+        
+        $model = GoalMission::find($id);
+        $model->editable = $editable;
+        return $model->save();
+        
+    }
+
     public static function updateAvg($obj) {
         if (empty($obj['id'])) {
             $model = GoalMissionAvg::create($obj);

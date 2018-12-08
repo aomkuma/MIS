@@ -1,5 +1,5 @@
-angular.module('e-homework').controller('UpdateMGController', function($scope, $cookies, $filter, $state, $routeParams, $uibModal, HTTPService, IndexOverlayFactory) {
-	//console.log('Hello !');
+angular.module('e-homework').controller('UpdatePFController', function($scope, $cookies, $filter, $state, $routeParams, $uibModal, HTTPService, IndexOverlayFactory) {
+    //console.log('Hello !');
     $scope.DEFAULT_LANGUAGE = 'TH';
     $scope.menu_selected = 'management';
     var $user_session = sessionStorage.getItem('user_session');
@@ -29,10 +29,10 @@ angular.module('e-homework').controller('UpdateMGController', function($scope, $
     $scope.save = function(Data){
         var params = {'Data' : Data};
         IndexOverlayFactory.overlayShow();
-        HTTPService.clientRequest('master-goal/update', params).then(function(result){
+        HTTPService.clientRequest('production-factor/update', params).then(function(result){
             if(result.data.STATUS == 'OK'){
                 // if($scope.ID !== undefined && $scope.ID !== null){
-                    window.location.href = '#/master-goal/update/' + result.data.DATA.id;
+                    window.location.href = '#/production-factor/update/' + result.data.DATA.id;
                 // }else{
                 //     location.reload();    
                 // }
@@ -42,20 +42,18 @@ angular.module('e-homework').controller('UpdateMGController', function($scope, $
     }
 
     $scope.cancelUpdate = function(){
-        window.location.href = '#/master-goal';
+        window.location.href = '#/production-factor';
     }
 
     $scope.Data = {
         'id':''
-        , 'goal_type':''
-        , 'menu_type':''
-        , 'goal_name':''
+        , 'name':''
         , 'actives':'Y'
         , 'create_date':''
         , 'update_date':''
     };
     if($scope.ID !== undefined && $scope.ID !== null){
-        $scope.loadData('master-goal/get', $scope.ID);
+        $scope.loadData('production-factor/get', $scope.ID);
     }
 
 });

@@ -45,6 +45,23 @@
             }
         }
 
+        public function updateDataEditable($request, $response, $args){
+            try{
+                $params = $request->getParsedBody();
+                $id = $params['obj']['id'];
+                $editable = $params['obj']['editable'];
+
+                $result = GoalMissionService::updateDataEditable($id, $editable);
+
+                $this->data_result['DATA']['result'] = $result;
+                
+                return $this->returnResponse(200, $this->data_result, $response, false);
+                
+            }catch(\Exception $e){
+                return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+            }   
+        }
+
         public function updateData($request, $response, $args){
             
             try{

@@ -27,6 +27,7 @@ $app->post('/master-goal/update/', 'MasterGoalController:updateData');
 $app->post('/goal-mission/list/', 'GoalMissionController:getList');
 $app->post('/goal-mission/get/', 'GoalMissionController:getData');
 $app->post('/goal-mission/update/', 'GoalMissionController:updateData');
+$app->post('/goal-mission/update/editable/', 'GoalMissionController:updateDataEditable');
 
 $app->post('/mou/list/', 'MouController:getList');
 $app->post('/mou/get/', 'MouController:getData');

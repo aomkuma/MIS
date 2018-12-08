@@ -14,6 +14,7 @@
 			<tr>
 				<th>Last Update</th>
 				<th>ด้านกิจการ</th>
+				<th>ข้อมูล</th>
 				<th>รายการ</th>
 				<th>สถานะ</th>
 				<th>บริหารจัดการ</th>
@@ -23,6 +24,7 @@
 			<tr ng-repeat="data in List">
 				<td>{{data.update_date}}</td>
 				<td>{{getGoalType(data.goal_type)}}</td>
+				<td>{{data.menu_type}}</td>
 				<td>{{data.goal_name}}</td>
 				<td>{{data.actives=='Y'?'ใช้งาน':'ไม่ใช้งาน'}}</td>
 				<td>

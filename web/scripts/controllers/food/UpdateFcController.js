@@ -1,5 +1,5 @@
-angular.module('e-homework').controller('UpdateMGController', function($scope, $cookies, $filter, $state, $routeParams, $uibModal, HTTPService, IndexOverlayFactory) {
-	//console.log('Hello !');
+angular.module('e-homework').controller('UpdateFController', function($scope, $cookies, $filter, $state, $routeParams, $uibModal, HTTPService, IndexOverlayFactory) {
+    //console.log('Hello !');
     $scope.DEFAULT_LANGUAGE = 'TH';
     $scope.menu_selected = 'management';
     var $user_session = sessionStorage.getItem('user_session');
@@ -29,33 +29,33 @@ angular.module('e-homework').controller('UpdateMGController', function($scope, $
     $scope.save = function(Data){
         var params = {'Data' : Data};
         IndexOverlayFactory.overlayShow();
-        HTTPService.clientRequest('master-goal/update', params).then(function(result){
+        HTTPService.clientRequest('food/update', params).then(function(result){
             if(result.data.STATUS == 'OK'){
                 // if($scope.ID !== undefined && $scope.ID !== null){
-                    window.location.href = '#/master-goal/update/' + result.data.DATA.id;
+                    window.location.href = '#/food/update/' + result.data.DATA.id;
                 // }else{
                 //     location.reload();    
                 // }
+                
                 IndexOverlayFactory.overlayHide();
             }
         });
     }
 
     $scope.cancelUpdate = function(){
-        window.location.href = '#/master-goal';
+        window.location.href = '#/food';
     }
 
     $scope.Data = {
         'id':''
-        , 'goal_type':''
-        , 'menu_type':''
-        , 'goal_name':''
+        , 'name':''
+        , 'sell_type':null
         , 'actives':'Y'
         , 'create_date':''
         , 'update_date':''
     };
     if($scope.ID !== undefined && $scope.ID !== null){
-        $scope.loadData('master-goal/get', $scope.ID);
+        $scope.loadData('food/get', $scope.ID);
     }
 
 });

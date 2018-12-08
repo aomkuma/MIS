@@ -14,8 +14,8 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
     $scope.$parent.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));      
     // console.log($scope.$parent.Menu);
 
-    $scope.loadMasterGoalList = function(action){
-        var params = {'actives' : 'Y'};
+    $scope.loadMasterGoalList = function(action, menu_type){
+        var params = {'actives' : 'Y', 'menu_type' : menu_type};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest(action, params).then(function(result){
             if(result.data.STATUS == 'OK'){
@@ -56,10 +56,11 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
                 $scope.Data.price_value = parseFloat($scope.Data.price_value);
                 
                 //find goal type
-                $scope.findGoalType($scope.Data.goal_id);
+                // $scope.findGoalType($scope.Data.goal_id);
             }
             IndexOverlayFactory.overlayHide();
         });
+
     }
 
     $scope.save = function(Data, AvgList){
@@ -159,6 +160,10 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
     $scope.avgIDList = [];
     $scope.historyList = [];
 
-    $scope.loadMasterGoalList('master-goal/list');
+    // 
+    if($scope.ID != null){
+        $scope.loadMasterGoalList('master-goal/list', '');
+        $scope.loadData('goal-mission/get', $scope.ID);
+    }
 
 });

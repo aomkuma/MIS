@@ -6,12 +6,30 @@ angular.module('e-homework').controller('MainGMController', function($scope, $co
     
     if($user_session != null){
         $scope.$parent.currentUser = angular.fromJson($user_session);
+        console.log($scope.$parent.currentUser);
     }else{
        window.location.replace('#/guest/logon');
     }
 
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));   
     $scope.$parent.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));   
+    $scope.Approval = false;
+    $scope.getUserRole = function(){
+        var params = {'UserID' : $scope.currentUser.UserID};
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('account-permission/get', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.UserRole = result.data.DATA.Role;
+                for(var i =0; i < $scope.UserRole.length; i++){
+                    if($scope.UserRole[i].role == '2' && $scope.UserRole[i].actives == 'Y'){
+                        $scope.Approval = true;
+                    }
+                }
+                // console.log($scope.MasterGoalList);
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+    }
 
     $scope.loadMasterGoalList = function(action){
         var params = {'actives' : 'Y'};
@@ -82,12 +100,24 @@ angular.module('e-homework').controller('MainGMController', function($scope, $co
         return goalType;
     }
 
+    $scope.updateEdit = function(id, editable){
+        var params = {'id' : id, 'editable' : editable};
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('goal-mission/update/editable', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.loadList('goal-mission/list');
+                // console.log($scope.UserList);
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+
     // $scope.condition = {'Year' : ''
     //                     , 'Region' : ''
     //                     , 'Goal' : ''
     //                 };
     $scope.YearList = getYearList(20);
-
+    $scope.getUserRole();
     $scope.loadMasterGoalList('master-goal/list');
     
 

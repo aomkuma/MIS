@@ -7,10 +7,14 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class MasterGoalService {
 
-    public static function getList($actives = '') {
-        return MasterGoal::where(function($query) use ($actives) {
+    public static function getList($actives = '', $menu_type = '') {
+        return MasterGoal::where(function($query) use ($actives, $menu_type) {
                             if (!empty($actives)) {
                                 $query->where('actives', $actives);
+                            }
+
+                            if (!empty($menu_type)) {
+                                $query->where('menu_type', $menu_type);
                             }
                         })
                         ->orderBy("update_date", 'DESC')
