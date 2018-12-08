@@ -87,6 +87,7 @@ angular.module('e-homework').controller('MainMNController', function($scope, $co
             if(result.data.STATUS == 'OK'){
                 window.location.href="../" + result.data.DATA;
             }
+            IndexOverlayFactory.overlayHide();
         });
     }
 

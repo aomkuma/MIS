@@ -38,7 +38,7 @@ class MasterGoalService {
         return AccountRole::find($id)->delete();
     }
 
-    public static function getmisiontravel($name) {
+    public static function getmision($name) {
         return MasterGoal::where('goal_name', $name)
                         ->get()
                         ->toArray();

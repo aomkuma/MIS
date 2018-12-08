@@ -554,6 +554,7 @@ angular.module('e-homework').controller('MainVTController', function($scope, $co
             if(result.data.STATUS == 'OK'){
                 window.location.href="../" + result.data.DATA;
             }
+            IndexOverlayFactory.overlayHide();
         });
     }
 

@@ -96,6 +96,7 @@ $app->post('/material/delete/detail/', 'MaterialController:removeDetailData');
 $app->post('/cow-breed/get/', 'CowBreedController:getData');
 $app->post('/cow-breed/update/', 'CowBreedController:updateData');
 $app->post('/cow-breed/delete/detail/', 'CowBreedController:removeDetailData');
+$app->post('/cow-breed/report/', 'ReportController:exportCowbreedExcel');
 
 $app->post('/training-cowbreed/get/', 'TrainingCowBreedController:getData');
 $app->post('/training-cowbreed/update/', 'TrainingCowBreedController:updateData');
