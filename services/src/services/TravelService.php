@@ -64,7 +64,7 @@ class TravelService {
         
     }
 
-    public static function getDetailmonth($years, $month,$region) {
+    public static function getDetailmonth($years, $month, $region) {
         return Travel::select(DB::raw("SUM(adult_pay) AS apay")
                                 , DB::raw("SUM(`child_pay`) AS cpay")
                                 , DB::raw("SUM(`student_pay`) AS spay")
@@ -76,8 +76,59 @@ class TravelService {
                                 , DB::raw("SUM(`student_except`) AS s_except"))
                         ->join("travel_detail", 'travel_detail.travel_id', '=', 'travel.id')
                         ->where("years", $years)
-                        ->where("region_id",$region)
+                        ->where("region_id", $region)
                         ->where("months", $month)
+                        ->first()
+                        ->toArray();
+    }
+
+    public static function getDetailyear($years, $region) {
+        return Travel::select(DB::raw("SUM(adult_pay) AS apay")
+                                , DB::raw("SUM(`child_pay`) AS cpay")
+                                , DB::raw("SUM(`student_pay`) AS spay")
+                                , DB::raw("SUM(`adult_price`) AS p_adult")
+                                , DB::raw("SUM(`child_price`) AS p_child")
+                                , DB::raw("SUM(`student_price`) AS p_student")
+                                , DB::raw("SUM(`adult_except`) AS a_except")
+                                , DB::raw("SUM(`child_except`) AS c_except")
+                                , DB::raw("SUM(`student_except`) AS s_except"))
+                        ->join("travel_detail", 'travel_detail.travel_id', '=', 'travel.id')
+                        ->where("years", $years)
+                        ->where("region_id", $region)
+                        ->first()
+                        ->toArray();
+    }
+
+    public static function getDetailquar($years, $region, $quar) {
+        $st = 1;
+        $en = 3;
+        if ($quar == 1) {
+            $st = 1;
+            $en = 3;
+        } else if ($quar == 2) {
+            $st = 4;
+            $en = 6;
+        } else if ($quar == 3) {
+            $st = 7;
+            $en = 9;
+        } else {
+            $st = 10;
+            $en = 12;
+        }
+
+        return Travel::select(DB::raw("SUM(adult_pay) AS apay")
+                                , DB::raw("SUM(`child_pay`) AS cpay")
+                                , DB::raw("SUM(`student_pay`) AS spay")
+                                , DB::raw("SUM(`adult_price`) AS p_adult")
+                                , DB::raw("SUM(`child_price`) AS p_child")
+                                , DB::raw("SUM(`student_price`) AS p_student")
+                                , DB::raw("SUM(`adult_except`) AS a_except")
+                                , DB::raw("SUM(`child_except`) AS c_except")
+                                , DB::raw("SUM(`student_except`) AS s_except"))
+                        ->join("travel_detail", 'travel_detail.travel_id', '=', 'travel.id')
+                        ->where("years", $years)
+                        ->where("region_id", $region)
+                        ->whereBetween("months", [$st, $en])
                         ->first()
                         ->toArray();
     }
