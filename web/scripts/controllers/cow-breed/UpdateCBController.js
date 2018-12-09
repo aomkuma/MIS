@@ -43,6 +43,17 @@ angular.module('e-homework').controller('UpdateCBController', function($scope, $
         });
     }
 
+    $scope.loadMasterGoalList = function(){
+        var params = {'actives':'Y', 'menu_type' : 'ปัจจัยการเลี้ยงโค'};
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('master-goal/list', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.MasterGoalList = result.data.DATA.List;
+                IndexOverlayFactory.overlayHide();
+            }
+        });
+    }
+
     $scope.loadData = function(action, id){
         var params = {
             'cooperative_id' : $scope.Sperm.cooperative_id
@@ -263,6 +274,7 @@ angular.module('e-homework').controller('UpdateCBController', function($scope, $
 
     $scope.setSperm();
     $scope.loadCooperative();
+    $scope.loadMasterGoalList();
     // $scope.loadDairyFarming('MAIN', '');
     // $scope.loadDairyFarming('CHILD', '');
 

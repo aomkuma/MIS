@@ -84,6 +84,20 @@ angular.module('e-homework').controller('MainVTController', function($scope, $co
         $scope.loadList('veterinary/list/main');
     }
 
+    $scope.numberFormat = function(num){
+        if(num == null){
+            return '';
+        }
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    $scope.numberFormatComma = function(num){
+        if(num == null){
+            return '';
+        }
+        return num.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     $scope.viewDetail2 = function(cooperative_id, description){
         $scope.ViewType = 'DETAIL2';
         // console.log($scope.condition.DisplayType);

@@ -38,6 +38,17 @@ angular.module('e-homework').controller('UpdateMNController', function($scope, $
         });
     }
 
+    $scope.loadMasterGoalList = function(){
+        var params = {'actives':'Y', 'menu_type' : 'แร่ธาตุ พรีมิกซ์ และอาหาร'};
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('master-goal/list', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.MasterGoalList = result.data.DATA.List;
+                IndexOverlayFactory.overlayHide();
+            }
+        });
+    }
+
     $scope.loadData = function(action, id){
         var params = {
             'cooperative_id' : $scope.Mineral.cooperative_id
@@ -270,7 +281,7 @@ angular.module('e-homework').controller('UpdateMNController', function($scope, $
 
     $scope.setMineral();
     $scope.loadCooperative();
-    $scope.loadFood();
+    $scope.loadMasterGoalList();
     
 
 });

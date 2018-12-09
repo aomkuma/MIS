@@ -112,6 +112,17 @@ angular.module('e-homework').controller('UpdateSPSController', function($scope, 
         return convertDateToFullThaiDate(new Date(date));
     }
 
+    $scope.loadMasterGoalList = function(){
+        var params = {'actives':'Y', 'menu_type' : 'จำหน่ายน้ำเชื้อแช่แข็ง'};
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('master-goal/list', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.MasterGoalList = result.data.DATA.List;
+                IndexOverlayFactory.overlayHide();
+            }
+        });
+    }
+
     $scope.goSearch = function(){
         $scope.Search = true;
         $scope.SpermDetailList = [];
@@ -267,6 +278,7 @@ angular.module('e-homework').controller('UpdateSPSController', function($scope, 
 
     $scope.setSperm();
     $scope.loadCooperative();
+    $scope.loadMasterGoalList();
     // $scope.loadDairyFarming('MAIN', '');
     // $scope.loadDairyFarming('CHILD', '');
 

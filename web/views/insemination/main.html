@@ -145,14 +145,14 @@
 		</div>
 		<div class="row" style="">
 			<div class="col-lg-6" style="padding: 20px; border:solid 1px #000;">
-				ปริมาณโคที่รับบริการ&nbsp; {{SummaryData.SummaryCurrentCowService}}
+				ปริมาณโคที่รับบริการ&nbsp; {{numberFormat(SummaryData.SummaryCurrentCowService)}}
 				<br>
-				รายได้จากการจำหน่ายแร่ธาตุ &nbsp; {{SummaryData.SummaryCurrentIncomeService}}
+				รายได้จากการจำหน่ายแร่ธาตุ &nbsp; {{numberFormatComma(SummaryData.SummaryCurrentIncomeService)}}
 			</div>
 			<div class="col-lg-6" style="padding: 20px; border:solid 1px #000;">
-				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{SummaryData.SummaryCowServicePercentage}} %
+				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{numberFormatComma(SummaryData.SummaryCowServicePercentage)}} %
 				<br>
-				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{SummaryData.SummaryIncomeServicePercentage}} %
+				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{numberFormatComma(SummaryData.SummaryIncomeServicePercentage)}} %
 			</div>
 		</div>
 	</div>
@@ -169,7 +169,7 @@
 				<th colspan="2" style="text-align: center; vertical-align: middle;">{{CurYear}}</th>
 				<th colspan="2" style="text-align: center; vertical-align: middle;">{{LastYear}}</th>
 				<th colspan="4" style="text-align: center;">ผลต่าง</th>
-				<th rowspan="2" style="text-align: center; vertical-align: middle;">รายละเอียด</th>
+				
 			</tr>
 			<tr>
 				<th style="text-align: center;">โคที่รับบริการ (ตัว)</th>
@@ -189,20 +189,15 @@
 			<tr ng-repeat="data in List">
 				<td>{{data.RegionName}}</td>
 				<td>{{data.Month}}</td>
-				<td>{{data.CurrentCowService}}</td>
-				<td>{{data.CurrentIncomeService}}</td>
-				<td>{{data.BeforeCowService}}</td>
-				<td>{{data.BeforeIncomeService}}</td>
-				<td>{{data.DiffCowService}}</td>
-				<td>{{data.DiffCowServicePercentage}}</td>
-				<td>{{data.DiffIncomeService}}</td>
-				<td>{{data.DiffIncomeServicePercentage}}</td>
-				<td>
-					<button class="btn btn-success" ng-click="viewDetail(data.Description)">
-						<span class="glyphicon glyphicon-zoom-in"></span> 
-						รายละเอียด
-					</button>
-				</td>
+				<td>{{numberFormat(data.CurrentCowService)}}</td>
+				<td>{{numberFormatComma(data.CurrentIncomeService)}}</td>
+				<td>{{numberFormat(data.BeforeCowService)}}</td>
+				<td>{{numberFormatComma(data.BeforeIncomeService)}}</td>
+				<td>{{numberFormat(data.DiffCowService)}}</td>
+				<td>{{numberFormatComma(data.DiffCowServicePercentage)}}</td>
+				<td>{{numberFormatComma(data.DiffIncomeService)}}</td>
+				<td>{{numberFormatComma(data.DiffIncomeServicePercentage)}}</td>
+				
 			</tr>
 		</tbody>
 	</table>
@@ -220,7 +215,6 @@
 				<th colspan="2" style="text-align: center; vertical-align: middle;">{{CurYear}}</th>
 				<th colspan="2" style="text-align: center; vertical-align: middle;">{{LastYear}}</th>
 				<th colspan="4" style="text-align: center;">ผลต่าง</th>
-				<th rowspan="2" style="text-align: center; vertical-align: middle;">รายละเอียด</th>
 			</tr>
 			<tr>
 				<th style="text-align: center;">โคที่รับบริการ (ตัว)</th>
@@ -240,20 +234,15 @@
 			<tr ng-repeat="data in List">
 				<td>{{data.RegionName}}</td>
 				<td>{{data.Quarter}}</td>
-				<td>{{data.CurrentCowService}}</td>
-				<td>{{data.CurrentIncomeService}}</td>
-				<td>{{data.BeforeCowService}}</td>
-				<td>{{data.BeforeIncomeService}}</td>
-				<td>{{data.DiffCowService}}</td>
-				<td>{{data.DiffCowServicePercentage}}</td>
-				<td>{{data.DiffIncomeService}}</td>
-				<td>{{data.DiffIncomeServicePercentage}}</td>
-				<td>
-					<button class="btn btn-success" ng-click="viewDetail(data.Description)">
-						<span class="glyphicon glyphicon-zoom-in"></span> 
-						รายละเอียด
-					</button>
-				</td>
+				<td>{{numberFormat(data.CurrentCowService)}}</td>
+				<td>{{numberFormatComma(data.CurrentIncomeService)}}</td>
+				<td>{{numberFormat(data.BeforeCowService)}}</td>
+				<td>{{numberFormatComma(data.BeforeIncomeService)}}</td>
+				<td>{{numberFormat(data.DiffCowService)}}</td>
+				<td>{{numberFormatComma(data.DiffCowServicePercentage)}}</td>
+				<td>{{numberFormatComma(data.DiffIncomeService)}}</td>
+				<td>{{numberFormatComma(data.DiffIncomeServicePercentage)}}</td>
+				
 			</tr>
 		</tbody>
 	</table>
@@ -271,7 +260,6 @@
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">โคที่รับบริการ (ตัว)</th>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">รายได้ค่าบริการ + รายได้ค่าน้ำเชื้อ+วัสดุฯ (บาท)</th>
 				<th colspan="4" style="text-align: center;">ผลต่าง</th>
-				<th rowspan="2" style="text-align: center; vertical-align: middle;">รายละเอียด</th>
 			</tr>
 			<tr>
 				<th style="text-align: center;">โคที่รับบริการ (ตัว)</th>
@@ -287,18 +275,12 @@
 			<tr ng-repeat="data in List">
 				<td>{{data.RegionName}}</td>
 				<td>{{data.Year}}</td>
-				<td>{{data.CurrentCowService}}</td>
-				<td>{{data.CurrentIncomeService}}</td>
-				<td>{{data.DiffCowService}}</td>
-				<td>{{data.DiffCowServicePercentage}}</td>
-				<td>{{data.DiffIncomeService}}</td>
-				<td>{{data.DiffIncomeServicePercentage}}</td>
-				<td>
-					<button class="btn btn-success" ng-click="viewDetail(data.Description)">
-						<span class="glyphicon glyphicon-zoom-in"></span> 
-						รายละเอียด
-					</button>
-				</td>
+				<td>{{numberFormat(data.CurrentCowService)}}</td>
+				<td>{{numberFormatComma(data.CurrentIncomeService)}}</td>
+				<td>{{numberFormat(data.DiffCowService)}}</td>
+				<td>{{numberFormatComma(data.DiffCowServicePercentage)}}</td>
+				<td>{{numberFormatComma(data.DiffIncomeService)}}</td>
+				<td>{{numberFormatComma(data.DiffIncomeServicePercentage)}}</td>
 			</tr>
 		</tbody>
 	</table>

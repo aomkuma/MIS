@@ -139,14 +139,14 @@
 		</div>
 		<div class="row" style="">
 			<div class="col-lg-6" style="padding: 20px; border:solid 1px #000;">
-				จำนวนโคที่รับบริการ &nbsp; {{SummaryData.SummaryCurrentCow}}
+				จำนวนโคที่รับบริการ &nbsp; {{numberFormat(SummaryData.SummaryCurrentCow)}}
 				<br>
-				รายได้จากค่าบริการ &nbsp; {{SummaryData.SummaryCurrentService}}
+				รายได้จากค่าบริการ &nbsp; {{numberFormatComma(SummaryData.SummaryCurrentService)}}
 			</div>
 			<div class="col-lg-6" style="padding: 20px; border:solid 1px #000;">
-				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{SummaryData.SummaryCowPercentage}} %
+				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{numberFormatComma(SummaryData.SummaryCowPercentage)}} %
 				<br>
-				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{SummaryData.SummaryServicePercentage}} %
+				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{numberFormatComma(SummaryData.SummaryServicePercentage)}} %
 			</div>
 		</div>
 	</div>
@@ -184,14 +184,14 @@
 			<tr ng-repeat="data in List">
 				<td>{{data.RegionName}}</td>
 				<td>{{data.Month}}</td>
-				<td>{{data.CurrentCowData}}</td>
-				<td>{{data.CurrentServiceData}}</td>
-				<td>{{data.BeforeCowData}}</td>
-				<td>{{data.BeforeServiceData}}</td>
-				<td>{{data.DiffCowData}}</td>
-				<td>{{data.DiffCowDataPercentage}}</td>
-				<td>{{data.DiffServiceData}}</td>
-				<td>{{data.DiffServiceDataPercentage}}</td>
+				<td>{{numberFormat(data.CurrentCowData)}}</td>
+				<td>{{numberFormatComma(data.CurrentServiceData)}}</td>
+				<td>{{numberFormat(data.BeforeCowData)}}</td>
+				<td>{{numberFormatComma(data.BeforeServiceData)}}</td>
+				<td>{{numberFormat(data.DiffCowData)}}</td>
+				<td>{{numberFormatComma(data.DiffCowDataPercentage)}}</td>
+				<td>{{numberFormatComma(data.DiffServiceData)}}</td>
+				<td>{{numberFormatComma(data.DiffServiceDataPercentage)}}</td>
 				<td>{{data.CreateDate}}</td>
 				<td>{{data.ApproveDate}}</td>
 				<td>{{data.Status}}</td>
@@ -244,14 +244,14 @@
 			<tr ng-repeat="data in List">
 				<td>{{data.RegionName}}</td>
 				<td>{{data.Quarter}}</td>
-				<td>{{data.CurrentCowData}}</td>
-				<td>{{data.CurrentServiceData}}</td>
-				<td>{{data.BeforeCowData}}</td>
-				<td>{{data.BeforeServiceData}}</td>
-				<td>{{data.DiffCowData}}</td>
-				<td>{{data.DiffCowDataPercentage}}</td>
-				<td>{{data.DiffServiceData}}</td>
-				<td>{{data.DiffServiceDataPercentage}}</td>
+				<td>{{numberFormat(data.CurrentCowData)}}</td>
+				<td>{{numberFormatComma(data.CurrentServiceData)}}</td>
+				<td>{{numberFormat(data.BeforeCowData)}}</td>
+				<td>{{numberFormatComma(data.BeforeServiceData)}}</td>
+				<td>{{numberFormat(data.DiffCowData)}}</td>
+				<td>{{numberFormatComma(data.DiffCowDataPercentage)}}</td>
+				<td>{{numberFormatComma(data.DiffServiceData)}}</td>
+				<td>{{numberFormatComma(data.DiffServiceDataPercentage)}}</td>
 				<td>{{data.CreateDate}}</td>
 				<td>{{data.ApproveDate}}</td>
 				<td>{{data.Status}}</td>
@@ -296,12 +296,12 @@
 			<tr ng-repeat="data in List">
 				<td>{{data.RegionName}}</td>
 				<td>{{data.Year}}</td>
-				<td>{{data.CurrentCowData}}</td>
-				<td>{{data.CurrentServiceData}}</td>
-				<td>{{data.DiffCowData}}</td>
-				<td>{{data.DiffCowDataPercentage}}</td>
-				<td>{{data.DiffServiceData}}</td>
-				<td>{{data.DiffServiceDataPercentage}}</td>
+				<td>{{numberFormat(data.CurrentCowData)}}</td>
+				<td>{{numberFormatComma(data.CurrentServiceData)}}</td>
+				<td>{{numberFormat(data.DiffCowData)}}</td>
+				<td>{{numberFormatComma(data.DiffCowDataPercentage)}}</td>
+				<td>{{numberFormatComma(data.DiffServiceData)}}</td>
+				<td>{{numberFormatComma(data.DiffServiceDataPercentage)}}</td>
 				<td>{{data.CreateDate}}</td>
 				<td>{{data.ApproveDate}}</td>
 				<td>{{data.Status}}</td>
@@ -343,9 +343,9 @@
 				<td>{{sub_data.ItemName}}</td>
 				<td>{{sub_data.Unit}}</td>
 				<td ng-repeat="item in sub_data.Dataset" style="text-align: center; vertical-align: middle;">
-					{{item.Amount}}
+					{{numberFormatComma(item.Amount)}}
 				</td>
-				<td>{{sub_data.Summary}}</td>
+				<td>{{numberFormatComma(sub_data.Summary)}}</td>
 				
 			</tr>
 		</tbody>
@@ -378,9 +378,9 @@
 				<td>{{sub_data.ItemName}}</td>
 				<td>{{sub_data.Unit}}</td>
 				<td ng-repeat="item in sub_data.Dataset">
-					{{item.Amount}}
+					{{numberFormatComma(item.Amount)}}
 				</td>
-				<td>{{sub_data.Summary}}</td>
+				<td>{{numberFormatComma(sub_data.Summary)}}</td>
 				
 			</tr>
 		</tbody>

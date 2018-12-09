@@ -144,14 +144,14 @@
 		</div>
 		<div class="row" style="">
 			<div class="col-lg-6" style="padding: 20px; border:solid 1px #000;">
-				ปริมาณการจำหน่ายแร่ธาตุ &nbsp; {{SummaryData.SummaryCurrentMineralAmount}}
+				ปริมาณการจำหน่ายแร่ธาตุ &nbsp; {{numberFormat(SummaryData.SummaryCurrentMineralAmount)}}
 				<br>
-				รายได้จากการจำหน่ายแร่ธาตุ &nbsp; {{SummaryData.SummaryCurrentMineralIncome}}
+				รายได้จากการจำหน่ายแร่ธาตุ &nbsp; {{numberFormatComma(SummaryData.SummaryCurrentMineralIncome)}}
 			</div>
 			<div class="col-lg-6" style="padding: 20px; border:solid 1px #000;">
-				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{SummaryData.SummaryMineralAmountPercentage}} %
+				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{numberFormatComma(SummaryData.SummaryMineralAmountPercentage)}} %
 				<br>
-				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{SummaryData.SummaryMineralIncomePercentage}} %
+				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{numberFormatComma(SummaryData.SummaryMineralIncomePercentage)}} %
 			</div>
 		</div>
 	</div>
@@ -188,14 +188,14 @@
 			<tr ng-repeat="data in List">
 				<td>{{data.RegionName}}</td>
 				<td>{{data.Month}}</td>
-				<td>{{data.CurrentWeight}}</td>
-				<td>{{data.CurrentBaht}}</td>
-				<td>{{data.BeforeWeight}}</td>
-				<td>{{data.BeforeBaht}}</td>
-				<td>{{data.DiffWeight}}</td>
-				<td>{{data.DiffWeightPercentage}}</td>
-				<td>{{data.DiffBaht}}</td>
-				<td>{{data.DiffBahtPercentage}}</td>
+				<td>{{numberFormatComma(data.CurrentWeight)}}</td>
+				<td>{{numberFormatComma(data.CurrentBaht)}}</td>
+				<td>{{numberFormatComma(data.BeforeWeight)}}</td>
+				<td>{{numberFormatComma(data.BeforeBaht)}}</td>
+				<td>{{numberFormatComma(data.DiffWeight)}}</td>
+				<td>{{numberFormatComma(data.DiffWeightPercentage)}}</td>
+				<td>{{numberFormatComma(data.DiffBaht)}}</td>
+				<td>{{numberFormatComma(data.DiffBahtPercentage)}}</td>
 				<td>
 					<button class="btn btn-success" ng-click="viewDetail(data.Description)">
 						<span class="glyphicon glyphicon-zoom-in"></span> 
@@ -239,14 +239,14 @@
 			<tr ng-repeat="data in List">
 				<td>{{data.RegionName}}</td>
 				<td>{{data.Quarter}}</td>
-				<td>{{data.CurrentWeight}}</td>
-				<td>{{data.CurrentBaht}}</td>
-				<td>{{data.BeforeWeight}}</td>
-				<td>{{data.BeforeBaht}}</td>
-				<td>{{data.DiffWeight}}</td>
-				<td>{{data.DiffWeightPercentage}}</td>
-				<td>{{data.DiffBaht}}</td>
-				<td>{{data.DiffBahtPercentage}}</td>
+				<td>{{numberFormatComma(data.CurrentWeight)}}</td>
+				<td>{{numberFormatComma(data.CurrentBaht)}}</td>
+				<td>{{numberFormatComma(data.BeforeWeight)}}</td>
+				<td>{{numberFormatComma(data.BeforeBaht)}}</td>
+				<td>{{numberFormatComma(data.DiffWeight)}}</td>
+				<td>{{numberFormatComma(data.DiffWeightPercentage)}}</td>
+				<td>{{numberFormatComma(data.DiffBaht)}}</td>
+				<td>{{numberFormatComma(data.DiffBahtPercentage)}}</td>
 				<td>
 					<button class="btn btn-success" ng-click="viewDetail(data.Description)">
 						<span class="glyphicon glyphicon-zoom-in"></span> 
@@ -286,12 +286,12 @@
 			<tr ng-repeat="data in List">
 				<td>{{data.RegionName}}</td>
 				<td>{{data.Year}}</td>
-				<td>{{data.CurrentWeight}}</td>
-				<td>{{data.CurrentBaht}}</td>
-				<td>{{data.DiffWeight}}</td>
-				<td>{{data.DiffWeightPercentage}}</td>
-				<td>{{data.DiffBaht}}</td>
-				<td>{{data.DiffBahtPercentage}}</td>
+				<td>{{numberFormatComma(data.CurrentWeight)}}</td>
+				<td>{{numberFormatComma(data.CurrentBaht)}}</td>
+				<td>{{numberFormatComma(data.DiffWeight)}}</td>
+				<td>{{numberFormatComma(data.DiffWeightPercentage)}}</td>
+				<td>{{numberFormatComma(data.DiffBaht)}}</td>
+				<td>{{numberFormatComma(data.DiffBahtPercentage)}}</td>
 				<td>
 					<button class="btn btn-success" ng-click="viewDetail(data.Description)">
 						<span class="glyphicon glyphicon-zoom-in"></span> 
@@ -328,14 +328,14 @@
 			<tr ng-repeat="data in DetailList"">
 				<td>{{data.RegionName}}</td>
 				<td ng-repeat="item in data.ValueList" style="text-align: center; vertical-align: middle;">
-					{{item.values}}
+					{{numberFormatComma(item.values)}}
 				</td>
 			</tr>
 		</tbody>
 		<tr>
 			<td>รวม</td>
 			<td ng-repeat="data in DetailSummary" style="text-align: center; vertical-align: middle;">
-				{{data.values}}
+				{{numberFormatComma(data.values)}}
 			</td>
 		</tr>
 	</table>

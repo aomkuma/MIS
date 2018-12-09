@@ -53,10 +53,8 @@
 						รายการ
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select class="form-control" ng-model="MineralDetail.food_id" ng-options="data.id as data.name for data in FoodList" ><!--ng-change="loadDairyFarming('CHILD', MineralDetail.dairy_farming_id)" -->
+						<select class="form-control" ng-model="MineralDetail.food_id" ng-options="data.id as data.goal_name for data in MasterGoalList" ><!--ng-change="loadDairyFarming('CHILD', MineralDetail.dairy_farming_id)" -->
 							<option value="">กรุณาเลือก..</option>
-							<option value="1">แร่ธาตุ</option>
-							<option value="2">อาหาร</option>
 						</select>
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">

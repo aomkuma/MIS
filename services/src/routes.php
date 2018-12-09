@@ -74,7 +74,7 @@ $app->post('/training/get/', 'TrainingController:getData');
 $app->post('/training/update/', 'TrainingController:updateData');
 $app->post('/training/delete/', 'TrainingController:removeData');
 
-$app->post('/insemination/list/main/', 'InseminationController:getMainList');
+$app->post('/insemination/list/main/', 'InseminationController:getMainList'); 
 $app->post('/insemination/get/', 'InseminationController:getData');
 $app->post('/insemination/update/', 'InseminationController:updateData');
 $app->post('/insemination/delete/detail/', 'InseminationController:removeDetailData');
@@ -86,6 +86,7 @@ $app->post('/mineral/update/', 'MineralController:updateData');
 $app->post('/mineral/delete/detail/', 'MineralController:removeDetailData');
 $app->post('/mineral/report/', 'ReportController:exportMineralExcel');
 
+$app->post('/sperm-sale/list/main/', 'SpermController:getMainList');
 $app->post('/sperm-sale/get/', 'SpermSaleController:getData');
 $app->post('/sperm-sale/update/', 'SpermSaleController:updateData');
 $app->post('/sperm-sale/delete/detail/', 'SpermSaleController:removeDetailData');

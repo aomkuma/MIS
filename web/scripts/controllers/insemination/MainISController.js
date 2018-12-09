@@ -30,6 +30,25 @@ angular.module('e-homework').controller('MainISController', function($scope, $co
         });
     }
 
+    $scope.loadListDetail = function(action, description){
+        $scope.data_description = description;
+        var params = {
+            'condition' : $scope.condition
+            , 'region' : $scope.PersonRegion
+            , 'description' : description
+        };
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest(action, params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.DetailList = result.data.DATA.DetailList;
+                $scope.CooperativeList = result.data.DATA.CooperativeList;
+                // $scope.SummaryData = result.data.DATA.Summary;
+                // console.log($scope.List);
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+
     $scope.getThaiDate = function(date){
         // console.log(date);
         return convertDateToFullThaiDateIgnoreTime(new Date(date));
@@ -44,10 +63,25 @@ angular.module('e-homework').controller('MainISController', function($scope, $co
         $scope.loadList('insemination/list/main');
     }
 
+    $scope.numberFormat = function(num){
+        if(num == null){
+            return '';
+        }
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 
-    $scope.viewDetail = function(){
+    $scope.numberFormatComma = function(num){
+        if(num == null){
+            return '';
+        }
+        return num.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    $scope.viewDetail = function(description){
         $scope.ViewType = 'DETAIL';
         console.log($scope.DetailList);
+        $scope.description = description;
+        $scope.loadListDetail('insemination/list/detail', description);
     }
 
     $scope.getRegionName = function(region_id){

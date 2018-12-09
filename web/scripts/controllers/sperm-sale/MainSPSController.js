@@ -67,7 +67,8 @@ angular.module('e-homework').controller('MainSPSController', function($scope, $c
     $scope.MonthList = getMonthList();
     var curDate = new Date();
     $scope.condition = {
-                        'Region':null
+                        'DisplayType' : 'monthly'
+                        ,'Region':null
                         ,'MonthFrom' : 1//curDate.getMonth()
                         ,'YearFrom': curDate.getFullYear()
                         ,'MonthTo' : 4//curDate.getMonth()
@@ -88,7 +89,7 @@ angular.module('e-homework').controller('MainSPSController', function($scope, $c
                 ,{'years' : (curDate.getFullYear() + 543) - 1}
             ];
 
-    // $scope.loadList('sperm-sale/list', '');
+    $scope.loadList('sperm-sale/list');
     IndexOverlayFactory.overlayHide();
 
     // Dummy Data

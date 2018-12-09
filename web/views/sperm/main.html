@@ -144,14 +144,14 @@
 		</div>
 		<div class="row" style="">
 			<div class="col-lg-6" style="padding: 20px; border:solid 1px #000;">
-				จำนวนโคที่รับบริการ &nbsp; {{SummaryData.SummaryCurrentSpermAmount}}
+				จำนวนโคที่รับบริการ &nbsp; {{numberFormat(SummaryData.SummaryCurrentSpermAmount)}}
 				<br>
-				รายได้จากค่าบริการ &nbsp; {{SummaryData.SummaryCurrentSpermIncome}}
+				รายได้จากค่าบริการ &nbsp; {{numberFormatComma(SummaryData.SummaryCurrentSpermIncome)}}
 			</div>
 			<div class="col-lg-6" style="padding: 20px; border:solid 1px #000;">
-				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{SummaryData.SummarySpermAmountPercentage}} %
+				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{numberFormatComma(SummaryData.SummarySpermAmountPercentage)}} %
 				<br>
-				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{SummaryData.SummarySpermIncomePercentage}} %
+				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{numberFormatComma(SummaryData.SummarySpermIncomePercentage)}} %
 			</div>
 		</div>
 	</div>
@@ -188,14 +188,14 @@
 			<tr ng-repeat="data in List">
 				<td>{{data.RegionName}}</td>
 				<td>{{data.Month}}</td>
-				<td>{{data.CurrentAmount}}</td>
-				<td>{{data.CurrentBaht}}</td>
-				<td>{{data.BeforeAmount}}</td>
-				<td>{{data.BeforeBaht}}</td>
-				<td>{{data.DiffAmount}}</td>
-				<td>{{data.DiffAmountPercentage}}</td>
-				<td>{{data.DiffBaht}}</td>
-				<td>{{data.DiffBahtPercentage}}</td>
+				<td>{{numberFormat(data.CurrentAmount)}}</td>
+				<td>{{numberFormatComma(data.CurrentBaht)}}</td>
+				<td>{{numberFormat(data.BeforeAmount)}}</td>
+				<td>{{numberFormatComma(data.BeforeBaht)}}</td>
+				<td>{{numberFormat(data.DiffAmount)}}</td>
+				<td>{{numberFormatComma(data.DiffAmountPercentage)}}</td>
+				<td>{{numberFormatComma(data.DiffBaht)}}</td>
+				<td>{{numberFormatComma(data.DiffBahtPercentage)}}</td>
 				<td>
 					<a class="pull-right" style="padding-right: 20px;" ng-click="exportReport( data,condition)"><img src="../files/img/excel.png" style="height: 40px;"></a>
 				</td>
@@ -236,14 +236,14 @@
 			<tr ng-repeat="data in List">
 				<td>{{data.RegionName}}</td>
 				<td>{{data.Quarter}}</td>
-				<td>{{data.CurrentAmount}}</td>
-				<td>{{data.CurrentBaht}}</td>
-				<td>{{data.BeforeAmount}}</td>
-				<td>{{data.BeforeBaht}}</td>
-				<td>{{data.DiffAmount}}</td>
-				<td>{{data.DiffAmountPercentage}}</td>
-				<td>{{data.DiffBaht}}</td>
-				<td>{{data.DiffBahtPercentage}}</td>
+				<td>{{numberFormat(data.CurrentAmount)}}</td>
+				<td>{{numberFormatComma(data.CurrentBaht)}}</td>
+				<td>{{numberFormat(data.BeforeAmount)}}</td>
+				<td>{{numberFormatComma(data.BeforeBaht)}}</td>
+				<td>{{numberFormat(data.DiffAmount)}}</td>
+				<td>{{numberFormatComma(data.DiffAmountPercentage)}}</td>
+				<td>{{numberFormatComma(data.DiffBaht)}}</td>
+				<td>{{numberFormatComma(data.DiffBahtPercentage)}}</td>
 				<td>
 					
 					<a class="pull-right" style="padding-right: 20px;" ng-click="exportReport( data,condition)"><img src="../files/img/excel.png" style="height: 40px;"></a>
@@ -282,12 +282,12 @@
 			<tr ng-repeat="data in List">
 				<td>{{data.RegionName}}</td>
 				<td>{{data.Year}}</td>
-				<td>{{data.CurrentAmount}}</td>
-				<td>{{data.CurrentBaht}}</td>
-				<td>{{data.DiffAmount}}</td>
-				<td>{{data.DiffAmountPercentage}}</td>
-				<td>{{data.DiffBaht}}</td>
-				<td>{{data.DiffBahtPercentage}}</td>
+				<td>{{numberFormat(data.CurrentAmount)}}</td>
+				<td>{{numberFormatComma(data.CurrentBaht)}}</td>
+				<td>{{numberFormat(data.DiffAmount)}}</td>
+				<td>{{numberFormatComma(data.DiffAmountPercentage)}}</td>
+				<td>{{numberFormatComma(data.DiffBaht)}}</td>
+				<td>{{numberFormatComma(data.DiffBahtPercentage)}}</td>
 				<td>
 				
 					<a class="pull-right" style="padding-right: 20px;" ng-click="exportReport(data,condition)"><img src="../files/img/excel.png" style="height: 40px;"></a>
