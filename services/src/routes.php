@@ -86,7 +86,7 @@ $app->post('/mineral/update/', 'MineralController:updateData');
 $app->post('/mineral/delete/detail/', 'MineralController:removeDetailData');
 $app->post('/mineral/report/', 'ReportController:exportMineralExcel');
 
-$app->post('/sperm-sale/list/main/', 'SpermController:getMainList');
+$app->post('/sperm-sale/list/main/', 'SpermSaleController:getMainList');
 $app->post('/sperm-sale/get/', 'SpermSaleController:getData');
 $app->post('/sperm-sale/update/', 'SpermSaleController:updateData');
 $app->post('/sperm-sale/delete/detail/', 'SpermSaleController:removeDetailData');

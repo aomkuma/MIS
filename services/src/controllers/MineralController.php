@@ -147,7 +147,34 @@
         private function getQuarterDataList($condition, $regions){
 
             // get loop to query
-            $loop = intval($condition['YearTo'] . $condition['QuarterTo']) - intval($condition['YearFrom'] . $condition['QuarterFrom']) + 1;
+            $diffYear = ($condition['YearTo'] - $condition['YearFrom']) + 1;
+            $cnt = 0;
+            $loop = 0;
+            $j = $condition['QuarterFrom'];
+
+            for($i = 0; $i < $diffYear; $i++){
+                if($cnt == $diffYear){
+                    for($k = 0; $k < $condition['QuarterTo']; $k++){
+                        $loop++;
+                    }
+                }else{
+
+                    if($i > 0){
+                        $j = 0;
+                    }
+
+                    if($diffYear == 1){
+                        $length = $condition['QuarterTo'];
+                    }else{
+                        $length = 4;
+                    }
+                    for(; $j < $length; $j++){
+                        $loop++;
+                    }
+                }
+                $cnt++;
+            }
+            $loop++;
 
             $curQuarter = intval($condition['QuarterFrom']);
 

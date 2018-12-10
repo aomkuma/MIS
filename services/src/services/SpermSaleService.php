@@ -10,6 +10,18 @@
     
     class SpermSaleService {
 
+        public static function getMainList($years, $months, $region_id) {
+        return SpermSale::select(DB::raw("SUM(amount) AS sum_amount")
+                                , DB::raw("SUM(`values`) AS sum_baht")
+                                , "sperm_sale.update_date")
+                        ->join("sperm_sale_detail", 'sperm_sale_detail.sperm_sale_id', '=', 'sperm_sale.id')
+                        ->where("years", $years)
+                        ->where("months", $months)
+                        ->where("region_id", $region_id)
+                        ->first()
+                        ->toArray();
+    }
+
         public static function getDataByID($id){
             return SpermSale::where('id', $id)
                     //->with('mouHistories')

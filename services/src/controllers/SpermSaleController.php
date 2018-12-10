@@ -15,6 +15,30 @@
             $this->db = $db;
         }
 
+        private function getLastDayOfMonth($time){
+            return $date = date("t", strtotime($time . '-' . '01'));
+
+            // return date("t", $last_day_timestamp);
+        }
+
+        private function getMonthName($month){
+            switch($month){
+                case 1 : $monthTxt = 'มกราคม';break;
+                case 2 : $monthTxt = 'กุมภาพันธ์';break;
+                case 3 : $monthTxt = 'มีนาคม';break;
+                case 4 : $monthTxt = 'เมษายน';break;
+                case 5 : $monthTxt = 'พฤษภาคม';break;
+                case 6 : $monthTxt = 'มิถุนายน';break;
+                case 7 : $monthTxt = 'กรกฎาคม';break;
+                case 8 : $monthTxt = 'สิงหาคม';break;
+                case 9 : $monthTxt = 'กันยายน';break;
+                case 10 : $monthTxt = 'ตุลาคม';break;
+                case 11 : $monthTxt = 'พฤษจิกายน';break;
+                case 12 : $monthTxt = 'ธันวาคม';break;
+            }
+            return $monthTxt;
+        }
+
         public function getMainList($request, $response, $args){
             try{
                 // error_reporting(E_ERROR);
@@ -22,14 +46,27 @@
                 // ini_set('display_errors','On');
                 $params = $request->getParsedBody();
                 $condition = $params['obj']['condition'];
-                $regions = $condition['Region'];
-                
+                $region_selected = $condition['Region'];
+                $regions = $params['obj']['region'];
+                $RegionList = [];
+                if(!empty($region_selected)){
+                    for($i =0; $i < count($regions); $i++){
+                        if($regions[$i]['RegionID'] == $region_selected){
+                            array_push($RegionList, $regions[$i]);
+                            break;
+                        }
+                    }
+                }else{
+                    $RegionList = $regions;
+                }
+                // print_r($RegionList);
+                // exit;
                 if($condition['DisplayType'] == 'monthly'){
-                    $Result = $this->getMonthDataList($condition, $regions);
+                    $Result = $this->getMonthDataList($condition, $RegionList);
                 }else if($condition['DisplayType'] == 'quarter'){
-                    $Result = $this->getQuarterDataList($condition, $regions);
+                    $Result = $this->getQuarterDataList($condition, $RegionList);
                 }else if($condition['DisplayType'] == 'annually'){
-                    $Result = $this->getAnnuallyDataList($condition, $regions);
+                    $Result = $this->getAnnuallyDataList($condition, $RegionList);
                 }
                 $DataList = $Result['DataList'];
                 $Summary = $Result['Summary'];
@@ -79,11 +116,11 @@
                     
                     // get cooperative type
 
-                    $Current = SpermService::getMainList($curYear, $curMonth, $region_id);
+                    $Current = SpermSaleService::getMainList($curYear, $curMonth, $region_id);
                     $data['CurrentAmount'] = floatval($Current['sum_amount']);
                     $data['CurrentBaht'] = floatval($Current['sum_baht']);
 
-                    $Before = SpermService::getMainList($beforeYear, $curMonth, $region_id); 
+                    $Before = SpermSaleService::getMainList($beforeYear, $curMonth, $region_id); 
                     $data['BeforeAmount'] = floatval($Before['sum_amount']);
                     $data['BeforeBaht'] = floatval($Before['sum_baht']);
 
@@ -105,12 +142,15 @@
 
                     array_push($DataList, $data);
 
-                    $DataSummary['SummaryCurrentSpermAmount'] = $DataSummary['SummaryCurrentSpermAmount'] + $data['CurrentAmount'];
-                    $DataSummary['SummaryBeforSpermAmount'] = $DataSummary['SummaryBeforSpermAmount'] + $data['BeforeAmount'];
-                    $DataSummary['SummarySpermAmountPercentage'] = 0;
-                    $DataSummary['SummaryCurrentSpermIncome'] = $DataSummary['SummaryCurrentSpermIncome'] + $data['CurrentBaht'];
-                    $DataSummary['SummaryBeforeSpermIncome'] = $DataSummary['SummaryBeforeSpermIncome'] + $data['BeforeBaht'];
-                    $DataSummary['SummarySpermIncomePercentage'] = 0;
+                    $DataSummary['SummarySpermSaleAmount'] = $DataSummary['SummarySpermSaleAmount'] + $data['CurrentAmount'];
+                    $DataSummary['SummaryBeforSpermSaleAmount'] = $DataSummary['SummaryBeforSpermSaleAmount'] + $data['BeforeAmount'];
+                    
+                    $DataSummary['SummarySpermSaleIncome'] = $DataSummary['SummarySpermSaleIncome'] + $data['CurrentBaht'];
+                    $DataSummary['SummaryBeforeSpermSaleIncome'] = $DataSummary['SummaryBeforeSpermSaleIncome'] + $data['BeforeBaht'];
+                    
+                    $DataSummary['SummarySpermSaleAmountPercentage'] = $DataSummary['SummarySpermSaleAmountPercentage'] + $DataSummary['SummarySpermSaleAmount'] + $DataSummary['SummaryBeforSpermSaleAmount'];
+                    $DataSummary['SummarySpermSaleIncomePercentage'] = $DataSummary['SummarySpermSaleIncomePercentage'] + $DataSummary['SummarySpermSaleIncome'] + $DataSummary['SummaryBeforeSpermSaleIncome'];
+                    
 
                 }
 
@@ -118,6 +158,218 @@
             }
 
             return ['DataList' => $DataList, 'Summary' => $DataSummary];                
+        }
+
+        private function getQuarterDataList($condition, $regions){
+
+            // get loop to query
+            // $loop = intval($condition['YearTo'] . $condition['QuarterTo']) - intval($condition['YearFrom'] . $condition['QuarterFrom']) + 1;
+            $diffYear = ($condition['YearTo'] - $condition['YearFrom']) + 1;
+            $cnt = 0;
+            $loop = 0;
+            $j = $condition['QuarterFrom'];
+
+            for($i = 0; $i < $diffYear; $i++){
+                if($cnt == $diffYear){
+                    for($k = 0; $k < $condition['QuarterTo']; $k++){
+                        $loop++;
+                    }
+                }else{
+
+                    if($i > 0){
+                        $j = 0;
+                    }
+
+                    if($diffYear == 1){
+                        $length = $condition['QuarterTo'];
+                    }else{
+                        $length = 4;
+                    }
+                    for(; $j < $length; $j++){
+                        $loop++;
+                    }
+                }
+                $cnt++;
+            }
+            $loop++;
+            $curQuarter = intval($condition['QuarterFrom']);
+
+            if(intval($curQuarter) == 1){
+                $curYear = intval($condition['YearFrom']) - 1;  
+                $beforeYear = $curYear - 1;
+            }else{
+                $curYear = intval($condition['YearFrom']);
+                $beforeYear = $curYear - 1;
+            }
+
+            $DataList = [];
+            $DataSummary = [];
+
+            for($i = 0; $i < $loop; $i++){
+
+                if($i > 0 && $curQuarter == 2){
+                    $curYear++;
+                    $beforeYear = $curYear - 1;
+                }
+
+                // find month in quarter
+                if($curQuarter == 1){
+                    $monthList = [10, 11, 12];
+                }else if($curQuarter == 2){
+                    $monthList = [1, 2, 3];
+                }else if($curQuarter == 3){
+                    $monthList = [4, 5, 6];
+                }else if($curQuarter == 4){
+                    $monthList = [7, 8, 9];
+                }
+
+                // Loop User Regions
+                foreach ($regions as $key => $value) {
+                    $region_id = $value['RegionID'];
+
+                    $SumCurrentAmount = 0;
+                    $SumCurrentBaht = 0;
+                    $SumBeforeAmount = 0;
+                    $SumBeforeBaht = 0;
+                     // loop get quarter sum data
+                    for($j = 0; $j < count($monthList); $j++){
+                        $curMonth = $monthList[$j];
+                        
+                        $Current = SpermSaleService::getMainList($curYear, $curMonth, $region_id);
+                        $SumCurrentAmount += floatval($Current['sum_amount']);
+                        $SumCurrentBaht += floatval($Current['sum_baht']);
+
+                        $Before = SpermSaleService::getMainList($beforeYear, $curMonth, $region_id); 
+                        $SumBeforeAmount += floatval($Before['sum_amount']);
+                        $SumBeforeBaht += floatval($Before['sum_baht']);
+                    }
+
+                    $data = [];
+                    $data['RegionName'] = $value['RegionName'];
+                    $data['Quarter'] = $curQuarter . ' (' . (($curQuarter == 1?$curYear + 543 + 1:$curYear + 543)) . ')';
+
+                    $data['CurrentAmount'] = $SumCurrentAmount;
+                    $data['CurrentBaht'] = $SumCurrentBaht;
+ 
+                    $data['BeforeAmount'] = $SumBeforeAmount;
+                    $data['BeforeBaht'] = $SumBeforeBaht;
+
+                    $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+                    $data['DiffAmount'] = $DiffAmount;
+                    $data['DiffAmountPercentage'] = 0;
+
+                    $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                    $data['DiffBaht'] = $DiffBaht;
+                    $data['DiffBahtPercentage'] = 0;
+
+                    $data['CreateDate'] = $CurrentCowService['update_date'];
+                    $data['ApproveDate'] = '';
+                    $data['Status'] = '';
+                    $data['Description'] = ['months' => $curMonth
+                                            ,'years' => $curYear
+                                            ,'region_id' => $region_id
+                                            ];
+
+                    array_push($DataList, $data);
+
+                    $DataSummary['SummarySpermSaleAmount'] = $DataSummary['SummarySpermSaleAmount'] + $data['CurrentAmount'];
+                    $DataSummary['SummaryBeforSpermSaleAmount'] = $DataSummary['SummaryBeforSpermSaleAmount'] + $data['BeforeAmount'];
+                    
+                    $DataSummary['SummarySpermSaleIncome'] = $DataSummary['SummarySpermSaleIncome'] + $data['CurrentBaht'];
+                    $DataSummary['SummaryBeforeSpermSaleIncome'] = $DataSummary['SummaryBeforeSpermSaleIncome'] + $data['BeforeBaht'];
+                    
+                    $DataSummary['SummarySpermSaleAmountPercentage'] = $DataSummary['SummarySpermSaleAmountPercentage'] + $DataSummary['SummarySpermSaleAmount'] + $DataSummary['SummaryBeforSpermSaleAmount'];
+                    $DataSummary['SummarySpermSaleIncomePercentage'] = $DataSummary['SummarySpermSaleIncomePercentage'] + $DataSummary['SummarySpermSaleIncome'] + $DataSummary['SummaryBeforeSpermSaleIncome'];
+                }
+                
+                $curQuarter++;
+                if($curQuarter > 4){
+                    $curQuarter = 1;
+                }
+            }
+
+            return ['DataList' => $DataList, 'Summary' => $DataSummary];
+        }
+
+        private function getAnnuallyDataList($condition, $regions){
+            
+            $loop = intval($condition['YearTo']) - intval($condition['YearFrom']) + 1;
+            $curYear = $condition['YearFrom'];
+            
+            $beforeYear = $calcYear - 1;
+            $monthList = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+            $DataList = [];
+            $DataSummary = [];
+            $curYear = $condition['YearFrom'];
+            for($i = 0; $i < $loop; $i++){
+                
+                // Loop User Regions
+                foreach ($regions as $key => $value) {
+                    $region_id = $value['RegionID'];
+
+                    
+                    $calcYear = intval($curYear) - 1;
+
+                    $SumCurrentAmount = 0;
+                    $SumCurrentBaht = 0;
+                    $SumBeforeAmount = 0;
+                    $SumBeforeBaht = 0;
+                     // loop get quarter sum data
+                    for($j = 0; $j < 12; $j++){
+                        $curMonth = $monthList[$j];
+                        
+                        $Current = SpermSaleService::getMainList($curYear, $curMonth, $region_id);
+                        $SumCurrentAmount += floatval($Current['sum_amount']);
+                        $SumCurrentBaht += floatval($Current['sum_baht']);
+
+                        $Before = SpermSaleService::getMainList($beforeYear, $curMonth, $region_id); 
+                        $SumBeforeAmount += floatval($Before['sum_amount']);
+                        $SumBeforeBaht += floatval($Before['sum_baht']);
+                    }
+
+                    $data = [];
+                    $data['RegionName'] = $value['RegionName'];
+                    $data['Year'] = $curYear + 543;
+
+                    $data['CurrentAmount'] = $SumCurrentAmount;
+                    $data['CurrentBaht'] = $SumCurrentBaht;
+ 
+                    $data['BeforeAmount'] = $SumBeforeAmount;
+                    $data['BeforeBaht'] = $SumBeforeBaht;
+
+                    $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+                    $data['DiffAmount'] = $DiffAmount;
+                    $data['DiffAmountPercentage'] = 0;
+
+                    $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                    $data['DiffBaht'] = $DiffBaht;
+                    $data['DiffBahtPercentage'] = 0;
+
+                    $data['CreateDate'] = $CurrentCowService['update_date'];
+                    $data['ApproveDate'] = '';
+                    $data['Status'] = '';
+                    $data['Description'] = ['months' => $curMonth
+                                            ,'years' => $curYear
+                                            ,'region_id' => $region_id
+                                            ];
+
+                    array_push($DataList, $data);
+
+                    $DataSummary['SummarySpermSaleAmount'] = $DataSummary['SummarySpermSaleAmount'] + $data['CurrentAmount'];
+                    $DataSummary['SummaryBeforSpermSaleAmount'] = $DataSummary['SummaryBeforSpermSaleAmount'] + $data['BeforeAmount'];
+                    
+                    $DataSummary['SummarySpermSaleIncome'] = $DataSummary['SummarySpermSaleIncome'] + $data['CurrentBaht'];
+                    $DataSummary['SummaryBeforeSpermSaleIncome'] = $DataSummary['SummaryBeforeSpermSaleIncome'] + $data['BeforeBaht'];
+                    
+                    $DataSummary['SummarySpermSaleAmountPercentage'] = $DataSummary['SummarySpermSaleAmountPercentage'] + $DataSummary['SummarySpermSaleAmount'] + $DataSummary['SummaryBeforSpermSaleAmount'];
+                    $DataSummary['SummarySpermSaleIncomePercentage'] = $DataSummary['SummarySpermSaleIncomePercentage'] + $DataSummary['SummarySpermSaleIncome'] + $DataSummary['SummaryBeforeSpermSaleIncome'];
+                }
+                
+                $curYear++;
+            }
+
+            return ['DataList' => $DataList, 'Summary' => $DataSummary];
         }
 
         public function getData($request, $response, $args){
