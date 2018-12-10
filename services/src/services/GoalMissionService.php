@@ -95,5 +95,12 @@ class GoalMissionService {
                         ->get()
                         ->toArray();
     }
+    public static function getMission($goalid,$regid, $year) {
+        return GoalMission::where('years', $year)
+                        ->where('region_id', $regid)
+                        ->where('goal_id', $goalid)
+                        ->get()
+                        ->toArray();
+    }
 
 }
