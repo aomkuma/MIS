@@ -42,6 +42,17 @@ angular.module('e-homework').controller('MainMTController', function($scope, $co
         // $scope.loadList('material/list/main');
     }
 
+    $scope.loadMasterGoalList = function(){
+        var params = {'actives':'Y', 'menu_type' : 'วัสดุผสมเทียมและอื่นๆ'};
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('master-goal/list', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.MasterGoalList = result.data.DATA.List;
+                IndexOverlayFactory.overlayHide();
+            }
+        });
+    }
+
 
     $scope.viewDetail = function(){
         $scope.ViewType = 'DETAIL';
