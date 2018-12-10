@@ -123,7 +123,7 @@ $app->post('/cooperative-milk/delete/detail/', 'CooperativeMilkController:remove
 $app->post('/cow-group/get/', 'CowGroupController:getData');
 $app->post('/cow-group/update/', 'CowGroupController:updateData');
 $app->post('/cow-group/delete/detail/', 'CowGroupController:removeDetailData');
-
+$app->post('/cow-group/report/', 'ReportController:exportCowgroupExcel');
 
 // Default action
 $app->get('/[{name}]', function ($request, $response, $args) {
