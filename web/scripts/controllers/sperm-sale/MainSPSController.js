@@ -39,7 +39,7 @@ angular.module('e-homework').controller('MainSPSController', function($scope, $c
 
     $scope.goSearch = function(){
         $scope.ViewType = 'MAIN';
-        // $scope.loadList('sperm-sale/list/main');
+        $scope.loadList('sperm-sale/list/main');
     }
 
 
@@ -59,6 +59,20 @@ angular.module('e-homework').controller('MainSPSController', function($scope, $c
             case 7 : return 'อ.ส.ค. ภาคเหนือตอนบน (เชียงใหม่)';
             default : return '';
         }
+    }
+
+    $scope.numberFormat = function(num){
+        if(num == null){
+            return '';
+        }
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    $scope.numberFormatComma = function(num){
+        if(num == null){
+            return '';
+        }
+        return num.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
     $scope.Header = [];
@@ -89,7 +103,7 @@ angular.module('e-homework').controller('MainSPSController', function($scope, $c
                 ,{'years' : (curDate.getFullYear() + 543) - 1}
             ];
 
-    $scope.loadList('sperm-sale/list');
+    $scope.loadList('sperm-sale/list/main');
     IndexOverlayFactory.overlayHide();
 
     // Dummy Data

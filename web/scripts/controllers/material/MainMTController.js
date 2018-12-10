@@ -61,13 +61,28 @@ angular.module('e-homework').controller('MainMTController', function($scope, $co
         }
     }
 
+    $scope.numberFormat = function(num){
+        if(num == null){
+            return '';
+        }
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    $scope.numberFormatComma = function(num){
+        if(num == null){
+            return '';
+        }
+        return num.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     $scope.Header = [];
     $scope.ViewType = 'MAIN';
     $scope.YearList = getYearList(20);
     $scope.MonthList = getMonthList();
     var curDate = new Date();
     $scope.condition = {
-                        'Region':null
+                        'DisplayType':'monthly'
+                        ,'Region':null
                         ,'MonthFrom' : 1//curDate.getMonth()
                         ,'YearFrom': curDate.getFullYear()
                         ,'MonthTo' : 4//curDate.getMonth()
@@ -77,10 +92,10 @@ angular.module('e-homework').controller('MainMTController', function($scope, $co
                     };
 
     $scope.SummaryData = {
-                    'SummaryCurrentMineralAmount':'240000'
-                    ,'SummaryCurrentMineralIncome':'10245000'
-                    ,'SummaryMineralAmountPercentage':'15'
-                    ,'SummaryMineralIncomePercentage':'11.21'
+                    'SummaryCurrentMineralAmount':240000
+                    ,'SummaryCurrentMineralIncome':10245000
+                    ,'SummaryMineralAmountPercentage':15
+                    ,'SummaryMineralIncomePercentage':11.21
                     };
 
     $scope.ResultYearList = [
