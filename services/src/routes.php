@@ -74,6 +74,7 @@ $app->post('/training/get/', 'TrainingController:getData');
 $app->post('/training/update/', 'TrainingController:updateData');
 $app->post('/training/delete/', 'TrainingController:removeData');
 
+
 $app->post('/insemination/list/main/', 'InseminationController:getMainList'); 
 $app->post('/insemination/get/', 'InseminationController:getData');
 $app->post('/insemination/update/', 'InseminationController:updateData');
@@ -103,6 +104,7 @@ $app->post('/cow-breed/report/', 'ReportController:exportCowbreedExcel');
 $app->post('/training-cowbreed/get/', 'TrainingCowBreedController:getData');
 $app->post('/training-cowbreed/update/', 'TrainingCowBreedController:updateData');
 $app->post('/training-cowbreed/delete/detail/','TrainingCowBreedController:removeDetailData');
+$app->post('/training-cowbreed/report/', 'ReportController:exportTrainingcowbreedExcel');
 
 $app->post('/sperm/list/main/', 'SpermController:getMainList');
 $app->post('/sperm/list/detail/', 'SpermController:getDetailList');

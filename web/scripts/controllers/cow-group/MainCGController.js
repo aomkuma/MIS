@@ -47,6 +47,22 @@ angular.module('e-homework').controller('MainCGController', function($scope, $co
         $scope.ViewType = 'DETAIL';
         console.log($scope.DetailList);
     }
+    $scope.exportReport = function(data,condition){
+       // console.log(DetailList, $scope.data_description);
+        // return;
+        IndexOverlayFactory.overlayHide();
+        var params = {
+            'data' : data
+           , 'condition' : condition
+        }; 
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('cow-group/report', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                window.location.href="../" + result.data.DATA;
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+    }
 
     $scope.getRegionName = function(region_id){
         switch(region_id){

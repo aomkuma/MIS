@@ -1,69 +1,118 @@
 <?php
-    
-    namespace App\Service;
-    
-    use App\Model\CowGroup;
-    use App\Model\CowGroupDetail;
-    
 
-    use Illuminate\Database\Capsule\Manager as DB;
-    
-    class CowGroupService {
+namespace App\Service;
 
-        public static function getDataByID($id){
-            return CowGroup::where('id', $id)
-                    //->with('mouHistories')
-                    ->with(array('cowGroupDetail' => function($query){
-                        $query->orderBy('update_date', 'DESC');
-                    }))
-                    ->first();      
-        }
+use App\Model\CowGroup;
+use App\Model\CowGroupDetail;
+use Illuminate\Database\Capsule\Manager as DB;
 
-        public static function getData($cooperative_id, $months, $years){
-            return CowGroup::where('cooperative_id', $cooperative_id)
-                    ->where('months', $months)
-                    ->where('years', $years)
-                    //->with('mouHistories')
-                    ->with(array('cowGroupDetail' => function($query){
-                        $query->orderBy('update_date', 'DESC');
-                    }))
-                    ->first();      
-        }
+class CowGroupService {
 
-        public static function updateData($obj){
-            
-            if(empty($obj['id'])){
-                $obj['create_date'] = date('Y-m-d H:i:s');
-                $obj['update_date'] = date('Y-m-d H:i:s');
-                $model = CowGroup::create($obj);
-                return $model->id;
-            }else{
-                $obj['update_date'] = date('Y-m-d H:i:s');
-                $model = CowGroup::find($obj['id'])->update($obj);
-                return $obj['id'];
-            }
-        }
+    public static function getDataByID($id) {
+        return CowGroup::where('id', $id)
+                        //->with('mouHistories')
+                        ->with(array('cowGroupDetail' => function($query) {
+                                $query->orderBy('update_date', 'DESC');
+                            }))
+                        ->first();
+    }
 
-        public static function updateDetailData($obj){
+    public static function getData($cooperative_id, $months, $years) {
+        return CowGroup::where('cooperative_id', $cooperative_id)
+                        ->where('months', $months)
+                        ->where('years', $years)
+                        //->with('mouHistories')
+                        ->with(array('cowGroupDetail' => function($query) {
+                                $query->orderBy('update_date', 'DESC');
+                            }))
+                        ->first();
+    }
 
-            if(empty($obj['id'])){
-                $obj['create_date'] = date('Y-m-d H:i:s');
-                $obj['update_date'] = date('Y-m-d H:i:s');
-                $model = CowGroupDetail::create($obj);
-                return $model->id;
-            }else{
-                $obj['update_date'] = date('Y-m-d H:i:s');
-                $model = CowGroupDetail::find($obj['id'])->update($obj);
-                return $obj['id'];
-            }
-        }
+    public static function updateData($obj) {
 
-        public static function removeDetailData($id){
-           
-            return CowGroupDetail::find($id)->delete();
-        }
-
-        public static function removeData($id){
-
+        if (empty($obj['id'])) {
+            $obj['create_date'] = date('Y-m-d H:i:s');
+            $obj['update_date'] = date('Y-m-d H:i:s');
+            $model = CowGroup::create($obj);
+            return $model->id;
+        } else {
+            $obj['update_date'] = date('Y-m-d H:i:s');
+            $model = CowGroup::find($obj['id'])->update($obj);
+            return $obj['id'];
         }
     }
+
+    public static function updateDetailData($obj) {
+
+        if (empty($obj['id'])) {
+            $obj['create_date'] = date('Y-m-d H:i:s');
+            $obj['update_date'] = date('Y-m-d H:i:s');
+            $model = CowGroupDetail::create($obj);
+            return $model->id;
+        } else {
+            $obj['update_date'] = date('Y-m-d H:i:s');
+            $model = CowGroupDetail::find($obj['id'])->update($obj);
+            return $obj['id'];
+        }
+    }
+
+    public static function removeDetailData($id) {
+
+        return CowGroupDetail::find($id)->delete();
+    }
+
+    public static function removeData($id) {
+        
+    }
+
+    public static function getDetailmonth($years, $months, $type_id, $region) {
+        return CowGroup::select(DB::raw("SUM(total_sell) AS amount")
+                                , DB::raw("SUM(`total_sell_values`) AS price"))
+                        ->join("cow_group_detail", 'cow_group_detail.cow_group_id', '=', 'cow_group.id')
+                        ->where("years", $years)
+                        ->where("months", $months)
+                        ->where("region_id", $region)
+                        ->where("cow_group_item_id", $type_id)
+                        ->first()
+                        ->toArray();
+    }
+
+    public static function getDetailyear($years, $type_id, $region) {
+        return CowGroup::select(DB::raw("SUM(total_sell) AS amount")
+                                , DB::raw("SUM(`total_sell_values`) AS price"))
+                        ->join("cow_group_detail", 'cow_group_detail.cow_group_id', '=', 'cow_group.id')
+                        ->where("years", $years)
+                        ->where("region_id", $region)
+                        ->where("cow_group_item_id", $type_id)
+                        ->first()
+                        ->toArray();
+    }
+
+    public static function getDetailquar($years, $type_id, $region, $quar) {
+        $st = 1;
+        $en = 3;
+        if ($quar == 1) {
+            $st = 1;
+            $en = 3;
+        } else if ($quar == 2) {
+            $st = 4;
+            $en = 6;
+        } else if ($quar == 3) {
+            $st = 7;
+            $en = 9;
+        } else {
+            $st = 10;
+            $en = 12;
+        }
+        return CowGroup::select(DB::raw("SUM(total_sell) AS amount")
+                                , DB::raw("SUM(`total_sell_values`) AS price"))
+                        ->join("cow_group_detail", 'cow_group_detail.cow_group_id', '=', 'cow_group.id')
+                        ->where("years", $years)
+                        ->whereBetween("months", [$st, $en])
+                        ->where("region_id", $region)
+                        ->where("cow_group_item_id", $type_id)
+                        ->first()
+                        ->toArray();
+    }
+
+}
