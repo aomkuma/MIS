@@ -28,6 +28,44 @@ class CowBreedService {
                         ->first()
                         ->toArray();
     }
+    public static function getDetailyear($years, $type_id, $region) {
+        return CowBreed::select(DB::raw("SUM(amount) AS amount")
+                                , DB::raw("SUM(`price`) AS price"))
+                        ->join("cow_breed_detail", 'cow_breed_detail.cow_breed_id', '=', 'cow_breed.id')
+                        ->where("years", $years)
+                        
+                        ->where("region_id", $region)
+                        ->where("cow_breed_type_id", $type_id)
+                        ->first()
+                        ->toArray();
+    }
+     public static function getDetailquar($years, $type_id, $region, $quar) {
+         $st = 1;
+        $en = 3;
+        if ($quar == 1) {
+            $st = 1;
+            $en = 3;
+        } else if ($quar == 2) {
+            $st = 4;
+            $en = 6;
+        } else if ($quar == 3) {
+            $st = 7;
+            $en = 9;
+        } else {
+            $st = 10;
+            $en = 12;
+        }
+        return CowBreed::select(DB::raw("SUM(amount) AS amount")
+                                , DB::raw("SUM(`price`) AS price"))
+                        ->join("cow_breed_detail", 'cow_breed_detail.cow_breed_id', '=', 'cow_breed.id')
+                        ->where("years", $years)
+                        ->whereBetween("months", [$st, $en])
+                        ->where("region_id", $region)
+                        ->where("cow_breed_type_id", $type_id)
+                        ->first()
+                        ->toArray();
+    }
+    
 
     public static function getData($cooperative_id, $months, $years) {
         return CowBreed::where('cooperative_id', $cooperative_id)
