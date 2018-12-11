@@ -42,6 +42,16 @@ angular.module('e-homework').controller('UpdateTCBController', function($scope, 
             IndexOverlayFactory.overlayHide();
         });
     }
+    $scope.loadMasterGoalList = function(){
+        var params = {'actives':'Y', 'menu_type' : 'ฝึกอบรม'};
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('master-goal/list', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.MasterGoalList = result.data.DATA.List;
+                IndexOverlayFactory.overlayHide();
+            }
+        });
+    }
 
     $scope.loadData = function(action, id){
         var params = {
@@ -263,6 +273,7 @@ angular.module('e-homework').controller('UpdateTCBController', function($scope, 
 
     $scope.setSperm();
     $scope.loadData('training-cowbreed/get', $scope.ID);
+    $scope.loadMasterGoalList();
     // $scope.loadCooperative();
     // $scope.loadDairyFarming('MAIN', '');
     // $scope.loadDairyFarming('CHILD', '');
