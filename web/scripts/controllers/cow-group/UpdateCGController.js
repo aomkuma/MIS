@@ -287,8 +287,8 @@ angular.module('e-homework').controller('UpdateCGController', function($scope, $
     $scope.DairyFarmingList = [];
     $scope.SpermDetailList = [];
     $scope.SpermList = [
-        {'id':1, 'name':'ฝูงโค 1'}
-        ,{'id':2, 'name':'อาหาร TMR'}
+        {'id':1, 'name':'ฝูงโคต้นงวด'}
+        ,{'id':2, 'name':'ฝูงโคปลายงวด'}
     ];
     $scope.CowGroupList = [
             {'id':1, 'name':'ฝูงโค 1'}
