@@ -15,5 +15,22 @@ angular.module('e-homework').controller('MonthlyController', function($scope, $c
 
     $scope.YearList = getYearList(20);
     $scope.MonthList = getMonthList();
+    $scope.exportReport = function(data,condition){
+       // console.log(DetailList, $scope.data_description);
+        // return;
+        IndexOverlayFactory.overlayHide();
+        var params = {
+            'data' : data
+           , 'condition' : condition
+           , 'region' : $scope.PersonRegion
+        }; 
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('monthreport/report', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                window.location.href="../" + result.data.DATA;
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+    }
 
 });

@@ -128,6 +128,8 @@ $app->post('/cow-group/update/', 'CowGroupController:updateData');
 $app->post('/cow-group/delete/detail/', 'CowGroupController:removeDetailData');
 $app->post('/cow-group/report/', 'ReportController:exportCowgroupExcel');
 
+$app->post('/monthreport/report/', 'MonthReportController:exportmonthreportExcel');
+
 // Default action
 $app->get('/[{name}]', function ($request, $response, $args) {
     // Sample log message

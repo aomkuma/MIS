@@ -127,3 +127,6 @@ $container['CowGroupController'] = function ($c) {
 $container['ReportController'] = function ($c) {
     return new \App\Controller\ReportController($c->get('logger'), $c->get('db'));
 };
+$container['MonthReportController'] = function ($c) {
+    return new \App\Controller\MonthReportController($c->get('logger'), $c->get('db'));
+};
