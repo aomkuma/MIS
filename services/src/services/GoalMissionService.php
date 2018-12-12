@@ -28,7 +28,6 @@ class GoalMissionService {
     public static function getyearGoal($regid, $year) {
         return GoalMission::where('years', $year)
                         ->where('region_id', $regid)
-                        
                         ->get()
                         ->toArray();
     }
@@ -61,11 +60,10 @@ class GoalMissionService {
     }
 
     public static function updateDataEditable($id, $editable) {
-        
+
         $model = GoalMission::find($id);
         $model->editable = $editable;
         return $model->save();
-        
     }
 
     public static function updateAvg($obj) {
@@ -88,17 +86,27 @@ class GoalMissionService {
     public static function removeData($id) {
         return AccountRole::find($id)->delete();
     }
-     public static function getGoaltravel($goalid,$regid, $year) {
+
+    public static function getGoaltravel($goalid, $regid, $year) {
         return GoalMission::where('years', $year)
                         ->where('region_id', $regid)
                         ->where('goal_id', $goalid)
                         ->get()
                         ->toArray();
     }
-    public static function getMission($goalid,$regid, $year) {
+
+    public static function getMission($goalid, $regid, $year) {
         return GoalMission::where('years', $year)
                         ->where('region_id', $regid)
                         ->where('goal_id', $goalid)
+                        ->get()
+                        ->toArray();
+    }
+
+    public static function getMissionforinsem($goalid, $year) {
+        return GoalMission::where('years', $year)
+                        ->where('goal_id', $goalid)
+                        ->join("region", 'goal_mission.region_id', '=', 'region.RegionID')
                         ->get()
                         ->toArray();
     }

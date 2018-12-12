@@ -83,6 +83,22 @@ angular.module('e-homework').controller('MainISController', function($scope, $co
         $scope.description = description;
         $scope.loadListDetail('insemination/list/detail', description);
     }
+     $scope.exportReport = function(data,condition){
+       // console.log(DetailList, $scope.data_description);
+        // return;
+        IndexOverlayFactory.overlayHide();
+        var params = {
+            'data' : data
+           , 'condition' : condition
+        }; 
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('insemination/report', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                window.location.href="../" + result.data.DATA;
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+    }
 
     $scope.getRegionName = function(region_id){
         switch(region_id){

@@ -79,6 +79,7 @@ $app->post('/insemination/list/main/', 'InseminationController:getMainList');
 $app->post('/insemination/get/', 'InseminationController:getData');
 $app->post('/insemination/update/', 'InseminationController:updateData');
 $app->post('/insemination/delete/detail/', 'InseminationController:removeDetailData');
+$app->post('/insemination/report/', 'ReportController:exportInseminationExcel');
 
 $app->post('/mineral/list/main/', 'MineralController:getMainList');
 $app->post('/mineral/list/detail/', 'MineralController:getDetailList');
