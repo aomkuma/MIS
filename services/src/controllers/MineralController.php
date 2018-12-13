@@ -81,10 +81,17 @@
             $date1 = new \DateTime($toTime);
             $date2 = new \DateTime($fromTime);
             $diff = $date1->diff($date2);
-            $diffMonth = (($diff->format('%y') * 12) + $diff->format('%m'));
+            $diffMonth = (($diff->format('%y') * 12) + $diff->format('%m')) + 1;
             $curMonth = $condition['MonthFrom'];
             $DataList = [];
             $DataSummary = [];
+
+            if ($diffMonth == 0) {
+                $diffMonth = 1;
+            }else{
+                $diffMonth += 1;
+            }
+            
             if($diffMonth==0){$diffMonth=1;}
             for($i = 0; $i < $diffMonth; $i++){
 

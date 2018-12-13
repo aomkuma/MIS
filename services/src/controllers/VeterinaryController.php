@@ -113,6 +113,8 @@ class VeterinaryController extends Controller {
         $DataSummary['SummaryServicePercentage'] = 0;
         if ($diffMonth == 0) {
             $diffMonth = 1;
+        }else{
+            $diffMonth += 1;
         }
         for ($i = 0; $i < $diffMonth; $i++) {
 
