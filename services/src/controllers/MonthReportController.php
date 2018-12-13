@@ -123,13 +123,13 @@ class MonthReportController extends Controller {
         } else {
             $showm = $condition['YearFrom'];
         }
-        $objPHPExcel->getActiveSheet()->setTitle("2.1 สัตวแพท-ผสมเทียม (2)");
+        $objPHPExcel->getActiveSheet()->setTitle("2.1 สัตวแพทย์-ผสมเทียม (2)");
         $objPHPExcel->getActiveSheet()->setCellValue('A3', '2. การดำเนินงานด้านการให้บริการของ อ.ส.ค.');
         $objPHPExcel->getActiveSheet()->setCellValue('A4', '  2.1 การบริการสัตวแพทย์และการบริการผสมเทียม');
         $objPHPExcel->getActiveSheet()->setCellValue('A5', '            2.1.1 การบริการสัตวแพทย์');
-        $objPHPExcel->getActiveSheet()->setCellValue('A6', '                       เดือน ' . $this->getMonthName($condition['MonthFrom']) . ' ' . ($condition['YearFrom'] + 543) . 'มีโคเข้ารับการบริการสัตวแพทย์ จำนวน ' . $data['Summary']['SummaryCurrentCow'] . 'ตัว รายได้ ' . $data['Summary']['SummaryCurrentService'] . '  บาท');
-        $objPHPExcel->getActiveSheet()->setCellValue('A7', '                  เมื่อเปรียบเทียบกับเดือนเดียวกันของปีที่ผ่านมา การบริการและมูลค่าลดลงคิดเป็นร้อยละ ' . $data['Summary']['SummaryCowPercentage']);
-        $objPHPExcel->getActiveSheet()->setCellValue('A8', '                  และ ' . $data['Summary']['SummaryServicePercentage'] . ' ตามลำดับ');
+        $objPHPExcel->getActiveSheet()->setCellValue('A6', '                       เดือน ' . $this->getMonthName($condition['MonthFrom']) . ' ' . ($condition['YearFrom'] + 543) . ' มีโคเข้ารับการบริการสัตวแพทย์ จำนวน ' . number_format($data['Summary']['SummaryCurrentCow'], 2, '.', ',') . ' ตัว รายได้ ' . number_format($data['Summary']['SummaryCurrentService'], 2, '.', ',') . '  บาท');
+        $objPHPExcel->getActiveSheet()->setCellValue('A7', '                  เมื่อเปรียบเทียบกับเดือนเดียวกันของปีที่ผ่านมา การบริการและมูลค่าลดลงคิดเป็นร้อยละ ' . number_format($data['Summary']['SummaryCowPercentage'], 2, '.', ','));
+        $objPHPExcel->getActiveSheet()->setCellValue('A8', '                  และ ' . number_format($data['Summary']['SummaryServicePercentage'], 2, '.', ',') . ' ตามลำดับ');
 
 //tb header
         $objPHPExcel->getActiveSheet()->setCellValue('A10', 'รายการ');
@@ -299,13 +299,13 @@ class MonthReportController extends Controller {
         }
         $highestRow += 2;
         $startrowtb2 = $highestRow;
-        $objPHPExcel->getActiveSheet()->setCellValue('A' . $highestRow, '                       เดือน ' . 'ต.ค. ' . ($showm + 543) . " - " . $this->getMonthshName($start) . ' ' . ($showy + 543) . 'มีโคเข้ารับการบริการสัตวแพทย์ จำนวน ' . $tb2data['Summary']['SummaryCurrentCow'] . 'ตัว รายได้ ' . $tb2data['Summary']['SummaryCurrentService'] . '  บาท');
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . $highestRow, '                       เดือน ' . 'ต.ค. ' . ($showm + 543) . " - " . $this->getMonthshName($start) . ' ' . ($showy + 543) . ' มีโคเข้ารับการบริการสัตวแพทย์ จำนวน ' . number_format($tb2data['Summary']['SummaryCurrentCow'], 2, '.', ',') . ' ตัว รายได้ ' . number_format($tb2data['Summary']['SummaryCurrentService'], 2, '.', ',') . '  บาท');
         $objPHPExcel->getActiveSheet()->getStyle('A' . $highestRow)->getFont()->setSize(16);
         $highestRow++;
-        $objPHPExcel->getActiveSheet()->setCellValue('A' . $highestRow, '                  เมื่อเปรียบเทียบกับเดือนเดียวกันของปีที่ผ่านมา การบริการและมูลค่าลดลงคิดเป็นร้อยละ ' . $data['Summary']['SummaryCowPercentage']);
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . $highestRow, '                  เมื่อเปรียบเทียบกับเดือนเดียวกันของปีที่ผ่านมา การบริการและมูลค่าลดลงคิดเป็นร้อยละ ' . number_format($tb2data['Summary']['SummaryCowPercentage'], 2, '.', ','));
         $objPHPExcel->getActiveSheet()->getStyle('A' . $highestRow)->getFont()->setSize(16);
         $highestRow++;
-        $objPHPExcel->getActiveSheet()->setCellValue('A' . $highestRow, '                  และ ' . $data['Summary']['SummaryServicePercentage'] . ' ตามลำดับ');
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . $highestRow, '                  และ ' . number_format($tb2data['Summary']['SummaryServicePercentage'], 2, '.', ',') . ' ตามลำดับ');
         $objPHPExcel->getActiveSheet()->getStyle('A' . $highestRow)->getFont()->setSize(16);
         $highestRow++;
         $objPHPExcel->getActiveSheet()->setCellValue('A' . $highestRow, 'รายการ');
