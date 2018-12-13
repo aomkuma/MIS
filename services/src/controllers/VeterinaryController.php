@@ -194,16 +194,25 @@ class VeterinaryController extends Controller {
                 $diffCowData = floatval($data['CurrentCowData']) - floatval($data['BeforeCowData']);
                 $data['DiffCowData'] = $diffCowData;
 
-                $data['DiffCowDataPercentage'] = floatval($data['CurrentCowData']) / floatval($data['BeforeCowData'] * 100);
-                if (is_nan($data['DiffCowDataPercentage'])) {
+                if(floatval($data['BeforeCowData']) != 0){
+                    $data['DiffCowDataPercentage'] = floatval($data['CurrentCowData']) / floatval($data['BeforeCowData'] * 100);
+                }else{
                     $data['DiffCowDataPercentage'] = 0;
                 }
+                // if (is_nan($data['DiffCowDataPercentage'])) {
+                //     $data['DiffCowDataPercentage'] = 0;
+                // }
                 $diffServiceData = $data['CurrentServiceData'] - $data['BeforeServiceData'];
                 $data['DiffServiceData'] = $diffServiceData;
-                $data['DiffServiceDataPercentage'] = floatval($data['CurrentServiceData']) / floatval($data['BeforeServiceData'] * 100);
-                if (is_nan($data['DiffServiceDataPercentage'])) {
+
+                if($data['BeforeServiceData'] != 0){
+                    $data['DiffServiceDataPercentage'] = floatval($data['CurrentServiceData']) / floatval($data['BeforeServiceData'] * 100);
+                }else{
                     $data['DiffServiceDataPercentage'] = 0;
                 }
+                // if (is_nan($data['DiffServiceDataPercentage'])) {
+                //     $data['DiffServiceDataPercentage'] = 0;
+                // }
                 $data['CreateDate'] = $CurrentCowData['update_date'];
                 $data['ApproveDate'] = '';
                 $data['Status'] = '';
