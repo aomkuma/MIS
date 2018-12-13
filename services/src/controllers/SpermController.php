@@ -15,13 +15,13 @@
             $this->db = $db;
         }
 
-        private function getLastDayOfMonth($time){
+        public function getLastDayOfMonth($time){
             return $date = date("t", strtotime($time . '-' . '01'));
 
             // return date("t", $last_day_timestamp);
         }
 
-        private function getMonthName($month){
+        public function getMonthName($month){
             switch($month){
                 case 1 : $monthTxt = 'มกราคม';break;
                 case 2 : $monthTxt = 'กุมภาพันธ์';break;
@@ -70,11 +70,11 @@
             }
         }
 
-        private function getMonthDataList($condition, $regions){
+        public function getMonthDataList($condition, $regions){
 
             $ymFrom = $condition['YearFrom'] . '-' . str_pad($condition['MonthFrom'], 2, "0", STR_PAD_LEFT);
             $ymTo = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT);
-            $toTime = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT) . '-' .$this->getLastDayOfMonth($ym);
+            $toTime = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT) . '-' .SpermController::getLastDayOfMonth($ym);
             //exit;
             $fromTime = $condition['YearFrom']  . '-' . str_pad($condition['MonthFrom'], 2, "0", STR_PAD_LEFT) .'-01';
             
@@ -82,6 +82,11 @@
             $date2 = new \DateTime($fromTime);
             $diff = $date1->diff($date2);
             $diffMonth = (($diff->format('%y') * 12) + $diff->format('%m'));
+            if ($diffMonth == 0) {
+                $diffMonth = 1;
+            }else{
+                $diffMonth += 1;
+            }
             $curMonth = $condition['MonthFrom'];
             $DataList = [];
             $DataSummary = [];
@@ -95,7 +100,7 @@
                 foreach ($regions as $key => $value) {
                     
                     $region_id = $value['RegionID'];
-                    $monthName = $this->getMonthName($curMonth);
+                    $monthName = SpermController::getMonthName($curMonth);
 
                     $data = [];
                     $data['RegionName'] = $value['RegionName'];
@@ -144,7 +149,7 @@
             return ['DataList' => $DataList, 'Summary' => $DataSummary];                
         }
 
-        private function getQuarterDataList($condition, $regions){
+        public function getQuarterDataList($condition, $regions){
 
             // get loop to query
             $diffYear = ($condition['YearTo'] - $condition['YearFrom']) + 1;
@@ -273,7 +278,7 @@
             return ['DataList' => $DataList, 'Summary' => $DataSummary];
         }
 
-        private function getAnnuallyDataList($condition, $regions){
+        public function getAnnuallyDataList($condition, $regions){
             
             $loop = intval($condition['YearTo']) - intval($condition['YearFrom']) + 1;
             $curYear = $condition['YearFrom'];

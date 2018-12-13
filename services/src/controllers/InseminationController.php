@@ -85,7 +85,11 @@
             $curMonth = $condition['MonthFrom'];
             $DataList = [];
             $DataSummary = [];
-            if($diffMonth==0){$diffMonth=1;}
+            if ($diffMonth == 0) {
+                $diffMonth = 1;
+            }else{
+                $diffMonth += 1;
+            }
             for($i = 0; $i < $diffMonth; $i++){
 
                 // Prepare condition
@@ -147,7 +151,7 @@
             return ['DataList' => $DataList, 'Summary' => $DataSummary];                
         }
 
-        private function getQuarterDataList($condition, $regions){
+        public function getQuarterDataList($condition, $regions){
 
             // get loop to query
             $diffYear = ($condition['YearTo'] - $condition['YearFrom']) + 1;
@@ -275,7 +279,7 @@
             return ['DataList' => $DataList, 'Summary' => $DataSummary];                
         }
 
-        private function getAnnuallyDataList($condition, $regions){
+        public function getAnnuallyDataList($condition, $regions){
             
             $loop = intval($condition['YearTo']) - intval($condition['YearFrom']) + 1;
             $curYear = $condition['YearFrom'];

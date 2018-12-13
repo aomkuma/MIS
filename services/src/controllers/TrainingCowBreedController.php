@@ -97,8 +97,10 @@
             $date2 = new \DateTime($fromTime);
             $diff = $date1->diff($date2);
             $diffMonth = (($diff->format('%y') * 12) + $diff->format('%m'));
-            if($diffMonth == 0){
+            if ($diffMonth == 0) {
                 $diffMonth = 1;
+            }else{
+                $diffMonth += 1;
             }
             $curMonth = $condition['MonthFrom'];
             $DataList = [];
