@@ -1132,14 +1132,14 @@ class ReportController extends Controller {
     }
 
     public function exportCowbreedExcel($request, $response) {
-            
+
         try {
             $obj = $request->getParsedBody();
             $mastesgoallist = MasterGoalService::getList('Y', 'ปัจจัยการเลี้ยงโค');
-        
-           $condition = $obj['obj']['condition'];
 
-                $data = $obj['obj']['data'];
+            $condition = $obj['obj']['condition'];
+
+            $data = $obj['obj']['data'];
 
 
             $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_in_memory_gzip;
@@ -2109,17 +2109,17 @@ class ReportController extends Controller {
         try {
             $obj = $request->getParsedBody();
             $mastesgoallist = MasterGoalService::getList('Y', 'ผสมเทียม');
-         
+
 //            $data['Description']['years'] = 2018;
 //            $condition['DisplayType'] = 'monthly';
 //            $data['Description']['months'] = 1;
 //            $data['Quarter'] = 1;
 //            $data['Description']['region_id'] = 3;
-             $condition = $obj['obj']['condition'];
+            $condition = $obj['obj']['condition'];
 //            $cooperative = $obj['obj']['CooperativeList'];
-                 $data = $obj['obj']['data'];
+            $data = $obj['obj']['data'];
 //            $description = $obj['obj']['data_description'];
-
+          
             $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_in_memory_gzip;
 
             $catch_result = \PHPExcel_Settings::setCacheStorageMethod($cacheMethod);
@@ -2133,7 +2133,7 @@ class ReportController extends Controller {
                 case 'monthly' : $header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม เดือน ' . $this->getMonthName($data['Description']['months']) . ' ปี ' . ($data['Description']['years'] + 543);
                     $objPHPExcel = $this->generateInseminationExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
                     break;
-                case 'quarter' :$header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม ไตรมาสที่ ' . $data['Quarter'] ;
+                case 'quarter' :$header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม ไตรมาสที่ ' . $data['Quarter'];
                     $objPHPExcel = $this->generateInseminationExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
                     break;
 
@@ -2196,9 +2196,9 @@ class ReportController extends Controller {
                 $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row))->getFont()->setSize(16);
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), 'ตัว');
                 $objPHPExcel->getActiveSheet()->getStyle('A' . (4 + $row))->getFont()->setBold(true);
-                $objPHPExcel->getActiveSheet()->getStyle('A' . (4 + $row) )->getFont()->setSize(16);
-                $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row) )->getFont()->setBold(true);
-                $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row) )->getFont()->setSize(16);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . (4 + $row))->getFont()->setSize(16);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row))->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row))->getFont()->setSize(16);
                 foreach ($mission as $itemmission) {
                     $inmonth = InseminationService::getDetailyear($data['Description']['years'], $itemmission['region_id']);
                     $summisamt += $itemmission['amount'];
@@ -2282,7 +2282,7 @@ class ReportController extends Controller {
                 $objPHPExcel->getActiveSheet()->getStyle('A' . (4 + $row))->getFont()->setBold(true);
                 $objPHPExcel->getActiveSheet()->getStyle('A' . (4 + $row))->getFont()->setSize(16);
                 $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row))->getFont()->setBold(true);
-                $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row) )->getFont()->setSize(16);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row))->getFont()->setSize(16);
                 foreach ($mission as $itemmission) {
                     $inmonth = InseminationService::getDetailmonth($data['Description']['years'], $data['Description']['months'], $itemmission['region_id']);
                     print_r($inmonth);
@@ -2305,10 +2305,10 @@ class ReportController extends Controller {
                 }
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (6 + $row), 'รายได้ค่าบริการ ');
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . (6 + $row), 'บาท');
-                $objPHPExcel->getActiveSheet()->getStyle('A' . (6 + $row) )->getFont()->setBold(true);
-                $objPHPExcel->getActiveSheet()->getStyle('A' . (6 + $row) )->getFont()->setSize(16);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . (6 + $row))->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . (6 + $row))->getFont()->setSize(16);
                 $row ++;
-              
+
                 foreach ($mission as $itemmission) {
                     $inmonth = InseminationService::getDetailmonth($data['Description']['years'], $data['Description']['months'], $itemmission['region_id']);
 
@@ -2364,12 +2364,14 @@ class ReportController extends Controller {
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), $item['goal_name'] . 'รายตัว');
                 $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row))->getFont()->setSize(16);
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), 'ตัว');
-                $objPHPExcel->getActiveSheet()->getStyle('A' . (4 + $row) )->getFont()->setBold(true);
-                $objPHPExcel->getActiveSheet()->getStyle('A' . (4 + $row) )->getFont()->setSize(16);
-                $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row) )->getFont()->setBold(true);
-                $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row) )->getFont()->setSize(16);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . (4 + $row))->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . (4 + $row))->getFont()->setSize(16);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row))->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row))->getFont()->setSize(16);
+                  print_r($mission);
                 foreach ($mission as $itemmission) {
-                    $inmonth = InseminationService::getDetailquar($data['Description']['years'], $itemmission['region_id'], $data['Quarter']);
+                    $inmonth = InseminationService::getDetailquar($data['Description']['years'], $itemmission['region_id'], $data['Description']['quarter']);
+                  
                     $summisamt += $itemmission['amount'];
                     $summispri += $itemmission['price_value'];
                     $sumMamt += $itemmission['amount'] / 3;
@@ -2389,12 +2391,12 @@ class ReportController extends Controller {
                 }
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (6 + $row), 'รายได้ค่าบริการ ');
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . (6 + $row), 'บาท');
-                $objPHPExcel->getActiveSheet()->getStyle('A' . (6 + $row) . $highestRow)->getFont()->setBold(true);
-                $objPHPExcel->getActiveSheet()->getStyle('A' . (6 + $row) . $highestRow)->getFont()->setSize(16);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . (6 + $row))->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . (6 + $row))->getFont()->setSize(16);
                 $row ++;
                 foreach ($mission as $itemmission) {
-                    $inmonth = InseminationService::getDetailquar($data['Description']['years'], $itemmission['region_id'], $data['Quarter']);
-
+                    $inmonth = InseminationService::getDetailquar($data['Description']['years'], $itemmission['region_id'], $data['Description']['quarter']);
+                 
                     $objPHPExcel->getActiveSheet()->setCellValue('A' . (6 + $row), '    - ' . $itemmission['RegionName']);
                     $objPHPExcel->getActiveSheet()->getStyle('A' . (6 + $row))->getFont()->setSize(16);
                     $objPHPExcel->getActiveSheet()->setCellValue('C' . (6 + $row), $itemmission['price_value']);
@@ -2419,7 +2421,7 @@ class ReportController extends Controller {
             $objPHPExcel->getActiveSheet()->setCellValue('E' . (7 + $row), $sumcbpri);
             $objPHPExcel->getActiveSheet()->setCellValue('F' . (6 + $row), $sumcomamt);
             $objPHPExcel->getActiveSheet()->setCellValue('F' . (7 + $row), $sumcompri);
-
+          
             $objPHPExcel->getActiveSheet()->getStyle('A3:F4')->applyFromArray(
                     array(
                         'fill' => array(
@@ -2480,7 +2482,7 @@ class ReportController extends Controller {
                     )
                 )
         );
-
+  die();
         return $objPHPExcel;
     }
 
