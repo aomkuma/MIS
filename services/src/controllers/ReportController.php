@@ -1792,8 +1792,7 @@ class ReportController extends Controller {
              $condition = $obj['obj']['condition'];
 //            $cooperative = $obj['obj']['CooperativeList'];
                  $data = $obj['obj']['data'];
-                 print_r($obj);
-                 die();
+            
 //            $description = $obj['obj']['data_description'];
 
             $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_in_memory_gzip;
