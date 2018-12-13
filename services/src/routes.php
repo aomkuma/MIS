@@ -98,6 +98,7 @@ $app->post('/material/get/', 'MaterialController:getData');
 $app->post('/material/update/', 'MaterialController:updateData');
 $app->post('/material/delete/detail/', 'MaterialController:removeDetailData');
 
+$app->post('/cow-breed/list/main/', 'CowBreedController:getMainList');
 $app->post('/cow-breed/get/', 'CowBreedController:getData');
 $app->post('/cow-breed/update/', 'CowBreedController:updateData');
 $app->post('/cow-breed/delete/detail/', 'CowBreedController:removeDetailData');

@@ -8,6 +8,19 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class CowBreedService {
 
+    public static function getMainList($years, $months, $region_id, $cow_breed_type_id){
+            return CowBreed::select(DB::raw("SUM(amount) AS sum_amount")
+                                        ,DB::raw("SUM(`price`) AS sum_baht")
+                                        ,"cow_breed.update_date")
+                            ->join("cow_breed_detail", 'cow_breed_detail.cow_breed_id', '=', 'cow_breed.id')
+                            ->where("years", $years)
+                            ->where("months", $months)
+                            ->where("region_id", $region_id)
+                            ->where('cow_breed_type_id', $cow_breed_type_id)
+                            ->first()
+                            ->toArray();
+        }
+
     public static function getDataByID($id) {
         return CowBreed::where('id', $id)
                         //->with('mouHistories')
