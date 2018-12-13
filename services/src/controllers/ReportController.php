@@ -619,7 +619,7 @@ class ReportController extends Controller {
             $objPHPExcel->getActiveSheet()->setCellValue('F3', 'เปรียบเทียบเป้าหมาย');
             foreach ($goal as $key => $value) {
                 $mastesgoallist = MasterGoalService::getData($value['goal_id']);
-                $spmonth = SpermService::getDetailquar($data['Description']['years'], $value['goal_id'], $data['Description']['region_id'], $data['Quarter']);
+                $spmonth = SpermService::getDetailquar($data['Description']['years'], $value['goal_id'], $data['Description']['region_id'], $data['Description']['quarter']);
                 if (sizeof($spmonth) > 0) {
                     $objPHPExcel->getActiveSheet()->setCellValue('A' . (4 + $row), $mastesgoallist['goal_name']);
                     $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), '        มูลค่า' . $mastesgoallist['goal_name']);
@@ -1339,7 +1339,7 @@ class ReportController extends Controller {
             $sumMamt = 0;
             $sumMpri = 0;
             foreach ($mastesgoallist as $item) {
-                $cbmonth = CowBreedService::getDetailquar($data['Description']['years'], $item['id'], $data['Description']['region_id'], $data['Quarter']);
+                $cbmonth = CowBreedService::getDetailquar($data['Description']['years'], $item['id'], $data['Description']['region_id'], $data['Description']['quarter']);
                 $mission = GoalMissionService::getMission($item['id'], $data['Description']['region_id'], $data['Description']['years']);
 
                 $summisamt += $mission[0]['amount'];
@@ -1784,14 +1784,16 @@ class ReportController extends Controller {
             $obj = $request->getParsedBody();
             $mastesgoallist = MasterGoalService::getList('Y', 'ฝึกอบรม');
             //  print_r($mastesgoallist->toArray());
-            $data['Description']['years'] = 2018;
-            $condition['DisplayType'] = 'quarter';
-            $data['Description']['months'] = 1;
-            $data['Quarter'] = 1;
-            $data['Description']['region_id'] = 3;
-            // $condition = $obj['obj']['condition'];
+//            $data['Description']['years'] = 2018;
+//            $condition['DisplayType'] = 'quarter';
+//            $data['Description']['months'] = 1;
+//            $data['Quarter'] = 1;
+//            $data['Description']['region_id'] = 3;
+             $condition = $obj['obj']['condition'];
 //            $cooperative = $obj['obj']['CooperativeList'];
-            //     $data = $obj['obj']['data'];
+                 $data = $obj['obj']['data'];
+                 print_r($obj);
+                 die();
 //            $description = $obj['obj']['data_description'];
 
             $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_in_memory_gzip;
@@ -1991,7 +1993,7 @@ class ReportController extends Controller {
             $sumMamt = 0;
             $sumMpri = 0;
             foreach ($mastesgoallist as $item) {
-                $cbmonth = TrainingCowBreedService::getDetailquar($data['Description']['years'], $item['id'], $data['Description']['region_id'], $data['Quarter']);
+                $cbmonth = TrainingCowBreedService::getDetailquar($data['Description']['years'], $item['id'], $data['Description']['region_id'], $data['Description']['quarter']);
                 $mission = GoalMissionService::getMission($item['id'], $data['Description']['region_id'], $data['Description']['years']);
 
                 $summisamt += $mission[0]['amount'];
