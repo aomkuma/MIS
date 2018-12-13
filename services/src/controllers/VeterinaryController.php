@@ -89,7 +89,7 @@ class VeterinaryController extends Controller {
     public function getMonthDataList($condition, $regions) {
         $ymFrom = $condition['YearTo'] . '-' . str_pad($condition['MonthFrom'], 2, "0", STR_PAD_LEFT);
         $ymTo = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT);
-        $toTime = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT) . '-' . VeterinaryController::getLastDayOfMonth($ymTo);
+        $toTime = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT) . '-28';// . VeterinaryController::getLastDayOfMonth($ymTo);
         //exit;
         $fromTime = $condition['YearTo'] . '-' . str_pad($condition['MonthFrom'], 2, "0", STR_PAD_LEFT) . '-01';
 
@@ -98,8 +98,8 @@ class VeterinaryController extends Controller {
         $date2 = new \DateTime($fromTime);
         $diff = $date1->diff($date2);
 
-        echo $diffMonth = (($diff->format('%y') * 12) + $diff->format('%m'));
-        exit;
+        $diffMonth = (($diff->format('%y') * 12) + $diff->format('%m'));
+        // exit;
         // if($ymFrom != $ymTo){
         //     $diffMonth += 1;
         // }
