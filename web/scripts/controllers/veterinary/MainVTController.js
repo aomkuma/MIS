@@ -20,7 +20,7 @@ angular.module('e-homework').controller('MainVTController', function($scope, $co
             'condition' : $scope.condition
             , 'region' : $scope.PersonRegion
         };
-        IndexOverlayFactory.overlayShow();
+      //  IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest(action, params).then(function(result){
             if(result.data.STATUS == 'OK'){
                 $scope.List = result.data.DATA.DataList;

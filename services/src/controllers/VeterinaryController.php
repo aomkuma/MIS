@@ -22,7 +22,7 @@ class VeterinaryController extends Controller {
         // return date("t", $last_day_timestamp);
     }
 
-     public static function getMonthName($month) {
+    public static function getMonthName($month) {
         switch ($month) {
             case 1 : $monthTxt = 'มกราคม';
                 break;
@@ -54,6 +54,9 @@ class VeterinaryController extends Controller {
 
     public function getMainList($request, $response, $args) {
         try {
+            error_reporting(E_ERROR);
+            error_reporting(E_ALL);
+            ini_set('display_errors', 'On');
             // error_reporting(E_ERROR);
             // error_reporting(E_ALL);
             // ini_set('display_errors','On');
@@ -75,7 +78,8 @@ class VeterinaryController extends Controller {
 
             $this->data_result['DATA']['DataList'] = $DataList;
             $this->data_result['DATA']['Summary'] = $Summary;
-
+//            print_r($this->data_result);
+//            die();
             return $this->returnResponse(200, $this->data_result, $response, false);
         } catch (\Exception $e) {
             return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
@@ -88,12 +92,12 @@ class VeterinaryController extends Controller {
         $toTime = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT) . '-' . VeterinaryController::getLastDayOfMonth($ymTo);
         //exit;
         $fromTime = $condition['YearFrom'] . '-' . str_pad($condition['MonthFrom'], 2, "0", STR_PAD_LEFT) . '-01';
- 
+
         $date1 = new \DateTime($toTime);
-       
+
         $date2 = new \DateTime($fromTime);
         $diff = $date1->diff($date2);
-        
+
         $diffMonth = (($diff->format('%y') * 12) + $diff->format('%m'));
         // if($ymFrom != $ymTo){
         //     $diffMonth += 1;
@@ -107,7 +111,9 @@ class VeterinaryController extends Controller {
         $DataSummary['SummaryCurrentService'] = 0;
         $DataSummary['SummaryBeforeService'] = 0;
         $DataSummary['SummaryServicePercentage'] = 0;
-       if($diffMonth==0){$diffMonth=1;}
+        if ($diffMonth == 0) {
+            $diffMonth = 1;
+        }
         for ($i = 0; $i < $diffMonth; $i++) {
 
             // Prepare condition
@@ -115,7 +121,7 @@ class VeterinaryController extends Controller {
             $beforeYear = $condition['YearTo'] - 1;
             // Loop User Regions
             foreach ($regions as $key => $value) {
- 
+
                 $region_id = $value['RegionID'];
                 $monthName = VeterinaryController::getMonthName($curMonth);
 
@@ -185,15 +191,19 @@ class VeterinaryController extends Controller {
                 $BeforeServiceData = VeterinaryService::getMainList($beforeYear, $curMonth, $region_id, $farm_type, $item_type);
                 $data['BeforeServiceData'] = floatval($BeforeServiceData['sum_amount']);
 
-                $diffCowData = $data['CurrentCowData'] - $data['BeforeCowData'];
+                $diffCowData = floatval($data['CurrentCowData']) - floatval($data['BeforeCowData']);
                 $data['DiffCowData'] = $diffCowData;
 
-                $data['DiffCowDataPercentage'] = $data['CurrentCowData'] / $data['BeforeCowData'] * 100;
-
+                $data['DiffCowDataPercentage'] = floatval($data['CurrentCowData']) / floatval($data['BeforeCowData'] * 100);
+                if (is_nan($data['DiffCowDataPercentage'])) {
+                    $data['DiffCowDataPercentage'] = 0;
+                }
                 $diffServiceData = $data['CurrentServiceData'] - $data['BeforeServiceData'];
                 $data['DiffServiceData'] = $diffServiceData;
-                $data['DiffServiceDataPercentage'] = $data['CurrentServiceData'] / $data['BeforeServiceData'] * 100;
-                ;
+                $data['DiffServiceDataPercentage'] = floatval($data['CurrentServiceData']) / floatval($data['BeforeServiceData'] * 100);
+                if (is_nan($data['DiffServiceDataPercentage'])) {
+                    $data['DiffServiceDataPercentage'] = 0;
+                }
                 $data['CreateDate'] = $CurrentCowData['update_date'];
                 $data['ApproveDate'] = '';
                 $data['Status'] = '';
@@ -214,7 +224,7 @@ class VeterinaryController extends Controller {
             }
             $curMonth++;
         }
-       
+      
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
 

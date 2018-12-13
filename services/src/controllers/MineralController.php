@@ -15,13 +15,13 @@
             $this->db = $db;
         }
 
-        private function getLastDayOfMonth($time){
+        public static  function getLastDayOfMonth($time){
             return $date = date("t", strtotime($time . '-' . '01'));
 
             // return date("t", $last_day_timestamp);
         }
 
-        private function getMonthName($month){
+        public static function getMonthName($month){
             switch($month){
                 case 1 : $monthTxt = 'มกราคม';break;
                 case 2 : $monthTxt = 'กุมภาพันธ์';break;
@@ -70,11 +70,11 @@
             }
         }
 
-        private function getMonthDataList($condition, $regions){
+        public static  function getMonthDataList($condition, $regions){
 
             $ymFrom = $condition['YearFrom'] . '-' . str_pad($condition['MonthFrom'], 2, "0", STR_PAD_LEFT);
             $ymTo = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT);
-            $toTime = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT) . '-' .$this->getLastDayOfMonth($ym);
+            $toTime = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT) . '-' .MineralController::getLastDayOfMonth($ymTo);
             //exit;
             $fromTime = $condition['YearFrom']  . '-' . str_pad($condition['MonthFrom'], 2, "0", STR_PAD_LEFT) .'-01';
             
@@ -85,6 +85,7 @@
             $curMonth = $condition['MonthFrom'];
             $DataList = [];
             $DataSummary = [];
+            if($diffMonth==0){$diffMonth=1;}
             for($i = 0; $i < $diffMonth; $i++){
 
                 // Prepare condition
@@ -95,7 +96,7 @@
                 foreach ($regions as $key => $value) {
                     
                     $region_id = $value['RegionID'];
-                    $monthName = $this->getMonthName($curMonth);
+                    $monthName = MineralController::getMonthName($curMonth);
 
                     $data = [];
                     $data['RegionName'] = $value['RegionName'];
