@@ -291,7 +291,7 @@
             return ['DataList' => $DataList, 'Summary' => $DataSummary];
         }
 
-        private function getAnnuallyDataList($condition, $regions){
+        public function getAnnuallyDataList($condition, $regions){
             
             $loop = intval($condition['YearTo']) - intval($condition['YearFrom']) + 1;
             $curYear = $condition['YearFrom'];
