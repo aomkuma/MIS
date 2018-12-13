@@ -257,6 +257,7 @@
                     $data['Status'] = '';
                     $data['Description'] = ['quarter' => $curQuarter
                                             ,'years' => $curYear
+                                            ,'quarter' => $curQuarter
                                             ,'region_id' => $region_id
                                             ];
 
