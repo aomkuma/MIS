@@ -39,20 +39,8 @@ angular.module('e-homework').controller('MainMTController', function($scope, $co
 
     $scope.goSearch = function(){
         $scope.ViewType = 'MAIN';
-        // $scope.loadList('material/list/main');
+        $scope.loadList('material/list/main');
     }
-
-    $scope.loadMasterGoalList = function(){
-        var params = {'actives':'Y', 'menu_type' : 'วัสดุผสมเทียมและอื่นๆ'};
-        IndexOverlayFactory.overlayShow();
-        HTTPService.clientRequest('master-goal/list', params).then(function(result){
-            if(result.data.STATUS == 'OK'){
-                $scope.MasterGoalList = result.data.DATA.List;
-                IndexOverlayFactory.overlayHide();
-            }
-        });
-    }
-
 
     $scope.viewDetail = function(){
         $scope.ViewType = 'DETAIL';
@@ -260,6 +248,6 @@ angular.module('e-homework').controller('MainMTController', function($scope, $co
         ,{'values':'7200'}
         ,{'values':'151500'}
     ];
-    // $scope.loadList('material/list/main');
+    $scope.loadList('material/list/main');
 
 });

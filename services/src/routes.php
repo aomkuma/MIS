@@ -93,6 +93,7 @@ $app->post('/sperm-sale/get/', 'SpermSaleController:getData');
 $app->post('/sperm-sale/update/', 'SpermSaleController:updateData');
 $app->post('/sperm-sale/delete/detail/', 'SpermSaleController:removeDetailData');
 
+$app->post('/material/list/main/', 'MaterialController:getMainList');
 $app->post('/material/get/', 'MaterialController:getData');
 $app->post('/material/update/', 'MaterialController:updateData');
 $app->post('/material/delete/detail/', 'MaterialController:removeDetailData');
