@@ -10,6 +10,19 @@
     
     class MaterialService {
 
+        public static function getMainList($years, $months, $region_id, $material_type_id){
+            return Material::select(DB::raw("SUM(amount) AS sum_amount")
+                                        ,DB::raw("SUM(`price`) AS sum_baht")
+                                        ,"material.update_date")
+                            ->join("material_detail", 'material_detail.material_id', '=', 'material.id')
+                            ->where("years", $years)
+                            ->where("months", $months)
+                            ->where("region_id", $region_id)
+                            ->where('material_type_id', $material_type_id)
+                            ->first()
+                            ->toArray();
+        }
+
         public static function getDataByID($id){
             return Material::where('id', $id)
                     //->with('mouHistories')
