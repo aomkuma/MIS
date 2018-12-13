@@ -8,7 +8,7 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class InseminationService {
 
-    public static function getMainList($years, $months, $region_id, $farm_type, $item_type) {
+    public static function getMainList($years, $months, $region_id/*, $farm_type, $item_type*/) {
         return Insemination::select(DB::raw("SUM(cow_amount) AS sum_cow_amount")
                                 , DB::raw("SUM(service_cost + sperm_cost + material_cost) AS sum_income_amount")
                                 , "insemination.update_date")

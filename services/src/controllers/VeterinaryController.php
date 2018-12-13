@@ -22,7 +22,7 @@ class VeterinaryController extends Controller {
         // return date("t", $last_day_timestamp);
     }
 
-    private function getMonthName($month) {
+     public static function getMonthName($month) {
         switch ($month) {
             case 1 : $monthTxt = 'มกราคม';
                 break;
@@ -107,7 +107,7 @@ class VeterinaryController extends Controller {
         $DataSummary['SummaryCurrentService'] = 0;
         $DataSummary['SummaryBeforeService'] = 0;
         $DataSummary['SummaryServicePercentage'] = 0;
-
+       if($diffMonth==0){$diffMonth=1;}
         for ($i = 0; $i < $diffMonth; $i++) {
 
             // Prepare condition
@@ -117,7 +117,7 @@ class VeterinaryController extends Controller {
             foreach ($regions as $key => $value) {
  
                 $region_id = $value['RegionID'];
-                $monthName = $this->getMonthName($curMonth);
+                $monthName = VeterinaryController::getMonthName($curMonth);
 
                 $data = [];
                 $data['RegionName'] = $value['RegionName'] . ' (สหกรณ์)';
@@ -214,7 +214,7 @@ class VeterinaryController extends Controller {
             }
             $curMonth++;
         }
-
+       
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
 
