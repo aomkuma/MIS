@@ -96,6 +96,27 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
         $scope.goal_type = data.goal_type;
     }
 
+    $scope.reCalcAmount = function(){
+        $scope.totalAmount = 0;
+        var loop = $scope.avgList.length;
+        for(var i = 0; i < loop; i++){
+            if($scope.avgList[i].amount != null){
+                $scope.totalAmount += $scope.avgList[i].amount;
+            }
+        }
+        $scope.totalAmount = parseFloat($scope.totalAmount.toFixed(2));
+    }
+    $scope.reCalcPrice = function(){
+        $scope.totalPriceValue = 0;
+        var loop = $scope.avgList.length;
+        for(var i = 0; i < loop; i++){
+            if($scope.avgList[i].price_value != null){
+                $scope.totalPriceValue += $scope.avgList[i].price_value;    
+            }
+        }
+        $scope.totalPriceValue = parseFloat($scope.totalPriceValue.toFixed(2));
+    }
+
     $scope.avgData = function(Data){
         $scope.avgList = [];
         $scope.totalAmount = 0;

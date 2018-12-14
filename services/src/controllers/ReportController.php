@@ -2483,7 +2483,7 @@ class ReportController extends Controller {
                     )
                 )
         );
-  die();
+  
         return $objPHPExcel;
     }
 

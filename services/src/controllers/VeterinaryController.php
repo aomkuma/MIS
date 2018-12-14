@@ -150,11 +150,23 @@ class VeterinaryController extends Controller {
                 $diffCowData = $data['CurrentCowData'] - $data['BeforeCowData'];
                 $data['DiffCowData'] = $diffCowData;
 
-                $data['DiffCowDataPercentage'] = 0;
+                if($data['BeforeCowData'] != 0){
+                    $data['DiffCowDataPercentage'] = ($data['CurrentCowData'] / $data['BeforeCowData']) * 100;
+                }else{
+                    $data['DiffCowDataPercentage'] = 0;
+                }
+                
 
                 $diffServiceData = $data['CurrentServiceData'] - $data['BeforeServiceData'];
                 $data['DiffServiceData'] = $diffServiceData;
-                $data['DiffServiceDataPercentage'] = 0;
+                
+
+                if($data['BeforeServiceData'] != 0){
+                    $data['DiffServiceDataPercentage'] = ($data['CurrentServiceData'] / $data['BeforeServiceData']) * 100;
+                }else{
+                    $data['DiffServiceDataPercentage'] = 0;
+                }
+                
                 $data['CreateDate'] = $CurrentCowData['update_date'];
                 $data['ApproveDate'] = '';
                 $data['Status'] = '';
