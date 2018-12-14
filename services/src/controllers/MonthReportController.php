@@ -94,7 +94,8 @@ class MonthReportController extends Controller {
             $objPHPExcel = $this->generateMineralExcel($objPHPExcel, $condition, $region);
 
 //
-            $filename = 'MIS Report-รายงานรายเดือน' . '_' . date('YmdHis') . '.xlsx';
+            // $filename = 'MIS_Report-รายงานรายเดือน' . '_' . date('YmdHis') . '.xlsx';
+            $filename = 'MIS_Report-monthly_' . '_' . date('YmdHis') . '.xlsx';
             $filepath = '../../files/files/download/' . $filename;
 
             $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
