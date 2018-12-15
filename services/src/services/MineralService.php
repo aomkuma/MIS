@@ -22,6 +22,19 @@
                             ->toArray();
         }
 
+        public static function getMainListByMaster($years, $months, $master_id, $RegionList){
+            return Mineral::select(DB::raw("SUM(amount) AS sum_weight")
+                                        ,DB::raw("SUM(`values`) AS sum_baht")
+                                        ,"mineral.update_date")
+                            ->join("mineral_detail", 'mineral_detail.mineral_id', '=', 'mineral.id')
+                            ->where("years", $years)
+                            ->where("months", $months)
+                            ->where("food_id", $master_id)
+                            ->whereIn("region_id", $RegionList)
+                            ->first()
+                            ->toArray();
+        }
+
         public static function getDetailList($years, $months, $cooperative_id, $food_id){
             return Mineral::select(DB::raw("SUM(amount) AS sum_weight")
                                         ,DB::raw("SUM(`values`) AS sum_baht"))
