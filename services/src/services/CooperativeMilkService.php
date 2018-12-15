@@ -24,12 +24,12 @@
                         ->where("years", $years)
                         ->where("months", $months)
                         ->where("region_id", $region_id)
-                        ->where("cooperative_milk_detail.cooperative_id", $cooperative_id)
-                        // ->where("cooperative_milk_detail.cooperative_id", function($query) use ($cooperative_id){
-                        //     if(!empty($cooperative_id)){
-                        //         $query->where('cooperative_milk_detail.cooperative_id', $cooperative_id);
-                        //     }
-                        // })
+                        // ->where("cooperative_milk_detail.cooperative_id", $cooperative_id)
+                        ->where(function($query) use ($cooperative_id){
+                            if(!empty($actives)){
+                                $query->where('cooperative_id' , $cooperative_id);
+                            }
+                        })
                         ->first()
                         ->toArray();
     }

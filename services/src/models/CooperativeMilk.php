@@ -6,7 +6,6 @@ class CooperativeMilk extends \Illuminate\Database\Eloquent\Model {
   	protected $primaryKey = 'id';
   	public $timestamps = false;
   	protected $fillable = array('id'
-  								, 'cooperative_id'
                   , 'region_id'
                   , 'months'
                   , 'years'
