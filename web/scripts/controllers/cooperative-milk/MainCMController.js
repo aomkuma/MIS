@@ -61,16 +61,31 @@ angular.module('e-homework').controller('MainCMController', function($scope, $co
         }
     }
 
+    $scope.numberFormat = function(num){
+        if(num == null){
+            return '';
+        }
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    $scope.numberFormatComma = function(num){
+        if(num == null){
+            return '';
+        }
+        return num.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     $scope.Header = [];
     $scope.ViewType = 'MAIN';
     $scope.YearList = getYearList(20);
     $scope.MonthList = getMonthList();
     var curDate = new Date();
     $scope.condition = {
-                        'Region':null
-                        ,'MonthFrom' : 1//curDate.getMonth()
+                        'Region':$scope.PersonRegion[0].RegionID
+                        , 'DisplayType':'monthly'
+                        ,'MonthFrom' : curDate.getMonth() + 1
                         ,'YearFrom': curDate.getFullYear()
-                        ,'MonthTo' : 4//curDate.getMonth()
+                        ,'MonthTo' : curDate.getMonth() + 1
                         ,'YearTo': curDate.getFullYear()
                         ,'QuarterFrom':'1'
                         ,'QuarterTo':'4'

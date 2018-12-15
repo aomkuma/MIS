@@ -10,7 +10,8 @@ angular.module('e-homework').controller('UpdateCMController', function($scope, $
        window.location.replace('#/guest/logon');
     }
     $scope.ID = $routeParams.id;
-    $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));    
+    $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));  
+    $scope.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));     
     // console.log($scope.$parent.Menu);
 
     $scope.loadCooperative = function(){
