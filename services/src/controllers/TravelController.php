@@ -83,7 +83,7 @@
             }
         }
 
-        private function getMonthDataList($condition, $regions){
+        public function getMonthDataList($condition, $regions){
 
             $ymFrom = $condition['YearTo'] . '-' . str_pad($condition['MonthFrom'], 2, "0", STR_PAD_LEFT);
             $ymTo = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT);
