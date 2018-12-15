@@ -43,6 +43,17 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
         });
     }
 
+    $scope.loadMasterGoalList = function(){
+        var params = {'actives':'Y', 'menu_type' : 'ท่องเที่ยว'};
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('master-goal/list', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.MasterGoalList = result.data.DATA.List;
+                IndexOverlayFactory.overlayHide();
+            }
+        });
+    }
+
     $scope.loadData = function(action, id){
         var params = {
             'months' : $scope.Sperm.months
@@ -250,8 +261,9 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
             'id':''
             , 'cooperative_id':null
             , 'region_id':null
-            , 'months':null
-            , 'years':null
+            , 'days':$scope.currentDay.getDate()
+            , 'months':($scope.currentDay.getMonth() + 1)
+            , 'years':$scope.currentDay.getFullYear()
             , 'create_date':''
             , 'update_date':''
         };    
@@ -259,6 +271,7 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
     
     $scope.YearList = getYearList(20);
     $scope.MonthList = getMonthList();
+    $scope.DayList = getDayList();
     $scope.Search = false;
     $scope.SubDairyFarmingList = [];
     $scope.DairyFarmingList = [];
@@ -275,8 +288,11 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
         $scope.SpermDetailList[index].open_date = true;
     };
 
+    $scope.currentDay = new Date();
+
     $scope.setSperm();
     $scope.loadCooperative();
+    $scope.loadMasterGoalList();
     // $scope.loadDairyFarming('MAIN', '');
     // $scope.loadDairyFarming('CHILD', '');
 

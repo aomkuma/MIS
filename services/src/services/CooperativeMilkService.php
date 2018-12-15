@@ -10,6 +10,18 @@
     
     class CooperativeMilkService {
 
+        public static function getMainList($years, $months, $field_amount, $field_price) {
+        return CooperativeMilk::select(DB::raw("SUM(".$field_amount.") AS sum_amount")
+                                , DB::raw("SUM(".$field_price.") AS sum_baht")
+                                , "cooperative_milk.update_date")
+                        ->join("cooperative_milk_detail", 'cooperative_milk_detail.cooperative_milk_id', '=', 'cooperative_milk.id')
+                        ->where("years", $years)
+                        ->where("months", $months)
+                        // ->where("region_id", $region_id)
+                        ->first()
+                        ->toArray();
+    }
+
         public static function getDataByID($id){
             return CooperativeMilk::where('id', $id)
                     //->with('mouHistories')

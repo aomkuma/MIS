@@ -6,6 +6,7 @@ class Travel extends \Illuminate\Database\Eloquent\Model {
   	protected $primaryKey = 'id';
   	public $timestamps = false;
   	protected $fillable = array('id'
+                  , 'days'
   								, 'months'
   								, 'years'
   								, 'create_date'

@@ -7,6 +7,7 @@ class TravelDetail extends \Illuminate\Database\Eloquent\Model {
   	public $timestamps = false;
   	protected $fillable = array('id'
   								, 'travel_id'
+                  , 'travel_type_id'
   								, 'organize'
   								, 'travel_date'
   								, 'adult_pay'

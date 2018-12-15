@@ -8,6 +8,18 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class TravelService {
 
+    public static function getMainList($years, $months, $field_amount, $field_price) {
+        return Travel::select(DB::raw("SUM(".$field_amount.") AS sum_amount")
+                                , DB::raw("SUM(".$field_price.") AS sum_baht")
+                                , "travel.update_date")
+                        ->join("travel_detail", 'travel_detail.travel_id', '=', 'travel.id')
+                        ->where("years", $years)
+                        ->where("months", $months)
+                        // ->where("region_id", $region_id)
+                        ->first()
+                        ->toArray();
+    }
+
     public static function getDataByID($id) {
         return Travel::where('id', $id)
                         //->with('mouHistories')

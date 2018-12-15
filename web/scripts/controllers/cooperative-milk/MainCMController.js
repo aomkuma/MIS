@@ -208,6 +208,6 @@ angular.module('e-homework').controller('MainCMController', function($scope, $co
         ,{'values':'7200'}
         ,{'values':'151500'}
     ];
-    // $scope.loadList('cooperative-milk/list/main');
+    $scope.loadList('cooperative-milk/list/main');
 
 });
