@@ -8,9 +8,9 @@
 			ชื่อสหกรณ์
 		</div>
 		<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-			<select class="form-control" ng-model="Sperm.cooperative_id" ng-options="data.id as data.cooperative_name for data in Cooperative" required="required">
-				<option value="">กรุณาเลือก..</option>
-			</select>
+			<select name="Year" class="form-control" ng-model="Sperm.region_id" ng-options="region.RegionID as region.RegionName for region in PersonRegion" required="required">
+			    	<option value="">กรุณาเลือก..</option>
+				</select>
 		</div>
 		<div class="field-label col-lg-1 col-md-1 col-sm-12 col-xs-12">
 			เดือน

@@ -25,12 +25,12 @@
 					<option value="">กรุณาเลือก..</option>
 				</select>
 		  	</div>
-			<div class="form-group">
+			<!--<div class="form-group">
 			    <label for="exampleInputName2">&nbsp; ปี : </label>
 			    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearFrom" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
 					<option value="">กรุณาเลือก..</option>
 				</select>
-		  	</div>
+		  	</div>-->
 		  	<div class="form-group">
 			    <label for="exampleInputName2">&nbsp; ถึง </label>
 		  	</div>
@@ -86,18 +86,15 @@
 			<tr ng-repeat="data in List">
 				<td>{{data.RegionName}}</td>
 				<td>{{data.CooperativeName}}</td>
-				<td>{{data.TotalMilk}}</td>
-				<td>{{data.TotalMilkSent}}</td>
-				<td>{{data.TotalMilkBeeb}}</td>
-				<td>{{data.TotalMilkBeebSent}}</td>
-				<td>{{data.TotalMilkAmount}}</td>
-				<td>{{data.TotalValues}}</td>
-				<td>{{data.AverageValues}}</td>
+				<td>{{numberFormat(data.TotalPerson)}}</td>
+				<td>{{numberFormat(data.TotalPersonSent)}}</td>
+				<td>{{numberFormat(data.TotalCow)}}</td>
+				<td>{{numberFormat(data.TotalCowBeeb)}}</td>
+				<td>{{numberFormatComma(data.TotalMilkAmount)}}</td>
+				<td>{{numberFormatComma(data.TotalValues)}}</td>
+				<td>{{numberFormatComma(data.AverageValues)}}</td>
 				<td>
-					<button class="btn btn-success" ng-click="viewDetail(data.Description)">
-						<span class="glyphicon glyphicon-zoom-in"></span> 
-						รายละเอียด
-					</button>
+					<a class="pull-right" style="padding-right: 20px;" ng-click="exportReport( data,condition)"><img src="../files/img/excel.png" style="height: 40px;"></a>
 				</td>
 			</tr>
 		</tbody>

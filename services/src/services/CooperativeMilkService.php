@@ -10,14 +10,26 @@
     
     class CooperativeMilkService {
 
-        public static function getMainList($years, $months, $field_amount, $field_price) {
-        return CooperativeMilk::select(DB::raw("SUM(".$field_amount.") AS sum_amount")
-                                , DB::raw("SUM(".$field_price.") AS sum_baht")
+        public static function getMainList($years, $months, $region_id, $cooperative_id = '') {
+        return CooperativeMilk::select(DB::raw("SUM(total_person) AS sum_total_person")
+                                , DB::raw("SUM(total_person_sent) AS sum_total_person_sent")
+                                , DB::raw("SUM(total_cow) AS sum_total_cow")
+                                , DB::raw("SUM(total_cow_beeb) AS sum_total_cow_beeb")
+                                , DB::raw("SUM(milk_amount) AS sum_milk_amount")
+                                , DB::raw("SUM(total_values) AS sum_total_values")
+                                , DB::raw("SUM(average_values) AS sum_average_values")
+
                                 , "cooperative_milk.update_date")
                         ->join("cooperative_milk_detail", 'cooperative_milk_detail.cooperative_milk_id', '=', 'cooperative_milk.id')
                         ->where("years", $years)
                         ->where("months", $months)
-                        // ->where("region_id", $region_id)
+                        ->where("region_id", $region_id)
+                        ->where("cooperative_milk_detail.cooperative_id", $cooperative_id)
+                        // ->where("cooperative_milk_detail.cooperative_id", function($query) use ($cooperative_id){
+                        //     if(!empty($cooperative_id)){
+                        //         $query->where('cooperative_milk_detail.cooperative_id', $cooperative_id);
+                        //     }
+                        // })
                         ->first()
                         ->toArray();
     }
