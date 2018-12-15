@@ -415,6 +415,15 @@ function getYearList(loop)
     return yearList;
 }
 
+function getDayList(loop)
+{
+    var dayList = [];
+    for(var i =1 ; i <= 31; i++){
+        dayList.push({'dayValue': i, 'dayText' : i});
+    }
+    return dayList;
+}
+
 function getThaiMonth()
 {
     return [{monthText:'01',monthValue:'มกราคม'}

@@ -12,8 +12,15 @@
 				<option value="">กรุณาเลือก..</option>
 			</select>
 		</div>-->
-
-		<div class="field-label col-lg-1 col-md-1 col-sm-12 col-xs-12 col-lg-offset-2 col-md-offset-2">
+		<div class="field-label col-lg-1 col-md-1 col-sm-12 col-xs-12">
+			วัน
+		</div>
+		<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+			<select name="Year" class="form-control" ng-model="Sperm.days" ng-options="day.dayValue as day.dayText for day in DayList" required="required">
+					<option value="">กรุณาเลือก..</option>
+				</select>
+		</div>
+		<div class="field-label col-lg-1 col-md-1 col-sm-12 col-xs-12">
 			เดือน
 		</div>
 		<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
@@ -49,6 +56,16 @@
 		<div>
 			<fieldset style="border: 1px solid #999; padding: 10px; margin-top: 10px;" ng-repeat="SpermDetail in SpermDetailList">
 			<div ng-form="sub_form_data">
+				<div class="row form-group">
+					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+						รายการ
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select class="form-control" ng-model="SpermDetail.travel_type_id" ng-options="data.id as data.goal_name for data in MasterGoalList" ><!--ng-change="loadDairyFarming('CHILD', SpermDetail.dairy_farming_id)" -->
+							<option value="">กรุณาเลือก..</option>
+						</select>
+					</div>
+				</div>
 				<div class="row form-group" ng-init="parentIndex = $index">
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						หน่วยงาน

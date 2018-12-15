@@ -78,6 +78,20 @@ angular.module('e-homework').controller('MainTVController', function($scope, $co
         }
     }
 
+    $scope.numberFormat = function(num){
+        if(num == null){
+            return '';
+        }
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    $scope.numberFormatComma = function(num){
+        if(num == null){
+            return '';
+        }
+        return num.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     $scope.Header = [];
     $scope.ViewType = 'MAIN';
     $scope.YearList = getYearList(20);
@@ -85,6 +99,7 @@ angular.module('e-homework').controller('MainTVController', function($scope, $co
     var curDate = new Date();
     $scope.condition = {
                         'Region':null
+                        ,'DisplayType':'monthly'
                         ,'MonthFrom' : 1//curDate.getMonth()
                         ,'YearFrom': curDate.getFullYear()
                         ,'MonthTo' : 4//curDate.getMonth()
@@ -276,6 +291,6 @@ angular.module('e-homework').controller('MainTVController', function($scope, $co
         ,{'values':'0'}
         ,{'values':'0'}
     ];
-    // $scope.loadList('travel/list/main');
+    $scope.loadList('travel/list/main');
 
 });

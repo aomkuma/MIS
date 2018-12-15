@@ -234,12 +234,14 @@ angular.module('e-homework').controller('UpdateCMController', function($scope, $
             'id':''
             , 'cooperative_id':null
             , 'region_id':null
-            , 'months':null
-            , 'years':null
+            , 'months':($scope.currentDay.getMonth() + 1)
+            , 'years':$scope.currentDay.getFullYear()
             , 'create_date':''
             , 'update_date':''
         };    
     }
+    
+    $scope.currentDay = new Date();
     
     $scope.YearList = getYearList(20);
     $scope.MonthList = getMonthList();
