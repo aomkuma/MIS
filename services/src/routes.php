@@ -128,6 +128,7 @@ $app->post('/cooperative-milk/get/', 'CooperativeMilkController:getData');
 $app->post('/cooperative-milk/update/', 'CooperativeMilkController:updateData');
 $app->post('/cooperative-milk/delete/detail/', 'CooperativeMilkController:removeDetailData');
 
+$app->post('/cow-group/list/main/', 'CowGroupController:getMainList');
 $app->post('/cow-group/get/', 'CowGroupController:getData');
 $app->post('/cow-group/update/', 'CowGroupController:updateData');
 $app->post('/cow-group/delete/detail/', 'CowGroupController:removeDetailData');

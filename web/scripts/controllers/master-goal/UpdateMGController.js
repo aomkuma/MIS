@@ -32,7 +32,8 @@ angular.module('e-homework').controller('UpdateMGController', function($scope, $
         HTTPService.clientRequest('master-goal/update', params).then(function(result){
             if(result.data.STATUS == 'OK'){
                 // if($scope.ID !== undefined && $scope.ID !== null){
-                    window.location.href = '#/master-goal/update/' + result.data.DATA.id;
+                    // window.location.href = '#/master-goal/update/' + result.data.DATA.id;
+                    window.location.href = '#/master-goal';
                 // }else{
                 //     location.reload();    
                 // }

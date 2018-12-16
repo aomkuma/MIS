@@ -312,7 +312,10 @@ angular.module('e-homework').controller('UpdateCGController', function($scope, $
     $scope.SpermDetailList = [];
     $scope.SpermList = [
         {'id':1, 'name':'ฝูงโคต้นงวด'}
-        ,{'id':2, 'name':'ฝูงโคปลายงวด'}
+        ,{'id':2, 'name':'โคเพิ่ม'}
+        ,{'id':3, 'name':'โคลด'}
+        ,{'id':4, 'name':'ฝูงโคปลายงวด'}
+        ,{'id':5, 'name':'การจำหน่ายโค'}
     ];
     $scope.CowGroupList = [
             {'id':1, 'name':'ฝูงโค 1'}
