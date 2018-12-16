@@ -1546,7 +1546,7 @@ class ReportController extends Controller {
                 $sumcompri += $cbmonth['price'] - ($mission[0]['price_value'] );
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (4 + $row), 'ปริมาณ' . $item['goal_name']);
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), '        รายได้' . $item['goal_name']);
-                $objPHPExcel->getActiveSheet()->setCellValue('B' . (4 + $row), 'กก.');
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . (4 + $row), 'ตัว');
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), 'บาท');
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (4 + $row), $mission[0]['amount']);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $mission[0]['price_value']);
@@ -1560,7 +1560,7 @@ class ReportController extends Controller {
             }
             $objPHPExcel->getActiveSheet()->setCellValue('A' . (4 + $row), 'รวมการจำหน่ายโค');
             $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), 'รวมรายได้การจำหน่ายโค');
-            $objPHPExcel->getActiveSheet()->setCellValue('B' . (4 + $row), 'กก.');
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . (4 + $row), 'ตัว');
             $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), 'บาท');
             $objPHPExcel->getActiveSheet()->setCellValue('C' . (4 + $row), $summisamt);
             $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $summispri);
@@ -1611,7 +1611,7 @@ class ReportController extends Controller {
 //                $sumcompri += $cbmonth['price'] - ($mission[0]['price_value'] / 12);
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (4 + $row), 'ปริมาณ' . $item['goal_name']);
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), '        รายได้' . $item['goal_name']);
-                $objPHPExcel->getActiveSheet()->setCellValue('B' . (4 + $row), 'กก.');
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . (4 + $row), 'ตัว');
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), 'บาท');
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (4 + $row), $mission[0]['amount']);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $mission[0]['price_value']);
@@ -1626,7 +1626,7 @@ class ReportController extends Controller {
             }
             $objPHPExcel->getActiveSheet()->setCellValue('A' . (4 + $row), 'รวมการจำหน่ายโค');
             $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), 'รวมรายได้การจำหน่ายโค');
-            $objPHPExcel->getActiveSheet()->setCellValue('B' . (4 + $row), 'กก.');
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . (4 + $row), 'ตัว');
             $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), 'บาท');
             $objPHPExcel->getActiveSheet()->setCellValue('C' . (4 + $row), $summisamt);
             $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $summispri);
@@ -1678,7 +1678,7 @@ class ReportController extends Controller {
                 $sumcompri += $cbmonth['price'] - ($mission[0]['price_value'] / 3);
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (4 + $row), 'ปริมาณ' . $item['goal_name']);
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), '        รายได้' . $item['goal_name']);
-                $objPHPExcel->getActiveSheet()->setCellValue('B' . (4 + $row), 'กก.');
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . (4 + $row), 'ตัว');
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), 'บาท');
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (4 + $row), $mission[0]['amount']);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $mission[0]['price_value']);
@@ -1693,7 +1693,7 @@ class ReportController extends Controller {
             }
             $objPHPExcel->getActiveSheet()->setCellValue('A' . (4 + $row), 'รวมการจำหน่ายโค');
             $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), 'รวมรายได้การจำหน่ายโค');
-            $objPHPExcel->getActiveSheet()->setCellValue('B' . (4 + $row), 'กก.');
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . (4 + $row), 'ตัว');
             $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), 'บาท');
             $objPHPExcel->getActiveSheet()->setCellValue('C' . (4 + $row), $summisamt);
             $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $summispri);
