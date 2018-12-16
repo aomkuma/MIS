@@ -31,10 +31,17 @@
 	<div class="col-lg-12 table-responsive">
 		<table class="table table-bordered table-striped">
 			<caption>
-				<button class="btn btn-danger pull-right" ng-click="goUpdate('')">
-					<span class="glyphicon glyphicon-plus"></span> 
-					เพิ่มเป้าหมาย
-				</button>
+				<div class="row">
+					<div class="col-lg-12 text-center">
+						<span  class="glyphicon glyphicon-lock" style="color: green;"></span> รูปกุญแจสีเขียว หมายถึง สามารถแก้ไขข้อมูลได้
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<span  class="glyphicon glyphicon-lock" style="color: red;"></span> รูปกุญแจสีเขียว หมายถึง ไม่สามารถแก้ไขข้อมูลได้
+						<button class="btn btn-danger pull-right" ng-click="goUpdate('')">
+							<span class="glyphicon glyphicon-plus"></span> 
+							เพิ่มเป้าหมาย
+						</button>
+					</div>
+				</div>
 			</caption>
 			<thead>
 				<tr>

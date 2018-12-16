@@ -24,7 +24,7 @@
 				<td>{{data.update_date}}</td>
 				<td>{{data.dairy_farming_name}}</td>
 				<td>{{data.child_name}}</td>
-				<td>{{data.actives=='Y'?'ใช้งาน':'ไม่ใช้งาน'}}</td>
+				<td ng-class="{'inactive-text':data.actives=='N'}">{{data.actives=='Y'?'ใช้งาน':'ไม่ใช้งาน'}}</td>
 				<td>
 					<button class="btn btn-success" ng-click="goUpdate(data.id)">
 						<span class="glyphicon glyphicon-edit"></span> 
@@ -36,3 +36,8 @@
 		</tbody>
 	</table>
 </div>
+<style type="text/css">
+	.inactive-text{
+		color: red;
+	}
+</style>

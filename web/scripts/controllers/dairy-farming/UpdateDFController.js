@@ -50,7 +50,8 @@ angular.module('e-homework').controller('UpdateDFController', function($scope, $
         HTTPService.clientRequest('dairy-farming/update', params).then(function(result){
             if(result.data.STATUS == 'OK'){
                 // if($scope.ID !== undefined && $scope.ID !== null){
-                    window.location.href = '#/dairy-farming/update/' + result.data.DATA.id;
+                    // window.location.href = '#/dairy-farming/update/' + result.data.DATA.id;
+                    window.location.href = '#/dairy-farming';
                 // }else{
                 //     location.reload(); 
                 // }
