@@ -68,11 +68,11 @@
 			</tr>
 			<tr>
 				<th style="text-align: center;">หน่วย</th>
-				<th style="text-align: center;">%</th>
+				<th style="text-align: center;">จำนวน</th>
 				<th style="text-align: center;">หน่วย</th>
-				<th style="text-align: center;">%</th>
+				<th style="text-align: center;">จำนวน</th>
 				<th style="text-align: center;">หน่วย</th>
-				<th style="text-align: center;">%</th>
+				<th style="text-align: center;">จำนวน</th>
 			</tr>
 		</thead>
 		<tbody ng-repeat="data in List">
@@ -83,11 +83,11 @@
 				<td rowspan="{{$index==0?4:0}}" ng-show="$index==0">{{data.MainItem}}</td>
 				<td>{{sub_data.SubItem}}</td>
 				<td>{{sub_data.CurrentUnit}}</td>
-				<td>{{sub_data.CurrentPercentage}}</td>
+				<td>{{numberFormatComma(sub_data.CurrentPercentage)}}</td>
 				<td>{{sub_data.BeforeUnit}}</td>
-				<td>{{sub_data.BeforePercentage}}</td>
+				<td>{{numberFormatComma(sub_data.BeforePercentage)}}</td>
 				<td>{{sub_data.DiffUnit}}</td>
-				<td>{{sub_data.DiffPercentage}}</td>
+				<td>{{numberFormatComma(sub_data.DiffPercentage)}}</td>
 				<td><a class="pull-right" style="padding-right: 20px;" ng-click="exportReport( data,condition)"><img src="../files/img/excel.png" style="height: 40px;"></a></td>
 			</tr>
 		</tbody>

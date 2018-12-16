@@ -39,7 +39,7 @@ angular.module('e-homework').controller('MainCGController', function($scope, $co
 
     $scope.goSearch = function(){
         $scope.ViewType = 'MAIN';
-        // $scope.loadList('cow-group/list/main');
+        $scope.loadList('cow-group/list/main');
     }
 
 
@@ -77,6 +77,20 @@ angular.module('e-homework').controller('MainCGController', function($scope, $co
         }
     }
 
+    $scope.numberFormat = function(num){
+        if(num == null){
+            return '';
+        }
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    $scope.numberFormatComma = function(num){
+        if(num == null){
+            return '';
+        }
+        return num.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     $scope.Header = [];
     $scope.ViewType = 'MAIN';
     $scope.YearList = getYearList(20);
@@ -84,6 +98,7 @@ angular.module('e-homework').controller('MainCGController', function($scope, $co
     var curDate = new Date();
     $scope.condition = {
                         'Region':$scope.PersonRegion[0].RegionID
+                        , 'DisplayType' : 'monthly'
                         ,'MonthFrom' : curDate.getMonth() + 1
                         ,'YearFrom': curDate.getFullYear()
                         ,'MonthTo' : curDate.getMonth() + 1
@@ -285,6 +300,6 @@ angular.module('e-homework').controller('MainCGController', function($scope, $co
         ,{'values':'7200'}
         ,{'values':'151500'}
     ];
-    // $scope.loadList('cow-group/list/main');
+    $scope.loadList('cow-group/list/main');
 
 });

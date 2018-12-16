@@ -4,6 +4,7 @@
     
     use App\Service\CowGroupService;
     use App\Service\CooperativeService;
+    use App\Service\MasterGoalService;
 
     class CowGroupController extends Controller {
         
@@ -40,8 +41,10 @@
                 // ini_set('display_errors','On');
                 $params = $request->getParsedBody();
                 $condition = $params['obj']['condition'];
-                $regions = $params['obj']['region'];
-                
+                // $regions = $params['obj']['region'];
+                $regions = $condition['Region'];
+                // print_r($condition);
+                // exit;
                 if($condition['DisplayType'] == 'monthly'){
                     $Result = $this->getMonthDataList($condition, $regions);
                 }else if($condition['DisplayType'] == 'quarter'){
@@ -68,7 +71,7 @@
 
             $ymFrom = $condition['YearTo'] . '-' . str_pad($condition['MonthFrom'], 2, "0", STR_PAD_LEFT);
             $ymTo = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT);
-            $toTime = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT) . '-28';// .SpermController::getLastDayOfMonth($ym);
+            $toTime = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT) . '-28';// .CowGroupController::getLastDayOfMonth($ym);
             //exit;
             $fromTime = $condition['YearTo']  . '-' . str_pad($condition['MonthFrom'], 2, "0", STR_PAD_LEFT) .'-01';
             
@@ -84,6 +87,17 @@
             $curMonth = $condition['MonthFrom'];
             $DataList = [];
             $DataSummary = [];
+
+            $TypeList = [
+                ['id'=>1, 'name'=>'ฝูงโคต้นงวด', 'field_name' => 'beginning_period_total_values']
+                // ,['id'=>2, 'name'=>'โคเพิ่ม']
+                // ,['id'=>3, 'name'=>'โคลด']
+                ,['id'=>4, 'name'=>'ฝูงโคปลายงวด', 'field_name' => 'last_period_total_values']
+                // ,['id'=>5, 'name'=>'การจำหน่ายโค']
+            ];
+
+            $MasterGoalList = MasterGoalService::getList('Y', 'ข้อมูลฝูงโค');
+
             for($i = 0; $i < $diffMonth; $i++){
 
                 // Prepare condition
@@ -91,50 +105,54 @@
                 $beforeYear = $condition['YearTo'] - 1;
                 
                 // Loop User Regions
-                foreach ($regions as $key => $value) {
+                foreach ($TypeList as $key => $value) {
                     
-                    $region_id = $value['RegionID'];
-                    $monthName = SpermController::getMonthName($curMonth);
+                    $region_id = $regions;
+                    // $monthName = CowGroupController::getMonthName($curMonth);
 
                     $data = [];
-                    $data['RegionName'] = $value['RegionName'];
-                    $data['Month'] = $monthName;
+                    $data['MainItem'] = $value['name'];
+                    $field_name = $value['field_name'];
+                    // Load master goal
                     
-                    // get cooperative type
+                    foreach ($MasterGoalList as $k => $v) {
+                        $sub_data = [];   
+                        $sub_data['SubItem'] = $v['goal_name'];
+                        $goal_id = $v['id'];
+                        // get cooperative type
 
-                    $Current = SpermService::getMainList($curYear, $curMonth, $region_id);
-                    $data['CurrentAmount'] = floatval($Current['sum_amount']);
-                    $data['CurrentBaht'] = floatval($Current['sum_baht']);
+                        $Current = CowGroupService::getMainList($curYear, $curMonth, $region_id, $goal_id, $field_name);
+                        $sub_data['CurrentUnit'] = 'ตัว';
+                        $sub_data['CurrentPercentage'] = floatval($Current['sum_baht']);
 
-                    $Before = SpermService::getMainList($beforeYear, $curMonth, $region_id); 
-                    $data['BeforeAmount'] = floatval($Before['sum_amount']);
-                    $data['BeforeBaht'] = floatval($Before['sum_baht']);
+                        $Before = CowGroupService::getMainList($beforeYear, $curMonth, $region_id, $goal_id, $field_name); 
+                        $sub_data['BeforeUnit'] = 'ตัว';
+                        $sub_data['BeforePercentage'] = floatval($Before['sum_baht']);
 
-                    $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
-                    $data['DiffAmount'] = $DiffAmount;
-                    $data['DiffAmountPercentage'] = 0;
+                        $DiffAmount = $data['CurrentPercentage'] - $data['BeforePercentage'];
+                        $sub_data['DiffUnit'] = 'ตัว';//$DiffAmount;
+                        if($sub_data['BeforePercentage'] != 0){
+                            $sub_data['DiffPercentage'] = ($sub_data['CurrentPercentage'] / $sub_data['BeforePercentage']) * 100;
+                        }else{
+                            $sub_data['DiffPercentage'] = 0;    
+                        }
+                        
 
-                    $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
-                    $data['DiffBaht'] = $DiffBaht;
-                    $data['DiffBahtPercentage'] = 0;
+                        $sub_data['Description'] = ['months' => $curMonth
+                                                ,'years' => $curYear
+                                                ,'region_id' => $region_id
+                                                ];
 
-                    $data['CreateDate'] = $CurrentCowService['update_date'];
-                    $data['ApproveDate'] = '';
-                    $data['Status'] = '';
-                    $data['Description'] = ['months' => $curMonth
-                                            ,'years' => $curYear
-                                            ,'region_id' => $region_id
-                                            ];
-
-                    array_push($DataList, $data);
-
-                    $DataSummary['SummaryCurrentSpermAmount'] = $DataSummary['SummaryCurrentSpermAmount'] + $data['CurrentAmount'];
-                    $DataSummary['SummaryBeforSpermAmount'] = $DataSummary['SummaryBeforSpermAmount'] + $data['BeforeAmount'];
-                    $DataSummary['SummarySpermAmountPercentage'] = 0;
-                    $DataSummary['SummaryCurrentSpermIncome'] = $DataSummary['SummaryCurrentSpermIncome'] + $data['CurrentBaht'];
-                    $DataSummary['SummaryBeforeSpermIncome'] = $DataSummary['SummaryBeforeSpermIncome'] + $data['BeforeBaht'];
-                    $DataSummary['SummarySpermIncomePercentage'] = 0;
-
+                        // array_push($data, $sub_data);
+                        $data['SubItem'][] = $sub_data;
+                        $DataSummary['SummaryCurrentCowGroupAmount'] = $DataSummary['SummaryCurrentCowGroupAmount'] + $data['CurrentPercentage'];
+                        $DataSummary['SummaryBeforCowGroupAmount'] = $DataSummary['SummaryBeforCowGroupAmount'] + $data['BeforePercentage'];
+                        $DataSummary['SummaryCowGroupAmountPercentage'] = 0;
+                        $DataSummary['SummaryCurrentCowGroupIncome'] = $DataSummary['SummaryCurrentCowGroupIncome'] + $data['CurrentPercentage'];
+                        $DataSummary['SummaryBeforeCowGroupIncome'] = $DataSummary['SummaryBeforeCowGroupIncome'] + $data['BeforePercentage'];
+                        $DataSummary['SummaryCowGroupIncomePercentage'] = 0;
+                    }
+                    array_push($DataList, $data);    
                 }
 
                 $curMonth++;
