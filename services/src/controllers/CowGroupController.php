@@ -134,7 +134,7 @@
                         if($sub_data['BeforePercentage'] != 0){
                             $sub_data['DiffPercentage'] = ($sub_data['CurrentPercentage'] / $sub_data['BeforePercentage']) * 100;
                         }else{
-                            $sub_data['DiffPercentage'] = 0;    
+                            $sub_data['DiffPercentage'] = 100;    
                         }
                         
 
