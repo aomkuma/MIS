@@ -50,8 +50,17 @@
                 $params = $request->getParsedBody();
                 $id = $params['obj']['id'];
                 $editable = $params['obj']['editable'];
+                $user_session = $params['user_session'];
+                // print_r($user_session);
+                $unlock_name = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+                // exit;
+
+                $change_date = date('Y-m-d H:i:s');
+                $arr_history = ['goal_mission_id' => $id, 'unlock_name' => $unlock_name, 'change_date' => $change_date];
 
                 $result = GoalMissionService::updateDataEditable($id, $editable);
+
+                GoalMissionService::addHistory($arr_history);
 
                 $this->data_result['DATA']['result'] = $result;
                 
@@ -72,7 +81,7 @@
                 $_Data = $params['obj']['Data'];
                 $_AvgData = $params['obj']['AvgList'];
                 $user_session = $params['user_session'];
-
+                $edit_name = $user_session['FirstName'] . ' ' . $user_session['LastName'];
                 unset($_Data['goal_mission_avg']);
                 unset($_Data['goal_mission_history']);
                 
@@ -89,6 +98,7 @@
                         $HistoryData = $_AvgData[$cnt];
                         unset($HistoryData['id']);
                         $HistoryData['goal_mission_id'] = $id;
+                        $HistoryData['edit_name'] = $edit_name;
                         GoalMissionService::addHistory($HistoryData);
                     }
                     $cnt++;

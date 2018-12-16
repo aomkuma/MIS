@@ -97,11 +97,11 @@ angular.module('e-homework').controller('MainCBController', function($scope, $co
     $scope.MonthList = getMonthList();
     var curDate = new Date();
     $scope.condition = {
-                        'Region':null
+                        'Region':$scope.PersonRegion[0].RegionID
                         ,'DisplayType':'monthly'
-                        ,'MonthFrom' : 1//curDate.getMonth()
+                        ,'MonthFrom' : curDate.getMonth() + 1
                         ,'YearFrom': curDate.getFullYear()
-                        ,'MonthTo' : 4//curDate.getMonth()
+                        ,'MonthTo' : curDate.getMonth() + 1
                         ,'YearTo': curDate.getFullYear()
                         ,'QuarterFrom':'1'
                         ,'QuarterTo':'4'

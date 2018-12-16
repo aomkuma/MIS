@@ -86,6 +86,7 @@ angular.module('e-homework').controller('UpdateISController', function($scope, $
         HTTPService.clientRequest('insemination/update', params).then(function(result){
             if(result.data.STATUS == 'OK'){
                 //alert('save success');
+                alert('บันทึกสำเร็จ');
                  window.location.href = '#/insemination/update/' + result.data.DATA.id;
                 // if($scope.ID !== undefined && $scope.ID !== null){
                    
@@ -116,6 +117,27 @@ angular.module('e-homework').controller('UpdateISController', function($scope, $
         $scope.InseminationDetailList = [];
         // $scope.setInsemination();
         $scope.loadData('insemination/get');
+        $scope.CooperativeName = '';
+        $scope.MonthName = '';
+        $scope.YearName = '';
+        // Get cooperative name
+        for(var i=0; i < $scope.Cooperative.length; i++){
+            if($scope.Insemination.cooperative_id == $scope.Cooperative[i].id){
+                $scope.CooperativeName = $scope.Cooperative[i].cooperative_name;
+            }
+        }
+
+        for(var i=0; i < $scope.MonthList.length; i++){
+            if($scope.Insemination.months == $scope.MonthList[i].monthValue){
+                $scope.MonthName = $scope.MonthList[i].monthText;
+            }
+        }
+
+        for(var i=0; i < $scope.YearList.length; i++){
+            if($scope.Insemination.years == $scope.YearList[i].yearText){
+                $scope.YearName = $scope.YearList[i].yearValue;
+            }
+        }
         // $scope.InseminationDetailList = [
         //     {}
         // ];
@@ -230,14 +252,14 @@ angular.module('e-homework').controller('UpdateISController', function($scope, $
             'id':''
             , 'cooperative_id':null
             , 'region_id':null
-            , 'months':null
-            , 'years':null
+            , 'months':curDate.getMonth() + 1
+            , 'years':curDate.getFullYear()
             , 'create_date':''
             , 'update_date':''
         };    
     }
     
-
+    var curDate = new Date();
     $scope.YearList = getYearList(20);
     $scope.MonthList = getMonthList();
     $scope.Search = false;

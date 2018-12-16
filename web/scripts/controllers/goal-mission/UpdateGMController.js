@@ -64,12 +64,22 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
     }
 
     $scope.save = function(Data, AvgList){
+        if($scope.totalAmount != $scope.Data.amount){
+            alert('ผลรวมของจำนวนเฉลี่ยไม่เท่ากับจำนวนเป้ารายปี กรุณาตรวจสอบข้อมูล');
+            return false;
+        }
+        if($scope.totalPriceValue != $scope.Data.price_value){
+            alert('ผลรวมของมูลค่าเฉลี่ยไม่เท่ากับมูลค่าเป้ารายปี กรุณาตรวจสอบข้อมูล');
+            return false;
+        }
         var params = {'Data' : Data, 'AvgList' : AvgList};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('goal-mission/update', params).then(function(result){
             if(result.data.STATUS == 'OK'){
                 // if($scope.ID !== undefined && $scope.ID !== null){
-                    window.location.href = '#/goal-mission/update/' + result.data.DATA.id;
+                    // window.location.href = '#/goal-mission/update/' + result.data.DATA.id;
+                    alert('บันทึกข้อมูลสำเร็จ');
+                    window.location.href = '#/goal-mission/';
                 // }else{
                 //     location.reload();    
                 // }
@@ -118,6 +128,7 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
     }
 
     $scope.avgData = function(Data){
+        $scope.AVGAction = true;
         $scope.avgList = [];
         $scope.totalAmount = 0;
         $scope.totalPriceValue = 0;
@@ -142,8 +153,8 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
                 'id':($scope.avgIDList[i] === undefined?'':$scope.avgIDList[i].id)
                 , 'goal_mission_id':''
                 , 'avg_date':dateStr
-                , 'amount':avgAmount
-                , 'price_value':avgPriceValue
+                , 'amount':0//avgAmount
+                , 'price_value':0//avgPriceValue
             };
 
             $scope.avgList.push(avgData);
@@ -152,22 +163,29 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
             $scope.totalPriceValue += avgPriceValue;
         }
 
-        $scope.totalAmount = parseFloat($scope.totalAmount.toFixed(2));
-        $scope.totalPriceValue = parseFloat($scope.totalPriceValue.toFixed(2));
+        $scope.totalAmount = 0;//parseFloat($scope.totalAmount.toFixed(2));
+        $scope.totalPriceValue = 0;//parseFloat($scope.totalPriceValue.toFixed(2));
         // console.log($scope.avgList);
     }
 
     $scope.getMonthYearText = function(dateStr){
-        return getMonthYearText(dateStr);
+        if(dateStr != null && dateStr != ''){
+            return getMonthYearText(dateStr);
+        }else{
+            return '';
+        }
+        
     }
 
+    var curDate = new Date();
+    $scope.AVGAction = false;
     $scope.totalAmount = 0;
     $scope.totalPriceValue = 0;
     $scope.YearList = getYearList(20);
     $scope.Data = {
         'id':''
-        , 'years':''
-        , 'region_id':null
+        , 'years':curDate.getFullYear()
+        , 'region_id':$scope.PersonRegion[0].RegionID
         , 'goal_id':null
         , 'amount':null
         , 'unit':null

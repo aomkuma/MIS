@@ -2,7 +2,7 @@
 <div class="page-header">
 	<h3>ข้อมูลกิจการโคนม  >  บันทึกข้อมูลการผลิตน้ำเชื้อแช่แข็ง</h3>
 </div>
-<div class="col-lg-10 col-lg-offset-1" ng-form="form_data">
+<div class="col-lg-12 " ng-form="form_data">
 	<div class="row form-group">
 		<div class="field-label col-lg-1 col-md-1 col-sm-12 col-xs-12">
 			ชื่อสหกรณ์
@@ -38,6 +38,17 @@
 	<hr>
 	<div ng-show="Search || SpermDetailList.length > 0">
 		<div class="row form-group">
+			<label class="col-lg-12 form-control-static">
+				สหกรณ์ : {{CooperativeName}}
+			</label>
+			<label class="col-lg-12 form-control-static">
+				 เดือน : {{MonthName}}
+			</label>
+			<label class="col-lg-12 form-control-static">
+				ปี : {{YearName}}
+			</label>
+		</div>
+		<div class="row form-group">
 			<div class="col-lg-12">
 				<button class="btn btn-danger  pull-right" ng-click="addSpermDetail()" ><!--ng-disabled="!form_data.$valid"-->
 				<span class="glyphicon glyphicon-plus"></span> 
@@ -60,7 +71,7 @@
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						หน่วย
 					</div>
-					<div class="col-lg-1 col-md-2 col-sm-12 col-xs-12">
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select class="form-control" ng-model="SpermDetail.amount_unit"><!--ng-change="loadDairyFarming('CHILD', SpermDetail.dairy_farming_id)" -->
 							<option value="">กรุณาเลือก..</option>
 							<option value="หลอด">หลอด</option>

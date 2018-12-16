@@ -83,10 +83,10 @@ angular.module('e-homework').controller('MainCGController', function($scope, $co
     $scope.MonthList = getMonthList();
     var curDate = new Date();
     $scope.condition = {
-                        'Region':null
-                        ,'MonthFrom' : 1//curDate.getMonth()
+                        'Region':$scope.PersonRegion[0].RegionID
+                        ,'MonthFrom' : curDate.getMonth() + 1
                         ,'YearFrom': curDate.getFullYear()
-                        ,'MonthTo' : 4//curDate.getMonth()
+                        ,'MonthTo' : curDate.getMonth() + 1
                         ,'YearTo': curDate.getFullYear()
                         ,'QuarterFrom':'1'
                         ,'QuarterTo':'4'

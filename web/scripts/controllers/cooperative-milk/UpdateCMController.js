@@ -88,6 +88,7 @@ angular.module('e-homework').controller('UpdateCMController', function($scope, $
             if(result.data.STATUS == 'OK'){
                 //alert('save success');
                 // if($scope.ID !== undefined && $scope.ID !== null){
+                    alert('บันทึกสำเร็จ');
                     window.location.href = '#/cooperative-milk/update/' + result.data.DATA.id;
                 // }else{
                 //     location.reload();    
@@ -116,6 +117,27 @@ angular.module('e-homework').controller('UpdateCMController', function($scope, $
         $scope.SpermDetailList = [];
         // $scope.setSperm();
         $scope.loadData('cooperative-milk/get');
+        $scope.CooperativeName = '';
+        $scope.MonthName = '';
+        $scope.YearName = '';
+        // Get cooperative name
+        for(var i=0; i < $scope.PersonRegion.length; i++){
+            if($scope.Sperm.region_id == $scope.PersonRegion[i].RegionID){
+                $scope.CooperativeName = $scope.PersonRegion[i].RegionName;
+            }
+        }
+
+        for(var i=0; i < $scope.MonthList.length; i++){
+            if($scope.Sperm.months == $scope.MonthList[i].monthValue){
+                $scope.MonthName = $scope.MonthList[i].monthText;
+            }
+        }
+
+        for(var i=0; i < $scope.YearList.length; i++){
+            if($scope.Sperm.years == $scope.YearList[i].yearText){
+                $scope.YearName = $scope.YearList[i].yearValue;
+            }
+        }
         // $scope.SpermDetailList = [
         //     {
         //         'id':''

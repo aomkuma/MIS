@@ -89,6 +89,7 @@ angular.module('e-homework').controller('UpdateSPSController', function($scope, 
             if(result.data.STATUS == 'OK'){
                 //alert('save success');
                 // if($scope.ID !== undefined && $scope.ID !== null){
+                    alert('บันทึกสำเร็จ');
                     window.location.href = '#/sperm-sale/update/' + result.data.DATA.id;
                 // }else{
                 //     location.reload();    
@@ -128,6 +129,27 @@ angular.module('e-homework').controller('UpdateSPSController', function($scope, 
         $scope.SpermDetailList = [];
         // $scope.setSperm();
         $scope.loadData('sperm-sale/get');
+        $scope.CooperativeName = '';
+        $scope.MonthName = '';
+        $scope.YearName = '';
+        // Get cooperative name
+        for(var i=0; i < $scope.Cooperative.length; i++){
+            if($scope.Sperm.cooperative_id == $scope.Cooperative[i].id){
+                $scope.CooperativeName = $scope.Cooperative[i].cooperative_name;
+            }
+        }
+
+        for(var i=0; i < $scope.MonthList.length; i++){
+            if($scope.Sperm.months == $scope.MonthList[i].monthValue){
+                $scope.MonthName = $scope.MonthList[i].monthText;
+            }
+        }
+
+        for(var i=0; i < $scope.YearList.length; i++){
+            if($scope.Sperm.years == $scope.YearList[i].yearText){
+                $scope.YearName = $scope.YearList[i].yearValue;
+            }
+        }
         // $scope.SpermDetailList = [
         //     {
         //         'id':''
@@ -231,8 +253,8 @@ angular.module('e-homework').controller('UpdateSPSController', function($scope, 
             'id':''
             , 'cooperative_id':null
             , 'region_id':null
-            , 'months':null
-            , 'years':null
+            , 'months':curDate.getMonth() + 1
+            , 'years':curDate.getFullYear()
             , 'create_date':''
             , 'update_date':''
         };    
@@ -250,6 +272,7 @@ angular.module('e-homework').controller('UpdateSPSController', function($scope, 
             data.values = (parseFloat(data.price) * parseFloat(data.amount)).toFixed(2);
         }
     }
+    var curDate = new Date();
     
     $scope.YearList = getYearList(20);
     $scope.MonthList = getMonthList();

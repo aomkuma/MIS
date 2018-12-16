@@ -82,10 +82,10 @@ angular.module('e-homework').controller('MainSPSController', function($scope, $c
     var curDate = new Date();
     $scope.condition = {
                         'DisplayType' : 'monthly'
-                        ,'Region':null
-                        ,'MonthFrom' : 1//curDate.getMonth()
+                        ,'Region':$scope.PersonRegion[0].RegionID
+                        ,'MonthFrom' : curDate.getMonth() + 1
                         ,'YearFrom': curDate.getFullYear()
-                        ,'MonthTo' : 4//curDate.getMonth()
+                        ,'MonthTo' : curDate.getMonth() + 1
                         ,'YearTo': curDate.getFullYear()
                         ,'QuarterFrom':'1'
                         ,'QuarterTo':'4'

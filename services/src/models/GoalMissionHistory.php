@@ -10,6 +10,8 @@ class GoalMissionHistory extends \Illuminate\Database\Eloquent\Model {
   								, 'avg_date'
   								, 'amount'
   								, 'price_value'
+                  , 'edit_name'
+                  , 'unlock_name'
                   , 'change_date'
   							);
 

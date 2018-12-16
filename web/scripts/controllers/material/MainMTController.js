@@ -82,9 +82,9 @@ angular.module('e-homework').controller('MainMTController', function($scope, $co
     $scope.condition = {
                         'DisplayType':'monthly'
                         ,'Region':null
-                        ,'MonthFrom' : 1//curDate.getMonth()
+                        ,'MonthFrom' : curDate.getMonth() + 1
                         ,'YearFrom': curDate.getFullYear()
-                        ,'MonthTo' : 4//curDate.getMonth()
+                        ,'MonthTo' : curDate.getMonth() + 1
                         ,'YearTo': curDate.getFullYear()
                         ,'QuarterFrom':'1'
                         ,'QuarterTo':'4'

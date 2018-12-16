@@ -104,6 +104,7 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
             if(result.data.STATUS == 'OK'){
                 //alert('save success');
                 // if($scope.ID !== undefined && $scope.ID !== null){
+                    alert('บันทึกสำเร็จ');
                     window.location.href = '#/travel/update/' + result.data.DATA.id;
                 // }else{
                 //     location.reload();    
@@ -132,6 +133,21 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
         $scope.SpermDetailList = [];
         // $scope.setSperm();
         $scope.loadData('travel/get');
+
+        $scope.MonthName = '';
+        $scope.YearName = '';
+
+        for(var i=0; i < $scope.MonthList.length; i++){
+            if($scope.Sperm.months == $scope.MonthList[i].monthValue){
+                $scope.MonthName = $scope.MonthList[i].monthText;
+            }
+        }
+
+        for(var i=0; i < $scope.YearList.length; i++){
+            if($scope.Sperm.years == $scope.YearList[i].yearText){
+                $scope.YearName = $scope.YearList[i].yearValue;
+            }
+        }
         // $scope.SpermDetailList = [
         //     {
         //         'id':''

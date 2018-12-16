@@ -26,7 +26,7 @@
                         ->where("region_id", $region_id)
                         // ->where("cooperative_milk_detail.cooperative_id", $cooperative_id)
                         ->where(function($query) use ($cooperative_id){
-                            if(!empty($actives)){
+                            if(!empty($cooperative_id)){
                                 $query->where('cooperative_id' , $cooperative_id);
                             }
                         })
@@ -44,7 +44,7 @@
         }
 
         public static function getData($cooperative_id, $months, $years){
-            return CooperativeMilk::where('cooperative_id', $cooperative_id)
+            return CooperativeMilk::where('region_id', $cooperative_id)
                     ->where('months', $months)
                     ->where('years', $years)
                     //->with('mouHistories')
