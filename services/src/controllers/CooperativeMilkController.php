@@ -83,8 +83,8 @@
             }
         }
 
-        private function getMonthDataList($condition, $regions){
-
+        public function getMonthDataList($condition, $regions){
+            
             $ymFrom = $condition['YearTo'] . '-' . str_pad($condition['MonthFrom'], 2, "0", STR_PAD_LEFT);
             $ymTo = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT);
             $toTime = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT) . '-28';// .CooperativeMilkController::getLastDayOfMonth($ym);
@@ -113,9 +113,10 @@
                 foreach ($regions as $key => $value) {
 
                     $region_id = $value['RegionID'];
-
+                    
                     // get cooperative by region
                     $CooperativeList = CooperativeService::getListByRegion($region_id);
+                    
                     foreach ($CooperativeList as $k => $v) {
                         // $monthName = CooperativeMilkController::getMonthName($curMonth);
                         $cooperative_id = $v['id'];
@@ -231,6 +232,86 @@
             }catch(\Exception $e){
                 return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
             }
+        }
+        public function getMonthData($condition,$region){
+//            $region = [0=>['RegionID'=>1,'RegionName'=>'อ.ส.ค. สำนักงานใหญ่ มวกเหล็ก'],1=>['RegionID'=>2,'RegionName'=>'อ.ส.ค. สำนักงานกรุงเทพฯ Office'],
+//                   2=>['RegionID'=>3,'RegionName'=>'อ.ส.ค. สำนักงานภาคกลาง'],3=>['RegionID'=>4,'RegionName'=>'อ.ส.ค. ภาคใต้ (ประจวบคีรีขันธ์)'],
+//                   4=>['RegionID'=>5,'RegionName'=>'อ.ส.ค. ภาคตะวันออกเฉียงเหนือ (ขอนแก่น)'],5=>['RegionID'=>6,'RegionName'=>'อ.ส.ค. ภาคเหนือตอนล่าง (สุโขทัย)'],
+//                   6=>['RegionID'=>7,'RegionName'=>'อ.ส.ค. ภาคเหนือตอนบน (เชียงใหม่)']];
+            $ymFrom = $condition['YearTo'] . '-' . str_pad($condition['MonthFrom'], 2, "0", STR_PAD_LEFT);
+            $ymTo = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT);
+            $toTime = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT) . '-28';// .CooperativeMilkController::getLastDayOfMonth($ym);
+            //exit;
+            $fromTime = $condition['YearTo']  . '-' . str_pad($condition['MonthFrom'], 2, "0", STR_PAD_LEFT) .'-01';
+            
+            $date1 = new \DateTime($toTime);
+            $date2 = new \DateTime($fromTime);
+            $diff = $date1->diff($date2);
+            $diffMonth = (($diff->format('%y') * 12) + $diff->format('%m'));
+            if ($diffMonth == 0) {
+                $diffMonth = 1;
+            }else{
+                $diffMonth += 1;
+            }
+            $curMonth = $condition['MonthFrom'];
+            $DataList = [];
+            $DataSummary = [];
+            for($i = 0; $i < $diffMonth; $i++){
+
+                // Prepare condition
+                $curYear = $condition['YearTo'];
+                $beforeYear = $condition['YearTo'] - 1;
+                
+                // Loop User Regions
+            //    foreach ($region as $key => $value) {
+
+                    $region_id = $region['RegionID'];
+                    
+                    // get cooperative by region
+                    $CooperativeList = CooperativeService::getListByRegion($region_id);
+                    
+                    foreach ($CooperativeList as $k => $v) {
+                        // $monthName = CooperativeMilkController::getMonthName($curMonth);
+                        $cooperative_id = $v['id'];
+                        $data = [];
+                        $data['RegionName'] = $region['RegionName'];
+                        $data['CooperativeName'] = $v['cooperative_name'];
+                        
+                        // get cooperative type
+
+                        $Current = CooperativeMilkService::getMainList($curYear, $curMonth, $region_id, $cooperative_id);
+                        $data['TotalPerson'] = floatval($Current['sum_total_person']);
+                        $data['TotalPersonSent'] = floatval($Current['sum_total_person_sent']);
+                        $data['TotalCow'] = floatval($Current['sum_total_cow']);
+                        $data['TotalCowSent'] = floatval($Current['sum_total_person_sent']);
+                        $data['TotalCowBeeb'] = floatval($Current['sum_total_cow_beeb']);
+                        $data['TotalMilkAmount'] = floatval($Current['sum_milk_amount']);
+                        $data['TotalValues'] = floatval($Current['sum_total_values']);
+                        $data['AverageValues'] = floatval($Current['sum_average_values']);
+
+                        $data['Description'] = ['months' => $curMonth
+                                                ,'years' => $curYear
+                                                ,'region_id' => $region_id
+                                                ];
+
+                        array_push($DataList, $data);
+
+                        $DataSummary['SummaryCooperativeMilkAmount'] = $DataSummary['SummaryCooperativeMilkAmount'] + $data['CurrentAmount'];
+                        $DataSummary['SummaryBeforCooperativeMilkAmount'] = $DataSummary['SummaryBeforCooperativeMilkAmount'] + $data['BeforeAmount'];
+                        
+                        $DataSummary['SummaryCooperativeMilkIncome'] = $DataSummary['SummaryCooperativeMilkIncome'] + $data['CurrentBaht'];
+                        $DataSummary['SummaryBeforeCooperativeMilkIncome'] = $DataSummary['SummaryBeforeCooperativeMilkIncome'] + $data['BeforeBaht'];
+                        
+                        $DataSummary['SummaryCooperativeMilkAmountPercentage'] = $DataSummary['SummaryCooperativeMilkAmountPercentage'] + $DataSummary['SummaryCooperativeMilkAmount'] + $DataSummary['SummaryBeforCooperativeMilkAmount'];
+                        $DataSummary['SummaryCooperativeMilkIncomePercentage'] = $DataSummary['SummaryCooperativeMilkIncomePercentage'] + $DataSummary['SummaryCooperativeMilkIncome'] + $DataSummary['SummaryBeforeCooperativeMilkIncome'];
+                        
+                    }
+              //  }
+
+                $curMonth++;
+            }
+
+            return ['DataList' => $DataList, 'Summary' => $DataSummary];                
         }
 
     }
