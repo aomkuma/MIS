@@ -130,3 +130,6 @@ $container['ReportController'] = function ($c) {
 $container['MonthReportController'] = function ($c) {
     return new \App\Controller\MonthReportController($c->get('logger'), $c->get('db'));
 };
+$container['QuarterReportController'] = function ($c) {
+    return new \App\Controller\QuarterReportController($c->get('logger'), $c->get('db'));
+};

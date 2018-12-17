@@ -331,14 +331,14 @@
 
                         array_push($DataList, $data);
 
-                        $DataSummary['SummaryCurrentCowBreedAmount'] = $DataSummary['SummaryCurrentCowBreedAmount'] + $data['CurrentAmount'];
-                        $DataSummary['SummaryBeforeCowBreedAmount'] = $DataSummary['SummaryBeforeCowBreedAmount'] + $data['BeforeAmount'];
+                        $DataSummary['SummaryCurrentTravelAmount'] = $DataSummary['SummaryCurrentTravelAmount'] + $data['CurrentAmount'];
+                        $DataSummary['SummaryBeforTravelAmount'] = $DataSummary['SummaryBeforTravelAmount'] + $data['BeforeAmount'];
                         
-                        $DataSummary['SummaryCurrentCowBreedIncome'] = $DataSummary['SummaryCurrentCowBreedIncome'] + $data['CurrentBaht'];
-                        $DataSummary['SummaryBeforeCowBreedIncome'] = $DataSummary['SummaryBeforeCowBreedIncome'] + $data['BeforeBaht'];
+                        $DataSummary['SummaryCurrentTravelIncome'] = $DataSummary['SummaryCurrentTravelIncome'] + $data['CurrentBaht'];
+                        $DataSummary['SummaryBeforeTravelIncome'] = $DataSummary['SummaryBeforeTravelIncome'] + $data['BeforeBaht'];
                         
-                        $DataSummary['SummaryCowBreedAmountPercentage'] = $DataSummary['SummaryCowBreedAmountPercentage'] + $DataSummary['SummaryCurrentCowBreedAmount'] + $DataSummary['SummaryBeforeCowBreedAmount'];
-                        $DataSummary['SummaryCowBreedIncomePercentage'] = $DataSummary['SummaryCowBreedIncomePercentage'] + $DataSummary['SummaryCurrentCowBreedIncome'] + $DataSummary['SummaryBeforeCowBreedIncome'];
+                        $DataSummary['SummaryTravelAmountPercentage'] = $DataSummary['SummaryTravelAmountPercentage'] + $DataSummary['SummaryCurrentCowBreedAmount'] + $DataSummary['SummaryBeforeCowBreedAmount'];
+                        $DataSummary['SummaryTravelIncomePercentage'] = $DataSummary['SummaryTravelIncomePercentage'] + $DataSummary['SummaryCurrentCowBreedIncome'] + $DataSummary['SummaryBeforeCowBreedIncome'];
                     }
                 // }
                 

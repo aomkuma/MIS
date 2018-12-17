@@ -774,4 +774,138 @@ class MineralController extends Controller {
         }
     }
 
+    public function getQuarterDataListbyMaster($condition, $regions) {
+        $MasterGoalList = MasterGoalService::getList('Y', 'แร่ธาตุ พรีมิกซ์ และอาหาร');
+        foreach ($regions as $key => $valuereg) {
+            $RegionList[] = $valuereg['RegionID'];
+        }
+       
+        // get loop to query
+        $diffYear = ($condition['YearTo'] - $condition['YearFrom']) + 1;
+        $cnt = 0;
+        $loop = 0;
+        $j = $condition['QuarterFrom'];
+
+        for ($i = 0; $i < $diffYear; $i++) {
+            if ($cnt == $diffYear) {
+                for ($k = 0; $k < $condition['QuarterTo']; $k++) {
+                    $loop++;
+                }
+            } else {
+
+                if ($i > 0) {
+                    $j = 0;
+                }
+
+                if ($diffYear == 1) {
+                    $length = $condition['QuarterTo'];
+                } else {
+                    $length = 4;
+                }
+                for (; $j < $length; $j++) {
+                    $loop++;
+                }
+            }
+            $cnt++;
+        }
+        $loop++;
+
+        $curQuarter = intval($condition['QuarterFrom']);
+
+        if (intval($curQuarter) == 1) {
+            $curYear = intval($condition['YearFrom']) - 1;
+            $beforeYear = $curYear - 1;
+        } else {
+            $curYear = intval($condition['YearFrom']);
+            $beforeYear = $curYear - 1;
+        }
+
+        $DataList = [];
+        $DataSummary = [];
+
+        for ($i = 0; $i < $loop; $i++) {
+
+            if ($i > 0 && $curQuarter == 2) {
+                $curYear++;
+                $beforeYear = $curYear - 1;
+            }
+
+            // find month in quarter
+            if ($curQuarter == 1) {
+                $monthList = [10, 11, 12];
+            } else if ($curQuarter == 2) {
+                $monthList = [1, 2, 3];
+            } else if ($curQuarter == 3) {
+                $monthList = [4, 5, 6];
+            } else if ($curQuarter == 4) {
+                $monthList = [7, 8, 9];
+            }
+
+            // Loop User Regions
+            foreach ($MasterGoalList as $key => $value) {
+                //  $region_id = $value['RegionID'];
+               
+                $master_id = $value['id'];
+                $data['MineralName'] = $value['goal_name'];
+                $SumCurrentWeight = 0;
+                $SumCurrentBaht = 0;
+                $SumBeforeWeight = 0;
+                $SumBeforeBaht = 0;
+                // loop get quarter sum data
+                for ($j = 0; $j < count($monthList); $j++) {
+                    $curMonth = $monthList[$j];
+                    $Current = MineralService::getMainListByMaster($curYear, $curMonth, $master_id, $RegionList);
+                    $SumCurrentWeight += floatval($Current['sum_weight']);
+                    $SumCurrentBaht += floatval($Current['sum_baht']);
+
+                    $Before = MineralService::getMainListByMaster($beforeYear, $curMonth, $master_id, $RegionList);
+                    $SumBeforeWeight += floatval($Before['sum_weight']);
+                    $SumBeforeBaht += floatval($Before['sum_baht']);
+                }
+
+                $data = [];
+                $data['RegionName'] = $value['goal_name'];
+                $data['Quarter'] = $curQuarter;
+                $data['CurrentWeight'] = $SumCurrentWeight;
+                $data['CurrentBaht'] = $SumCurrentBaht;
+
+                $data['BeforeWeight'] = $SumBeforeWeight;
+                $data['BeforeBaht'] = $SumBeforeBaht;
+
+                $DiffWeight = $data['CurrentWeight'] - $data['BeforeWeight'];
+                $data['DiffWeight'] = $DiffWeight;
+                $data['DiffWeightPercentage'] = 0;
+
+                $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                $data['DiffBaht'] = $DiffBaht;
+                $data['DiffBahtPercentage'] = 0;
+
+                $data['CreateDate'] = $CurrentCowService['update_date'];
+                $data['ApproveDate'] = '';
+                $data['Status'] = '';
+                $data['Description'] = ['quarter' => $curQuarter
+                    , 'years' => $curYear
+                    , 'quarter' => $curQuarter
+                    , 'region_id' => $region_id
+                ];
+
+                array_push($DataList, $data);
+
+                $DataSummary['SummaryCurrentMineralAmount'] = $DataSummary['SummaryCurrentMineralAmount'] + $data['CurrentWeight'];
+                $DataSummary['SummaryBeforMineralAmount'] = $DataSummary['SummaryBeforMineralAmount'] + $data['BeforeWeight'];
+                $DataSummary['SummaryMineralAmountPercentage'] = 0;
+                $DataSummary['SummaryCurrentMineralIncome'] = $DataSummary['SummaryCurrentMineralIncome'] + $data['CurrentBaht'];
+                $DataSummary['SummaryBeforeMineralIncome'] = $DataSummary['SummaryBeforeMineralIncome'] + $data['BeforeBaht'];
+                $DataSummary['SummaryMineralIncomePercentage'] = 0;
+            }
+          //  print_r($data);
+            $curQuarter++;
+            if ($curQuarter > 4) {
+                $curQuarter = 1;
+            }
+        }
+
+        return ['DataList' => $DataList, 'Summary' => $DataSummary];
+    }
+
 }

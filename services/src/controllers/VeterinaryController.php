@@ -252,14 +252,14 @@ class VeterinaryController extends Controller {
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
 
-    private function getQuarterDataList($condition, $regions) {
+    public function getQuarterDataList($condition, $regions) {
 
         // get loop to query
         $diffYear = ($condition['YearTo'] - $condition['YearFrom']) + 1;
         $cnt = 0;
         $loop = 0;
         $j = $condition['QuarterFrom'];
-
+       
         for ($i = 0; $i < $diffYear; $i++) {
             if ($cnt == $diffYear) {
                 for ($k = 0; $k < $condition['QuarterTo']; $k++) {
@@ -282,6 +282,7 @@ class VeterinaryController extends Controller {
             }
             $cnt++;
         }
+        
         $loop++;
 
         $curQuarter = intval($condition['QuarterFrom']);
@@ -424,6 +425,7 @@ class VeterinaryController extends Controller {
                 $curQuarter = 1;
             }
         }
+
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
