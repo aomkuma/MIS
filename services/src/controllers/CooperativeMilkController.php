@@ -328,19 +328,19 @@ class CooperativeMilkController extends Controller {
         $curYear = $condition['YearFrom'];
         if (intval($curQuarter) == 1) {
             $curYear = intval($condition['YearFrom']) - 1;
-            $beforeYear = $curYear - 1;
-        } else {
-            $curYear = intval($condition['YearFrom']);
-            $beforeYear = $curYear - 1;
         }
         if ($curQuarter == 1) {
-            $monthList = [10, 11, 12];
+            $monthst = 10;
+            $monthen = 12;
         } else if ($curQuarter == 2) {
-            $monthList = [1, 2, 3];
+            $monthst = 1;
+            $monthen = 3;
         } else if ($curQuarter == 3) {
-            $monthList = [4, 5, 6];
+            $monthst = 4;
+            $monthen = 6;
         } else if ($curQuarter == 4) {
-            $monthList = [7, 8, 9];
+            $monthst = 7;
+            $monthen = 9;
         }
 
 
@@ -349,14 +349,6 @@ class CooperativeMilkController extends Controller {
         $DataSummary = [];
         $region_id = $region['RegionID'];
         $CooperativeList = CooperativeService::getListByRegion($region_id);
-        for ($j = 0; $j < count($monthList); $j++) {
-            
-        }
-
-        // Loop User Regions
-        //    foreach ($region as $key => $value) {
-        // get cooperative by region
-
 
         foreach ($CooperativeList as $k => $v) {
             // $monthName = CooperativeMilkController::getMonthName($curMonth);
@@ -367,7 +359,7 @@ class CooperativeMilkController extends Controller {
 
             // get cooperative type
 
-            $Current = CooperativeMilkService::getMainList($curYear, $curMonth, $region_id, $cooperative_id);
+            $Current = CooperativeMilkService::getMainListquar($curYear, $monthst,$monthen, $region_id, $cooperative_id);
             $data['TotalPerson'] = floatval($Current['sum_total_person']);
             $data['TotalPersonSent'] = floatval($Current['sum_total_person_sent']);
             $data['TotalCow'] = floatval($Current['sum_total_cow']);
@@ -393,7 +385,7 @@ class CooperativeMilkController extends Controller {
             $DataSummary['SummaryCooperativeMilkAmountPercentage'] = $DataSummary['SummaryCooperativeMilkAmountPercentage'] + $DataSummary['SummaryCooperativeMilkAmount'] + $DataSummary['SummaryBeforCooperativeMilkAmount'];
             $DataSummary['SummaryCooperativeMilkIncomePercentage'] = $DataSummary['SummaryCooperativeMilkIncomePercentage'] + $DataSummary['SummaryCooperativeMilkIncome'] + $DataSummary['SummaryBeforeCooperativeMilkIncome'];
         }
-        //  }
+
 
 
 

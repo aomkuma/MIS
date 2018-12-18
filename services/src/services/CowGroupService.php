@@ -20,6 +20,18 @@ class CowGroupService {
                         ->first()
                         ->toArray();
     }
+    public static function getMainListquar($years, $st, $en, $region_id, $goal_id, $field_name) {
+        return CowGroup::select(DB::raw("SUM(".$field_name.") AS sum_baht")
+                                // , DB::raw("SUM(".$field_price.") AS sum_baht")
+                                , "cow_group.update_date")
+                        ->join("cow_group_detail", 'cow_group_detail.cow_group_id', '=', 'cow_group.id')
+                        ->where("years", $years)
+                         ->whereBetween("months", [$st, $en])
+                        ->where("region_id", $region_id)
+                        ->where("cow_group_item_id", $goal_id)
+                        ->first()
+                        ->toArray();
+    }
 
     public static function getDataByID($id) {
         return CowGroup::where('id', $id)
