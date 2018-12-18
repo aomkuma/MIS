@@ -57,7 +57,10 @@ angular.module('e-homework').controller('UpdateMOUController', function($scope, 
             if(result.data.STATUS == 'OK'){
                 // alert('save success');
                 // if($scope.ID !== undefined && $scope.ID !== null){
-                    window.location.href = '#/mou/update/' + result.data.DATA.id;
+
+                    // window.location.href = '#/mou/update/' + result.data.DATA.id;
+                    alert('บันทึกสำเร็จ');
+                    window.location.href = '#/mou/';
                 // }else{
                 //     location.reload();    
                 // }
@@ -80,6 +83,7 @@ angular.module('e-homework').controller('UpdateMOUController', function($scope, 
         // console.log(date);
         return convertDateToFullThaiDate(new Date(date));
     }
+
 
     $scope.Data = {
         'id':''

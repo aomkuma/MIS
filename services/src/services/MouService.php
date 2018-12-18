@@ -18,7 +18,8 @@
         }
 
     	public static function getList($region_id, $actives = ''){
-            return Mou::where(function($query) use ($actives){
+            return Mou::select('mou.*', 'cooperative.cooperative_name')
+                    ->where(function($query) use ($actives){
                         if(!empty($actives)){
                             $query->where('actives' , $actives);
                         }

@@ -31,7 +31,7 @@
 				<td>{{sub_data.years + 543}}</td>
 				<td>{{getThaiDate(sub_data.start_date)}}</td>
 				<td>{{getThaiDate(sub_data.end_date)}}</td>
-				<td>{{sub_data.mou_amount}}</td>
+				<td>{{numberFormatComma(sub_data.mou_amount)}}</td>
 				<td>
 					<button class="btn btn-success" ng-click="goUpdate(sub_data.id)">
 						<span class="glyphicon glyphicon-edit"></span> 
