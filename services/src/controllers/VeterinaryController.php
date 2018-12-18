@@ -430,7 +430,7 @@ class VeterinaryController extends Controller {
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
 
-    private function getAnnuallyDataList($condition, $regions) {
+    public function getAnnuallyDataList($condition, $regions) {
 
         $loop = intval($condition['YearTo']) - intval($condition['YearFrom']) + 1;
         $curYear = $condition['YearFrom'];
@@ -814,10 +814,11 @@ class VeterinaryController extends Controller {
         return ['DetailList' => $DetailList, 'CooperativeList' => $CooperativeList];
     }
 
-    private function getAnnuallyDetailList($condition, $regions, $description) {
+    public function getAnnuallyDetailList($condition, $regions, $description) {
         $years = $description['years'];
         $quarter = $description['quarter'];
         $region_id = $description['region_id'];
+        
         $costList = [
             ['item' => 'สมาชิก', 'unit' => 'ราย']
             , ['item' => 'โคนม', 'unit' => 'ตัว']

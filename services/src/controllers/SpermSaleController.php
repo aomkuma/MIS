@@ -204,7 +204,7 @@ class SpermSaleController extends Controller {
             // Loop User Regions
             foreach ($mastesgoallist as $key => $value) {
 
-              //  $region_id = $value['RegionID'];
+                //  $region_id = $value['RegionID'];
                 $monthName = SpermSaleController::getMonthName($curMonth);
 
                 $data = [];
@@ -537,8 +537,9 @@ class SpermSaleController extends Controller {
             return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
         }
     }
+
     public function getQuarterDataListreport($condition, $regions) {
-$mastesgoallist = MasterGoalService::getList('Y', 'จำหน่ายน้ำเชื้อแช่แข็ง');
+        $mastesgoallist = MasterGoalService::getList('Y', 'จำหน่ายน้ำเชื้อแช่แข็ง');
         // get loop to query
         // $loop = intval($condition['YearTo'] . $condition['QuarterTo']) - intval($condition['YearFrom'] . $condition['QuarterFrom']) + 1;
         $diffYear = ($condition['YearTo'] - $condition['YearFrom']) + 1;
@@ -602,7 +603,7 @@ $mastesgoallist = MasterGoalService::getList('Y', 'จำหน่ายน้�
 
             // Loop User Regions
             foreach ($mastesgoallist as $key => $value) {
-              //  $region_id = $value['RegionID'];
+                //  $region_id = $value['RegionID'];
 
                 $SumCurrentAmount = 0;
                 $SumCurrentBaht = 0;
@@ -622,7 +623,8 @@ $mastesgoallist = MasterGoalService::getList('Y', 'จำหน่ายน้�
                 }
 
                 $data = [];
-                $data['RegionName'] = $value['goal_name'];;
+                $data['RegionName'] = $value['goal_name'];
+                ;
                 $data['Quarter'] = $curQuarter . ' (' . (($curQuarter == 1 ? $curYear + 543 + 1 : $curYear + 543)) . ')';
 
                 $data['CurrentAmount'] = $SumCurrentAmount;
@@ -665,6 +667,86 @@ $mastesgoallist = MasterGoalService::getList('Y', 'จำหน่ายน้�
                 $curQuarter = 1;
             }
         }
+
+        return ['DataList' => $DataList, 'Summary' => $DataSummary];
+    }
+
+    public function getAnnuallyDataListreport($condition, $regions) {
+
+        $mastesgoallist = MasterGoalService::getList('Y', 'จำหน่ายน้ำเชื้อแช่แข็ง');
+        $curYear = $condition['YearFrom'];
+
+        $beforeYear = $curYear - 1;
+        $monthList = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+        $yearList = [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $DataList = [];
+        $DataSummary = [];
+        
+
+
+        // Loop User Regions
+        foreach ($mastesgoallist as $key => $value) {
+
+
+
+
+
+            $SumCurrentAmount = 0;
+            $SumCurrentBaht = 0;
+            $SumBeforeAmount = 0;
+            $SumBeforeBaht = 0;
+            // loop get quarter sum data
+            for ($j = 0; $j < 12; $j++) {
+                $curMonth = $monthList[$j];
+
+                $Current = SpermSaleService::getMainListforreport($curYear-$yearList[$j], $curMonth, $value['id']);
+                $SumCurrentAmount += floatval($Current['sum_amount']);
+                $SumCurrentBaht += floatval($Current['sum_baht']);
+
+                $Before = SpermSaleService::getMainListforreport($beforeYear-$yearList[$j], $curMonth, $value['id']);
+                $SumBeforeAmount += floatval($Before['sum_amount']);
+                $SumBeforeBaht += floatval($Before['sum_baht']);
+            }
+
+            $data = [];
+            $data['RegionName'] = $value['goal_name'];
+            $data['Year'] = $curYear + 543;
+
+            $data['CurrentAmount'] = $SumCurrentAmount;
+            $data['CurrentBaht'] = $SumCurrentBaht;
+
+            $data['BeforeAmount'] = $SumBeforeAmount;
+            $data['BeforeBaht'] = $SumBeforeBaht;
+
+            $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+            $data['DiffAmount'] = $DiffAmount;
+            $data['DiffAmountPercentage'] = 0;
+
+            $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+            $data['DiffBaht'] = $DiffBaht;
+            $data['DiffBahtPercentage'] = 0;
+
+            $data['CreateDate'] = $CurrentCowService['update_date'];
+            $data['ApproveDate'] = '';
+            $data['Status'] = '';
+            $data['Description'] = ['months' => $curMonth
+                , 'years' => $curYear
+                , 'region_id' => $region_id
+            ];
+
+            array_push($DataList, $data);
+
+            $DataSummary['SummarySpermSaleAmount'] = $DataSummary['SummarySpermSaleAmount'] + $data['CurrentAmount'];
+            $DataSummary['SummaryBeforSpermSaleAmount'] = $DataSummary['SummaryBeforSpermSaleAmount'] + $data['BeforeAmount'];
+
+            $DataSummary['SummarySpermSaleIncome'] = $DataSummary['SummarySpermSaleIncome'] + $data['CurrentBaht'];
+            $DataSummary['SummaryBeforeSpermSaleIncome'] = $DataSummary['SummaryBeforeSpermSaleIncome'] + $data['BeforeBaht'];
+
+            $DataSummary['SummarySpermSaleAmountPercentage'] = $DataSummary['SummarySpermSaleAmountPercentage'] + $DataSummary['SummarySpermSaleAmount'] + $DataSummary['SummaryBeforSpermSaleAmount'];
+            $DataSummary['SummarySpermSaleIncomePercentage'] = $DataSummary['SummarySpermSaleIncomePercentage'] + $DataSummary['SummarySpermSaleIncome'] + $DataSummary['SummaryBeforeSpermSaleIncome'];
+        }
+
+
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }

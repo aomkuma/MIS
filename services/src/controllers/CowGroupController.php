@@ -276,35 +276,113 @@ class CowGroupController extends Controller {
 
         $MasterGoalList = MasterGoalService::getList('Y', 'ข้อมูลฝูงโค');
 
-      
 
-            // Prepare condition
-        
 
-            // Loop User Regions
-            foreach ($TypeList as $key => $value) {
+        // Prepare condition
+        // Loop User Regions
+        foreach ($TypeList as $key => $value) {
 
-                $region_id = $regions;
-                // $monthName = CowGroupController::getMonthName($curMonth);
+            $region_id = $regions;
+            // $monthName = CowGroupController::getMonthName($curMonth);
 
-                $data = [];
-                $data['MainItem'] = $value['name'];
-                $field_name = $value['field_name'];
-                // Load master goal
+            $data = [];
+            $data['MainItem'] = $value['name'];
+            $field_name = $value['field_name'];
+            // Load master goal
 
-                foreach ($MasterGoalList as $k => $v) {
-                    $sub_data = [];
-                    $sub_data['SubItem'] = $v['goal_name'];
-                    $goal_id = $v['id'];
-                    // get cooperative type
+            foreach ($MasterGoalList as $k => $v) {
+                $sub_data = [];
+                $sub_data['SubItem'] = $v['goal_name'];
+                $goal_id = $v['id'];
+                // get cooperative type
 
-                    $Current = CowGroupService::getMainListquar($curYear, $monthst,$monthen, $region_id, $goal_id, $field_name);
+                $Current = CowGroupService::getMainListquar($curYear, $monthst, $monthen, $region_id, $goal_id, $field_name);
+                $sub_data['CurrentUnit'] = 'ตัว';
+                $sub_data['CurrentPercentage'] = floatval($Current['sum_baht']);
+
+                $Before = CowGroupService::getMainListquar($beforeYear, $monthst, $monthen, $region_id, $goal_id, $field_name);
+                $sub_data['BeforeUnit'] = 'ตัว';
+                $sub_data['BeforePercentage'] = floatval($Before['sum_baht']);
+
+                $DiffAmount = $data['CurrentPercentage'] - $data['BeforePercentage'];
+                $sub_data['DiffUnit'] = 'ตัว'; //$DiffAmount;
+                if ($sub_data['BeforePercentage'] != 0) {
+                    $sub_data['DiffPercentage'] = ($sub_data['CurrentPercentage'] / $sub_data['BeforePercentage']) * 100;
+                } else {
+                    $sub_data['DiffPercentage'] = 100;
+                }
+
+
+                $sub_data['Description'] = ['months' => $curMonth
+                    , 'years' => $curYear
+                    , 'region_id' => $region_id
+                ];
+
+                // array_push($data, $sub_data);
+                $data['SubItem'][] = $sub_data;
+                $DataSummary['SummaryCurrentCowGroupAmount'] = $DataSummary['SummaryCurrentCowGroupAmount'] + $data['CurrentPercentage'];
+                $DataSummary['SummaryBeforCowGroupAmount'] = $DataSummary['SummaryBeforCowGroupAmount'] + $data['BeforePercentage'];
+                $DataSummary['SummaryCowGroupAmountPercentage'] = 0;
+                $DataSummary['SummaryCurrentCowGroupIncome'] = $DataSummary['SummaryCurrentCowGroupIncome'] + $data['CurrentPercentage'];
+                $DataSummary['SummaryBeforeCowGroupIncome'] = $DataSummary['SummaryBeforeCowGroupIncome'] + $data['BeforePercentage'];
+                $DataSummary['SummaryCowGroupIncomePercentage'] = 0;
+            }
+            array_push($DataList, $data);
+        }
+
+
+
+        return ['DataList' => $DataList, 'Summary' => $DataSummary];
+    }
+
+    public function getDataListannual($condition, $regions) {
+
+        $curYear = $condition['YearFrom'];
+
+        $beforeYear = $curYear - 1;
+        $monthList = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+        $yearList = [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $DataList = [];
+        $DataSummary = [];
+
+        $TypeList = [
+            ['id' => 1, 'name' => 'ฝูงโคต้นงวด', 'field_name' => 'beginning_period_total_values']
+            // ,['id'=>2, 'name'=>'โคเพิ่ม']
+            // ,['id'=>3, 'name'=>'โคลด']
+            , ['id' => 4, 'name' => 'ฝูงโคปลายงวด', 'field_name' => 'last_period_total_values']
+                // ,['id'=>5, 'name'=>'การจำหน่ายโค']
+        ];
+
+        $MasterGoalList = MasterGoalService::getList('Y', 'ข้อมูลฝูงโค');
+
+
+
+        // Prepare condition
+        // Loop User Regions
+        foreach ($TypeList as $key => $value) {
+
+            $region_id = $regions;
+            // $monthName = CowGroupController::getMonthName($curMonth);
+
+            $data = [];
+            $data['MainItem'] = $value['name'];
+            $field_name = $value['field_name'];
+            // Load master goal
+
+            foreach ($MasterGoalList as $k => $v) {
+                $sub_data = [];
+                $sub_data['SubItem'] = $v['goal_name'];
+                $goal_id = $v['id'];
+                // get cooperative type
+                for ($j = 0; $j < 12; $j++) {
+                    $curMonth = $monthList[$j];
+                    $Current = CowGroupService::getMainList($curYear-$yearList[$j], $curMonth, $region_id, $goal_id, $field_name);
                     $sub_data['CurrentUnit'] = 'ตัว';
-                    $sub_data['CurrentPercentage'] = floatval($Current['sum_baht']);
+                    $sub_data['CurrentPercentage'] += floatval($Current['sum_baht']);
 
-                    $Before = CowGroupService::getMainListquar($beforeYear, $monthst,$monthen, $region_id, $goal_id, $field_name);
+                    $Before = CowGroupService::getMainList($beforeYear-$yearList[$j], $curMonth, $region_id, $goal_id, $field_name);
                     $sub_data['BeforeUnit'] = 'ตัว';
-                    $sub_data['BeforePercentage'] = floatval($Before['sum_baht']);
+                    $sub_data['BeforePercentage'] += floatval($Before['sum_baht']);
 
                     $DiffAmount = $data['CurrentPercentage'] - $data['BeforePercentage'];
                     $sub_data['DiffUnit'] = 'ตัว'; //$DiffAmount;
@@ -321,7 +399,7 @@ class CowGroupController extends Controller {
                     ];
 
                     // array_push($data, $sub_data);
-                    $data['SubItem'][] = $sub_data;
+                    
                     $DataSummary['SummaryCurrentCowGroupAmount'] = $DataSummary['SummaryCurrentCowGroupAmount'] + $data['CurrentPercentage'];
                     $DataSummary['SummaryBeforCowGroupAmount'] = $DataSummary['SummaryBeforCowGroupAmount'] + $data['BeforePercentage'];
                     $DataSummary['SummaryCowGroupAmountPercentage'] = 0;
@@ -329,10 +407,12 @@ class CowGroupController extends Controller {
                     $DataSummary['SummaryBeforeCowGroupIncome'] = $DataSummary['SummaryBeforeCowGroupIncome'] + $data['BeforePercentage'];
                     $DataSummary['SummaryCowGroupIncomePercentage'] = 0;
                 }
-                array_push($DataList, $data);
+                $data['SubItem'][] = $sub_data;
             }
+            array_push($DataList, $data);
+        }
 
-        
+
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }

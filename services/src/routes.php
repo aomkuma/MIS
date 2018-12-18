@@ -136,6 +136,7 @@ $app->post('/cow-group/report/', 'ReportController:exportCowgroupExcel');
 
 $app->post('/monthreport/report/', 'MonthReportController:exportmonthreportExcel');
 $app->post('/quarterreport/report/', 'QuarterReportController:exportquarterreportExcel');
+$app->post('/annuallyreport/report/', 'AnnualReportController:exportannuallyreportExcel');
 // Default action
 $app->get('/[{name}]', function ($request, $response, $args) {
     // Sample log message

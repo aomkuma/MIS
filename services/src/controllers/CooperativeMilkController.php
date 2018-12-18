@@ -359,7 +359,7 @@ class CooperativeMilkController extends Controller {
 
             // get cooperative type
 
-            $Current = CooperativeMilkService::getMainListquar($curYear, $monthst,$monthen, $region_id, $cooperative_id);
+            $Current = CooperativeMilkService::getMainListquar($curYear, $monthst, $monthen, $region_id, $cooperative_id);
             $data['TotalPerson'] = floatval($Current['sum_total_person']);
             $data['TotalPersonSent'] = floatval($Current['sum_total_person_sent']);
             $data['TotalCow'] = floatval($Current['sum_total_cow']);
@@ -386,6 +386,68 @@ class CooperativeMilkController extends Controller {
             $DataSummary['SummaryCooperativeMilkIncomePercentage'] = $DataSummary['SummaryCooperativeMilkIncomePercentage'] + $DataSummary['SummaryCooperativeMilkIncome'] + $DataSummary['SummaryBeforeCooperativeMilkIncome'];
         }
 
+
+
+
+        return ['DataList' => $DataList, 'Summary' => $DataSummary];
+    }
+
+    public function getAnnuallyDataListreport($condition, $regions) {
+
+
+        $curYear = $condition['YearFrom'];
+
+        //$beforeYear = $calcYear - 1;
+        $monthList = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+        $yearList = [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $DataList = [];
+        $DataSummary = [];
+        $region_id = $regions['RegionID'];
+        $CooperativeList = CooperativeService::getListByRegion($region_id);
+
+        // Loop User Regions
+        foreach ($CooperativeList as $key => $value) {
+            $SumCurrentAmount = 0;
+            $SumCurrentBaht = 0;
+            $SumBeforeAmount = 0;
+            $SumBeforeBaht = 0;
+            $data = [];
+            $data['RegionName'] = $regions['RegionName'];
+            $data['CooperativeName'] = $value['cooperative_name'];
+            // loop get quarter sum data
+            for ($j = 0; $j < 12; $j++) {
+                $curMonth = $monthList[$j];
+                $cooperative_id = $value['id'];
+
+
+                // get cooperative type
+
+                $Current = CooperativeMilkService::getMainList($curYear - $yearList[$j], $curMonth, $region_id, $cooperative_id);
+               
+                $data['TotalPerson'] += floatval($Current['sum_total_person']);
+                $data['TotalPersonSent'] += floatval($Current['sum_total_person_sent']);
+                $data['TotalCow'] += floatval($Current['sum_total_cow']);
+                $data['TotalCowSent'] += floatval($Current['sum_total_person_sent']);
+                $data['TotalCowBeeb'] += floatval($Current['sum_total_cow_beeb']);
+                $data['TotalMilkAmount'] += floatval($Current['sum_milk_amount']);
+                $data['TotalValues'] += floatval($Current['sum_total_values']);
+                $data['AverageValues'] += floatval($Current['sum_average_values']);
+
+
+
+                
+
+                $DataSummary['SummaryCooperativeMilkAmount'] = $DataSummary['SummaryCooperativeMilkAmount'] + $data['CurrentAmount'];
+                $DataSummary['SummaryBeforCooperativeMilkAmount'] = $DataSummary['SummaryBeforCooperativeMilkAmount'] + $data['BeforeAmount'];
+
+                $DataSummary['SummaryCooperativeMilkIncome'] = $DataSummary['SummaryCooperativeMilkIncome'] + $data['CurrentBaht'];
+                $DataSummary['SummaryBeforeCooperativeMilkIncome'] = $DataSummary['SummaryBeforeCooperativeMilkIncome'] + $data['BeforeBaht'];
+
+                $DataSummary['SummaryCooperativeMilkAmountPercentage'] = $DataSummary['SummaryCooperativeMilkAmountPercentage'] + $DataSummary['SummaryCooperativeMilkAmount'] + $DataSummary['SummaryBeforCooperativeMilkAmount'];
+                $DataSummary['SummaryCooperativeMilkIncomePercentage'] = $DataSummary['SummaryCooperativeMilkIncomePercentage'] + $DataSummary['SummaryCooperativeMilkIncome'] + $DataSummary['SummaryBeforeCooperativeMilkIncome'];
+            }
+            array_push($DataList, $data);
+        }
 
 
 

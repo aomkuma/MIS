@@ -779,7 +779,7 @@ class MineralController extends Controller {
         foreach ($regions as $key => $valuereg) {
             $RegionList[] = $valuereg['RegionID'];
         }
-       
+
         // get loop to query
         $diffYear = ($condition['YearTo'] - $condition['YearFrom']) + 1;
         $cnt = 0;
@@ -844,7 +844,7 @@ class MineralController extends Controller {
             // Loop User Regions
             foreach ($MasterGoalList as $key => $value) {
                 //  $region_id = $value['RegionID'];
-               
+
                 $master_id = $value['id'];
                 $data['MineralName'] = $value['goal_name'];
                 $SumCurrentWeight = 0;
@@ -898,11 +898,98 @@ class MineralController extends Controller {
                 $DataSummary['SummaryBeforeMineralIncome'] = $DataSummary['SummaryBeforeMineralIncome'] + $data['BeforeBaht'];
                 $DataSummary['SummaryMineralIncomePercentage'] = 0;
             }
-          //  print_r($data);
+            //  print_r($data);
             $curQuarter++;
             if ($curQuarter > 4) {
                 $curQuarter = 1;
             }
+        }
+
+        return ['DataList' => $DataList, 'Summary' => $DataSummary];
+    }
+
+    public function getAnnuallyDataListbymaster($condition, $regions) {
+        $MasterGoalList = MasterGoalService::getList('Y', 'แร่ธาตุ พรีมิกซ์ และอาหาร');
+        foreach ($regions as $key => $valuereg) {
+            $RegionList[] = $valuereg['RegionID'];
+        }
+        $loop = intval($condition['YearTo']) - intval($condition['YearFrom']) + 1;
+        $curYear = $condition['YearFrom'];
+
+        $beforeYear = $calcYear - 1;
+        $monthList = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+        $DataList = [];
+        $DataSummary = [];
+
+        for ($i = 0; $i < $loop; $i++) {
+
+            // Loop User Regions
+            foreach ($MasterGoalList as $key => $value) {
+                // $region_id = $value['RegionID'];
+
+                $curYear = $condition['YearFrom'];
+                $calcYear = intval($curYear) - 1;
+                $master_id = $value['id'];
+                $SumCurrentWeight = 0;
+                $SumCurrentBaht = 0;
+                $SumBeforeWeight = 0;
+                $SumBeforeBaht = 0;
+
+                for ($j = 0; $j < 12; $j++) {
+
+                    $curMonth = $monthList[$j];
+
+                    if ($curMonth == 1) {
+                        $calcYear++;
+                        $beforeYear = $calcYear - 1;
+                    }
+
+                    $curMonth = $monthList[$j];
+
+                    $Current = MineralService::getMainListByMaster($curYear, $curMonth, $master_id, $RegionList);
+                    $SumCurrentWeight += floatval($Current['sum_weight']);
+                    $SumCurrentBaht += floatval($Current['sum_baht']);
+
+                    $Before = MineralService::getMainListByMaster($beforeYear, $curMonth, $master_id, $RegionList);
+                    $SumBeforeWeight += floatval($Before['sum_weight']);
+                    $SumBeforeBaht += floatval($Before['sum_baht']);
+                }
+
+                $data = [];
+                $data['RegionName'] = $value['goal_name'];
+                $data['Year'] = $curYear + 543;
+                $data['CurrentWeight'] = $SumCurrentWeight;
+                $data['CurrentBaht'] = $SumCurrentBaht;
+
+                $data['BeforeWeight'] = $SumBeforeWeight;
+                $data['BeforeBaht'] = $SumBeforeBaht;
+
+                $DiffWeight = $data['CurrentWeight'] - $data['BeforeWeight'];
+                $data['DiffWeight'] = $DiffWeight;
+                $data['DiffWeightPercentage'] = 0;
+
+                $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                $data['DiffBaht'] = $DiffBaht;
+                $data['DiffBahtPercentage'] = 0;
+
+                $data['CreateDate'] = $CurrentCowService['update_date'];
+                $data['ApproveDate'] = '';
+                $data['Status'] = '';
+                $data['Description'] = ['years' => $curYear
+                    , 'region_id' => $region_id
+                ];
+
+                array_push($DataList, $data);
+
+                $DataSummary['SummaryCurrentMineralAmount'] = $DataSummary['SummaryCurrentMineralAmount'] + $data['CurrentWeight'];
+                $DataSummary['SummaryBeforMineralAmount'] = $DataSummary['SummaryBeforMineralAmount'] + $data['BeforeWeight'];
+                $DataSummary['SummaryMineralAmountPercentage'] = 0;
+                $DataSummary['SummaryCurrentMineralIncome'] = $DataSummary['SummaryCurrentMineralIncome'] + $data['CurrentBaht'];
+                $DataSummary['SummaryBeforeMineralIncome'] = $DataSummary['SummaryBeforeMineralIncome'] + $data['BeforeBaht'];
+                $DataSummary['SummaryMineralIncomePercentage'] = 0;
+            }
+            $curYear++;
         }
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
