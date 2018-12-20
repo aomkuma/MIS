@@ -76,7 +76,7 @@ class TravelService {
         
     }
 
-    public static function getDetailmonth($years, $month, $region) {
+    public static function getDetailmonth($years, $month, $id) {
         return Travel::select(DB::raw("SUM(adult_pay) AS apay")
                                 , DB::raw("SUM(`child_pay`) AS cpay")
                                 , DB::raw("SUM(`student_pay`) AS spay")
@@ -88,7 +88,7 @@ class TravelService {
                                 , DB::raw("SUM(`student_except`) AS s_except"))
                         ->join("travel_detail", 'travel_detail.travel_id', '=', 'travel.id')
                         ->where("years", $years)
-                        ->where("region_id", $region)
+                        ->where("travel_type_id", $id)
                         ->where("months", $month)
                         ->first()
                         ->toArray();

@@ -705,13 +705,14 @@ class ReportController extends Controller {
             $obj = $request->getParsedBody();
             $mastesgoallist = MasterGoalService::getList('Y', 'ท่องเที่ยว');
 
-            //  $condition = $obj['obj']['condition'];
-            // $data = $obj['obj']['data'];
-            $data['Description']['years'] = 2018;
-            $condition['DisplayType'] = 'monthly';
-            $data['Description']['months'] = 1;
-            $data['Quarter'] = 1;
-            $data['Description']['region_id'] = 3;
+              $condition = $obj['obj']['condition'];
+             $data = $obj['obj']['data'];
+//            $data['Description']['years'] = 2018;
+//            $condition['DisplayType'] = 'monthly';
+//            $data['Description']['months'] = 1;
+//            $data['Quarter'] = 1;
+//            $data['Description']['region_id'] = 3;
+           
             $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_in_memory_gzip;
 
             $catch_result = \PHPExcel_Settings::setCacheStorageMethod($cacheMethod);
@@ -786,13 +787,13 @@ class ReportController extends Controller {
         $row = 0;
 
         $mastesgoaladult = MasterGoalService::getmision($mastesgoallist[0]['goal_name']);
-        $missionad = GoalMissionService::getGoaltravel($mastesgoaladult[0]['id'], $data['Description']['region_id'], $data['Description']['years']);
+        $missionad = GoalMissionService::getGoaltravel($mastesgoaladult[0]['id'],  $data['Description']['years']);
         $mastesgoalchild = MasterGoalService::getmision($mastesgoallist[1]['goal_name']);
-        $missionch = GoalMissionService::getGoaltravel($mastesgoalchild[0]['id'], $data['Description']['region_id'], $data['Description']['years']);
+        $missionch = GoalMissionService::getGoaltravel($mastesgoalchild[0]['id'], $data['Description']['years']);
         $mastesgoalstudent = MasterGoalService::getmision($mastesgoallist[2]['goal_name']);
-        $missionst = GoalMissionService::getGoaltravel($mastesgoalstudent[0]['id'], $data['Description']['region_id'], $data['Description']['years']);
+        $missionst = GoalMissionService::getGoaltravel($mastesgoalstudent[0]['id'], $data['Description']['years']);
 
-
+        print_r($missionst);
 
 
         if ($type == 'annually') {
@@ -875,7 +876,7 @@ class ReportController extends Controller {
             $objPHPExcel->getActiveSheet()->setCellValue('F10', ($tvmonth['apay'] - round($missionad[0]['amount'], 2)) + ( $tvmonth['cpay'] - round($missionch[0]['amount'], 2)) + ($tvmonth['spay'] - round($missionst[0]['amount'], 2)));
             $objPHPExcel->getActiveSheet()->setCellValue('G10', ($tvmonth['p_adult'] - round($missionad[0]['price_value'], 2)) + ($tvmonth['p_child'] - round($missionch[0]['price_value'], 2)) + ($tvmonth['p_student'] - round($missionst[0]['price_value'], 2)));
         } else if ($type == 'monthly') {
-            $tvmonth = TravelService::getDetailmonth($data['Description']['years'], $data['Description']['months'], $data['Description']['region_id']);
+            $tvmonth = TravelService::getDetailmonth($data['Description']['years'], $data['Description']['months'], $mastesgoallist[0]['id']);
             $objPHPExcel->getActiveSheet()->setCellValue('B4', 'จำนวน ');
             $objPHPExcel->getActiveSheet()->setCellValue('C4', 'มูลค่า (บาท)');
 

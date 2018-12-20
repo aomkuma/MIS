@@ -87,9 +87,9 @@ class GoalMissionService {
         return AccountRole::find($id)->delete();
     }
 
-    public static function getGoaltravel($goalid, $regid, $year) {
+    public static function getGoaltravel($goalid, $year) {
         return GoalMission::where('years', $year)
-                        ->where('region_id', $regid)
+                        
                         ->where('goal_id', $goalid)
                         ->get()
                         ->toArray();
@@ -102,6 +102,7 @@ class GoalMissionService {
                         ->get()
                         ->toArray();
     }
+   
 
     public static function getMissionforinsem($goalid, $year) {
         return GoalMission::where('years', $year)
