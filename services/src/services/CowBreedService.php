@@ -56,17 +56,18 @@ class CowBreedService {
          $st = 1;
         $en = 3;
         if ($quar == 1) {
-            $st = 1;
-            $en = 3;
-        } else if ($quar == 2) {
-            $st = 4;
-            $en = 6;
-        } else if ($quar == 3) {
-            $st = 7;
-            $en = 9;
-        } else {
+            $years-=1;
             $st = 10;
             $en = 12;
+        } else if ($quar == 2) {
+            $st = 1;
+            $en = 3;
+        } else if ($quar == 3) {
+            $st = 4;
+            $en = 6;
+        } else {
+            $st = 7;
+            $en = 9;
         }
         return CowBreed::select(DB::raw("SUM(amount) AS amount")
                                 , DB::raw("SUM(`price`) AS price"))

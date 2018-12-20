@@ -88,7 +88,7 @@ class TravelService {
                                 , DB::raw("SUM(`student_except`) AS s_except"))
                         ->join("travel_detail", 'travel_detail.travel_id', '=', 'travel.id')
                         ->where("years", $years)
-                        ->where("travel_type_id", $id)
+                       // ->where("travel_type_id", $id)
                         ->where("months", $month)
                         ->first()
                         ->toArray();
@@ -115,17 +115,18 @@ class TravelService {
         $st = 1;
         $en = 3;
         if ($quar == 1) {
-            $st = 1;
-            $en = 3;
-        } else if ($quar == 2) {
-            $st = 4;
-            $en = 6;
-        } else if ($quar == 3) {
-            $st = 7;
-            $en = 9;
-        } else {
+            $years-=1;
             $st = 10;
             $en = 12;
+        } else if ($quar == 2) {
+            $st = 1;
+            $en = 3;
+        } else if ($quar == 3) {
+            $st = 4;
+            $en = 6;
+        } else {
+            $st = 7;
+            $en = 9;
         }
 
         return Travel::select(DB::raw("SUM(adult_pay) AS apay")
@@ -139,7 +140,7 @@ class TravelService {
                                 , DB::raw("SUM(`student_except`) AS s_except"))
                         ->join("travel_detail", 'travel_detail.travel_id', '=', 'travel.id')
                         ->where("years", $years)
-                        ->where("region_id", $region)
+//                        ->where("region_id", $region)
                         ->whereBetween("months", [$st, $en])
                         ->first()
                         ->toArray();

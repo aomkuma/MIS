@@ -96,7 +96,7 @@ class CowGroupService {
                         ->join("cow_group_detail", 'cow_group_detail.cow_group_id', '=', 'cow_group.id')
                         ->where("years", $years)
                         ->where("months", $months)
-                        ->where("region_id", $region)
+                    //    ->where("region_id", $region)
                         ->where("cow_group_item_id", $type_id)
                         ->first()
                         ->toArray();
@@ -116,18 +116,19 @@ class CowGroupService {
     public static function getDetailquar($years, $type_id, $region, $quar) {
         $st = 1;
         $en = 3;
-        if ($quar == 1) {
-            $st = 1;
-            $en = 3;
-        } else if ($quar == 2) {
-            $st = 4;
-            $en = 6;
-        } else if ($quar == 3) {
-            $st = 7;
-            $en = 9;
-        } else {
+         if ($quar == 1) {
+            $years-=1;
             $st = 10;
             $en = 12;
+        } else if ($quar == 2) {
+            $st = 1;
+            $en = 3;
+        } else if ($quar == 3) {
+            $st = 4;
+            $en = 6;
+        } else {
+            $st = 7;
+            $en = 9;
         }
         return CowGroup::select(DB::raw("SUM(total_sell) AS amount")
                                 , DB::raw("SUM(`total_sell_values`) AS price"))

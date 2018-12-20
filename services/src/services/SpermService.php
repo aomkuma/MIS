@@ -33,13 +33,15 @@ class SpermService {
     }
 
     public static function getDetailmonth($years, $months, $sperm_item_id, $region) {
-        return Sperm::
-                        join("sperm_detail", 'sperm_detail.sperm_id', '=', 'sperm.id')
+        return Sperm::select(DB::raw("SUM(amount) AS amount")
+                                , DB::raw("SUM(`price`) AS price"))
+                        ->join("sperm_detail", 'sperm_detail.sperm_id', '=', 'sperm.id')
                         ->where("years", $years)
                         ->where("months", $months)
                         ->where("region_id", $region)
                         ->where("sperm_item_id", $sperm_item_id)
                         ->first()
+                        ->toArray();
         ;
     }
 
@@ -58,17 +60,18 @@ class SpermService {
         $st = 1;
         $en = 3;
         if ($quar == 1) {
-            $st = 1;
-            $en = 3;
-        } else if ($quar == 2) {
-            $st = 4;
-            $en = 6;
-        } else if ($quar == 3) {
-            $st = 7;
-            $en = 9;
-        } else {
+            $years -= 1;
             $st = 10;
             $en = 12;
+        } else if ($quar == 2) {
+            $st = 1;
+            $en = 3;
+        } else if ($quar == 3) {
+            $st = 4;
+            $en = 6;
+        } else {
+            $st = 7;
+            $en = 9;
         }
 
         return Sperm::select(DB::raw("SUM(amount) AS amount")
