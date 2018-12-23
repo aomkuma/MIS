@@ -506,7 +506,8 @@ class MineralController extends Controller {
         $months = $description['months'];
         $region_id = $description['region_id'];
 
-        $FoodList = MineralService::getFoodList();
+        // $FoodList = MineralService::getFoodList();
+        $FoodList = MasterGoalService::getList('Y', 'แร่ธาตุ พรีมิกซ์ และอาหาร');
         $CooperativeList = CooperativeService::getListByRegion($region_id);
 
         $DataList = [];
@@ -546,7 +547,7 @@ class MineralController extends Controller {
         $ItemUnit = [];
         foreach ($FoodList as $_key => $_value) {
             $data = [];
-            $data['label'] = $_value['name'];
+            $data['label'] = $_value['goal_name'];
             $unit = [];
             $unit[]['label'] = '';
             $unit[]['label'] = '';
@@ -575,7 +576,8 @@ class MineralController extends Controller {
             $monthList = [7, 8, 9];
         }
 
-        $FoodList = MineralService::getFoodList();
+        // $FoodList = MineralService::getFoodList();
+        $FoodList = MasterGoalService::getList('Y', 'แร่ธาตุ พรีมิกซ์ และอาหาร');
         $CooperativeList = CooperativeService::getListByRegion($region_id);
 
         $DataList = [];
@@ -622,7 +624,7 @@ class MineralController extends Controller {
         $ItemUnit = [];
         foreach ($FoodList as $_key => $_value) {
             $data = [];
-            $data['label'] = $_value['name'];
+            $data['label'] = $_value['goal_name'];
             $unit = [];
             $unit[]['label'] = '';
             $unit[]['label'] = '';
@@ -643,7 +645,8 @@ class MineralController extends Controller {
 
         $monthList = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-        $FoodList = MineralService::getFoodList();
+        // $FoodList = MineralService::getFoodList();
+        $FoodList = MasterGoalService::getList('Y', 'แร่ธาตุ พรีมิกซ์ และอาหาร');
         $CooperativeList = CooperativeService::getListByRegion($region_id);
 
         $DataList = [];
@@ -690,7 +693,7 @@ class MineralController extends Controller {
         $ItemUnit = [];
         foreach ($FoodList as $_key => $_value) {
             $data = [];
-            $data['label'] = $_value['name'];
+            $data['label'] = $_value['goal_name'];
             $unit = [];
             $unit[]['label'] = '';
             $unit[]['label'] = '';
