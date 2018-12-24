@@ -64,7 +64,7 @@
 						กิจกรรมส่งเสริมโคนม (หลัก)
 					</div>
 					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-						<select class="form-control" ng-model="VeterinaryDetail.dairy_farming_id" ng-options="data.id as data.dairy_farming_name for data in DairyFarmingList" ><!--ng-change="loadDairyFarming('CHILD', VeterinaryDetail.dairy_farming_id)" -->
+						<select class="form-control" ng-model="VeterinaryDetail.dairy_farming_id" ng-options="data.id as data.dairy_farming_name for data in DairyFarmingList[parentIndex]" ng-change="loadDairyFarming('CHILD', VeterinaryDetail.dairy_farming_id, parentIndex)">
 							<option value="">กรุณาเลือก..</option>
 						</select>
 					</div>
@@ -72,7 +72,7 @@
 						กิจกรรมส่งเสริมโคนม (ย่อย)
 					</div>
 					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-						<select class="form-control" ng-model="VeterinaryDetail.sub_dairy_farming_id" ng-options="data.id as data.dairy_farming_name for data in SubDairyFarmingList">
+						<select class="form-control" ng-model="VeterinaryDetail.sub_dairy_farming_id" ng-options="data.id as data.dairy_farming_name for data in SubDairyFarmingList[parentIndex]">
 							<option value="">กรุณาเลือก..</option>
 						</select>
 					</div>

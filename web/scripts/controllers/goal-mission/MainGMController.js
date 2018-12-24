@@ -112,6 +112,20 @@ angular.module('e-homework').controller('MainGMController', function($scope, $co
         });
     }
 
+    $scope.numberFormat = function(num){
+        if(num == null){
+            return '';
+        }
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    $scope.numberFormatComma = function(num){
+        if(num == null){
+            return '';
+        }
+        return parseFloat(num).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     // $scope.condition = {'Year' : ''
     //                     , 'Region' : ''
     //                     , 'Goal' : ''

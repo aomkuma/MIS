@@ -10,11 +10,12 @@ angular.module('e-homework').controller('UpdateVTController', function($scope, $
        window.location.replace('#/guest/logon');
     }
     $scope.ID = $routeParams.id;
-    $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));    
+    $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));   
+    $scope.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));    
     // console.log($scope.$parent.Menu);
 
     $scope.loadCooperative = function(){
-        var params = {'actives':'Y'};
+        var params = {'actives':'Y', 'RegionList':$scope.PersonRegion};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('cooperative/list', params).then(function(result){
             if(result.data.STATUS == 'OK'){
@@ -27,15 +28,15 @@ angular.module('e-homework').controller('UpdateVTController', function($scope, $
         });
     }
 
-    $scope.loadDairyFarming = function(type, parent_id){
+    $scope.loadDairyFarming = function(type, parent_id, index){
         var params = {'type':type, 'parent_id' : parent_id};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('dairy-farming/list/veterinary', params).then(function(result){
             if(result.data.STATUS == 'OK'){
                 if(type == 'MAIN'){
-                    $scope.DairyFarmingList = result.data.DATA.List;
+                    $scope.DairyFarmingList[index] = result.data.DATA.List;
                 }else{
-                    $scope.SubDairyFarmingList = result.data.DATA.List;
+                    $scope.SubDairyFarmingList[index] = result.data.DATA.List;
                 }
                 // $scope.Cooperative = result.data.DATA.List;
             }
@@ -66,9 +67,10 @@ angular.module('e-homework').controller('UpdateVTController', function($scope, $
                 $scope.Veterinary.cooperative_id = parseInt($scope.Veterinary.cooperative_id);
                 $scope.VeterinaryDetailList = $scope.Veterinary.veterinary_detail;
                 // load sub dar=iry farming
-                // for(var i =0; i < $scope.VeterinaryDetailList.length; i++){
-                //     $scope.loadDairyFarming('CHILD', $scope.VeterinaryDetailList[i].dairy_farming_id);
-                // }
+                for(var i =0; i < $scope.VeterinaryDetailList.length; i++){
+                    $scope.loadDairyFarming('MAIN', '', i);
+                    $scope.loadDairyFarming('CHILD', $scope.VeterinaryDetailList[i].dairy_farming_id, i);
+                }
                 IndexOverlayFactory.overlayHide();
             }else{
                 if($scope.Veterinary.id != ''){
@@ -164,6 +166,12 @@ angular.module('e-homework').controller('UpdateVTController', function($scope, $
                     };
 
         $scope.VeterinaryDetailList.push(detail);
+
+        $scope.DairyFarmingList.push({});
+        $scope.SubDairyFarmingList.push({});
+        var index = $scope.VeterinaryDetailList.length - 1;
+        $scope.loadDairyFarming('MAIN', '', index);
+        $scope.loadDairyFarming('CHILD', '', index);
     }
 
     $scope.addVeterinaryItem = function(index){
@@ -205,6 +213,8 @@ angular.module('e-homework').controller('UpdateVTController', function($scope, $
                 HTTPService.clientRequest('veterinary/delete/detail', params).then(function(result){
                     if(result.data.STATUS == 'OK'){
                         $scope.VeterinaryDetailList.splice(index, 1);
+                        $scope.SubDairyFarmingList.splice(index, 1);
+                        $scope.DairyFarmingList.splice(index, 1);
                     }
                     IndexOverlayFactory.overlayHide();
                 });
@@ -262,8 +272,8 @@ angular.module('e-homework').controller('UpdateVTController', function($scope, $
     $scope.YearList = getYearList(20);
     $scope.MonthList = getMonthList();
     $scope.Search = false;
-    $scope.SubDairyFarmingList = [];
-    $scope.DairyFarmingList = [];
+    $scope.SubDairyFarmingList = [{}];
+    $scope.DairyFarmingList = [{}];
     $scope.VeterinaryDetailList = [];
 
     $scope.popup1 = {
@@ -282,8 +292,8 @@ angular.module('e-homework').controller('UpdateVTController', function($scope, $
 
     $scope.setVeterinary();
     $scope.loadCooperative();
-    $scope.loadDairyFarming('MAIN', '');
-    $scope.loadDairyFarming('CHILD', '');
+    $scope.loadDairyFarming('MAIN', '', 0);
+    $scope.loadDairyFarming('CHILD', '', 0);
 
 
 });

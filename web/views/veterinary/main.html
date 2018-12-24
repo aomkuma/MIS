@@ -16,7 +16,7 @@
 		  	<div ng-show="condition.DisplayType == 'monthly'">
 		  		<div class="form-group">
 				    <label for="exampleInputName2">&nbsp; การแสดงข้อมูล : </label>
-				    &nbsp; <select name="Year" class="form-control" ng-model="condition.DisplayType">
+				    &nbsp; <select name="Year" class="form-control" ng-model="condition.DisplayType" ng-change="goSearch()">
 						<option value="">กรุณาเลือก</option>
 						<option value="monthly">รายเดือน</option>
 						<option value="quarter">รายไตรมาส</option>
@@ -55,7 +55,7 @@
 			<div ng-show="condition.DisplayType == 'quarter'">
 				<div class="form-group">
 				    <label for="exampleInputName2">&nbsp; การแสดงข้อมูล : </label>
-				    &nbsp; <select name="Year" class="form-control" ng-model="condition.DisplayType">
+				    &nbsp; <select name="Year" class="form-control" ng-model="condition.DisplayType" ng-change="goSearch()">
 						<option value="">กรุณาเลือก</option>
 						<option value="monthly">รายเดือน</option>
 						<option value="quarter">รายไตรมาส</option>
@@ -102,7 +102,7 @@
 			<div ng-show="condition.DisplayType == 'annually'">
 				<div class="form-group">
 				    <label for="exampleInputName2">&nbsp; การแสดงข้อมูล : </label>
-				    &nbsp; <select name="Year" class="form-control" ng-model="condition.DisplayType">
+				    &nbsp; <select name="Year" class="form-control" ng-model="condition.DisplayType" ng-change="goSearch()">
 						<option value="">กรุณาเลือก</option>
 						<option value="monthly">รายเดือน</option>
 						<option value="quarter">รายไตรมาส</option>

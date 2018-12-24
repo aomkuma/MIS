@@ -62,8 +62,8 @@
 					<td>{{getRegionName(data.region_id)}}</td>
 					<td>{{findGoalType(data.goal_id)}}</td>
 					<td>{{getGoalName(data.goal_id)}}</td>
-					<td>{{data.amount}} {{data.unit}}</td>
-					<td>{{data.price_value}}</td>
+					<td>{{numberFormatComma(data.amount)}} {{data.unit}}</td>
+					<td>{{numberFormatComma(data.price_value)}}</td>
 					<td>
 						<button class="btn btn-success" ng-click="goUpdate(data.id)">
 							<span class="glyphicon glyphicon-edit"></span> 

@@ -10,11 +10,12 @@ angular.module('e-homework').controller('UpdateCGController', function($scope, $
        window.location.replace('#/guest/logon');
     }
     $scope.ID = $routeParams.id;
-    $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));    
+    $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));  
+    $scope.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));      
     // console.log($scope.$parent.Menu);
 
     $scope.loadCooperative = function(){
-        var params = {'actives':'Y'};
+        var params = {'actives':'Y', 'RegionList':$scope.PersonRegion};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('cooperative/list', params).then(function(result){
             if(result.data.STATUS == 'OK'){

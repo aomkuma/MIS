@@ -18,7 +18,13 @@
             try{
                 $params = $request->getParsedBody();
                 $actives = $params['obj']['actives'];
-                $_List = CooperativeService::getList($actives);
+                $RegionList = $params['obj']['RegionList'];
+
+                $RegionID = [];
+                foreach ($RegionList as $key => $value) {
+                    $RegionID[] = $value['RegionID'];
+                }
+                $_List = CooperativeService::getList($actives, $RegionID);
 
                 $this->data_result['DATA']['List'] = $_List;
 

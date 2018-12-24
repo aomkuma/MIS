@@ -8,10 +8,13 @@
     
     class CooperativeService {
 
-    	public static function getList($actives = ''){
-            return Cooperative::where(function($query) use ($actives){
+    	public static function getList($actives = '', $RegionID = []){
+            return Cooperative::where(function($query) use ($actives, $RegionID){
                         if(!empty($actives)){
                             $query->where('actives' , $actives);
+                        }
+                        if(count($RegionID) > 0){
+                            $query->whereIn('region_id', $RegionID);
                         }
                     })
                     ->orderBy("region_id", 'ASC')
