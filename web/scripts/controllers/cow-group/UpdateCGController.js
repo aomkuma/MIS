@@ -345,6 +345,11 @@ angular.module('e-homework').controller('UpdateCGController', function($scope, $
         $scope.popup2.opened = true;
     };
 
+    $scope.calcHeadValues = function(weight, price, values){
+        values = weight * price;
+        return parseFloat(values);
+    }
+
     $scope.setSperm();
     $scope.loadCooperative();
     $scope.loadMasterGoalList();

@@ -34,8 +34,10 @@ $app->post('/mou/get/', 'MouController:getData');
 $app->post('/mou/update/', 'MouController:updateData');
 
 $app->post('/cooperative/list/', 'CooperativeController:getList');
+$app->post('/cooperative/list/region/', 'CooperativeController:getRegionList');
 $app->post('/cooperative/get/', 'CooperativeController:getData');
 $app->post('/cooperative/update/', 'CooperativeController:updateData');
+$app->post('/cooperative/delete/', 'CooperativeController:deleteData');
 
 $app->post('/dairy-farming/list/', 'DairyFarmingController:getList');
 $app->post('/dairy-farming/list/parent/', 'DairyFarmingController:getParentList');

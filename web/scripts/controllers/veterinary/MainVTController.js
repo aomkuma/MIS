@@ -14,7 +14,7 @@ angular.module('e-homework').controller('MainVTController', function($scope, $co
     $scope.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));   
 
     $scope.loadList = function(action){
-        $scope.CurYear = $scope.condition.YearFrom + 543;
+        $scope.CurYear = $scope.condition.YearTo + 543;
         $scope.LastYear = $scope.CurYear - 1;
         var params = {
             'condition' : $scope.condition

@@ -178,9 +178,8 @@
 			<tr>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">ภูมิภาค</th>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">เดือน</th>
-				<th colspan="2" style="text-align: center;" ng-repeat="year in ResultYearList">
-					{{year.years}}
-				</th>
+				<th colspan="2" style="text-align: center; vertical-align: middle;">{{CurYear}}</th>
+				<th colspan="2" style="text-align: center; vertical-align: middle;">{{LastYear}}</th>
 				<th colspan="4" style="text-align: center;">ผลต่าง</th>
 			</tr>
 			<tr>
@@ -223,9 +222,8 @@
 			<tr>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">ภูมิภาค</th>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">ไตรมาส</th>
-				<th colspan="2" style="text-align: center;" ng-repeat="year in ResultYearList">
-					{{year.years}}
-				</th>
+				<th colspan="2" style="text-align: center; vertical-align: middle;">{{CurYear}}</th>
+				<th colspan="2" style="text-align: center; vertical-align: middle;">{{LastYear}}</th>
 				<th colspan="4" style="text-align: center;">ผลต่าง</th>
 			</tr>
 			<tr>
@@ -268,16 +266,11 @@
 			<tr>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">ภูมิภาค</th>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">ปี</th>
-				<th colspan="2" style="text-align: center;" ng-repeat="year in ResultYearList">
-					{{year.years}}
-				</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">ปริมาณ (หลอด)</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">มูลค่า (บาท)</th>
 				<th colspan="4" style="text-align: center;">ผลต่าง</th>
 			</tr>
 			<tr>
-				<th style="text-align: center;">ปริมาณ (หลอด)</th>
-				<th style="text-align: center;">มูลค่า (บาท)</th>
-				<th style="text-align: center;">ปริมาณ (หลอด)</th>
-				<th style="text-align: center;">มูลค่า (บาท)</th>
 				<th style="text-align: center;">ปริมาณ (หลอด)</th>
 				<th style="text-align: center;">% เพิ่ม / ลด</th>
 				<th style="text-align: center;">มูลค่า (บาท)</th>
@@ -293,8 +286,6 @@
 				<td>{{data.Year}}</td>
 				<td>{{numberFormat(data.CurrentAmount)}}</td>
 				<td>{{numberFormatComma(data.CurrentBaht)}}</td>
-				<td>{{numberFormat(data.BeforeAmount)}}</td>
-				<td>{{numberFormatComma(data.BeforeBaht)}}</td>
 				<td>{{numberFormat(data.DiffAmount)}}</td>
 				<td>{{numberFormatComma(data.DiffAmountPercentage)}}</td>
 				<td>{{numberFormatComma(data.DiffBaht)}}</td>

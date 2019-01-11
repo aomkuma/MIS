@@ -122,6 +122,30 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 		}
 	})
 
+	.when("/cooperative", {
+        templateUrl : "views/cooperative/main.html",
+        controller : "MainCooperativeController",
+        resolve : {
+			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
+				return $ocLazyLoad.load({
+					files : [ "scripts/controllers/cooperative/MainCooperativeController.js" ]
+				});
+			} ]
+		}
+	})
+
+	.when("/cooperative/update/:id?", {
+        templateUrl : "views/cooperative/update.html",
+        controller : "UpdateCooperativeController",
+        resolve : {
+			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
+				return $ocLazyLoad.load({
+					files : [ "scripts/controllers/cooperative/UpdateCooperativeController.js" ]
+				});
+			} ]
+		}
+	})
+
 	.when("/goal-mission", {
         templateUrl : "views/goal-mission/main.html",
         controller : "MainGMController",

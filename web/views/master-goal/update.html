@@ -8,7 +8,7 @@
 			ด้านกิจการ
 		</div>
 		<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-			<select class="form-control" ng-model="Data.goal_type" required="required">
+			<select class="form-control" ng-model="Data.goal_type" required="required" ng-change="changeGoalType()">
 				<option value="">กรุณาเลือก..</option>
 				<option value="DBI">ข้อมูลกิจการโคนม</option>
 				<option value="II">ข้อมูลอุตสาหกรรม</option>
@@ -20,8 +20,9 @@
 			ข้อมูล
 		</div>
 		<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-			<select class="form-control" ng-model="Data.menu_type" required="required">
+			<select class="form-control" ng-model="Data.menu_type" required="required" ng-options="data.value as data.name for data in MenuType">
 				<option value="">กรุณาเลือก..</option>
+				<!--
 				<option value="บริการสัตวแพทย์">บริการสัตวแพทย์</option>
 				<option value="ผสมเทียม">ผสมเทียม</option>
 				<option value="แร่ธาตุ พรีมิกซ์ และอาหาร">แร่ธาตุ พรีมิกซ์ และอาหาร</option>
@@ -33,6 +34,14 @@
 				<option value="ท่องเที่ยว">ท่องเที่ยว</option>
 				<option value="สหกรณ์และปริมาณน้ำนม">สหกรณ์และปริมาณน้ำนม</option>
 				<option value="ข้อมูลฝูงโค">ข้อมูลฝูงโค</option>
+				<option value="ข้อมูลการผลิต">ข้อมูลการผลิต</option>
+				<option value="ข้อมูลการขาย">ข้อมูลการขาย</option>
+				<option value="ข้อมูลรับซื้อและจำหน่ายน้ำนม">ข้อมูลรับซื้อและจำหน่ายน้ำนม</option>
+				<option value="การสูญเสียในกระบวนการ">การสูญเสียในกระบวนการ</option>
+				<option value="การสูญเสียนอกกระบวนการ">การสูญเสียนอกกระบวนการ</option>
+				<option value="การสูญเสียรอจำหน่าย">การสูญเสียรอจำหน่าย</option>
+				<option value="การสูญเสียในกระบวนการขนส่ง">การสูญเสียในกระบวนการขนส่ง</option>
+				-->
 			</select>
 		</div>
 	</div>

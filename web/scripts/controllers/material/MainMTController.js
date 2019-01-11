@@ -13,6 +13,8 @@ angular.module('e-homework').controller('MainMTController', function($scope, $co
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));    
     $scope.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));   
     $scope.loadList = function(action){
+        $scope.CurYear = $scope.condition.YearTo + 543;
+        $scope.LastYear = $scope.CurYear - 1;
         var params = {
             'condition' : $scope.condition
             , 'region' : $scope.PersonRegion
