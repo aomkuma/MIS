@@ -89,7 +89,6 @@ class GoalMissionService {
 
     public static function getGoaltravel($goalid, $year) {
         return GoalMission::where('years', $year)
-                        
                         ->where('goal_id', $goalid)
                         ->get()
                         ->toArray();
@@ -102,7 +101,6 @@ class GoalMissionService {
                         ->get()
                         ->toArray();
     }
-   
 
     public static function getMissionforinsem($goalid, $year) {
         return GoalMission::where('years', $year)
@@ -110,6 +108,42 @@ class GoalMissionService {
                         ->join("region", 'goal_mission.region_id', '=', 'region.RegionID')
                         ->get()
                         ->toArray();
+    }
+
+    public static function getMissionavg($goal_mission_id, $year, $month) {
+        $date = $year . '-' . $month . '-01';
+        
+        return GoalMissionAvg::where('goal_mission_id', $goal_mission_id)
+                        ->where('avg_date', $date)
+                        ->get()
+                        ->toArray();
+    }
+
+    public static function getMissionavgquar($goal_mission_id, $year, $quar) {
+       
+        $month = [];
+        $years = $year;
+
+        $result = ['amount' => 0, 'price_value' => 0];
+        if ($quar == 1) {
+            
+            $month = [10, 11, 12];
+        } else if ($quar == 2) {
+            $month = [1, 2, 3];
+        } else if ($quar == 3) {
+            $month = [4, 5, 6];
+        } else {
+            $month = [7, 8, 9];
+        }
+        foreach ($month as $value) {
+            $date = $years . '-' . $value . '-01';
+            $missionM = GoalMissionService::getMissionavg($goal_mission_id, $years, $value);
+           
+            $result['amount'] += $missionM[0]['amount'];
+            $result['price_value'] += $missionM[0]['price_value'];
+        }
+         
+        return $result;
     }
 
 }

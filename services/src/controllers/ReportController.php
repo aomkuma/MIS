@@ -316,6 +316,7 @@ class ReportController extends Controller {
         // ini_set('display_errors','On');           
         try {
             $obj = $request->getParsedBody();
+            print_r($obj);
 
             $condition = $obj['obj']['condition'];
             $item = $obj['obj']['Item'];
@@ -515,7 +516,11 @@ class ReportController extends Controller {
                 case 'monthly' : $header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม เดือน ' . $this->getMonthName($data['Description']['months']) . ' ปี ' . ($data['Description']['years'] + 543);
                     $objPHPExcel = $this->generateSpermExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
                     break;
-                case 'quarter' :$header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม ไตรมาสที่ ' . $data['Quarter'] . ' ปี ' . ($data['Description']['years'] + 543);
+                case 'quarter' :
+                    if ($data['Description']['quarter'] == 1) {
+                        $textyear = $data['Description']['years'] + 1;
+                    }
+                    $header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม ไตรมาสที่ ' . $data['Description']['quarter'] . ' ปี ' . ($textyear + 543);
                     $objPHPExcel = $this->generateSpermExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
                     break;
 
@@ -602,6 +607,7 @@ class ReportController extends Controller {
             foreach ($mastesgoallist as $key => $value) {
                 $mission = GoalMissionService::getMission($value['id'], $data['Description']['region_id'], $data['Description']['years']);
                 $spmonth = SpermService::getDetailmonth($data['Description']['years'], $data['Description']['months'], $value['id'], $data['Description']['region_id']);
+                $missionM = GoalMissionService::getMissionavg($mission[0]['id'], $data['Description']['years'], $data['Description']['months']);
 
                 if (sizeof($spmonth) > 0) {
                     $objPHPExcel->getActiveSheet()->setCellValue('A' . (4 + $row), $value['goal_name']);
@@ -611,16 +617,16 @@ class ReportController extends Controller {
                     $objPHPExcel->getActiveSheet()->setCellValue('B' . (4 + $row), $mission[0]['unit']);
                     $objPHPExcel->getActiveSheet()->setCellValue('C' . (4 + $row), $mission[0]['amount']);
                     $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $mission[0]['price_value']);
-                    $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), round($mission[0]['amount'] / 12, 2));
-                    $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), round($mission[0]['price_value'] / 12, 2));
+                    $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), round($missionM[0]['amount'], 2));
+                    $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), round($missionM[0]['price_value'], 2));
 /// month
                     $objPHPExcel->getActiveSheet()->setCellValue('E' . (4 + $row), $spmonth['amount']);
 
                     $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $spmonth['price']);
 //compare
-                    $objPHPExcel->getActiveSheet()->setCellValue('F' . (4 + $row), $spmonth['amount'] - round($mission[0]['amount'] / 12, 2));
+                    $objPHPExcel->getActiveSheet()->setCellValue('F' . (4 + $row), $spmonth['amount'] - round($missionM[0]['amount'] / 12, 2));
 
-                    $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $spmonth['price'] - round($mission[0]['price_value'] / 12, 2));
+                    $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $spmonth['price'] - round($missionM[0]['price_value'] / 12, 2));
                     $row += 2;
                 }
             }
@@ -631,6 +637,7 @@ class ReportController extends Controller {
             foreach ($mastesgoallist as $key => $value) {
                 $mission = GoalMissionService::getMission($value['id'], $data['Description']['region_id'], $data['Description']['years']);
                 $spmonth = SpermService::getDetailquar($data['Description']['years'], $value['id'], $data['Description']['region_id'], $data['Description']['quarter']);
+                $missionM = GoalMissionService::getMissionavgquar($mission[0]['id'], $data['Description']['years'], $data['Description']['quarter']);
 
 
                 if (sizeof($spmonth) > 0) {
@@ -641,16 +648,16 @@ class ReportController extends Controller {
                     $objPHPExcel->getActiveSheet()->setCellValue('B' . (4 + $row), $mission[0]['unit']);
                     $objPHPExcel->getActiveSheet()->setCellValue('C' . (4 + $row), $mission[0]['amount']);
                     $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $mission[0]['price_value']);
-                    $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), round($mission[0]['amount'] / 3, 2));
-                    $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), round($mission[0]['price_value'] / 3, 2));
+                    $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), round($missionM['amount'], 2));
+                    $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), round($missionM['price_value'], 2));
 /// month
                     $objPHPExcel->getActiveSheet()->setCellValue('E' . (4 + $row), $spmonth['amount']);
 
                     $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $spmonth['price']);
 //compare
-                    $objPHPExcel->getActiveSheet()->setCellValue('F' . (4 + $row), $spmonth['amount'] - round($mission[0]['amount'] / 3, 2));
+                    $objPHPExcel->getActiveSheet()->setCellValue('F' . (4 + $row), $spmonth['amount'] - round($missionM['amount'], 2));
 
-                    $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $spmonth['price'] - round($mission[0]['price_value'] / 3, 2));
+                    $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $spmonth['price'] - round($missionM['price_value'], 2));
                     $row += 2;
                 }
             }
@@ -725,7 +732,8 @@ class ReportController extends Controller {
 //            $data['Description']['months'] = 1;
 //            $data['Quarter'] = 1;
 //            $data['Description']['region_id'] = 3;
-
+//            print_r($obj);
+//            die();
             $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_in_memory_gzip;
 
             $catch_result = \PHPExcel_Settings::setCacheStorageMethod($cacheMethod);
@@ -801,11 +809,16 @@ class ReportController extends Controller {
 
         $mastesgoaladult = MasterGoalService::getmision($mastesgoallist[0]['goal_name']);
         $missionad = GoalMissionService::getGoaltravel($mastesgoaladult[0]['id'], $data['Description']['years']);
+        $avgad = GoalMissionService::getMissionavg($missionad[0]['id'], $data['Description']['years'], $data['Description']['months']);
+//        
         $mastesgoalchild = MasterGoalService::getmision($mastesgoallist[1]['goal_name']);
         $missionch = GoalMissionService::getGoaltravel($mastesgoalchild[0]['id'], $data['Description']['years']);
+        $avgch = GoalMissionService::getMissionavg($missionch[0]['id'], $data['Description']['years'], $data['Description']['months']);
+//       
         $mastesgoalstudent = MasterGoalService::getmision($mastesgoallist[2]['goal_name']);
         $missionst = GoalMissionService::getGoaltravel($mastesgoalstudent[0]['id'], $data['Description']['years']);
-
+        $avgst = GoalMissionService::getMissionavg($missionst[0]['id'], $data['Description']['years'], $data['Description']['months']);
+//       
 
 
 
@@ -954,19 +967,19 @@ class ReportController extends Controller {
 
             $objPHPExcel->getActiveSheet()->setCellValue('B' . (6), number_format($missionad[0]['amount'], 2, '.', ','));
             $objPHPExcel->getActiveSheet()->setCellValue('C' . (6), number_format($missionad[0]['price_value'], 2, '.', ','));
-            $objPHPExcel->getActiveSheet()->setCellValue('D' . (6), number_format($missionad[0]['amount'] / 12, 2, '.', ','));
-            $objPHPExcel->getActiveSheet()->setCellValue('E' . (6), number_format($missionad[0]['price_value'] / 12, 2, '.', ','));
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . (6), number_format($avgad[0]['amount'], 2, '.', ','));
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . (6), number_format($avgad[0]['price_value'], 2, '.', ','));
 
             $objPHPExcel->getActiveSheet()->setCellValue('B' . (7), number_format($missionch[0]['amount'], 2, '.', ','));
             $objPHPExcel->getActiveSheet()->setCellValue('C' . (7), number_format($missionch[0]['price_value'], 2, '.', ','));
-            $objPHPExcel->getActiveSheet()->setCellValue('D' . (7), number_format($missionch[0]['amount'] / 12, 2));
-            $objPHPExcel->getActiveSheet()->setCellValue('E' . (7), number_format($missionch[0]['price_value'] / 12, 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . (7), number_format($avgch[0]['amount'], 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . (7), number_format($avgch[0]['price_value'], 2));
 
             $objPHPExcel->getActiveSheet()->setCellValue('B' . (8), $missionst[0]['amount']);
             $objPHPExcel->getActiveSheet()->setCellValue('C' . (8), $missionst[0]['price_value']);
-            $objPHPExcel->getActiveSheet()->setCellValue('D' . (8), number_format($missionst[0]['amount'] / 12, 2, '.', ','));
-            $objPHPExcel->getActiveSheet()->setCellValue('E' . (8), number_format($missionst[0]['price_value'] / 12, 2, '.', ','));
-///// month
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . (8), number_format($avgst[0]['amount'], 2, '.', ','));
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . (8), number_format($avgst[0]['price_value'], 2, '.', ','));
+///// mont
             $objPHPExcel->getActiveSheet()->setCellValue('F6', $tvmonth['apay']);
             $objPHPExcel->getActiveSheet()->setCellValue('G6', $tvmonth['p_adult']);
             $objPHPExcel->getActiveSheet()->setCellValue('F7', $tvmonth['cpay']);
@@ -977,23 +990,23 @@ class ReportController extends Controller {
 
 
 ////compare
-            $objPHPExcel->getActiveSheet()->setCellValue('H6', $tvmonth['apay'] - round($missionad[0]['amount'] / 12, 2));
-            $objPHPExcel->getActiveSheet()->setCellValue('I6', $tvmonth['p_adult'] - round($missionad[0]['price_value'] / 12, 2));
-            $objPHPExcel->getActiveSheet()->setCellValue('H7', $tvmonth['cpay'] - round($missionch[0]['amount'] / 12, 2));
-            $objPHPExcel->getActiveSheet()->setCellValue('I7', $tvmonth['p_child'] - round($missionch[0]['price_value'] / 12, 2));
-            $objPHPExcel->getActiveSheet()->setCellValue('H8', $tvmonth['spay'] - round($missionst[0]['amount'] / 12, 2));
-            $objPHPExcel->getActiveSheet()->setCellValue('I8', $tvmonth['p_student'] - round($missionst[0]['price_value'] / 12, 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('H6', $tvmonth['apay'] - round($avgad[0]['amount'], 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('I6', $tvmonth['p_adult'] - round($avgad[0]['price_value'], 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('H7', $tvmonth['cpay'] - round($avgch[0]['amount'], 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('I7', $tvmonth['p_child'] - round($avgch[0]['price_value'], 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('H8', $tvmonth['spay'] - round($avgst[0]['amount'], 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('I8', $tvmonth['p_student'] - round($avgst[0]['price_value'], 2));
 
 
 //  sum
             $objPHPExcel->getActiveSheet()->setCellValue('B10', $missionad[0]['amount'] + $missionch[0]['amount'] + $missionst[0]['amount']);
             $objPHPExcel->getActiveSheet()->setCellValue('C10', $missionad[0]['price_value'] + $missionch[0]['price_value'] + $missionst[0]['price_value']);
-            $objPHPExcel->getActiveSheet()->setCellValue('D10', round($missionad[0]['amount'] / 12, 2) + round($missionch[0]['amount'] / 12, 2) + round($missionst[0]['amount'] / 12, 2));
-            $objPHPExcel->getActiveSheet()->setCellValue('E10', round($missionad[0]['price_value'] / 12, 2) + round($missionch[0]['price_value'] / 12, 2) + round($missionst[0]['price_value'] / 12, 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('D10', round($avgad[0]['amount'], 2) + round($avgch[0]['amount'], 2) + round($avgst[0]['amount'], 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('E10', round($avgad[0]['price_value'], 2) + round($avgch[0]['price_value'], 2) + round($avgst[0]['price_value'], 2));
             $objPHPExcel->getActiveSheet()->setCellValue('F10', $tvmonth['apay'] + $tvmonth['cpay'] + $tvmonth['spay'] + $tvmonth['a_except'] + $tvmonth['c_except'] + $tvmonth['a_except']);
             $objPHPExcel->getActiveSheet()->setCellValue('G10', $tvmonth['p_adult'] + $tvmonth['p_child'] + $tvmonth['p_student']);
-            $objPHPExcel->getActiveSheet()->setCellValue('H10', ($tvmonth['apay'] - round($missionad[0]['amount'] / 12, 2)) + ( $tvmonth['cpay'] - round($missionch[0]['amount'] / 12, 2)) + ($tvmonth['spay'] - round($missionst[0]['amount'] / 12, 2)));
-            $objPHPExcel->getActiveSheet()->setCellValue('I10', ($tvmonth['p_adult'] - round($missionad[0]['price_value'] / 12, 2)) + ($tvmonth['p_child'] - round($missionch[0]['price_value'] / 12, 2)) + ($tvmonth['p_student'] - round($missionst[0]['price_value'] / 12, 2)));
+            $objPHPExcel->getActiveSheet()->setCellValue('H10', ($tvmonth['apay'] - round($avgad[0]['amount'], 2)) + ( $tvmonth['cpay'] - round($avgch[0]['amount'], 2)) + ($tvmonth['spay'] - round($avgst[0]['amount'], 2)));
+            $objPHPExcel->getActiveSheet()->setCellValue('I10', ($tvmonth['p_adult'] - round($avgad[0]['price_value'], 2)) + ($tvmonth['p_child'] - round($avgch[0]['price_value'], 2)) + ($tvmonth['p_student'] - round($avgst[0]['price_value'], 2)));
         } else {
             $tvmonth = TravelService::getDetailquar($data['Description']['years'], $data['Description']['region_id'], $data['Quarter']);
             $objPHPExcel->getActiveSheet()->setCellValue('B4', 'จำนวน ');
@@ -1047,21 +1060,23 @@ class ReportController extends Controller {
                             )
             );
 //            ///goal
-
+            $avgad = GoalMissionService::getMissionavgquar($missionad[0]['id'], $data['Description']['years'], $data['Quarter']);
+            $avgch = GoalMissionService::getMissionavgquar($missionch[0]['id'], $data['Description']['years'], $data['Quarter']);
+            $avgst = GoalMissionService::getMissionavgquar($missionst[0]['id'], $data['Description']['years'], $data['Quarter']);
             $objPHPExcel->getActiveSheet()->setCellValue('B' . (6), $missionad[0]['amount']);
             $objPHPExcel->getActiveSheet()->setCellValue('C' . (6), $missionad[0]['price_value']);
-            $objPHPExcel->getActiveSheet()->setCellValue('D' . (6), round($missionad[0]['amount'] / 3, 2));
-            $objPHPExcel->getActiveSheet()->setCellValue('E' . (6), round($missionad[0]['price_value'] / 3, 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . (6), round($avgad['amount'], 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . (6), round($avgad['price_value'], 2));
 
             $objPHPExcel->getActiveSheet()->setCellValue('B' . (7), $missionch[0]['amount']);
             $objPHPExcel->getActiveSheet()->setCellValue('C' . (7), $missionch[0]['price_value']);
-            $objPHPExcel->getActiveSheet()->setCellValue('D' . (7), round($missionch[0]['amount'] / 3, 2));
-            $objPHPExcel->getActiveSheet()->setCellValue('E' . (7), round($missionch[0]['price_value'] / 3, 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . (7), round($avgch['amount'], 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . (7), round($avgch['price_value'], 2));
 
             $objPHPExcel->getActiveSheet()->setCellValue('B' . (8), $missionst[0]['amount']);
             $objPHPExcel->getActiveSheet()->setCellValue('C' . (8), $missionst[0]['price_value']);
-            $objPHPExcel->getActiveSheet()->setCellValue('D' . (8), round($missionst[0]['amount'] / 3, 2));
-            $objPHPExcel->getActiveSheet()->setCellValue('E' . (8), round($missionst[0]['price_value'] / 3, 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . (8), round($avgst['amount'], 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . (8), round($avgst['price_value'], 2));
 ///// month
             $objPHPExcel->getActiveSheet()->setCellValue('F6', $tvmonth['apay']);
             $objPHPExcel->getActiveSheet()->setCellValue('G6', $tvmonth['p_adult']);
@@ -1073,23 +1088,23 @@ class ReportController extends Controller {
 
 
 ////compare
-            $objPHPExcel->getActiveSheet()->setCellValue('H6', $tvmonth['apay'] - round($missionad[0]['amount'] / 3, 2));
-            $objPHPExcel->getActiveSheet()->setCellValue('I6', $tvmonth['p_adult'] - round($missionad[0]['price_value'] / 3, 2));
-            $objPHPExcel->getActiveSheet()->setCellValue('H7', $tvmonth['cpay'] - round($missionch[0]['amount'] / 3, 2));
-            $objPHPExcel->getActiveSheet()->setCellValue('I7', $tvmonth['p_child'] - round($missionch[0]['price_value'] / 3, 2));
-            $objPHPExcel->getActiveSheet()->setCellValue('H8', $tvmonth['spay'] - round($missionst[0]['amount'] / 3, 2));
-            $objPHPExcel->getActiveSheet()->setCellValue('I8', $tvmonth['p_student'] - round($missionst[0]['price_value'] / 3, 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('H6', $tvmonth['apay'] - round($avgad['amount'], 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('I6', $tvmonth['p_adult'] - round($avgad['price_value'], 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('H7', $tvmonth['cpay'] - round($avgch['amount'], 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('I7', $tvmonth['p_child'] - round($avgch['price_value'], 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('H8', $tvmonth['spay'] - round($avgst['amount'], 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('I8', $tvmonth['p_student'] - round($avgst['price_value'], 2));
 
 
 //  sum
             $objPHPExcel->getActiveSheet()->setCellValue('B10', $missionad[0]['amount'] + $missionch[0]['amount'] + $missionst[0]['amount']);
             $objPHPExcel->getActiveSheet()->setCellValue('C10', $missionad[0]['price_value'] + $missionch[0]['price_value'] + $missionst[0]['price_value']);
-            $objPHPExcel->getActiveSheet()->setCellValue('D10', round($missionad[0]['amount'] / 3, 2) + round($missionch[0]['amount'] / 3, 2) + round($missionst[0]['amount'] / 3, 2));
-            $objPHPExcel->getActiveSheet()->setCellValue('E10', round($missionad[0]['price_value'] / 3, 2) + round($missionch[0]['price_value'] / 3, 2) + round($missionst[0]['price_value'] / 3, 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('D10', round($avgad['amount'], 2) + round($avgch['amount'], 2) + round($avgst['amount'], 2));
+            $objPHPExcel->getActiveSheet()->setCellValue('E10', round($avgad['price_value'], 2) + round($avgch['price_value'], 2) + round($avgst['price_value'], 2));
             $objPHPExcel->getActiveSheet()->setCellValue('F10', $tvmonth['apay'] + $tvmonth['cpay'] + $tvmonth['spay'] + $tvmonth['a_except'] + $tvmonth['c_except'] + $tvmonth['a_except']);
             $objPHPExcel->getActiveSheet()->setCellValue('G10', $tvmonth['p_adult'] + $tvmonth['p_child'] + $tvmonth['p_student']);
-            $objPHPExcel->getActiveSheet()->setCellValue('H10', ($tvmonth['apay'] - round($missionad[0]['amount'] / 3, 2)) + ( $tvmonth['cpay'] - round($missionch[0]['amount'] / 3, 2)) + ($tvmonth['spay'] - round($missionst[0]['amount'] / 3, 2)));
-            $objPHPExcel->getActiveSheet()->setCellValue('I10', ($tvmonth['p_adult'] - round($missionad[0]['price_value'] / 3, 2)) + ($tvmonth['p_child'] - round($missionch[0]['price_value'] / 3, 2)) + ($tvmonth['p_student'] - round($missionst[0]['price_value'] / 3, 2)));
+            $objPHPExcel->getActiveSheet()->setCellValue('H10', ($tvmonth['apay'] - round($avgad['amount'], 2)) + ( $tvmonth['cpay'] - round($avgch['amount'], 2)) + ($tvmonth['spay'] - round($avgst['amount'], 2)));
+            $objPHPExcel->getActiveSheet()->setCellValue('I10', ($tvmonth['p_adult'] - round($avgad['price_value'], 2)) + ($tvmonth['p_child'] - round($avgch['price_value'], 2)) + ($tvmonth['p_student'] - round($avgst['price_value'], 2)));
         }
 
 
@@ -1303,27 +1318,27 @@ class ReportController extends Controller {
             foreach ($mastesgoallist as $item) {
                 $cbmonth = CowBreedService::getDetailmonth($data['Description']['years'], $data['Description']['months'], $item['id'], $data['Description']['region_id']);
                 $mission = GoalMissionService::getMission($item['id'], $data['Description']['region_id'], $data['Description']['years']);
-
+                $avg = GoalMissionService::getMissionavg($mission[0]['id'], $data['Description']['years'], $data['Description']['months']);
                 $summisamt += $mission[0]['amount'];
                 $summispri += $mission[0]['price_value'];
-                $sumMamt += $mission[0]['amount'] / 12;
-                $sumMpri += $mission[0]['price_value'] / 12;
+                $sumMamt += $avg[0]['amount'];
+                $sumMpri += $avg[0]['price_value'];
                 $sumcbamt += $cbmonth['amount'];
                 $sumcbpri += $cbmonth['price'];
-                $sumcomamt += $cbmonth['amount'] - ($mission[0]['amount'] / 12);
-                $sumcompri += $cbmonth['price'] - ($mission[0]['price_value'] / 12);
+                $sumcomamt += $cbmonth['amount'] - ($avg[0]['amount'] );
+                $sumcompri += $cbmonth['price'] - ($avg[0]['price_value'] );
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (4 + $row), 'ปริมาณ' . $item['goal_name']);
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), '        รายได้' . $item['goal_name']);
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . (4 + $row), 'กก.');
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), 'บาท');
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (4 + $row), $mission[0]['amount']);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $mission[0]['price_value']);
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), $mission[0]['amount'] / 12);
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $mission[0]['price_value'] / 12);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), $avg[0]['amount']);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $avg[0]['price_value']);
                 $objPHPExcel->getActiveSheet()->setCellValue('E' . (4 + $row), $cbmonth['amount']);
                 $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $cbmonth['price']);
-                $objPHPExcel->getActiveSheet()->setCellValue('F' . (4 + $row), $cbmonth['amount'] - ($mission[0]['amount'] / 12));
-                $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $cbmonth['price'] - ($mission[0]['price_value'] / 12));
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . (4 + $row), $cbmonth['amount'] - ($avg[0]['amount'] ));
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $cbmonth['price'] - ($avg[0]['price_value'] ));
 
                 $row += 2;
             }
@@ -1367,30 +1382,32 @@ class ReportController extends Controller {
             $sumcompri = 0;
             $sumMamt = 0;
             $sumMpri = 0;
+                 
             foreach ($mastesgoallist as $item) {
                 $cbmonth = CowBreedService::getDetailquar($data['Description']['years'], $item['id'], $data['Description']['region_id'], $data['Description']['quarter']);
                 $mission = GoalMissionService::getMission($item['id'], $data['Description']['region_id'], $data['Description']['years']);
+                $missionM = GoalMissionService::getMissionavgquar($mission[0]['id'], $data['Description']['years'], $data['Description']['quarter']);
 
                 $summisamt += $mission[0]['amount'];
                 $summispri += $mission[0]['price_value'];
-                $sumMamt += $mission[0]['amount'] / 3;
-                $sumMpri += $mission[0]['price_value'] / 3;
+                $sumMamt += $missionM['amount'];
+                $sumMpri += $missionM['price_value'];
                 $sumcbamt += $cbmonth['amount'];
                 $sumcbpri += $cbmonth['price'];
-                $sumcomamt += $cbmonth['amount'] - ($mission[0]['amount'] / 3);
-                $sumcompri += $cbmonth['price'] - ($mission[0]['price_value'] / 3);
+                $sumcomamt += $cbmonth['amount'] - ($missionM['amount'] );
+                $sumcompri += $cbmonth['price'] - ($missionM['price_value'] );
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (4 + $row), 'ปริมาณ' . $item['goal_name']);
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), '        รายได้' . $item['goal_name']);
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . (4 + $row), 'กก.');
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), 'บาท');
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (4 + $row), $mission[0]['amount']);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $mission[0]['price_value']);
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), $mission[0]['amount'] / 3);
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $mission[0]['price_value'] / 3);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), $missionM['amount']);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $missionM['price_value']);
                 $objPHPExcel->getActiveSheet()->setCellValue('E' . (4 + $row), $cbmonth['amount']);
                 $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $cbmonth['price']);
-                $objPHPExcel->getActiveSheet()->setCellValue('F' . (4 + $row), $cbmonth['amount'] - ($mission[0]['amount'] / 3));
-                $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $cbmonth['price'] - ($mission[0]['price_value'] / 3));
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . (4 + $row), $cbmonth['amount'] - ($missionM['amount'] ));
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $cbmonth['price'] - ($missionM['price_value'] ));
 
                 $row += 2;
             }
@@ -1639,27 +1656,28 @@ class ReportController extends Controller {
             foreach ($mastesgoallist as $item) {
                 $cbmonth = CowGroupService::getDetailmonth($data['Description']['years'], $data['Description']['months'], $item['id'], $data['Description']['region_id']);
                 $mission = GoalMissionService::getMission($item['id'], $data['Description']['region_id'], $data['Description']['years']);
-
+$avg = GoalMissionService::getMissionavg($mission[0]['id'], $data['Description']['years'], $data['Description']['months']);
+            
                 $summisamt += $mission[0]['amount'];
                 $summispri += $mission[0]['price_value'];
-                $sumMamt += $mission[0]['amount'] / 12;
-                $sumMpri += $mission[0]['price_value'] / 12;
+                $sumMamt += $avg[0]['amount'] ;
+                $sumMpri += $avg[0]['price_value'] ;
                 $sumcbamt += $cbmonth['amount'];
                 $sumcbpri += $cbmonth['price'];
-                $sumcomamt += $cbmonth['amount'] - ($mission[0]['amount'] / 12);
-                $sumcompri += $cbmonth['price'] - ($mission[0]['price_value'] / 12);
+                $sumcomamt += $cbmonth['amount'] - ($avg[0]['amount'] );
+                $sumcompri += $cbmonth['price'] - ($avg[0]['price_value'] );
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (4 + $row), 'ปริมาณ' . $item['goal_name']);
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), '        รายได้' . $item['goal_name']);
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . (4 + $row), 'ตัว');
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), 'บาท');
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (4 + $row), $mission[0]['amount']);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $mission[0]['price_value']);
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), $mission[0]['amount'] / 12);
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $mission[0]['price_value'] / 12);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), $avg[0]['amount'] );
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $avg[0]['price_value'] );
                 $objPHPExcel->getActiveSheet()->setCellValue('E' . (4 + $row), $cbmonth['amount']);
                 $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $cbmonth['price']);
-                $objPHPExcel->getActiveSheet()->setCellValue('F' . (4 + $row), $cbmonth['amount'] - ($mission[0]['amount'] / 12));
-                $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $cbmonth['price'] - ($mission[0]['price_value'] / 12));
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . (4 + $row), $cbmonth['amount'] - ($avg[0]['amount'] ));
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $cbmonth['price'] - ($avg[0]['price_value'] ));
 
                 $row += 2;
             }
@@ -1706,27 +1724,28 @@ class ReportController extends Controller {
             foreach ($mastesgoallist as $item) {
                 $cbmonth = CowGroupService::getDetailquar($data['Description']['years'], $item['id'], $data['Description']['region_id'], $data['Quarter']);
                 $mission = GoalMissionService::getMission($item['id'], $data['Description']['region_id'], $data['Description']['years']);
+   $missionM = GoalMissionService::getMissionavgquar($mission[0]['id'], $data['Description']['years'], $data['Quarter']);
 
                 $summisamt += $mission[0]['amount'];
                 $summispri += $mission[0]['price_value'];
-                $sumMamt += $mission[0]['amount'] / 3;
-                $sumMpri += $mission[0]['price_value'] / 3;
+                $sumMamt += $missionM['amount'] ;
+                $sumMpri += $missionM['price_value'] ;
                 $sumcbamt += $cbmonth['amount'];
                 $sumcbpri += $cbmonth['price'];
-                $sumcomamt += $cbmonth['amount'] - ($mission[0]['amount'] / 3);
-                $sumcompri += $cbmonth['price'] - ($mission[0]['price_value'] / 3);
+                $sumcomamt += $cbmonth['amount'] - ($missionM['amount'] );
+                $sumcompri += $cbmonth['price'] - ($missionM['price_value'] );
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (4 + $row), 'ปริมาณ' . $item['goal_name']);
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), '        รายได้' . $item['goal_name']);
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . (4 + $row), 'ตัว');
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), 'บาท');
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (4 + $row), $mission[0]['amount']);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $mission[0]['price_value']);
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), $mission[0]['amount'] / 3);
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $mission[0]['price_value'] / 3);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), $missionM['amount'] );
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $missionM['price_value'] );
                 $objPHPExcel->getActiveSheet()->setCellValue('E' . (4 + $row), $cbmonth['amount']);
                 $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $cbmonth['price']);
-                $objPHPExcel->getActiveSheet()->setCellValue('F' . (4 + $row), $cbmonth['amount'] - ($mission[0]['amount'] / 3));
-                $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $cbmonth['price'] - ($mission[0]['price_value'] / 3));
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . (4 + $row), $cbmonth['amount'] - ($missionM['amount'] ));
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $cbmonth['price'] - ($missionM['price_value'] ));
 
                 $row += 2;
             }
@@ -1970,27 +1989,28 @@ class ReportController extends Controller {
             foreach ($mastesgoallist as $item) {
                 $cbmonth = TrainingCowBreedService::getDetailmonth($data['Description']['years'], $data['Description']['months'], $item['id'], $data['Description']['region_id']);
                 $mission = GoalMissionService::getGoaltravel($item['id'], $data['Description']['years']);
+                $avg = GoalMissionService::getMissionavg($mission[0]['id'], $data['Description']['years'], $data['Description']['months']);
 
                 $summisamt += $mission[0]['amount'];
                 $summispri += $mission[0]['price_value'];
-                $sumMamt += $mission[0]['amount'] / 12;
-                $sumMpri += $mission[0]['price_value'] / 12;
+                $sumMamt += $avg[0]['amount'] ;
+                $sumMpri += $avg[0]['price_value'] ;
                 $sumcbamt += $cbmonth['amount'];
                 $sumcbpri += $cbmonth['price'];
-                $sumcomamt += $cbmonth['amount'] - ($mission[0]['amount'] / 12);
-                $sumcompri += $cbmonth['price'] - ($mission[0]['price_value'] / 12);
+                $sumcomamt += $cbmonth['amount'] - ($avg[0]['amount'] );
+                $sumcompri += $cbmonth['price'] - ($avg[0]['price_value'] );
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (4 + $row), 'ปริมาณ' . $item['goal_name']);
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), '        รายได้' . $item['goal_name']);
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . (4 + $row), 'ครั้ง');
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), 'บาท');
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (4 + $row), $mission[0]['amount']);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $mission[0]['price_value']);
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), $mission[0]['amount'] / 12);
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $mission[0]['price_value'] / 12);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), $avg[0]['amount']);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $avg[0]['price_value'] );
                 $objPHPExcel->getActiveSheet()->setCellValue('E' . (4 + $row), $cbmonth['amount']);
                 $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $cbmonth['price']);
-                $objPHPExcel->getActiveSheet()->setCellValue('F' . (4 + $row), $cbmonth['amount'] - ($mission[0]['amount'] / 12));
-                $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $cbmonth['price'] - ($mission[0]['price_value'] / 12));
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . (4 + $row), $cbmonth['amount'] - ($avg[0]['amount'] ));
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $cbmonth['price'] - ($avg[0]['price_value'] ));
 
                 $row += 2;
             }
@@ -2037,27 +2057,27 @@ class ReportController extends Controller {
             foreach ($mastesgoallist as $item) {
                 $cbmonth = TrainingCowBreedService::getDetailquar($data['Description']['years'], $item['id'], $data['Description']['region_id'], $data['Description']['quarter']);
                 $mission = GoalMissionService::getGoaltravel($item['id'], $data['Description']['years']);
-
+ $missionM = GoalMissionService::getMissionavgquar($mission[0]['id'], $data['Description']['years'], $data['Description']['quarter']);
                 $summisamt += $mission[0]['amount'];
                 $summispri += $mission[0]['price_value'];
-                $sumMamt += $mission[0]['amount'] / 3;
-                $sumMpri += $mission[0]['price_value'] / 3;
+                $sumMamt += $missionM['amount'] ;
+                $sumMpri += $missionM['price_value'] ;
                 $sumcbamt += $cbmonth['amount'];
                 $sumcbpri += $cbmonth['price'];
-                $sumcomamt += $cbmonth['amount'] - ($mission[0]['amount'] / 3);
-                $sumcompri += $cbmonth['price'] - ($mission[0]['price_value'] / 3);
+                $sumcomamt += $cbmonth['amount'] - ($missionM['amount'] );
+                $sumcompri += $cbmonth['price'] - ($missionM['price_value'] );
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (4 + $row), 'ปริมาณ' . $item['goal_name']);
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), '        รายได้' . $item['goal_name']);
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . (4 + $row), 'ครั้ง');
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), 'บาท');
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (4 + $row), $mission[0]['amount']);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $mission[0]['price_value']);
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), $mission[0]['amount'] / 3);
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $mission[0]['price_value'] / 3);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row),$missionM['amount'] );
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $missionM['price_value'] );
                 $objPHPExcel->getActiveSheet()->setCellValue('E' . (4 + $row), $cbmonth['amount']);
                 $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $cbmonth['price']);
-                $objPHPExcel->getActiveSheet()->setCellValue('F' . (4 + $row), $cbmonth['amount'] - ($mission[0]['amount'] / 3));
-                $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $cbmonth['price'] - ($mission[0]['price_value'] / 3));
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . (4 + $row), $cbmonth['amount'] - ($missionM['amount'] ));
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $cbmonth['price'] - ($missionM['price_value'] ));
 
                 $row += 2;
             }
@@ -2338,21 +2358,21 @@ class ReportController extends Controller {
                 $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row))->getFont()->setSize(16);
                 foreach ($mission as $itemmission) {
                     $inmonth = InseminationService::getDetailmonth($data['Description']['years'], $data['Description']['months'], $itemmission['region_id']);
-
+                    $missionM = GoalMissionService::getMissionavg($itemmission['id'], $data['Description']['years'], $data['Description']['months']);
                     $summisamt += $itemmission['amount'];
                     $summispri += $itemmission['price_value'];
-                    $sumMamt += $itemmission['amount'] / 12;
-                    $sumMpri += $itemmission['price_value'] / 12;
+                    $sumMamt += $missionM[0]['amount'];
+                    $sumMpri += $missionM[0]['price_value'];
                     $sumcbamt += $inmonth['amount'];
                     $sumcbpri += $inmonth['price'];
-                    $sumcomamt += $inmonth['amount'] - ($itemmission['amount'] / 12);
-                    $sumcompri += $inmonth['price'] - ($itemmission['price_value'] / 12);
+                    $sumcomamt += $inmonth['amount'] - ($missionM[0]['amount']);
+                    $sumcompri += $inmonth['price'] - ($missionM[0]['price_value'] );
                     $objPHPExcel->getActiveSheet()->setCellValue('A' . (6 + $row), '    - ' . $itemmission['RegionName']);
                     $objPHPExcel->getActiveSheet()->getStyle('A' . (6 + $row))->getFont()->setSize(16);
                     $objPHPExcel->getActiveSheet()->setCellValue('C' . (6 + $row), $itemmission['amount']);
-                    $objPHPExcel->getActiveSheet()->setCellValue('D' . (6 + $row), $itemmission['amount'] / 12);
+                    $objPHPExcel->getActiveSheet()->setCellValue('D' . (6 + $row), $missionM[0]['amount']);
                     $objPHPExcel->getActiveSheet()->setCellValue('E' . (6 + $row), $inmonth['amount']);
-                    $objPHPExcel->getActiveSheet()->setCellValue('F' . (6 + $row), $inmonth['amount'] - ($itemmission['amount'] / 12));
+                    $objPHPExcel->getActiveSheet()->setCellValue('F' . (6 + $row), $inmonth['amount'] - ($missionM[0]['amount']));
 
                     $row ++;
                 }
@@ -2364,13 +2384,13 @@ class ReportController extends Controller {
 
                 foreach ($mission as $itemmission) {
                     $inmonth = InseminationService::getDetailmonth($data['Description']['years'], $data['Description']['months'], $itemmission['region_id']);
-
+                    $missionM = GoalMissionService::getMissionavg($itemmission['id'], $data['Description']['years'], $data['Description']['months']);
                     $objPHPExcel->getActiveSheet()->setCellValue('A' . (6 + $row), '    - ' . $itemmission['RegionName']);
                     $objPHPExcel->getActiveSheet()->getStyle('A' . (6 + $row))->getFont()->setSize(16);
                     $objPHPExcel->getActiveSheet()->setCellValue('C' . (6 + $row), $itemmission['price_value']);
-                    $objPHPExcel->getActiveSheet()->setCellValue('D' . (6 + $row), $itemmission['price_value'] / 12);
+                    $objPHPExcel->getActiveSheet()->setCellValue('D' . (6 + $row), $missionM[0]['price_value']);
                     $objPHPExcel->getActiveSheet()->setCellValue('E' . (6 + $row), $inmonth['price']);
-                    $objPHPExcel->getActiveSheet()->setCellValue('F' . (6 + $row), $inmonth['price'] - ($itemmission['price_value'] / 12));
+                    $objPHPExcel->getActiveSheet()->setCellValue('F' . (6 + $row), $inmonth['price'] - ($missionM[0]['price_value']));
 
                     $row ++;
                 }
@@ -2410,6 +2430,8 @@ class ReportController extends Controller {
             $sumcompri = 0;
             $sumMamt = 0;
             $sumMpri = 0;
+
+
             foreach ($mastesgoallist as $item) {
                 $mission = GoalMissionService::getMissionforinsem($item['id'], $data['Description']['years']);
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (4 + $row), $item['goal_name']);
@@ -2421,24 +2443,25 @@ class ReportController extends Controller {
                 $objPHPExcel->getActiveSheet()->getStyle('A' . (4 + $row))->getFont()->setSize(16);
                 $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row))->getFont()->setBold(true);
                 $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row))->getFont()->setSize(16);
-                print_r($mission);
+//                print_r($mission);
                 foreach ($mission as $itemmission) {
                     $inmonth = InseminationService::getDetailquar($data['Description']['years'], $itemmission['region_id'], $data['Description']['quarter']);
+                    $missionM = GoalMissionService::getMissionavgquar($itemmission['id'], $data['Description']['years'], $data['Description']['quarter']);
 
                     $summisamt += $itemmission['amount'];
                     $summispri += $itemmission['price_value'];
-                    $sumMamt += $itemmission['amount'] / 3;
-                    $sumMpri += $itemmission['price_value'] / 3;
+                    $sumMamt += $missionM['amount'];
+                    $sumMpri += $missionM['price_value'];
                     $sumcbamt += $inmonth['amount'];
                     $sumcbpri += $inmonth['price'];
-                    $sumcomamt += $inmonth['amount'] - ($itemmission['amount'] / 3);
-                    $sumcompri += $inmonth['price'] - ($itemmission['price_value'] / 3);
+                    $sumcomamt += $inmonth['amount'] - ($missionM[0]['amount'] );
+                    $sumcompri += $inmonth['price'] - ($missionM[0]['price_value']);
                     $objPHPExcel->getActiveSheet()->setCellValue('A' . (6 + $row), '    - ' . $itemmission['RegionName']);
                     $objPHPExcel->getActiveSheet()->getStyle('A' . (6 + $row))->getFont()->setSize(16);
                     $objPHPExcel->getActiveSheet()->setCellValue('C' . (6 + $row), $itemmission['amount']);
-                    $objPHPExcel->getActiveSheet()->setCellValue('D' . (6 + $row), $itemmission['amount'] / 3);
+                    $objPHPExcel->getActiveSheet()->setCellValue('D' . (6 + $row), $missionM['amount']);
                     $objPHPExcel->getActiveSheet()->setCellValue('E' . (6 + $row), $inmonth['amount']);
-                    $objPHPExcel->getActiveSheet()->setCellValue('F' . (6 + $row), $inmonth['amount'] - ($itemmission['amount'] / 3));
+                    $objPHPExcel->getActiveSheet()->setCellValue('F' . (6 + $row), $inmonth['amount'] - ($missionM['amount'] ));
 
                     $row ++;
                 }
@@ -2449,16 +2472,17 @@ class ReportController extends Controller {
                 $row ++;
                 foreach ($mission as $itemmission) {
                     $inmonth = InseminationService::getDetailquar($data['Description']['years'], $itemmission['region_id'], $data['Description']['quarter']);
-
+                    $missionM = GoalMissionService::getMissionavgquar($itemmission['id'], $data['Description']['years'], $data['Description']['quarter']);
                     $objPHPExcel->getActiveSheet()->setCellValue('A' . (6 + $row), '    - ' . $itemmission['RegionName']);
                     $objPHPExcel->getActiveSheet()->getStyle('A' . (6 + $row))->getFont()->setSize(16);
                     $objPHPExcel->getActiveSheet()->setCellValue('C' . (6 + $row), $itemmission['price_value']);
-                    $objPHPExcel->getActiveSheet()->setCellValue('D' . (6 + $row), $itemmission['price_value'] / 3);
+                    $objPHPExcel->getActiveSheet()->setCellValue('D' . (6 + $row), $missionM['price_value']);
                     $objPHPExcel->getActiveSheet()->setCellValue('E' . (6 + $row), $inmonth['price']);
-                    $objPHPExcel->getActiveSheet()->setCellValue('F' . (6 + $row), $inmonth['price'] - ($itemmission['price_value'] / 3));
+                    $objPHPExcel->getActiveSheet()->setCellValue('F' . (6 + $row), $inmonth['price'] - ($missionM['price_value'] ));
 
                     $row ++;
                 }
+//                   die();
             }
             $objPHPExcel->getActiveSheet()->setCellValue('A' . (6 + $row), 'รวมการบริการผสมเทียม');
             $objPHPExcel->getActiveSheet()->getStyle('A' . (6 + $row))->getFont()->setSize(16);
