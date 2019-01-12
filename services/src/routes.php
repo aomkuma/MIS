@@ -6,6 +6,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 //$app->get('/user/{id}', 'UserController:getUser');
 $app->post('/login/', 'LoginController:authenticate');
+$app->post('/login/check-permission/', 'LoginController:checkPermission');
 
 $app->post('/pages/', 'PageController:getPage');
 $app->post('/pages/update/', 'PageController:updatePage');

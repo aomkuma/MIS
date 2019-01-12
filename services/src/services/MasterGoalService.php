@@ -7,14 +7,26 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class MasterGoalService {
 
-    public static function getList($actives = '', $menu_type = '') {
-        return MasterGoal::where(function($query) use ($actives, $menu_type) {
+    public static function getList($actives = '', $menu_type = '', $condition = []) {
+        return MasterGoal::where(function($query) use ($actives, $menu_type, $condition) {
                             if (!empty($actives)) {
                                 $query->where('actives', $actives);
                             }
 
                             if (!empty($menu_type)) {
                                 $query->where('menu_type', $menu_type);
+                            }
+
+                            if (!empty($condition['goal_type'])) {
+                                $query->where('goal_type', $condition['goal_type']);
+                            }
+
+                            if (!empty($condition['menu_type'])) {
+                                $query->where('menu_type', $condition['menu_type']);
+                            }
+
+                            if (!empty($condition['keyword'])) {
+                                $query->where('goal_name', 'LIKE', DB::raw("'%". $condition['keyword'] ."%'"));
                             }
                         })
                         ->orderBy("update_date", 'DESC')

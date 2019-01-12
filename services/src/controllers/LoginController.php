@@ -14,6 +14,37 @@
             $this->db = $db;
         }
 
+        public function checkPermission($request, $response, $args){
+    //         error_reporting(E_ERROR);
+    // error_reporting(E_ALL);
+    // ini_set('display_errors','On');
+            try{
+                $error_msg = '';
+
+                $loginObj = $request->getParsedBody();
+                $UserID = $loginObj['obj']['UserID'];
+                
+                // System login
+                $permission = LoginService::checkPermission($UserID);    
+                
+                $this->logger->info($permission);
+                if(!empty($permission)){
+                    
+                    $this->data_result['DATA']['result'] = true;
+                    // $this->data_result['DATA']['MenuList'] = $menuList;
+                }else{
+                    $this->data_result['STATUS'] = 'ERROR';
+                    $this->data_result['DATA'] = false;
+                }
+                
+                return $this->returnResponse(200, $this->data_result, $response, false);
+                
+            }catch(\Exception $e){
+                return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+            }
+            
+        }
+
         
         public function authenticate($request, $response, $args){
     //         error_reporting(E_ERROR);

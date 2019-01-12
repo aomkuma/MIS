@@ -60,6 +60,11 @@
 			<fieldset style="border: 1px solid #999; padding: 10px; margin-top: 10px;">
 			<div ng-form="sub_form_data">
 				<div class="row form-group">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						วันที่แก้ไขล่าสุด {{getThaiDateTimeFromString(InseminationDetail.update_date)}}
+					</div>
+				</div>
+				<div class="row form-group">
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						จำนวนโคที่ได้รับบริการ (ตัว)
 					</div>
@@ -99,7 +104,7 @@
 						</button>
 					</div>
 				</div>
-				
+
 				<!--<div class="row form-group">
 					<div class="col-lg-12">
 						<button class="btn btn-primary pull-right" ng-click="addInseminationItem($index)">

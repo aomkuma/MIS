@@ -19,8 +19,9 @@
                 $params = $request->getParsedBody();
                 $actives = $params['obj']['actives'];
                 $menu_type = $params['obj']['menu_type'];
+                $condition = $params['obj']['condition'];
 
-                $_List = MasterGoalService::getList($actives, $menu_type);
+                $_List = MasterGoalService::getList($actives, $menu_type, $condition);
 
                 $this->data_result['DATA']['List'] = $_List;
 

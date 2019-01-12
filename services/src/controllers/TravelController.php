@@ -470,7 +470,7 @@ class TravelController extends Controller {
 
             $this->data_result['DATA']['Data'] = $_Data;
 
-            return $this->returnResponse(200, $this->data_result, $response, false);
+            return $this->returnResponse(200, $this->data_result, $response, true);
         } catch (\Exception $e) {
             return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
         }

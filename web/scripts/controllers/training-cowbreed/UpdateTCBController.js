@@ -55,6 +55,23 @@ angular.module('e-homework').controller('UpdateTCBController', function($scope, 
     }
 
     $scope.loadData = function(action, id){
+
+        $scope.MonthName = '';
+        $scope.YearName = '';
+        // Get cooperative name
+        
+        for(var i=0; i < $scope.MonthList.length; i++){
+            if($scope.Sperm.months == $scope.MonthList[i].monthValue){
+                $scope.MonthName = $scope.MonthList[i].monthText;
+            }
+        }
+
+        for(var i=0; i < $scope.YearList.length; i++){
+            if($scope.Sperm.years == $scope.YearList[i].yearText){
+                $scope.YearName = $scope.YearList[i].yearValue;
+            }
+        }
+        
         var params = {
             'months' : $scope.Sperm.months
             ,'years' : $scope.Sperm.years
@@ -125,21 +142,7 @@ angular.module('e-homework').controller('UpdateTCBController', function($scope, 
         $scope.SpermDetailList = [];
         // $scope.setSperm();
         $scope.loadData('training-cowbreed/get');
-        $scope.MonthName = '';
-        $scope.YearName = '';
-        // Get cooperative name
         
-        for(var i=0; i < $scope.MonthList.length; i++){
-            if($scope.Sperm.months == $scope.MonthList[i].monthValue){
-                $scope.MonthName = $scope.MonthList[i].monthText;
-            }
-        }
-
-        for(var i=0; i < $scope.YearList.length; i++){
-            if($scope.Sperm.years == $scope.YearList[i].yearText){
-                $scope.YearName = $scope.YearList[i].yearValue;
-            }
-        }
         // $scope.SpermDetailList = [
         //     {
         //         'id':''

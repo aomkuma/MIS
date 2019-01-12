@@ -4,11 +4,16 @@
     
     use App\Model\Account;
     use App\Model\Admin;
+    use App\Model\AccountRole;
 
     use Illuminate\Database\Capsule\Manager as DB;
     
     class LoginService {
         
+        public static function checkPermission($UserID){
+            return AccountRole::where('UserID', $UserID)->where('actives', 'Y')->first();      
+        }
+
         public static function authenticate($username , $password){
             return Account::where('Username', $username)->where('Password',$password)->first();      
         }

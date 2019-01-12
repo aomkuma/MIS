@@ -51,6 +51,29 @@ angular.module('e-homework').controller('UpdateMNController', function($scope, $
     }
 
     $scope.loadData = function(action, id){
+
+        $scope.CooperativeName = '';
+        $scope.MonthName = '';
+        $scope.YearName = '';
+        // Get cooperative name
+        for(var i=0; i < $scope.Cooperative.length; i++){
+            if($scope.Mineral.cooperative_id == $scope.Cooperative[i].id){
+                $scope.CooperativeName = $scope.Cooperative[i].cooperative_name;
+            }
+        }
+
+        for(var i=0; i < $scope.MonthList.length; i++){
+            if($scope.Mineral.months == $scope.MonthList[i].monthValue){
+                $scope.MonthName = $scope.MonthList[i].monthText;
+            }
+        }
+
+        for(var i=0; i < $scope.YearList.length; i++){
+            if($scope.Mineral.years == $scope.YearList[i].yearText){
+                $scope.YearName = $scope.YearList[i].yearValue;
+            }
+        }
+        
         var params = {
             'cooperative_id' : $scope.Mineral.cooperative_id
             ,'months' : $scope.Mineral.months
@@ -123,27 +146,7 @@ angular.module('e-homework').controller('UpdateMNController', function($scope, $
         $scope.MineralDetailList = [];
         // $scope.setMineral();
         $scope.loadData('mineral/get');
-        $scope.CooperativeName = '';
-        $scope.MonthName = '';
-        $scope.YearName = '';
-        // Get cooperative name
-        for(var i=0; i < $scope.Cooperative.length; i++){
-            if($scope.Mineral.cooperative_id == $scope.Cooperative[i].id){
-                $scope.CooperativeName = $scope.Cooperative[i].cooperative_name;
-            }
-        }
-
-        for(var i=0; i < $scope.MonthList.length; i++){
-            if($scope.Mineral.months == $scope.MonthList[i].monthValue){
-                $scope.MonthName = $scope.MonthList[i].monthText;
-            }
-        }
-
-        for(var i=0; i < $scope.YearList.length; i++){
-            if($scope.Mineral.years == $scope.YearList[i].yearText){
-                $scope.YearName = $scope.YearList[i].yearValue;
-            }
-        }
+        
         // $scope.MineralDetailList = [
         //     {
         //         'id':''

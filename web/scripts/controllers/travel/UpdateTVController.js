@@ -55,6 +55,22 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
     }
 
     $scope.loadData = function(action, id){
+
+        $scope.MonthName = '';
+        $scope.YearName = '';
+
+        for(var i=0; i < $scope.MonthList.length; i++){
+            if($scope.Sperm.months == $scope.MonthList[i].monthValue){
+                $scope.MonthName = $scope.MonthList[i].monthText;
+            }
+        }
+
+        for(var i=0; i < $scope.YearList.length; i++){
+            if($scope.Sperm.years == $scope.YearList[i].yearText){
+                $scope.YearName = $scope.YearList[i].yearValue;
+            }
+        }
+        
         var params = {
             'months' : $scope.Sperm.months
             ,'years' : $scope.Sperm.years
@@ -134,20 +150,7 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
         // $scope.setSperm();
         $scope.loadData('travel/get');
 
-        $scope.MonthName = '';
-        $scope.YearName = '';
-
-        for(var i=0; i < $scope.MonthList.length; i++){
-            if($scope.Sperm.months == $scope.MonthList[i].monthValue){
-                $scope.MonthName = $scope.MonthList[i].monthText;
-            }
-        }
-
-        for(var i=0; i < $scope.YearList.length; i++){
-            if($scope.Sperm.years == $scope.YearList[i].yearText){
-                $scope.YearName = $scope.YearList[i].yearValue;
-            }
-        }
+        
         // $scope.SpermDetailList = [
         //     {
         //         'id':''
@@ -285,6 +288,24 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
         };    
     }
     
+    $scope.calcAmount = function(SpermDetail){
+
+        SpermDetail.except_amount = SpermDetail.except_amount == null?0:SpermDetail.except_amount;
+        SpermDetail.student_amount = SpermDetail.student_amount == null?0:SpermDetail.student_amount;
+        SpermDetail.adult_amount = SpermDetail.adult_amount == null?0:SpermDetail.adult_amount;
+        
+        SpermDetail.total_amount = SpermDetail.except_amount + SpermDetail.student_amount + SpermDetail.adult_amount; 
+    }
+
+    $scope.calcPrice = function(SpermDetail){
+
+        SpermDetail.except_prices = SpermDetail.except_prices == null?0:SpermDetail.except_prices;
+        SpermDetail.student_prices = SpermDetail.student_prices == null?0:SpermDetail.student_prices;
+        SpermDetail.adult_prices = SpermDetail.adult_prices == null?0:SpermDetail.adult_prices;
+        
+        SpermDetail.total_prices = SpermDetail.except_prices + SpermDetail.student_prices + SpermDetail.adult_prices; 
+    }
+
     $scope.YearList = getYearList(20);
     $scope.MonthList = getMonthList();
     $scope.DayList = getDayList();
