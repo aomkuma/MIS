@@ -1,0 +1,1 @@
+ALTER TABLE `mis_travel_detail` ADD `child_amount` INT NULL AFTER `student_prices`, ADD `child_prices` DECIMAL(16,2) NULL AFTER `child_amount`, ADD INDEX (`child_amount`), ADD INDEX (`child_prices`);

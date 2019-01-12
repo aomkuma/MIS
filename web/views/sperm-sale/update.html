@@ -60,6 +60,9 @@
 			<fieldset style="border: 1px solid #999; padding: 10px; margin-top: 10px;">
 			<div ng-form="sub_form_data">
 				<div class="row form-group" ng-repeat="SpermDetail in SpermDetailList" ng-init="parentIndex = $index">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						วันที่แก้ไขล่าสุด {{getThaiDateTimeFromString(SpermDetail.update_date)}}
+					</div>
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						รายการ
 					</div>

@@ -78,6 +78,11 @@
 					</div>
 				</div>
 				-->
+				<div class="row form-group">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						วันที่แก้ไขล่าสุด {{getThaiDateTimeFromString(SpermDetail.update_date)}}
+					</div>
+				</div>
 				<div class="row form-group" ng-init="parentIndex = $index">
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						หน่วยงาน
@@ -127,6 +132,11 @@
 									</tr>
 									<tr>
 										<td>บุคคลทั่วไป (เด็ก)</td>
+										<td><input type="number" class="form-control" ng-model="SpermDetail.child_amount" ng-change="calcAmount(SpermDetail)"></td>
+										<td><input type="number" class="form-control" ng-model="SpermDetail.child_prices" ng-change="calcPrice(SpermDetail)"></td>
+									</tr>
+									<tr>
+										<td>บุคคลทั่วไป (ผู้ใหญ่)</td>
 										<td><input type="number" class="form-control" ng-model="SpermDetail.adult_amount" ng-change="calcAmount(SpermDetail)"></td>
 										<td><input type="number" class="form-control" ng-model="SpermDetail.adult_prices" ng-change="calcPrice(SpermDetail)"></td>
 									</tr>

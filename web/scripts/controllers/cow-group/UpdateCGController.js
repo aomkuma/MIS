@@ -57,28 +57,7 @@ angular.module('e-homework').controller('UpdateCGController', function($scope, $
 
     $scope.loadData = function(action, id){
         
-        $scope.CooperativeName = '';
-        $scope.MonthName = '';
-        $scope.YearName = '';
-        // Get cooperative name
-        for(var i=0; i < $scope.Cooperative.length; i++){
-            if($scope.Sperm.cooperative_id == $scope.Cooperative[i].id){
-                $scope.CooperativeName = $scope.Cooperative[i].cooperative_name;
-            }
-        }
-
-        for(var i=0; i < $scope.MonthList.length; i++){
-            if($scope.Sperm.months == $scope.MonthList[i].monthValue){
-                $scope.MonthName = $scope.MonthList[i].monthText;
-            }
-        }
-
-        for(var i=0; i < $scope.YearList.length; i++){
-            if($scope.Sperm.years == $scope.YearList[i].yearText){
-                $scope.YearName = $scope.YearList[i].yearValue;
-            }
-        }
-
+        
         var params = {
             'cooperative_id' : $scope.Sperm.cooperative_id
             ,'months' : $scope.Sperm.months
@@ -110,6 +89,28 @@ angular.module('e-homework').controller('UpdateCGController', function($scope, $
                     $scope.Sperm.id = '';
                 }
             }
+            $scope.CooperativeName = '';
+            $scope.MonthName = '';
+            $scope.YearName = '';
+            // Get cooperative name
+            for(var i=0; i < $scope.Cooperative.length; i++){
+                if($scope.Sperm.cooperative_id == $scope.Cooperative[i].id){
+                    $scope.CooperativeName = $scope.Cooperative[i].cooperative_name;
+                }
+            }
+
+            for(var i=0; i < $scope.MonthList.length; i++){
+                if($scope.Sperm.months == $scope.MonthList[i].monthValue){
+                    $scope.MonthName = $scope.MonthList[i].monthText;
+                }
+            }
+
+            for(var i=0; i < $scope.YearList.length; i++){
+                if($scope.Sperm.years == $scope.YearList[i].yearText){
+                    $scope.YearName = $scope.YearList[i].yearValue;
+                }
+            }
+
             IndexOverlayFactory.overlayHide();
         });
     }
@@ -144,6 +145,13 @@ angular.module('e-homework').controller('UpdateCGController', function($scope, $
     $scope.getThaiDateTime = function(date){
         // console.log(date);
         return convertDateToFullThaiDate(new Date(date));
+    }
+
+    $scope.getThaiDateTimeFromString = function(date){
+        console.log(date);
+        if(date != ''){
+            return convertSQLDateTimeToReportDateTime(date);
+        }
     }
 
     $scope.goSearch = function(){

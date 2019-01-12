@@ -56,20 +56,7 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
 
     $scope.loadData = function(action, id){
 
-        $scope.MonthName = '';
-        $scope.YearName = '';
-
-        for(var i=0; i < $scope.MonthList.length; i++){
-            if($scope.Sperm.months == $scope.MonthList[i].monthValue){
-                $scope.MonthName = $scope.MonthList[i].monthText;
-            }
-        }
-
-        for(var i=0; i < $scope.YearList.length; i++){
-            if($scope.Sperm.years == $scope.YearList[i].yearText){
-                $scope.YearName = $scope.YearList[i].yearValue;
-            }
-        }
+        
         
         var params = {
             'months' : $scope.Sperm.months
@@ -102,6 +89,20 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
             }else{
                 if($scope.Sperm.id != ''){
                     $scope.Sperm.id = '';
+                }
+            }
+            $scope.MonthName = '';
+            $scope.YearName = '';
+
+            for(var i=0; i < $scope.MonthList.length; i++){
+                if($scope.Sperm.months == $scope.MonthList[i].monthValue){
+                    $scope.MonthName = $scope.MonthList[i].monthText;
+                }
+            }
+
+            for(var i=0; i < $scope.YearList.length; i++){
+                if($scope.Sperm.years == $scope.YearList[i].yearText){
+                    $scope.YearName = $scope.YearList[i].yearValue;
                 }
             }
             IndexOverlayFactory.overlayHide();
@@ -144,6 +145,13 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
         return convertDateToFullThaiDate(new Date(date));
     }
 
+    $scope.getThaiDateTimeFromString = function(date){
+        console.log(date);
+        if(date != ''){
+            return convertSQLDateTimeToReportDateTime(date);
+        }
+    }
+    
     $scope.goSearch = function(){
         $scope.Search = true;
         $scope.SpermDetailList = [];
@@ -292,18 +300,20 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
 
         SpermDetail.except_amount = SpermDetail.except_amount == null?0:SpermDetail.except_amount;
         SpermDetail.student_amount = SpermDetail.student_amount == null?0:SpermDetail.student_amount;
+        SpermDetail.child_amount = SpermDetail.child_amount == null?0:SpermDetail.child_amount;
         SpermDetail.adult_amount = SpermDetail.adult_amount == null?0:SpermDetail.adult_amount;
         
-        SpermDetail.total_amount = SpermDetail.except_amount + SpermDetail.student_amount + SpermDetail.adult_amount; 
+        SpermDetail.total_amount = SpermDetail.except_amount + SpermDetail.student_amount + SpermDetail.child_amount + SpermDetail.adult_amount; 
     }
 
     $scope.calcPrice = function(SpermDetail){
 
         SpermDetail.except_prices = SpermDetail.except_prices == null?0:SpermDetail.except_prices;
         SpermDetail.student_prices = SpermDetail.student_prices == null?0:SpermDetail.student_prices;
+        SpermDetail.child_prices = SpermDetail.child_prices == null?0:SpermDetail.child_prices;
         SpermDetail.adult_prices = SpermDetail.adult_prices == null?0:SpermDetail.adult_prices;
         
-        SpermDetail.total_prices = SpermDetail.except_prices + SpermDetail.student_prices + SpermDetail.adult_prices; 
+        SpermDetail.total_prices = SpermDetail.except_prices + SpermDetail.student_prices + SpermDetail.child_prices + SpermDetail.adult_prices; 
     }
 
     $scope.YearList = getYearList(20);

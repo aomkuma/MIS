@@ -24,6 +24,8 @@ class TravelDetail extends \Illuminate\Database\Eloquent\Model {
                   , 'except_prices'
                   , 'student_amount'
                   , 'student_prices'
+                  , 'child_amount'
+                  , 'child_prices'
                   , 'adult_amount'
                   , 'adult_prices'
                   , 'total_amount'

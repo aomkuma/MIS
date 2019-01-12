@@ -56,21 +56,7 @@ angular.module('e-homework').controller('UpdateTCBController', function($scope, 
 
     $scope.loadData = function(action, id){
 
-        $scope.MonthName = '';
-        $scope.YearName = '';
-        // Get cooperative name
         
-        for(var i=0; i < $scope.MonthList.length; i++){
-            if($scope.Sperm.months == $scope.MonthList[i].monthValue){
-                $scope.MonthName = $scope.MonthList[i].monthText;
-            }
-        }
-
-        for(var i=0; i < $scope.YearList.length; i++){
-            if($scope.Sperm.years == $scope.YearList[i].yearText){
-                $scope.YearName = $scope.YearList[i].yearValue;
-            }
-        }
         
         var params = {
             'months' : $scope.Sperm.months
@@ -99,6 +85,21 @@ angular.module('e-homework').controller('UpdateTCBController', function($scope, 
             }else{
                 if($scope.Sperm.id != ''){
                     $scope.Sperm.id = '';
+                }
+            }
+            $scope.MonthName = '';
+            $scope.YearName = '';
+            // Get cooperative name
+            
+            for(var i=0; i < $scope.MonthList.length; i++){
+                if($scope.Sperm.months == $scope.MonthList[i].monthValue){
+                    $scope.MonthName = $scope.MonthList[i].monthText;
+                }
+            }
+
+            for(var i=0; i < $scope.YearList.length; i++){
+                if($scope.Sperm.years == $scope.YearList[i].yearText){
+                    $scope.YearName = $scope.YearList[i].yearValue;
                 }
             }
             IndexOverlayFactory.overlayHide();
@@ -135,6 +136,13 @@ angular.module('e-homework').controller('UpdateTCBController', function($scope, 
     $scope.getThaiDateTime = function(date){
         // console.log(date);
         return convertDateToFullThaiDate(new Date(date));
+    }
+
+    $scope.getThaiDateTimeFromString = function(date){
+        console.log(date);
+        if(date != ''){
+            return convertSQLDateTimeToReportDateTime(date);
+        }
     }
 
     $scope.goSearch = function(){
