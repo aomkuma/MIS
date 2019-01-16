@@ -63,7 +63,7 @@
 				ข้อมูล
 			</div>
 			<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-				<select class="form-control" ng-model="Data.menu_type" required="required" ng-options="data.value as data.name for data in MenuType">
+				<select class="form-control" ng-model="Data.menu_type" required="required" ng-options="data.value as data.name for data in MenuType" ng-change="loadMasterGoalList('master-goal/list', Data.menu_type)">
 					<option value="">กรุณาเลือก..</option>
 				</select>
 			</div>

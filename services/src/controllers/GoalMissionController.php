@@ -79,6 +79,13 @@
                 // ini_set('display_errors','On');
                 $params = $request->getParsedBody();
                 $_Data = $params['obj']['Data'];
+
+                foreach ($_Data as $key => $value) {
+                    if($value == 'null'){
+                        $_Data[$key] = NULL;
+                    }
+                }
+
                 $_AvgData = $params['obj']['AvgList'];
                 $user_session = $params['user_session'];
                 $edit_name = $user_session['FirstName'] . ' ' . $user_session['LastName'];
