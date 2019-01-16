@@ -55,6 +55,7 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
                 $scope.Data.amount = parseFloat($scope.Data.amount);
                 $scope.Data.price_value = parseFloat($scope.Data.price_value);
                 
+                $scope.changeGoalType();
                 //find goal type
                 // $scope.findGoalType($scope.Data.goal_id);
             }
@@ -137,7 +138,7 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
         avgAmount = parseFloat(avgAmount.toFixed(2));
         avgPriceValue = parseFloat(avgPriceValue.toFixed(2));
         var month = 10;
-        var year = parseInt(Data.years);
+        var year = parseInt(Data.years) - 1;
         for(var i = 0; i < 12; i++){
 
             // Create Date from years
@@ -177,6 +178,15 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
         
     }
 
+    $scope.changeGoalType = function(){
+        $scope.MenuType = [];
+        for(var i = 0; i < $scope.MenuTypeList.length; i++){
+            if($scope.Data.goal_type == $scope.MenuTypeList[i].type){
+                $scope.MenuType.push($scope.MenuTypeList[i]);
+            }
+        }   
+    }
+
     var curDate = new Date();
     $scope.AVGAction = false;
     $scope.totalAmount = 0;
@@ -198,6 +208,26 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
     $scope.avgList = [];
     $scope.avgIDList = [];
     $scope.historyList = [];
+
+    $scope.MenuTypeList = [{'type':'DBI', 'value':'บริการสัตวแพทย์', 'name' : 'บริการสัตวแพทย์'}
+                            ,{'type':'DBI', 'value':'ผสมเทียม', 'name' : 'ผสมเทียม'}
+                            ,{'type':'DBI', 'value':'แร่ธาตุ พรีมิกซ์ และอาหาร', 'name' : 'แร่ธาตุ พรีมิกซ์ และอาหาร'}
+                            ,{'type':'DBI', 'value':'ผลิตน้ำเชื้อแช่แข็ง', 'name' : 'ผลิตน้ำเชื้อแช่แข็ง'}
+                            ,{'type':'DBI', 'value':'จำหน่ายน้ำเชื้อแช่แข็ง', 'name' : 'จำหน่ายน้ำเชื้อแช่แข็ง'}
+                            ,{'type':'DBI', 'value':'วัสดุผสมเทียมและอื่นๆ', 'name' : 'วัสดุผสมเทียมและอื่นๆ'}
+                            ,{'type':'DBI', 'value':'ปัจจัยการเลี้ยงโค', 'name' : 'ปัจจัยการเลี้ยงโค'}
+                            ,{'type':'DBI', 'value':'ฝึกอบรม', 'name' : 'ฝึกอบรม'}
+                            ,{'type':'DBI', 'value':'ท่องเที่ยว', 'name' : 'ท่องเที่ยว'}
+                            ,{'type':'DBI', 'value':'สหกรณ์และปริมาณน้ำนม', 'name' : 'สหกรณ์และปริมาณน้ำนม'}
+                            ,{'type':'DBI', 'value':'ข้อมูลฝูงโค', 'name' : 'ข้อมูลฝูงโค'}
+                            ,{'type':'II', 'value':'ข้อมูลการผลิต', 'name' : 'ข้อมูลการผลิต'}
+                            ,{'type':'II', 'value':'ข้อมูลการขาย', 'name' : 'ข้อมูลการขาย'}
+                            ,{'type':'II', 'value':'ข้อมูลรับซื้อและจำหน่ายน้ำนม', 'name' : 'ข้อมูลรับซื้อและจำหน่ายน้ำนม'}
+                            ,{'type':'II', 'value':'การสูญเสียในกระบวนการ', 'name' : 'การสูญเสียในกระบวนการ'}
+                            ,{'type':'II', 'value':'การสูญเสียนอกกระบวนการ', 'name' : 'การสูญเสียนอกกระบวนการ'}
+                            ,{'type':'II', 'value':'การสูญเสียรอจำหน่าย', 'name' : 'การสูญเสียรอจำหน่าย'}
+                            ,{'type':'II', 'value':'การสูญเสียในกระบวนการขนส่ง', 'name' : 'การสูญเสียในกระบวนการขนส่ง'}
+                        ];
 
     // 
     if($scope.ID != null){

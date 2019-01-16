@@ -61,6 +61,14 @@
 
                 AccountPermissionService::resetAccountPermission($UserID);
                 foreach ($_Permission as $key => $value) {
+                    if($value['checked_menu'] || $value['checked_menu'] != ''){
+                        $obj_update = [];
+                        $obj_update['menu_id'] = $value['id'];
+                        $obj_update['UserID'] = $UserID;
+                        $obj_update['actives'] = 'Y';
+                        // print_r($obj_update);exit;
+                        AccountPermissionService::updateAccountPermission($obj_update);
+                    }
                     foreach ($value['sub_menu'] as $_key => $_value) {
                         if($_value['checked_menu'] || $_value['checked_menu'] != ''){
                             $obj_update = [];

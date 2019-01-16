@@ -177,7 +177,7 @@ class CowGroupController extends Controller {
             $params = $request->getParsedBody();
 
             $id = $params['obj']['id'];
-
+            $cow_group_name = $params['obj']['cow_group_name'];
             $cooperative_id = $params['obj']['cooperative_id'];
             $months = $params['obj']['months'];
             $years = $params['obj']['years'];
@@ -185,7 +185,7 @@ class CowGroupController extends Controller {
             if (!empty($id)) {
                 $_Data = CowGroupService::getDataByID($id);
             } else {
-                $_Data = CowGroupService::getData($cooperative_id, $months, $years);
+                $_Data = CowGroupService::getData($cow_group_name, $cooperative_id, $months, $years);
             }
 
             $this->data_result['DATA']['Data'] = $_Data;

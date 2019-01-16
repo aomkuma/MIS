@@ -18,20 +18,22 @@
         public function getMenuList($request, $response, $args){
             try{
                 $params = $request->getParsedBody();
-                
+                $user_session = $params['user_session'];
+                $UserID = $user_session['UserID'];
+
                 $MenuList = [];
                 // get main menu
-                $_Menu = MenuService::getMenuList(0);
+                $_Menu = MenuService::getMenuList(0, $UserID);
                 foreach ($_Menu as $key => $value) {
                     // get child menu level 1
-                    $_Menu1 = MenuService::getMenuList($value['id']);
+                    $_Menu1 = MenuService::getMenuList($value['id'], $UserID);
                     // print_r($_Menu1);exit;
                     $MenuList1 = [];
                     foreach ($_Menu1 as $key1 => $value1) {
-                        $_Menu2 = MenuService::getMenuList($value1['id']);
+                        $_Menu2 = MenuService::getMenuList($value1['id'], $UserID);
                         $MenuList2 = [];
                         foreach ($_Menu2 as $key2 => $value2) {
-                            $_Menu3 = MenuService::getMenuList($value2['id']);
+                            $_Menu3 = MenuService::getMenuList($value2['id'], $UserID);
                             $value2['sub_menu'] = $_Menu3;
                             $MenuList2[] = $value2;
                         }

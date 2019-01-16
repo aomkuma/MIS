@@ -42,8 +42,9 @@ class CowGroupService {
                         ->first();
     }
 
-    public static function getData($cooperative_id, $months, $years) {
-        return CowGroup::where('cooperative_id', $cooperative_id)
+    public static function getData($cow_group_name, $cooperative_id, $months, $years) {
+        return CowGroup::where('cow_group_name', $cow_group_name)
+                        ->where('cooperative_id', $cooperative_id)
                         ->where('months', $months)
                         ->where('years', $years)
                         //->with('mouHistories')

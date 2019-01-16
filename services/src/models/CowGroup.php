@@ -6,6 +6,7 @@ class CowGroup extends \Illuminate\Database\Eloquent\Model {
   	protected $primaryKey = 'id';
   	public $timestamps = false;
   	protected $fillable = array('id'
+                  , 'cow_group_name'
   								, 'cooperative_id'
   								, 'region_id'
   								, 'months'

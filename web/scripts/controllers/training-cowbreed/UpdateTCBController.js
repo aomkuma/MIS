@@ -140,7 +140,7 @@ angular.module('e-homework').controller('UpdateTCBController', function($scope, 
 
     $scope.getThaiDateTimeFromString = function(date){
         console.log(date);
-        if(date != ''){
+        if(date != undefined && date != null && date != ''){
             return convertSQLDateTimeToReportDateTime(date);
         }
     }

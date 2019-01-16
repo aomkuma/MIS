@@ -85,6 +85,14 @@ angular.module('e-homework').controller('UpdateAccController', function($scope, 
         // console.log($scope.MenuList);
         for(var i = 0; i < Permission.length; i++){
             for(var j = 0; j < $scope.MenuList.length; j++){
+
+                if(Permission[i].actives == 'Y'){
+                    if(Permission[i].menu_id == $scope.MenuList[j].id){
+                        $scope.MenuList[j].checked_menu = true;
+                        console.log($scope.MenuList[j].checked_menu);
+                    }
+                }
+
                 for(var k = 0; k < $scope.MenuList[j].sub_menu.length; k++){
                     // console.log(Permission[i].menu_id , $scope.MenuList[j].sub_menu[k].id);
                     if(Permission[i].actives == 'Y'){

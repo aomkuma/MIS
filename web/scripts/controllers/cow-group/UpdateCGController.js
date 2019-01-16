@@ -89,6 +89,8 @@ angular.module('e-homework').controller('UpdateCGController', function($scope, $
                     $scope.Sperm.id = '';
                 }
             }
+
+            $scope.CowGroupName = $scope.Sperm.cow_group_name;
             $scope.CooperativeName = '';
             $scope.MonthName = '';
             $scope.YearName = '';
@@ -110,7 +112,7 @@ angular.module('e-homework').controller('UpdateCGController', function($scope, $
                     $scope.YearName = $scope.YearList[i].yearValue;
                 }
             }
-
+            
             IndexOverlayFactory.overlayHide();
         });
     }
@@ -149,7 +151,7 @@ angular.module('e-homework').controller('UpdateCGController', function($scope, $
 
     $scope.getThaiDateTimeFromString = function(date){
         console.log(date);
-        if(date != ''){
+        if(date != undefined && date != null && date != ''){
             return convertSQLDateTimeToReportDateTime(date);
         }
     }

@@ -11,10 +11,12 @@
     
     class MenuService {
 
-        public static function getMenuList($parent_menu){
+        public static function getMenuList($parent_menu, $UserID){
             return Menu::select("menu.*", DB::raw("'' AS checked_menu"))
-                    ->where('actives', 'Y')
+                    // ->join("account_permission", 'account_permission.menu_id', '=' , 'menu.id')
+                    ->where('menu.actives', 'Y')
                     ->where('parent_menu', $parent_menu)
+                    // ->where('UserID', $UserID)
                     ->orderBy('menu_order', 'ASC')
                     ->get();      
         }

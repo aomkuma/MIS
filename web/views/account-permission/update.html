@@ -95,7 +95,7 @@
 	<div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
 		<div class="row form-group" ng-repeat="menu in MenuList">
 			<div class="col-lg-11" style="background-color: #B6CCFF; padding: 5px;">
-				{{menu.menu_name_th}}
+				<input id="{{menu.id+$index}}" type="checkbox" ng-model="menu.checked_menu"  ng-true-values="true" ng-false-values="false" ng-checked="menu.checked_menu"> &nbsp; <label for="{{menu.id+$index}}"> {{menu.menu_name_th}}
 			</div>
 			<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" ng-repeat="sub_menu in menu.sub_menu" style="padding-top: 5px;">
 				<input id="{{sub_menu.id+$index}}" type="checkbox" ng-model="sub_menu.checked_menu"  ng-true-values="true" ng-false-values="false" ng-checked="sub_menu.checked_menu"> &nbsp; <label for="{{sub_menu.id+$index}}">{{sub_menu.menu_name_th}}</label>
