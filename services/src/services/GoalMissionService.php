@@ -103,6 +103,7 @@ class GoalMissionService {
     }
 
     public static function getMissionforinsem($goalid, $year) {
+        print_r($year);
         return GoalMission::where('years', $year)
                         ->where('goal_id', $goalid)
                         ->join("region", 'goal_mission.region_id', '=', 'region.RegionID')

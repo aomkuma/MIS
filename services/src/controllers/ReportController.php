@@ -635,7 +635,14 @@ class ReportController extends Controller {
             $objPHPExcel->getActiveSheet()->setCellValue('E3', 'ผลการดำเนินงานประจำไตรมาส');
             $objPHPExcel->getActiveSheet()->setCellValue('F3', 'เปรียบเทียบเป้าหมาย');
             foreach ($mastesgoallist as $key => $value) {
-                $mission = GoalMissionService::getMission($value['id'], $data['Description']['region_id'], $data['Description']['years']);
+                if ($data['Description']['quarter'] == 1) {
+                    $y = $data['Description']['years'] + 1;
+
+                    $mission = GoalMissionService::getMission($item['id'], $data['Description']['region_id'], $y);
+                } else {
+                    $mission = GoalMissionService::getMission($value['id'], $data['Description']['region_id'], $data['Description']['years']);
+                }
+                
                 $spmonth = SpermService::getDetailquar($data['Description']['years'], $value['id'], $data['Description']['region_id'], $data['Description']['quarter']);
                 $missionM = GoalMissionService::getMissionavgquar($mission[0]['id'], $data['Description']['years'], $data['Description']['quarter']);
 
@@ -808,18 +815,28 @@ class ReportController extends Controller {
         $row = 0;
 
         $mastesgoaladult = MasterGoalService::getmision($mastesgoallist[0]['goal_name']);
-        $missionad = GoalMissionService::getGoaltravel($mastesgoaladult[0]['id'], $data['Description']['years']);
+
         $avgad = GoalMissionService::getMissionavg($missionad[0]['id'], $data['Description']['years'], $data['Description']['months']);
 //        
         $mastesgoalchild = MasterGoalService::getmision($mastesgoallist[1]['goal_name']);
-        $missionch = GoalMissionService::getGoaltravel($mastesgoalchild[0]['id'], $data['Description']['years']);
+
         $avgch = GoalMissionService::getMissionavg($missionch[0]['id'], $data['Description']['years'], $data['Description']['months']);
 //       
         $mastesgoalstudent = MasterGoalService::getmision($mastesgoallist[2]['goal_name']);
-        $missionst = GoalMissionService::getGoaltravel($mastesgoalstudent[0]['id'], $data['Description']['years']);
+
         $avgst = GoalMissionService::getMissionavg($missionst[0]['id'], $data['Description']['years'], $data['Description']['months']);
 //       
+        if ($data['Description']['quarter'] == 1) {
+            $y = $data['Description']['years'] + 1;
 
+            $missionad = GoalMissionService::getGoaltravel($mastesgoaladult[0]['id'], $y);
+            $missionch = GoalMissionService::getGoaltravel($mastesgoalchild[0]['id'], $y);
+            $missionst = GoalMissionService::getGoaltravel($mastesgoalstudent[0]['id'], $y);
+        } else {
+            $missionad = GoalMissionService::getGoaltravel($mastesgoaladult[0]['id'], $data['Description']['years']);
+            $missionch = GoalMissionService::getGoaltravel($mastesgoalchild[0]['id'], $data['Description']['years']);
+            $missionst = GoalMissionService::getGoaltravel($mastesgoalstudent[0]['id'], $data['Description']['years']);
+        }
 
 
         if ($type == 'annually') {
@@ -1382,10 +1399,17 @@ class ReportController extends Controller {
             $sumcompri = 0;
             $sumMamt = 0;
             $sumMpri = 0;
-                 
+
             foreach ($mastesgoallist as $item) {
                 $cbmonth = CowBreedService::getDetailquar($data['Description']['years'], $item['id'], $data['Description']['region_id'], $data['Description']['quarter']);
-                $mission = GoalMissionService::getMission($item['id'], $data['Description']['region_id'], $data['Description']['years']);
+                // $mission = GoalMissionService::getMission($item['id'], $data['Description']['region_id'], $data['Description']['years']);
+                if ($data['Description']['quarter'] == 1) {
+                    $y = $data['Description']['years'] + 1;
+
+                    $mission = GoalMissionService::getMission($item['id'], $data['Description']['region_id'], $y);
+                } else {
+                    $mission = GoalMissionService::getMission($item['id'], $data['Description']['region_id'], $data['Description']['years']);
+                }
                 $missionM = GoalMissionService::getMissionavgquar($mission[0]['id'], $data['Description']['years'], $data['Description']['quarter']);
 
                 $summisamt += $mission[0]['amount'];
@@ -1656,12 +1680,12 @@ class ReportController extends Controller {
             foreach ($mastesgoallist as $item) {
                 $cbmonth = CowGroupService::getDetailmonth($data['Description']['years'], $data['Description']['months'], $item['id'], $data['Description']['region_id']);
                 $mission = GoalMissionService::getMission($item['id'], $data['Description']['region_id'], $data['Description']['years']);
-$avg = GoalMissionService::getMissionavg($mission[0]['id'], $data['Description']['years'], $data['Description']['months']);
-            
+                $avg = GoalMissionService::getMissionavg($mission[0]['id'], $data['Description']['years'], $data['Description']['months']);
+
                 $summisamt += $mission[0]['amount'];
                 $summispri += $mission[0]['price_value'];
-                $sumMamt += $avg[0]['amount'] ;
-                $sumMpri += $avg[0]['price_value'] ;
+                $sumMamt += $avg[0]['amount'];
+                $sumMpri += $avg[0]['price_value'];
                 $sumcbamt += $cbmonth['amount'];
                 $sumcbpri += $cbmonth['price'];
                 $sumcomamt += $cbmonth['amount'] - ($avg[0]['amount'] );
@@ -1672,8 +1696,8 @@ $avg = GoalMissionService::getMissionavg($mission[0]['id'], $data['Description']
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), 'บาท');
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (4 + $row), $mission[0]['amount']);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $mission[0]['price_value']);
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), $avg[0]['amount'] );
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $avg[0]['price_value'] );
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), $avg[0]['amount']);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $avg[0]['price_value']);
                 $objPHPExcel->getActiveSheet()->setCellValue('E' . (4 + $row), $cbmonth['amount']);
                 $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $cbmonth['price']);
                 $objPHPExcel->getActiveSheet()->setCellValue('F' . (4 + $row), $cbmonth['amount'] - ($avg[0]['amount'] ));
@@ -1723,13 +1747,20 @@ $avg = GoalMissionService::getMissionavg($mission[0]['id'], $data['Description']
             $sumMpri = 0;
             foreach ($mastesgoallist as $item) {
                 $cbmonth = CowGroupService::getDetailquar($data['Description']['years'], $item['id'], $data['Description']['region_id'], $data['Quarter']);
-                $mission = GoalMissionService::getMission($item['id'], $data['Description']['region_id'], $data['Description']['years']);
-   $missionM = GoalMissionService::getMissionavgquar($mission[0]['id'], $data['Description']['years'], $data['Quarter']);
+
+                if ($data['Description']['quarter'] == 1) {
+                    $y = $data['Description']['years'] + 1;
+
+                    $mission = GoalMissionService::getMission($item['id'], $data['Description']['region_id'], $y);
+                } else {
+                    $mission = GoalMissionService::getMission($item['id'], $data['Description']['region_id'], $data['Description']['years']);
+                }
+                $missionM = GoalMissionService::getMissionavgquar($mission[0]['id'], $data['Description']['years'], $data['Quarter']);
 
                 $summisamt += $mission[0]['amount'];
                 $summispri += $mission[0]['price_value'];
-                $sumMamt += $missionM['amount'] ;
-                $sumMpri += $missionM['price_value'] ;
+                $sumMamt += $missionM['amount'];
+                $sumMpri += $missionM['price_value'];
                 $sumcbamt += $cbmonth['amount'];
                 $sumcbpri += $cbmonth['price'];
                 $sumcomamt += $cbmonth['amount'] - ($missionM['amount'] );
@@ -1740,8 +1771,8 @@ $avg = GoalMissionService::getMissionavg($mission[0]['id'], $data['Description']
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), 'บาท');
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (4 + $row), $mission[0]['amount']);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $mission[0]['price_value']);
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), $missionM['amount'] );
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $missionM['price_value'] );
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), $missionM['amount']);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $missionM['price_value']);
                 $objPHPExcel->getActiveSheet()->setCellValue('E' . (4 + $row), $cbmonth['amount']);
                 $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $cbmonth['price']);
                 $objPHPExcel->getActiveSheet()->setCellValue('F' . (4 + $row), $cbmonth['amount'] - ($missionM['amount'] ));
@@ -1993,8 +2024,8 @@ $avg = GoalMissionService::getMissionavg($mission[0]['id'], $data['Description']
 
                 $summisamt += $mission[0]['amount'];
                 $summispri += $mission[0]['price_value'];
-                $sumMamt += $avg[0]['amount'] ;
-                $sumMpri += $avg[0]['price_value'] ;
+                $sumMamt += $avg[0]['amount'];
+                $sumMpri += $avg[0]['price_value'];
                 $sumcbamt += $cbmonth['amount'];
                 $sumcbpri += $cbmonth['price'];
                 $sumcomamt += $cbmonth['amount'] - ($avg[0]['amount'] );
@@ -2006,7 +2037,7 @@ $avg = GoalMissionService::getMissionavg($mission[0]['id'], $data['Description']
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (4 + $row), $mission[0]['amount']);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $mission[0]['price_value']);
                 $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), $avg[0]['amount']);
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $avg[0]['price_value'] );
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $avg[0]['price_value']);
                 $objPHPExcel->getActiveSheet()->setCellValue('E' . (4 + $row), $cbmonth['amount']);
                 $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $cbmonth['price']);
                 $objPHPExcel->getActiveSheet()->setCellValue('F' . (4 + $row), $cbmonth['amount'] - ($avg[0]['amount'] ));
@@ -2056,12 +2087,19 @@ $avg = GoalMissionService::getMissionavg($mission[0]['id'], $data['Description']
             $sumMpri = 0;
             foreach ($mastesgoallist as $item) {
                 $cbmonth = TrainingCowBreedService::getDetailquar($data['Description']['years'], $item['id'], $data['Description']['region_id'], $data['Description']['quarter']);
-                $mission = GoalMissionService::getGoaltravel($item['id'], $data['Description']['years']);
- $missionM = GoalMissionService::getMissionavgquar($mission[0]['id'], $data['Description']['years'], $data['Description']['quarter']);
+
+                if ($data['Description']['quarter'] == 1) {
+                    $y = $data['Description']['years'] + 1;
+
+                    $mission = GoalMissionService::getGoaltravel($item['id'], $y);
+                } else {
+                    $mission = GoalMissionService::getGoaltravel($item['id'], $data['Description']['years']);
+                }
+                $missionM = GoalMissionService::getMissionavgquar($mission[0]['id'], $data['Description']['years'], $data['Description']['quarter']);
                 $summisamt += $mission[0]['amount'];
                 $summispri += $mission[0]['price_value'];
-                $sumMamt += $missionM['amount'] ;
-                $sumMpri += $missionM['price_value'] ;
+                $sumMamt += $missionM['amount'];
+                $sumMpri += $missionM['price_value'];
                 $sumcbamt += $cbmonth['amount'];
                 $sumcbpri += $cbmonth['price'];
                 $sumcomamt += $cbmonth['amount'] - ($missionM['amount'] );
@@ -2072,8 +2110,8 @@ $avg = GoalMissionService::getMissionavg($mission[0]['id'], $data['Description']
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), 'บาท');
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (4 + $row), $mission[0]['amount']);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $mission[0]['price_value']);
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row),$missionM['amount'] );
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $missionM['price_value'] );
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (4 + $row), $missionM['amount']);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $missionM['price_value']);
                 $objPHPExcel->getActiveSheet()->setCellValue('E' . (4 + $row), $cbmonth['amount']);
                 $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $cbmonth['price']);
                 $objPHPExcel->getActiveSheet()->setCellValue('F' . (4 + $row), $cbmonth['amount'] - ($missionM['amount'] ));
@@ -2433,7 +2471,15 @@ $avg = GoalMissionService::getMissionavg($mission[0]['id'], $data['Description']
 
 
             foreach ($mastesgoallist as $item) {
-                $mission = GoalMissionService::getMissionforinsem($item['id'], $data['Description']['years']);
+
+                if ($data['Description']['quarter'] == 1) {
+                    $y = $data['Description']['years'] + 1;
+
+                    $mission = GoalMissionService::getMissionforinsem($item['id'], $y);
+                } else {
+                    $mission = GoalMissionService::getMissionforinsem($item['id'], $data['Description']['years']);
+                }
+
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (4 + $row), $item['goal_name']);
                 $objPHPExcel->getActiveSheet()->getStyle('A' . (4 + $row))->getFont()->setSize(16);
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), $item['goal_name'] . 'รายตัว');

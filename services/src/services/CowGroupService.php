@@ -118,7 +118,7 @@ class CowGroupService {
         $st = 1;
         $en = 3;
          if ($quar == 1) {
-            $years-=1;
+      //      $years-=1;
             $st = 10;
             $en = 12;
         } else if ($quar == 2) {
