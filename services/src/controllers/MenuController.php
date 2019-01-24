@@ -20,6 +20,9 @@
                 $params = $request->getParsedBody();
                 $user_session = $params['user_session'];
                 $UserID = $user_session['UserID'];
+                if(empty($UserID)){
+                    $UserID = $params['obj']['UserID'];
+                }
 
                 $MenuList = [];
                 // get main menu

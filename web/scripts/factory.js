@@ -56,7 +56,7 @@ app.factory('IndexOverlayFactory', function(){
 });
 
 app.factory('HTTPService', ['$http', '$q', 'Upload', function($http, $q, Upload){
-    var user_session = angular.fromJson(sessionStorage.getItem('user_session'));
+
     return {
         loginRequest : function(action, obj) {
             return $http.post(serviceLoginUrl + action + '/',{"obj_login":obj})
@@ -71,6 +71,8 @@ app.factory('HTTPService', ['$http', '$q', 'Upload', function($http, $q, Upload)
         },
 
         clientRequest : function(action, obj) {
+            var user_session = angular.fromJson(sessionStorage.getItem('user_session'));
+            console.log(user_session);
             return $http.post(serviceUrl + action + '/',{"obj":obj, 'user_session' : user_session})
                 .then(
                     function(response){
@@ -95,6 +97,8 @@ app.factory('HTTPService', ['$http', '$q', 'Upload', function($http, $q, Upload)
         },
 
         uploadRequest : function(action, obj) {
+            var user_session = angular.fromJson(sessionStorage.getItem('user_session'));
+            console.log(user_session);
             return Upload.upload({
                 url: serviceUrl + action + '/',
                 data: {"obj":obj, 'user_session' : user_session}

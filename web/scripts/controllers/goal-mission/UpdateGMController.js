@@ -89,6 +89,72 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
         });
     }
 
+    $scope.approve = function(Data, OrgType){
+        $scope.alertMessage = 'ต้องการอนุมัติข้อมูลนี้ ใช่หรือไม่ ?';
+        var modalInstance = $uibModal.open({
+            animation : false,
+            templateUrl : 'views/dialog_confirm.html',
+            size : 'sm',
+            scope : $scope,
+            backdrop : 'static',
+            controller : 'ModalDialogCtrl',
+            resolve : {
+                params : function() {
+                    return {};
+                } 
+            },
+        });
+
+        modalInstance.result.then(function (valResult) {
+
+            var params = {'id' : Data.id, 'OrgType' : OrgType, 'ApproveStatus' : 'approve'};
+            HTTPService.uploadRequest('goal-mission/update/approve', params).then(function(result){
+                console.log(result);
+                if(result.data.STATUS == 'OK'){
+                    alert('บันทึกสำเร็จ');
+                    $scope.PAGE = 'MAIN';
+                }else{
+                    alert(result.data.DATA);
+                }
+                IndexOverlayFactory.overlayHide();
+            });
+        });
+    }
+
+    $scope.ApproveComment = '';
+    $scope.reject = function(Data, OrgType){
+        $scope.alertMessage = 'ไม่ต้องการอนุมัติข้อมูลนี้ ใช่หรือไม่ ?';
+        $scope.ApproveComment = '';
+        var modalInstance = $uibModal.open({
+            animation : false,
+            templateUrl : 'reject_dialog.html',
+            size : 'md',
+            scope : $scope,
+            backdrop : 'static',
+            controller : 'ModalDialogReturnFromOKBtnCtrl',
+            resolve : {
+                params : function() {
+                    return {};
+                } 
+            },
+        });
+
+        modalInstance.result.then(function (valResult) {
+            console.log(valResult);
+            var params = {'id' : Data.id, 'OrgType' : OrgType, 'ApproveStatus' : 'reject', 'ApproveComment' : valResult};
+            HTTPService.uploadRequest('goal-mission/update/approve', params).then(function(result){
+                console.log(result);
+                if(result.data.STATUS == 'OK'){
+                    alert('บันทึกสำเร็จ');
+                    $scope.PAGE = 'MAIN';
+                }else{
+                    alert(result.data.DATA);
+                }
+                IndexOverlayFactory.overlayHide();
+            });
+        });
+    }
+
     $scope.findGoalType = function(goal_id){
         for(var i = 0; i < $scope.MasterGoalList.length; i++){
             if($scope.MasterGoalList[i].id == goal_id){

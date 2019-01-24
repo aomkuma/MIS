@@ -22,9 +22,14 @@ angular.module('e-homework').controller('AppController', ['$cookies','$scope', '
 
     
     $scope.logout = function(){
+        sessionStorage.setItem('user_session', null);
         sessionStorage.removeItem('user_session');
         $scope.currentUser = null;
-        window.location.replace('#/guest/logon');
+        console.log(sessionStorage.getItem('user_session'));
+        setTimeout(function(){
+            window.location.replace('#/guest/logon');    
+        },500);
+        
     }
 
 }]);

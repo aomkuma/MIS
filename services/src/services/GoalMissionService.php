@@ -66,6 +66,11 @@ class GoalMissionService {
         return $model->save();
     }
 
+    public static function updateDataApprove($id, $obj) {
+
+        return GoalMission::where('id', $id)->update($obj);
+    }
+
     public static function updateAvg($obj) {
         if (empty($obj['id'])) {
             $model = GoalMissionAvg::create($obj);

@@ -70,14 +70,19 @@
 							แก้ไข
 						</button>
 						
+						<button ng-show="data.editable == 'N' && !Approval" class="btn btn-default" disabled="" style="color: red;">
+							<span class="glyphicon glyphicon-lock"></span> 
+							
+						</button>
 						<button ng-show="data.editable == 'N' && Approval" class="btn btn-default" ng-click="updateEdit(data.id, 'Y')" style="color: red;">
 							<span class="glyphicon glyphicon-lock"></span> 
 							
 						</button>
-						<button ng-show="data.editable == 'Y' && Approval" class="btn btn-default" disabled="" style="color: green;">
+						<button ng-show="data.editable == 'Y'" class="btn btn-default" disabled="" style="color: green;">
 							<span class="glyphicon glyphicon-lock"></span> 
 							
 						</button>
+						
 					</td>
 				</tr>
 			</tbody>
