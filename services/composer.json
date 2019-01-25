@@ -19,7 +19,8 @@
         "illuminate/database": "~5.1",
         "phpmailer/phpmailer": "^5.2",
 		"PHPExcel/PHPExcel": "1.7.6",
-        "akrabat/rka-ip-address-middleware": "^0.5.0"
+        "akrabat/rka-ip-address-middleware": "^0.5.0",
+        "phpoffice/phpspreadsheet": "^1.6"
     },
     "require-dev": {
         "phpunit/phpunit": ">=4.8 < 6.0"
