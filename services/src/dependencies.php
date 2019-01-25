@@ -136,3 +136,6 @@ $container['QuarterReportController'] = function ($c) {
 $container['AnnualReportController'] = function ($c) {
     return new \App\Controller\AnnualReportController($c->get('logger'), $c->get('db'));
 };
+$container['ImportPersonalController'] = function ($c) {
+    return new \App\Controller\ImportPersonalController($c->get('logger'), $c->get('db'));
+};

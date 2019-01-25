@@ -637,6 +637,17 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 			} ]
 		}
 	})
+	.when("/import-personal", {
+        templateUrl : "views/import-personal/main.html",
+        controller : "ImportController",
+        resolve : {
+			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
+				return $ocLazyLoad.load({
+					files : [ "scripts/controllers/import-personal/ImportController.js" ]
+				});
+			} ]
+		}
+	})
 
 	;
 

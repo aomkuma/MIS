@@ -316,7 +316,7 @@ class ReportController extends Controller {
         // ini_set('display_errors','On');           
         try {
             $obj = $request->getParsedBody();
-            print_r($obj);
+           // print_r($obj);
 
             $condition = $obj['obj']['condition'];
             $item = $obj['obj']['Item'];
