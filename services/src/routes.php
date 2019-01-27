@@ -144,6 +144,8 @@ $app->post('/annuallyreport/report/', 'AnnualReportController:exportannuallyrepo
 
 $app->post('/import-personal/', 'ImportPersonalController:import');
 $app->post('/import-personal/list/main/', 'ImportPersonalController:getMainList');
+
+$app->post('/personal/list/main/', 'PersonalController:getMainList');
 // Default action
 $app->get('/[{name}]', function ($request, $response, $args) {
     // Sample log message

@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Model\AttachFile;
 use App\Model\DataRows;
 use App\Model\DataSheets;
+use App\Model\DataRowsheet3;
 use Illuminate\Database\Capsule\Manager as DB;
 
 class AttachFileService {
@@ -87,6 +88,7 @@ class AttachFileService {
         $model->month = $data['Month'];
         $model->date = $data['date'];
         $model->save();
+        return $model->id;
     }
 
     public static function removeAttachFile($id) {
@@ -94,36 +96,86 @@ class AttachFileService {
     }
 
     public static function getList() {
-        return AttachFile::orderBy("modify", 'ASC')
+        return AttachFile::orderBy("modify", 'DESC')
                         ->get();
     }
 
-    public static function saverow($sheetid, $data) {
+    public static function saverow($sheetid, $data,$date,$seq) {
         $row = new DataRows();
 
         $row->sheet_id = $sheetid;
-        $row->positiontype = $data['positiontype'];
-        $row->department = $data['department'];
-        $row->director = $data['director'];
-        $row->lv1 = $data['lv1'];
-        $row->lv2 = $data['lv2'];
-        $row->lv3 = $data['lv3'];
-        $row->lv4 = $data['lv4'];
-        $row->lv5 = $data['lv5'];
-        $row->lv6 = $data['lv6'];
-        $row->lv7 = $data['lv7'];
-        $row->lv8 = $data['lv8'];
-        $row->lv9 = $data['lv9'];
-        $row->lv10 = $data['lv10'];
-        $row->summary = $data['summary'];
+        $row->seq = $seq;
+        $row->positiontype = $data[0];
+        $row->department = $data[1];
+        $row->director = $data[3];
+        $row->lv1 = $data[4];
+        $row->lv2 = $data[5];
+        $row->lv3 = $data[6];
+        $row->lv4 = $data[7];
+        $row->lv5 = $data[8];
+        $row->lv6 = $data[9];
+        $row->lv7 = $data[10];
+        $row->lv8 = $data[11];
+        $row->lv9 = $data[12];
+        $row->lv10 = $data[13];
+         $row->summary=$data[4]+$data[5]+$data[6]+$data[7]+$data[8]+$data[9]+$data[10]+$data[11]+$data[12]+$data[13];
+        
+//        $row->summary = $data[14];
+        $row->year = $date['Year'];
+        $row->month = $date['Month'];
+        $row->save();
+    }
+    public static function saverow2($sheetid, $data,$date) {
+        $row = new DataRows();
+
+        $row->sheet_id = $sheetid;
+        $row->positiontype = $data[0];
+        $row->department = $data[1];
+       
+        $row->lv1 = $data[2];
+        $row->lv2 = $data[3];
+        $row->lv3 = $data[4];
+        $row->lv4 = $data[5];
+        $row->lv5 = $data[6];
+        $row->lv6 = $data[7];
+        $row->lv7 = $data[8];
+        $row->lv8 = $data[9];
+        $row->lv9 = $data[10];
+        $row->lv10 = $data[11];
+        $row->year = $date['Year'];
+        $row->month = $date['Month'];
+        $row->save();
+    }
+       public static function saverow3($sheetid, $data,$date) {
+        $row = new DataRowsheet3();
+
+        $row->sheet_id = $sheetid;
+        $row->detail = $data[0];
+        $row->nolv = $data[1];
+       
+        $row->lv1 = $data[2];
+        $row->lv2 = $data[3];
+        $row->lv3 = $data[4];
+        $row->lv4 = $data[5];
+        $row->lv5 = $data[6];
+        $row->lv6 = $data[7];
+        $row->lv7 = $data[8];
+        $row->lv8 = $data[9];
+        $row->lv9 = $data[10];
+        $row->lv10 = $data[11];
+        $row->year = $date['Year'];
+        $row->month = $date['Month'];
+         $row->summary=$data[2]+$data[3]+$data[4]+$data[5]+$data[6]+$data[7]+$data[8]+$data[9]+$data[10]+$data[11];
         $row->save();
     }
 
-    public static function savesheet($attid, $data) {
+    public static function savesheet($attid, $data, $seq) {
         $sheet = new DataSheets();
-        $sheet->name = $data['name'];
-        $sheet->attach_id = $sheetid;
+        $sheet->name = $data;
+        $sheet->seq = $seq;
+        $sheet->attach_id = $attid;
         $sheet->save();
+        return $sheet->id;
     }
 
 }

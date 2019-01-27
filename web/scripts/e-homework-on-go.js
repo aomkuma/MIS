@@ -648,6 +648,17 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 			} ]
 		}
 	})
+	.when("/page/personal", {
+        templateUrl : "views/personal/main.html",
+        controller : "MainPRController",
+        resolve : {
+			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
+				return $ocLazyLoad.load({
+					files : [ "scripts/controllers/personal/MainPRController.js" ]
+				});
+			} ]
+		}
+	})
 
 	;
 

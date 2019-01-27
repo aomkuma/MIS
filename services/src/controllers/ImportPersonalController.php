@@ -32,54 +32,50 @@ class ImportPersonalController extends Controller {
                 $AttachFile = ['file_name' => $name
                     , 'file_path' => $FilePath
                 ];
-                AttachFileService::updateAttachFiles($AttachFile, $Data);
+                $attid = AttachFileService::updateAttachFiles($AttachFile, $Data);
+
                 $files['obj']['AttachFile']->moveTo('../../' . $FilePath);
-                $this->readExcelFile('../../' .$FilePath, $name);
+                $this->readExcelFile('../../' . $FilePath, $attid, $Data);
             }
         } catch (\Exception $e) {
             return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
         }
     }
 
-    private function readExcelFile($file, $name) {
+    private function readExcelFile($file, $id, $Data) {
 
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file);
-            $sheetData = $spreadsheet->getActiveSheet()->toArray();
 
-//        $inputFileType = PHPExcel\IOFactory::identify($name);
-//       $objReader = PHPExcel\IOFactory::createReader('excel2007');
-//        $objPHPExcel = $objReader->load($file);
+        ///sheet 1
 
-        print_r($sheetData);
-        die();
-//        $field_array = ['item', 'staff', 'operating', 'investing', 'subsidy', 'other', 'subtotal'];
-//        $cnt_row = 1;
-//        $ItemList = [];
-//        foreach ($sheetData as $key => $value) {
-//
-//            if ($cnt_row >= 4) {
-//
-//                $cnt_col = 0;
-//                $cnt_field = 0;
-//                $Item = [];
-//                $Item['budget_id'] = $budget_id;
-//
-//                foreach ($value as $k => $v) {
-//                    if ($cnt_col >= 1 && $cnt_col <= 7) {
-//
-//                        $Item[$field_array[$cnt_field]] = $v;
-//                        $cnt_field++;
-//                    }
-//                    $cnt_col++;
-//                }
-//
-//                array_push($ItemList, $Item);
-//            }
-//
-//            $cnt_row++;
-//        }
-//
-//        return $ItemList;
+        $spreadsheet->setActiveSheetIndex(0);
+        $sheet1 = $spreadsheet->getActiveSheet()->toArray();
+//        $highestRow1 = $spreadsheet->getActiveSheet()->getHighestRow();
+        $sheetid1 = AttachFileService::savesheet($id, 'รายละเอียด', 1);
+        $size = sizeof($sheet1) - 2;       
+       
+        for ($i = 5; $i < $size; $i++) {
+            AttachFileService::saverow($sheetid1, $sheet1[$i], $Data,1);
+        }
+
+        //sheet2
+        $sheet2 = $spreadsheet->getSheet(1)->toArray();
+        $sheetid2 = AttachFileService::savesheet($id, 'นักวิชาการ', 2);
+        $size2 = sizeof($sheet2) - 1;
+
+        for ($i = 2; $i < $size2; $i++) {
+            AttachFileService::saverow2($sheetid2, $sheet2[$i], $Data,2);
+        }
+        //sheet3
+        $sheet3 = $spreadsheet->getSheet(2)->toArray();
+        $sheetid3 = AttachFileService::savesheet($id, 'เคลื่อนไหว', 3);
+        $size3 = sizeof($sheet3) - 1;
+
+        for ($i = 4; $i < $size3; $i++) {
+            AttachFileService::saverow3($sheetid3, $sheet3[$i], $Data);
+        }
+
+
     }
 
     public function getMainList($request, $response, $args) {
