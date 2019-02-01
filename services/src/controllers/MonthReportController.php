@@ -225,19 +225,19 @@ class MonthReportController extends Controller {
             $SummarysumPercentage += $item['SummarysumPercentage'];
         }
 //        //summary
-           $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), 'รวมทั้งสิ้น');
-            $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), $SummaryCurrentsum);
-            $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $SummaryCurrentdirector);
-            $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $SummaryCurrent);
-            $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $SummaryBeforesum);
-            $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $SummaryBeforedirector);
-            $objPHPExcel->getActiveSheet()->setCellValue('G' . (5 + $row), $SummaryBefore);
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), 'รวมทั้งสิ้น');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), $SummaryCurrentsum);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $SummaryCurrentdirector);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $SummaryCurrent);
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $SummaryBeforesum);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $SummaryBeforedirector);
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . (5 + $row), $SummaryBefore);
 
 
-            $objPHPExcel->getActiveSheet()->setCellValue('H' . (5 + $row), $SummaryPercentage);
-            $objPHPExcel->getActiveSheet()->setCellValue('I' . (5 + $row), $SummarysumPercentage);
-            $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row) . ':I' . (5 + $row))->getFont()->setSize(16);
-            $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row) . ':I' . (5 + $row))->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . (5 + $row), $SummaryPercentage);
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . (5 + $row), $SummarysumPercentage);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row) . ':I' . (5 + $row))->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row) . ':I' . (5 + $row))->getFont()->setBold(true);
 //        
         // header style
         $objPHPExcel->getActiveSheet()->getStyle('A2')->getFont()->setSize(18);
@@ -295,9 +295,40 @@ class MonthReportController extends Controller {
 
     private function generatePower2Excel($objPHPExcel, $condition, $region) {
         $objPHPExcel->createSheet(1);
+        $data = PersonalController::getMonthDataList($condition);
+
         $objPHPExcel->setActiveSheetIndex(1);
         $objPHPExcel->getActiveSheet()->setTitle("1. อัตรากำลัง (2)");
         $objPHPExcel->getActiveSheet()->setCellValue('A3', '2. การดำเนินงานด้านการให้บริการของ อ.ส.ค.');
+
+        $index = 1;
+        $row = 0;
+        $sum = 0;
+        foreach ($data['Summary'][0]['current'] as $item) {
+
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . (6 + $row), $index . '. ' . $item['detail']);
+            for ($i = 1; $i < 10; $i++) {
+
+                if ($item['lv' . $i] != '') {
+                    $objPHPExcel->getActiveSheet()->setCellValue('E' . (6 + $row), 'พนักงานระดับ ' . $i . ' = ' . $item['lv' . $i] . ' ตำแหน่ง');
+                    $sum += $item['lv' . $i];
+                    $row++;
+                }
+            }
+            $index++;
+        }
+        $objPHPExcel->getActiveSheet()->setCellValue('A4', 'เดือน ' . $this->getMonthName($condition['MonthFrom']) . ' ปี ' . ($condition['YearFrom'] + 543) . ' มีการเคลื่อนไหวของพนักงานและลูกจ้าง จำนวน  ' . $sum . '  ตำแหน่ง ดังนี้');
+        $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setSize(18);
+        $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A4')->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A6:E50')->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:E50')->applyFromArray(
+                array(
+                    'font' => array(
+                        'name' => 'AngsanaUPC',
+                    )
+                )
+        );
         return $objPHPExcel;
     }
 

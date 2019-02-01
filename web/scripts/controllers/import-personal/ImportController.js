@@ -31,7 +31,7 @@ angular.module('e-homework').controller('ImportController', function($scope, $co
             var params = {'Data' : Data, 'AttachFile' : AttachFile};
             HTTPService.uploadRequest('import-personal', params).then(function(result){
                 console.log(result);
-               // $scope.loadList('import-personal/list/main');
+                $scope.loadList('import-personal/list/main');
                 if(result.data.STATUS == 'OK'){
                     alert('ระบบบันทึกข้อมูลเรียบร้อย');
                     
@@ -49,7 +49,7 @@ angular.module('e-homework').controller('ImportController', function($scope, $co
             console.log(result);
            // if(result.data.STATUS == 'OK'){
                 $scope.List = result.data;
-             
+           
           //  }
             IndexOverlayFactory.overlayHide();
         });

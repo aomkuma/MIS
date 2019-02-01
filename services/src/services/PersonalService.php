@@ -26,20 +26,29 @@ class PersonalService {
     }
 
     public static function getMainList($years, $months, $positiontype) {
-        return DataRows::where("year", $years)
-                        ->where("month", $months)
-                        ->where("seq", 1)
-                        ->where("positiontype", $positiontype)
-                        ->orderBy("id", 'ASC')
+        return DataRows::
+                        join("data_sheets", 'data_sheets.id', '=', 'data_rows.sheet_id')
+                        ->join("attachfiles", 'attachfiles.id', '=', 'data_sheets.attach_id')
+                        ->where("data_rows.year", $years)
+                        ->where("data_rows.month", $months)
+                        ->where("data_rows.seq", 1)
+                        ->where("data_rows.positiontype", $positiontype)
+                        ->where("attachfiles.parent_id", 0)
+                        ->orderBy("data_rows.id", 'ASC')
                         ->get()
                         ->toArray();
     }
-      public static function getMainListsheet3($years, $months) {
-        return DataRowsheet3::where("year", $years)
-                        ->where("month", $months)
-                        
-                        
-                        ->orderBy("id", 'ASC')
+
+    public static function getMainListsheet3($years, $months) {
+        return DataRowsheet3::
+                        join("data_sheets", 'data_sheets.id', '=', 'data_rowsheet3.sheet_id')
+                        ->join("attachfiles", 'attachfiles.id', '=', 'data_sheets.attach_id')
+                        ->where("data_rowsheet3.year", $years)
+                        ->where("data_rowsheet3.month", $months)
+                     
+                       
+                        ->where("attachfiles.parent_id", 0)
+                        ->orderBy("data_rowsheet3.id", 'ASC')
                         ->get()
                         ->toArray();
     }

@@ -68,27 +68,26 @@ class AttachFileService {
     public static function updateAttachFiles($AttachFile, $data) {
         $model = AttachFile::where('year', $data['Year'])
                 ->where('month', $data['Month'])
+                ->where('parent_id', 0)
                 ->first();
-        if (empty($model)) {
-            $model = new AttachFile;
+        if (!empty($model)) {
+            $model->parent_id = 1;
+            $model->save();
         }
-        // $model->fill($AttachFile);
-//            $model->menu_id = $AttachFile['menu_id'];
-//            $model->display_name = $AttachFile['display_name'];
-//            $model->parent_id = $AttachFile['parent_id'];
-//            $model->page_type = $AttachFile['page_type'];
-//            $model->file_language = $AttachFile['file_language'];
-        $model->file_name = $AttachFile['file_name'];
-//            $model->file_code = $AttachFile['file_code'];
-        $model->file_path = $AttachFile['file_path'];
-//            $model->content_type = $AttachFile['content_type'];
-//            $model->file_size = $AttachFile['file_size'];
-//            $model->order_no = $AttachFile['order_no'];
-        $model->year = $data['Year'];
-        $model->month = $data['Month'];
-        $model->date = $data['date'];
-        $model->save();
-        return $model->id;
+        $date1 = new \DateTime();
+        $newmodel = new AttachFile;
+
+        $newmodel->parent_id = 0;
+        $newmodel->modify = $date1;
+        $newmodel->file_name = $AttachFile['file_name'];
+
+        $newmodel->file_path = $AttachFile['file_path'];
+
+        $newmodel->year = $data['Year'];
+        $newmodel->month = $data['Month'];
+        $newmodel->date = $data['date'];
+        $newmodel->save();
+        return $newmodel->id;
     }
 
     public static function removeAttachFile($id) {
@@ -100,7 +99,7 @@ class AttachFileService {
                         ->get();
     }
 
-    public static function saverow($sheetid, $data,$date,$seq) {
+    public static function saverow($sheetid, $data, $date, $seq) {
         $row = new DataRows();
 
         $row->sheet_id = $sheetid;
@@ -118,20 +117,21 @@ class AttachFileService {
         $row->lv8 = $data[11];
         $row->lv9 = $data[12];
         $row->lv10 = $data[13];
-         $row->summary=$data[4]+$data[5]+$data[6]+$data[7]+$data[8]+$data[9]+$data[10]+$data[11]+$data[12]+$data[13];
-        
+        $row->summary = $data[4] + $data[5] + $data[6] + $data[7] + $data[8] + $data[9] + $data[10] + $data[11] + $data[12] + $data[13];
+
 //        $row->summary = $data[14];
         $row->year = $date['Year'];
         $row->month = $date['Month'];
         $row->save();
     }
-    public static function saverow2($sheetid, $data,$date) {
+
+    public static function saverow2($sheetid, $data, $date) {
         $row = new DataRows();
 
         $row->sheet_id = $sheetid;
         $row->positiontype = $data[0];
         $row->department = $data[1];
-       
+
         $row->lv1 = $data[2];
         $row->lv2 = $data[3];
         $row->lv3 = $data[4];
@@ -146,13 +146,14 @@ class AttachFileService {
         $row->month = $date['Month'];
         $row->save();
     }
-       public static function saverow3($sheetid, $data,$date) {
+
+    public static function saverow3($sheetid, $data, $date) {
         $row = new DataRowsheet3();
 
         $row->sheet_id = $sheetid;
         $row->detail = $data[0];
         $row->nolv = $data[1];
-       
+
         $row->lv1 = $data[2];
         $row->lv2 = $data[3];
         $row->lv3 = $data[4];
@@ -165,7 +166,7 @@ class AttachFileService {
         $row->lv10 = $data[11];
         $row->year = $date['Year'];
         $row->month = $date['Month'];
-         $row->summary=$data[2]+$data[3]+$data[4]+$data[5]+$data[6]+$data[7]+$data[8]+$data[9]+$data[10]+$data[11];
+        $row->summary = $data[2] + $data[3] + $data[4] + $data[5] + $data[6] + $data[7] + $data[8] + $data[9] + $data[10] + $data[11];
         $row->save();
     }
 

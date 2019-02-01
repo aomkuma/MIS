@@ -61,12 +61,11 @@ class PersonalController extends Controller {
 
             $DataList = $Result['DataList'];
             $Summary = $Result['Summary'];
-            // print_r($DataList);
-            // exit;
+
 
             $this->data_result['DATA']['DataList'] = $DataList;
             $this->data_result['DATA']['Summary'] = $Summary;
-//            print_r($this->data_result);
+//             print_r($Summary);
 //            die();
             return $this->returnResponse(200, $this->data_result, $response, false);
         } catch (\Exception $e) {
@@ -94,14 +93,7 @@ class PersonalController extends Controller {
         $curMonth = $condition['MonthFrom'];
         $DataList = [];
         $DataSummary = [];
-//        $DataSummary['SummaryCurrentsum'] = 0;
-//        $DataSummary['SummaryBeforesum'] = 0;
-//        $DataSummary['SummaryCurrentdirector'] = 0;
-//        $DataSummary['SummaryBeforedirector'] = 0;
-//        $DataSummary['SummaryCurrent'] = 0;
-//        $DataSummary['SummaryBefore'] = 0;
-//        $DataSummary['SummaryCurrentPercentage'] = 0;
-//        $DataSummary['SummaryBeforePercentage'] = 0;
+
         $positiontype = PersonalService::getPositiontype();
 
 //        die();
@@ -137,11 +129,9 @@ class PersonalController extends Controller {
                 // get cooperative type
 
                 $data['CurrentEmployee'] = PersonalService::getMainList($curYear, $curMonth, $value['positiontype']);
-//                $data['CurrentEmployee'] = floatval($Currentdata);
+
                 $data['BeforeEmployee'] = PersonalService::getMainList($beforeYear, $curMonth, $value['positiontype']);
-                //     $data['BeforeEmployee'] = floatval($Beforedata);
-//                $diffData = $data['CurrentCowData'] - $data['BeforeCowData'];
-//                $data['DiffCowData'] = $diffCowData;
+
 //
                 foreach ($data['CurrentEmployee'] as $key => $current) {
                     $data['CurrentEmployee'][$key]['percent'] = 0;
@@ -187,22 +177,350 @@ class PersonalController extends Controller {
             }
 
             //tb2
-            $DataSummary['current'] = PersonalService::getMainListsheet3($curYear, $curMonth);
-            $DataSummary['before'] = PersonalService::getMainListsheet3($beforeYear, $curMonth);
-            foreach ($DataSummary['current'] as $key => $t) {
-                $DataSummary['current'][$key]['Monthname'] = $monthName;
-                if($DataSummary['before'][$key]['summary']!=0&&$DataSummary['before'][$key]['summary']!=''){
-                         $DataSummary['current'][$key]['percent']=(($t['summary']- $DataSummary['before'][$key]['summary'])*100)/$DataSummary['before'][$key]['summary'];
-           
-                }else{
-                    $DataSummary['current'][$key]['percent']=0;
+            $DataSummary2['current'] = PersonalService::getMainListsheet3($curYear, $curMonth);
+            $DataSummary2['before'] = PersonalService::getMainListsheet3($beforeYear, $curMonth);
+            foreach ($DataSummary2['current'] as $key => $t) {
+                $DataSummary2['current'][$key]['Monthname'] = $monthName;
+                if ($DataSummary2['before'][$key]['summary'] != 0 && $DataSummary2['before'][$key]['summary'] != '') {
+                    $DataSummary2['current'][$key]['percent'] = (($t['summary'] - $DataSummary2['before'][$key]['summary']) * 100) / $DataSummary2['before'][$key]['summary'];
+                } else {
+                    $DataSummary2['current'][$key]['percent'] = 0;
                 }
             }
-
+            array_push($DataSummary, $DataSummary2);
             $curMonth++;
         }
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
+    }
+
+    public function getQuarterDataList($condition) {
+
+        // get loop to query
+        $diffYear = ($condition['YearTo'] - $condition['YearFrom']) + 1;
+        $cnt = 0;
+        $loop = 0;
+        $j = $condition['QuarterFrom'];
+        $positiontype = PersonalService::getPositiontype();
+        for ($i = 0; $i < $diffYear; $i++) {
+            if ($cnt == $diffYear) {
+                for ($k = 0; $k < $condition['QuarterTo']; $k++) {
+                    $loop++;
+                }
+            } else {
+
+                if ($i > 0) {
+                    $j = 0;
+                }
+
+                if ($diffYear == 1) {
+                    $length = $condition['QuarterTo'];
+                } else {
+                    $length = 4;
+                }
+                for (; $j < $length; $j++) {
+                    $loop++;
+                }
+            }
+            $cnt++;
+        }
+
+        $loop++;
+
+        $curQuarter = intval($condition['QuarterFrom']);
+
+        if (intval($curQuarter) == 1) {
+            $curYear = intval($condition['YearFrom']) - 1;
+            $beforeYear = $curYear - 1;
+        } else {
+            $curYear = intval($condition['YearFrom']);
+            $beforeYear = $curYear - 1;
+        }
+
+        $DataList = [];
+
+        $Summary = [];
+        for ($i = 0; $i < $loop; $i++) {
+
+            if ($i > 0 && $curQuarter == 2) {
+                $curYear++;
+                $beforeYear = $curYear - 1;
+            }
+
+            // find month in quarter
+            if ($curQuarter == 1) {
+                $monthList = [10, 11, 12];
+            } else if ($curQuarter == 2) {
+                $monthList = [1, 2, 3];
+            } else if ($curQuarter == 3) {
+                $monthList = [4, 5, 6];
+            } else if ($curQuarter == 4) {
+                $monthList = [7, 8, 9];
+            }
+
+            // Loop User Regions
+            foreach ($positiontype as $key => $value) {
+
+                $data = [];
+                $data['Position'] = $value['positiontype'];
+                //$data['Month'] = $monthName;
+                $data['Quarter'] = ($curQuarter) . ' (' . ($curQuarter == 1 ? $curYear + 543 + 1 : $curYear + 543) . ')';
+                $data['Year'] = ($curYear);
+                $data['SummaryCurrentsum'] = 0;
+                $data['SummaryBeforesum'] = 0;
+                $data['SummaryCurrentdirector'] = 0;
+                $data['SummaryBeforedirector'] = 0;
+                $data['SummaryCurrent'] = 0;
+                $data['SummaryBefore'] = 0;
+                $data['SummaryPercentage'] = 0;
+                $data['SummarysumPercentage'] = 0;
+//                $data['CurrentEmployee'] = PersonalService::getMainList($curYear, $monthList[0], $value['positiontype']);
+//                $data['BeforeEmployee'] = PersonalService::getMainList($beforeYear, $monthList[0], $value['positiontype']);
+                $DataSummary = [];
+//                $DataSummary['current'] = PersonalService::getMainListsheet3($curYear, $monthList[0]);
+//                $DataSummary['before'] = PersonalService::getMainListsheet3($beforeYear, $monthList[0]);
+                $DataSummary['Quarter'] = ($curQuarter);
+
+                $start = 0;
+
+                for ($j = 0; $j < count($monthList); $j++) {
+                    $data['CurrentEmployee'] = PersonalService::getMainList($curYear, $monthList[$j], $value['positiontype']);
+                    $data['BeforeEmployee'] = PersonalService::getMainList($beforeYear, $monthList[$j], $value['positiontype']);
+                    $DataSummary['current'] = PersonalService::getMainListsheet3($curYear, $monthList[$j]);
+                    $DataSummary['before'] = PersonalService::getMainListsheet3($beforeYear, $monthList[$j]);
+                    if (sizeof($data['CurrentEmployee']) > 0) {
+                        $start = $j + 1;
+
+                        break;
+                    }
+                }
+                // loop get quarter sum data
+                for ($j = $start; $j < count($monthList); $j++) {
+                    $curMonth = $monthList[$j];
+                    $data2['CurrentEmployee'] = PersonalService::getMainList($curYear, $curMonth, $value['positiontype']);
+                    $data2['BeforeEmployee'] = PersonalService::getMainList($beforeYear, $curMonth, $value['positiontype']);
+                    foreach ($data2['CurrentEmployee'] as $key => $itemdata2) {
+                        $data['CurrentEmployee'][$key]['summary'] += $itemdata2['summary'];
+                        $data['CurrentEmployee'][$key]['director'] += $itemdata2['director'];
+
+                        $data['BeforeEmployee'][$key]['summary'] += $data2['BeforeEmployee'][$key]['summary'];
+                        $data['BeforeEmployee'][$key]['director'] += $data2['BeforeEmployee'][$key]['director'];
+                    }
+
+
+
+                    $DataSummary2['current'] = PersonalService::getMainListsheet3($curYear, $curMonth);
+                    $DataSummary2['before'] = PersonalService::getMainListsheet3($beforeYear, $curMonth);
+
+
+                    foreach ($DataSummary2['current'] as $key => $itemsm) {
+                        if ($DataSummary2['current'][$key]['summary'] != '') {
+                            $DataSummary['current'][$key]['summary'] += $DataSummary2['current'][$key]['summary'];
+                            $DataSummary['current'][$key]['lv1'] += $DataSummary2['current'][$key]['lv1'];
+                            $DataSummary['current'][$key]['lv2'] += $DataSummary2['current'][$key]['lv2'];
+                            $DataSummary['current'][$key]['lv3'] += $DataSummary2['current'][$key]['lv3'];
+                            $DataSummary['current'][$key]['lv4'] += $DataSummary2['current'][$key]['lv4'];
+                            $DataSummary['current'][$key]['lv5'] += $DataSummary2['current'][$key]['lv5'];
+                            $DataSummary['current'][$key]['lv6'] += $DataSummary2['current'][$key]['lv6'];
+                            $DataSummary['current'][$key]['lv7'] += $DataSummary2['current'][$key]['lv7'];
+                            $DataSummary['current'][$key]['lv8'] += $DataSummary2['current'][$key]['lv8'];
+                            $DataSummary['current'][$key]['lv9'] += $DataSummary2['current'][$key]['lv9'];
+                            $DataSummary['current'][$key]['lv10'] += $DataSummary2['current'][$key]['lv10'];
+                        }
+                        if ($DataSummary2['before'][$key]['summary'] != '') {
+                            $DataSummary['before'][$key]['summary'] += $DataSummary2['before'][$key]['summary'];
+                        }
+                    }
+                }
+
+                foreach ($data['CurrentEmployee'] as $key => $current) {
+                    $data['CurrentEmployee'][$key]['percent'] = 0;
+                    $data['SummaryCurrentsum'] += $current['summary'];
+                    $data['SummaryCurrentdirector'] += $current['director'];
+                }
+
+                if ($data['BeforeEmployee'] != '' && !is_null($data['BeforeEmployee'])) {
+
+                    foreach ($data['CurrentEmployee'] as $keyitem => $item) {
+//                          
+
+                        $sumcurrent = $item['summary'] + $item['director'];
+                        $sumbefore = $data['BeforeEmployee'][$keyitem]['summary'] + $data['BeforeEmployee'][$keyitem]['director'];
+
+
+                        $data['SummaryCurrent'] += $sumcurrent;
+//                        
+                        $data['SummaryBeforesum'] += $data['BeforeEmployee'][$keyitem]['summary'];
+                        $data['SummaryBeforedirector'] += $data['BeforeEmployee'][$keyitem]['director'];
+                        $data['SummaryBefore'] += $sumbefore;
+                        if ($sumbefore != 0) {
+                            $data['CurrentEmployee'][$keyitem]['percent'] = (($sumcurrent - $sumbefore) * 100) / $sumbefore;
+                        }
+
+                        $data['SummaryPercentage'] += ($sumcurrent + $sumbefore);
+                    }
+                    if ($data['SummaryBefore'] != 0) {
+                        $data['SummarysumPercentage'] = (($data['SummaryCurrent'] - $data['SummaryBefore']) * 100) / $data['SummaryBefore'];
+                    }
+                }
+
+
+                array_push($DataList, $data);
+            }
+
+            foreach ($DataSummary['current'] as $key => $t) {
+
+                if ($DataSummary['before'][$key]['summary'] != 0 && $DataSummary['before'][$key]['summary'] != '') {
+                    $DataSummary['current'][$key]['percent'] = (($t['summary'] - $DataSummary['before'][$key]['summary']) * 100) / $DataSummary['before'][$key]['summary'];
+                } else {
+                    $DataSummary['current'][$key]['percent'] = 0;
+                }
+            }
+            array_push($Summary, $DataSummary);
+            $curQuarter++;
+            if ($curQuarter > 4) {
+                $curQuarter = 1;
+            }
+        }
+
+        // print_r($Summary);
+        //  die();
+        return ['DataList' => $DataList, 'Summary' => $Summary];
+    }
+
+    public function getAnnuallyDataList($condition) {
+
+        $loop = intval($condition['YearTo']) - intval($condition['YearFrom']) + 1;
+        $curYear = $condition['YearFrom'];
+        $calcYear = intval($curYear) - 1;
+        $beforeYear = $calcYear - 1;
+        $monthList = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+        $positiontype = PersonalService::getPositiontype();
+        $DataList = [];
+        $Summary = [];
+
+
+        for ($i = 0; $i < $loop; $i++) {
+
+            foreach ($positiontype as $key => $value) {
+
+
+
+
+                $data = [];
+                $data['Position'] = $value['positiontype'];
+
+                $data['Year'] = ($curYear);
+                $data['SummaryCurrentsum'] = 0;
+                $data['SummaryBeforesum'] = 0;
+                $data['SummaryCurrentdirector'] = 0;
+                $data['SummaryBeforedirector'] = 0;
+                $data['SummaryCurrent'] = 0;
+                $data['SummaryBefore'] = 0;
+                $data['SummaryPercentage'] = 0;
+                $data['SummarysumPercentage'] = 0;
+//                $data['CurrentEmployee'] = PersonalService::getMainList($curYear, $monthList[0], $value['positiontype']);
+//                $data['BeforeEmployee'] = PersonalService::getMainList($beforeYear, $monthList[0], $value['positiontype']);
+                $DataSummary = [];
+//                $DataSummary['current'] = PersonalService::getMainListsheet3($curYear, $monthList[0]);
+//                $DataSummary['before'] = PersonalService::getMainListsheet3($beforeYear, $monthList[0]);
+                $DataSummary['Year'] = ($curYear);
+                $start = 0;
+
+                for ($j = 0; $j < count($monthList); $j++) {
+                    $data['CurrentEmployee'] = PersonalService::getMainList($curYear, $monthList[$j], $value['positiontype']);
+                    $data['BeforeEmployee'] = PersonalService::getMainList($beforeYear, $monthList[$j], $value['positiontype']);
+                    $DataSummary['current'] = PersonalService::getMainListsheet3($curYear, $monthList[$j]);
+                    $DataSummary['before'] = PersonalService::getMainListsheet3($beforeYear, $monthList[$j]);
+                    if (sizeof($data['CurrentEmployee']) > 0) {
+                        $start = $j + 1;
+                        //   print_r($DataSummary);
+                        break;
+                    }
+                }
+
+                for ($j = $start; $j < count($monthList); $j++) {
+                    $curMonth = $monthList[$j];
+                    if (intval($curMonth) == 1) {
+                        $calcYear++;
+                        $beforeYear = $calcYear - 1;
+                    }
+                    $data2['CurrentEmployee'] = PersonalService::getMainList($curYear, $curMonth, $value['positiontype']);
+                    $data2['BeforeEmployee'] = PersonalService::getMainList($beforeYear, $curMonth, $value['positiontype']);
+                    foreach ($data2['CurrentEmployee'] as $key => $itemdata2) {
+                        $data['CurrentEmployee'][$key]['summary'] += $itemdata2['summary'];
+                        $data['CurrentEmployee'][$key]['director'] += $itemdata2['director'];
+
+                        $data['BeforeEmployee'][$key]['summary'] += $data2['BeforeEmployee'][$key]['summary'];
+                        $data['BeforeEmployee'][$key]['director'] += $data2['BeforeEmployee'][$key]['director'];
+                    }
+
+
+
+                    $DataSummary2['current'] = PersonalService::getMainListsheet3($curYear, $curMonth);
+                    $DataSummary2['before'] = PersonalService::getMainListsheet3($beforeYear, $curMonth);
+
+                    if (sizeof($DataSummary2['current']) > 0) {
+                        foreach ($DataSummary2['current'] as $key => $itemsm) {
+                            if ($DataSummary2['current'][$key]['summary'] != '') {
+                                $DataSummary['current'][$key]['summary'] += $DataSummary2['current'][$key]['summary'];
+                            }
+                            if ($DataSummary2['before'][$key]['summary'] != '') {
+                                $DataSummary['before'][$key]['summary'] += $DataSummary2['before'][$key]['summary'];
+                            }
+                        }
+                    }
+                }
+
+                foreach ($data['CurrentEmployee'] as $key => $current) {
+                    $data['CurrentEmployee'][$key]['percent'] = 0;
+                    $data['SummaryCurrentsum'] += $current['summary'];
+                    $data['SummaryCurrentdirector'] += $current['director'];
+                }
+
+                if ($data['BeforeEmployee'] != '' && !is_null($data['BeforeEmployee'])) {
+
+                    foreach ($data['CurrentEmployee'] as $keyitem => $item) {
+//                          
+
+                        $sumcurrent = $item['summary'] + $item['director'];
+                        $sumbefore = $data['BeforeEmployee'][$keyitem]['summary'] + $data['BeforeEmployee'][$keyitem]['director'];
+
+
+                        $data['SummaryCurrent'] += $sumcurrent;
+//                        
+                        $data['SummaryBeforesum'] += $data['BeforeEmployee'][$keyitem]['summary'];
+                        $data['SummaryBeforedirector'] += $data['BeforeEmployee'][$keyitem]['director'];
+                        $data['SummaryBefore'] += $sumbefore;
+                        if ($sumbefore != 0) {
+                            $data['CurrentEmployee'][$keyitem]['percent'] = (($sumcurrent - $sumbefore) * 100) / $sumbefore;
+                        }
+
+                        $data['SummaryPercentage'] += ($sumcurrent + $sumbefore);
+                    }
+                    if ($data['SummaryBefore'] != 0) {
+                        $data['SummarysumPercentage'] = (($data['SummaryCurrent'] - $data['SummaryBefore']) * 100) / $data['SummaryBefore'];
+                    }
+                }
+
+
+                array_push($DataList, $data);
+            }
+            foreach ($DataSummary['current'] as $key => $t) {
+
+                if ($DataSummary['before'][$key]['summary'] != 0 && $DataSummary['before'][$key]['summary'] != '') {
+                    $DataSummary['current'][$key]['percent'] = (($t['summary'] - $DataSummary['before'][$key]['summary']) * 100) / $DataSummary['before'][$key]['summary'];
+                } else {
+                    $DataSummary['current'][$key]['percent'] = 0;
+                }
+            }
+            array_push($Summary, $DataSummary);
+            $curYear++;
+        }
+        // exit;
+
+        return ['DataList' => $DataList, 'Summary' => $Summary];
     }
 
 }

@@ -156,7 +156,7 @@
 				<td colspan="7">{{getRegionName(data.region_id)}}</td>
 			</tr>-->
 			<tr>
-				<td>{{data.Position}}</td>
+				<td><b>{{data.Position}}</b></td>
 				<td>{{data.Month}}</td>
 				<td></td>
 				<td></td>
@@ -179,7 +179,7 @@
 				<td style="text-align: center;">{{numberFormat(row.summary+row.director+data.BeforeEmployee[$index].summary+data.BeforeEmployee[$index].director)}}</td>
 				<td style="text-align: center;">{{numberFormatComma(row.percent)}}</td>
 			</tr>
-				<tr>
+				<tr style="background-color:#B2BABB">
 				<td></td>
 				<td>รวม</td>
 				<td style="text-align: center;">{{numberFormat(data.SummaryCurrentsum)}}</td>
@@ -217,84 +217,220 @@
 				<th style="text-align: center;">% เพิ่ม / ลด</th>
 			</tr>
 		</thead>
-		<tbody ng-repeat="data in SummaryData.current">
-		</tr>
-			<tr>
-				<td>{{data.detail}}</td>
-				<td>{{data.Monthname}}</td>
-				<td style="text-align: center;">{{numberFormat(data.summary)}}</td>
-				<td style="text-align: center;">{{numberFormat(SummaryData.before[$index].summary)}}</td>
-				<td style="text-align: center;">{{numberFormat(data.summary+SummaryData.before[$index].summary)}}</td>
-				<td style="text-align: center;">{{numberFormatComma(data.percent)}}</td>
+		<tbody ng-repeat="data in SummaryData">
+		
+			<tr ng-repeat="row in data.current">
+				<td>{{row.detail}}</td>
+				<td>{{row.Monthname}}</td>
+				<td style="text-align: center;">{{numberFormat(row.summary)}}</td>
+				<td style="text-align: center;">{{numberFormat(data.before[$index].summary)}}</td>
+				<td style="text-align: center;">{{numberFormat(row.summary+data.before[$index].summary)}}</td>
+				<td style="text-align: center;">{{numberFormatComma(row.percent)}}</td>
 			</tr>
 			
 		</tbody>
 	</table>
 </div>
 <div class="col-lg-12 table-responsive" ng-show="ViewType == 'MAIN' && condition.DisplayType == 'quarter'">
+	<div>
+		<h4>จำนวนพนักงานและพนักงานสัญญาจ้าง</h4>
+	</div>
 	<table class="table table-bordered table-striped">
 		
 		<thead style="background-color: #BD1212; color: #FFF;">
 			<tr>
-				<th rowspan="2" style="text-align: center; vertical-align: middle;">ภูมิภาค</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">รายการ</th>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">ไตรมาส</th>
-			<!--
-				<th colspan="2" style="text-align: center;">2560</th>
-				<th colspan="2" style="text-align: center;">2561</th>
-			-->
-				<th colspan="2" style="text-align: center; vertical-align: middle;">{{CurYear}}</th>
-				<th colspan="2" style="text-align: center; vertical-align: middle;">{{LastYear}}</th>
-				<th colspan="4" style="text-align: center;">ผลต่าง</th>
-				<th rowspan="2" style="text-align: center; vertical-align: middle;">วันที่บันทึกข้อมูล</th>
-				<th rowspan="2" style="text-align: center; vertical-align: middle;">วันที่อนุมัติ</th>
-				<th rowspan="2" style="text-align: center; vertical-align: middle;">สถานะ</th>
-				<th rowspan="2" style="text-align: center; vertical-align: middle;">รายละเอียด</th>
+				<th colspan="3" style="text-align: center; vertical-align: middle;">{{CurYear}}</th>
+				<th colspan="3" style="text-align: center; vertical-align: middle;">{{LastYear}}</th>
+				<th colspan="2" style="text-align: center;">ผลต่าง</th>
+				
 			</tr>
 			<tr>
-				<th style="text-align: center;">โคที่รับบริการ (ตัว)</th>
-				<th style="text-align: center;">รายได้ค่าบริการ (บาท)</th>
-				<th style="text-align: center;">โคที่รับบริการ (ตัว)</th>
-				<th style="text-align: center;">รายได้ค่าบริการ (บาท)</th>
-				<th style="text-align: center;">โคที่รับบริการ (ตัว)</th>
-				<th style="text-align: center;">% เพิ่ม / ลด</th>
-				<th style="text-align: center;">รายได้ค่าบริการ (บาท)</th>
+				<th style="text-align: center;">พนักงาน</th>
+				<th style="text-align: center;">สัญญาจ้าง</th>
+				<th style="text-align: center;">รวม</th>
+				<th style="text-align: center;">พนักงาน</th>
+				<th style="text-align: center;">สัญญาจ้าง</th>
+				<th style="text-align: center;">รวม</th>
+			
+				<th style="text-align: center;">จำนวนรวม</th>
 				<th style="text-align: center;">% เพิ่ม / ลด</th>
 			</tr>
 		</thead>
-		<tbody >
+		<tbody ng-repeat="data in List">
 			<!--<tr style="background-color: #B6CCFF; padding: 5px;">
 				<td colspan="7">{{getRegionName(data.region_id)}}</td>
 			</tr>-->
+			<tr>
+				<td><b>{{data.Position}}</b></td>
+				<td>{{data.Quarter}}</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr ng-repeat="row in data.CurrentEmployee">
+				<td>{{row.department}}</td>
+				<td></td>
+				<td style="text-align: center;">{{numberFormat(row.summary)}}</td>
+				<td style="text-align: center;">{{numberFormat(row.director)}}</td>
+				<td style="text-align: center;">{{numberFormat(row.summary+row.director)}}</td>
+				<td style="text-align: center;">{{numberFormat(data.BeforeEmployee[$index].summary)}}</td>
+				<td style="text-align: center;">{{numberFormat(data.BeforeEmployee[$index].director)}}</td>
+				<td style="text-align: center;">{{numberFormat(data.BeforeEmployee[$index].summary+data.BeforeEmployee[$index].director)}}</td>
+				<td style="text-align: center;">{{numberFormat(row.summary+row.director+data.BeforeEmployee[$index].summary+data.BeforeEmployee[$index].director)}}</td>
+				<td style="text-align: center;">{{numberFormatComma(row.percent)}}</td>
+			</tr>
+			<tr style="background-color:#B2BABB">
+				<td></td>
+				<td>รวม</td>
+				<td style="text-align: center;">{{numberFormat(data.SummaryCurrentsum)}}</td>
+				<td style="text-align: center;">{{numberFormat(data.SummaryCurrentdirector)}}</td>
+				<td style="text-align: center;">{{numberFormat(data.SummaryCurrent)}}</td>
+				<td style="text-align: center;">{{numberFormat(data.SummaryBeforesum)}}</td>
+				<td style="text-align: center;">{{numberFormat(data.SummaryBeforedirector)}}</td>
+				<td style="text-align: center;">{{numberFormat(data.SummaryBefore)}}</td>
+				<td style="text-align: center;">{{numberFormat(data.SummaryPercentage)}}</td>
+				<td style="text-align: center;">{{numberFormatComma(data.SummarysumPercentage)}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<div>
+		<h4>ความเคลื่อนไหวของบุคลากร</h4>
+	</div>
+	<table class="table table-bordered table-striped">
+		
+		<thead style="background-color: #BD1212; color: #FFF;">
+			<tr>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">รายการ</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">ไตรมาส</th>
+				<th colspan="1" style="text-align: center; vertical-align: middle;">{{CurYear}}</th>
+				<th colspan="1" style="text-align: center; vertical-align: middle;">{{LastYear}}</th>
+				<th colspan="2" style="text-align: center;">ผลต่าง</th>
+				
+			</tr>
+			<tr>
+				<th style="text-align: center;">พนักงาน</th>
+				
+				<th style="text-align: center;">พนักงาน</th>
+				
+			
+				<th style="text-align: center;">จำนวนรวม</th>
+				<th style="text-align: center;">% เพิ่ม / ลด</th>
+			</tr>
+		</thead>
+		<tbody ng-repeat="data in SummaryData">
+		
+			<tr ng-repeat="row in data.current">
+				<td>{{row.detail}}</td>
+				<td>{{data.Quarter}}</td>
+				<td style="text-align: center;">{{numberFormat(row.summary)}}</td>
+				<td style="text-align: center;">{{numberFormat(data.before[$index].summary)}}</td>
+				<td style="text-align: center;">{{numberFormat(row.summary+data.before[$index].summary)}}</td>
+				<td style="text-align: center;">{{numberFormatComma(row.percent)}}</td>
+			</tr>
 			
 		</tbody>
 	</table>
 </div>
 <div class="col-lg-12 table-responsive" ng-show="ViewType == 'MAIN' && condition.DisplayType == 'annually'">
+	<div>
+		<h4>จำนวนพนักงานและพนักงานสัญญาจ้าง</h4>
+	</div>
 	<table class="table table-bordered table-striped">
 		
 		<thead style="background-color: #BD1212; color: #FFF;">
 			<tr>
-				<th rowspan="2" style="text-align: center; vertical-align: middle;">ภูมิภาค</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">รายการ</th>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">ปี</th>
-				<th rowspan="2" style="text-align: center; vertical-align: middle;">โคที่รับบริการ (ตัว)</th>
-				<th rowspan="2" style="text-align: center; vertical-align: middle;">รายได้ค่าบริการ (บาท)</th>
-				<th colspan="4" style="text-align: center;">ผลต่าง</th>
-				<th rowspan="2" style="text-align: center; vertical-align: middle;">วันที่บันทึกข้อมูล</th>
-				<th rowspan="2" style="text-align: center; vertical-align: middle;">วันที่อนุมัติ</th>
-				<th rowspan="2" style="text-align: center; vertical-align: middle;">สถานะ</th>
-				<th rowspan="2" style="text-align: center; vertical-align: middle;">รายละเอียด</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">พนักงาน</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">สัญญาจ้าง</th>
+				
+				
+				<th colspan="2" style="text-align: center;">ผลต่าง</th>
+				
 			</tr>
 			<tr>
-				<th style="text-align: center;">โคที่รับบริการ (ตัว)</th>
-				<th style="text-align: center;">% เพิ่ม / ลด</th>
-				<th style="text-align: center;">รายได้ค่าบริการ (บาท)</th>
+				
+			
+				<th style="text-align: center;">จำนวนรวม</th>
 				<th style="text-align: center;">% เพิ่ม / ลด</th>
 			</tr>
 		</thead>
-		<tbody >
+		<tbody ng-repeat="data in List">
 			<!--<tr style="background-color: #B6CCFF; padding: 5px;">
 				<td colspan="7">{{getRegionName(data.region_id)}}</td>
 			</tr>-->
+			<tr>
+				<td><b>{{data.Position}}</b></td>
+				<td>{{data.Year}}</td>
+				<td></td>
+				<td></td>
+				
+				
+				<td></td>
+				<td></td>
+			</tr>
+			<tr ng-repeat="row in data.CurrentEmployee">
+				<td>{{row.department}}</td>
+				<td></td>
+				<td style="text-align: center;">{{numberFormat(row.summary)}}</td>
+				<td style="text-align: center;">{{numberFormat(row.director)}}</td>
+				<td style="text-align: center;">{{numberFormat(row.summary+row.director)}}</td>
+				
+				
+				<td style="text-align: center;">{{numberFormatComma(row.percent)}}</td>
+			</tr>
+					<tr style="background-color:#B2BABB">
+				<td></td>
+				<td>รวม</td>
+				<td style="text-align: center;">{{numberFormat(data.SummaryCurrentsum)}}</td>
+				<td style="text-align: center;">{{numberFormat(data.SummaryCurrentdirector)}}</td>
+				<td style="text-align: center;">{{numberFormat(data.SummaryCurrent)}}</td>
+				
+			
+				<td style="text-align: center;">{{numberFormatComma(data.SummarysumPercentage)}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<div>
+		<h4>ความเคลื่อนไหวของบุคลากร</h4>
+	</div>
+	<table class="table table-bordered table-striped">
+		
+		<thead style="background-color: #BD1212; color: #FFF;">
+			<tr>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">รายการ</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">ปี</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">พนักงาน</th>
+				
+				
+				<th  style="text-align: center;">ผลต่าง</th>
+				
+			</tr>
+			<tr>
+				
+				
+			
+				
+				<th style="text-align: center;">% เพิ่ม / ลด</th>
+			</tr>
+		</thead>
+		<tbody ng-repeat="data in SummaryData">
+		
+			<tr ng-repeat="row in data.current">
+				<td>{{row.detail}}</td>
+				<td>{{data.Year}}</td>
+				<td style="text-align: center;">{{numberFormat(row.summary)}}</td>
+			
+				
+				<td style="text-align: center;">{{numberFormatComma(row.percent)}}</td>
+			</tr>
 			
 		</tbody>
 	</table>

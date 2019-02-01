@@ -26,51 +26,12 @@ angular.module('e-homework').controller('MainPRController', function($scope, $co
             if(result.data.STATUS == 'OK'){
                 $scope.List = result.data.DATA.DataList;
                 $scope.SummaryData = result.data.DATA.Summary;
-                console.log( $scope.List);
-            }
-            IndexOverlayFactory.overlayHide();
-        });
-    }
-/*
-    $scope.loadListDetail = function(action, description){
-        $scope.data_description = description;
-        var params = {
-            'condition' : $scope.condition
-            , 'region' : $scope.PersonRegion
-            , 'description' : description
-        };
-        IndexOverlayFactory.overlayShow();
-        HTTPService.clientRequest(action, params).then(function(result){
-            if(result.data.STATUS == 'OK'){
-                $scope.DetailList = result.data.DATA.DetailList;
-                $scope.CooperativeList = result.data.DATA.CooperativeList;
-                // $scope.SummaryData = result.data.DATA.Summary;
-                // console.log($scope.List);
+             //   console.log( $scope.SummaryData);
             }
             IndexOverlayFactory.overlayHide();
         });
     }
 
-    $scope.loadListSubDetail = function(action, cooperative_id, description){
-        var params = {
-            'condition' : $scope.condition
-            , 'region' : $scope.PersonRegion
-            , 'description' : description
-            , 'cooperative_id' : cooperative_id
-        };
-        IndexOverlayFactory.overlayShow();
-        HTTPService.clientRequest(action, params).then(function(result){
-            if(result.data.STATUS == 'OK'){
-                $scope.DetailList = result.data.DATA.SubDetailList;
-                $scope.Cooperative = result.data.DATA.Cooperative;
-                $scope.Header =  result.data.DATA.MonthNameList;
-                // $scope.SummaryData = result.data.DATA.Summary;
-                // console.log($scope.List);
-            }
-            IndexOverlayFactory.overlayHide();
-        });
-    }
-*/
     $scope.getThaiDate = function(date){
         // console.log(date);
         return convertDateToFullThaiDateIgnoreTime(new Date(date));
@@ -99,28 +60,6 @@ angular.module('e-homework').controller('MainPRController', function($scope, $co
         return num.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
-    /*
-
-    $scope.viewDetail = function(description){
-        $scope.ViewType = 'DETAIL';
-        $scope.description = description;
-        $scope.loadListDetail('veterinary/list/detail', description);
-    }
-
-    $scope.getRegionName = function(region_id){
-        switch(region_id){
-            case 1 : return 'อ.ส.ค. สำนักงานใหญ่ มวกเหล็ก';
-            case 2 : return 'อ.ส.ค. สำนักงานกรุงเทพฯ Office';
-            case 3 : return 'อ.ส.ค. สำนักงานภาคกลาง';
-            case 4 : return 'อ.ส.ค. ภาคใต้ (ประจวบคีรีขันธ์)';
-            case 5 : return 'อ.ส.ค. ภาคตะวันออกเฉียงเหนือ (ขอนแก่น)';
-            case 6 : return 'อ.ส.ค. ภาคเหนือตอนล่าง (สุโขทัย)';
-            case 7 : return 'อ.ส.ค. ภาคเหนือตอนบน (เชียงใหม่)';
-            default : return '';
-        }
-    }
-
-   */
 
     $scope.Header = [];
     $scope.ViewType = 'MAIN';
@@ -137,12 +76,7 @@ angular.module('e-homework').controller('MainPRController', function($scope, $co
                         ,'QuarterTo':'4'
                     };
 
-    $scope.SummaryData = {
-                    'SummaryCurrentCow':''
-                    ,'SummaryCurrentService':''
-                    ,'SummaryCowPercentage':''
-                    ,'SummaryServicePercentage':''
-                    };
+   
 
     $scope.ResultYearList = [
                 {'years' : (curDate.getFullYear() + 543)}
