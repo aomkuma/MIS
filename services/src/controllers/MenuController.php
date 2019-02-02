@@ -20,32 +20,61 @@
                 $params = $request->getParsedBody();
                 $user_session = $params['user_session'];
                 $UserID = $user_session['UserID'];
+                $Manage = $params['obj']['Manage'];
                 if(empty($UserID)){
                     $UserID = $params['obj']['UserID'];
                 }
-
-                $MenuList = [];
-                // get main menu
-                $_Menu = MenuService::getMenuList(0, $UserID);
-                foreach ($_Menu as $key => $value) {
-                    // get child menu level 1
-                    $_Menu1 = MenuService::getMenuList($value['id'], $UserID);
-                    // print_r($_Menu1);exit;
-                    $MenuList1 = [];
-                    foreach ($_Menu1 as $key1 => $value1) {
-                        $_Menu2 = MenuService::getMenuList($value1['id'], $UserID);
-                        $MenuList2 = [];
-                        foreach ($_Menu2 as $key2 => $value2) {
-                            $_Menu3 = MenuService::getMenuList($value2['id'], $UserID);
-                            $value2['sub_menu'] = $_Menu3;
-                            $MenuList2[] = $value2;
+                
+                if(!empty($Manage)){
+                    $UserID = '';
+                    //getMenuListUpdatePermission
+                    // get main menu
+                    $_Menu = MenuService::getMenuListUpdatePermission(0);
+                    foreach ($_Menu as $key => $value) {
+                        // get child menu level 1
+                        $_Menu1 = MenuService::getMenuListUpdatePermission($value['id']);
+                        // print_r($_Menu1);exit;
+                        $MenuList1 = [];
+                        foreach ($_Menu1 as $key1 => $value1) {
+                            $_Menu2 = MenuService::getMenuListUpdatePermission($value1['id']);
+                            $MenuList2 = [];
+                            foreach ($_Menu2 as $key2 => $value2) {
+                                $_Menu3 = MenuService::getMenuListUpdatePermission($value2['id']);
+                                $value2['sub_menu'] = $_Menu3;
+                                $MenuList2[] = $value2;
+                            }
+                            $value1['sub_menu'] = $MenuList2;
+                            $MenuList1[] = $value1;
                         }
-                        $value1['sub_menu'] = $MenuList2;
-                        $MenuList1[] = $value1;
+                        $value['sub_menu'] = $MenuList1;
+                        $MenuList[] = $value;
                     }
-                    $value['sub_menu'] = $MenuList1;
-                    $MenuList[] = $value;
+                }else{
+                    $MenuList = [];
+                    // get main menu
+                    $_Menu = MenuService::getMenuList(0, $UserID);
+                    foreach ($_Menu as $key => $value) {
+                        // get child menu level 1
+                        $_Menu1 = MenuService::getMenuList($value['id'], $UserID);
+                        // print_r($_Menu1);exit;
+                        $MenuList1 = [];
+                        foreach ($_Menu1 as $key1 => $value1) {
+                            $_Menu2 = MenuService::getMenuList($value1['id'], $UserID);
+                            $MenuList2 = [];
+                            foreach ($_Menu2 as $key2 => $value2) {
+                                $_Menu3 = MenuService::getMenuList($value2['id'], $UserID);
+                                $value2['sub_menu'] = $_Menu3;
+                                $MenuList2[] = $value2;
+                            }
+                            $value1['sub_menu'] = $MenuList2;
+                            $MenuList1[] = $value1;
+                        }
+                        $value['sub_menu'] = $MenuList1;
+                        $MenuList[] = $value;
+                    }
                 }
+
+                
                 $this->data_result['DATA']['Menu'] = $MenuList;
                 return $this->returnResponse(200, $this->data_result, $response, false);
                 

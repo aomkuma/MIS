@@ -21,6 +21,14 @@
                     ->get();      
         }
 
+        public static function getMenuListUpdatePermission($parent_menu){
+            return Menu::select("menu.*", DB::raw("'' AS checked_menu"))
+                    ->where('menu.actives', 'Y')
+                    ->where('parent_menu', $parent_menu)
+                    ->orderBy('menu_order', 'ASC')
+                    ->get();      
+        }
+
         public static function getMenuListManage(){
             return Menu::orderBy('id', 'DESC')
                     ->get();      

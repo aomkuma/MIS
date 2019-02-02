@@ -14,6 +14,7 @@ angular.module('e-homework').controller('LoginController',function($scope, $rout
 	$scope.authenticate = function (action, data){
         sessionStorage.setItem('user_session', null);
         sessionStorage.removeItem('user_session');
+        $scope.currentUser = null;
 		var flag= false;
         $scope.showError = false;
         $scope.showSuccess = false;

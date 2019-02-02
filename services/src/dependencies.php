@@ -142,3 +142,6 @@ $container['ImportPersonalController'] = function ($c) {
 $container['PersonalController'] = function ($c) {
     return new \App\Controller\PersonalController($c->get('logger'), $c->get('db'));
 };
+$container['ChartController'] = function ($c) {
+    return new \App\Controller\ChartController($c->get('logger'), $c->get('db'));
+};

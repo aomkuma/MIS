@@ -17,6 +17,9 @@ class ImportPersonalController extends Controller {
     }
 
     public function import($request, $response) {
+                error_reporting(E_ERROR);
+    error_reporting(E_ALL);
+    ini_set('display_errors','On');
         $_WEB_FILE_PATH = 'files/files';
         try {
             $params = $request->getParsedBody();

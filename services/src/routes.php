@@ -146,6 +146,9 @@ $app->post('/import-personal/', 'ImportPersonalController:import');
 $app->post('/import-personal/list/main/', 'ImportPersonalController:getMainList');
 
 $app->post('/personal/list/main/', 'PersonalController:getMainList');
+
+$app->post('/chart/main/dbi/', 'ChartController:getDataDBI');
+$app->post('/chart/main/ii/', 'ChartController:getDataII');
 // Default action
 $app->get('/[{name}]', function ($request, $response, $args) {
     // Sample log message
