@@ -126,6 +126,7 @@ class PersonalController extends Controller {
                 $data['SummaryBefore'] = 0;
                 $data['SummaryPercentage'] = 0;
                 $data['SummarysumPercentage'] = 0;
+
                 // get cooperative type
 
                 $data['CurrentEmployee'] = PersonalService::getMainList($curYear, $curMonth, $value['positiontype']);
@@ -134,9 +135,12 @@ class PersonalController extends Controller {
 
 //
                 foreach ($data['CurrentEmployee'] as $key => $current) {
+                    $data['CurrentEmployee'][$key]['sumc'] = 0;
+                    $data['CurrentEmployee'][$key]['sumb'] = 0;
+                    $data['CurrentEmployee'][$key]['sum'] = 0;
                     $data['CurrentEmployee'][$key]['percent'] = 0;
                     $data['SummaryCurrentsum'] += $current['summary'];
-                    $data['SummaryCurrentdirector'] = $current['director'];
+                    $data['SummaryCurrentdirector'] += $current['director'];
                 }
 
                 if ($data['BeforeEmployee'] != '' && !is_null($data['BeforeEmployee'])) {
@@ -146,8 +150,9 @@ class PersonalController extends Controller {
 
                         $sumcurrent = $item['summary'] + $item['director'];
                         $sumbefore = $data['BeforeEmployee'][$keyitem]['summary'] + $data['BeforeEmployee'][$keyitem]['director'];
-
-
+                        $data['CurrentEmployee'][$keyitem]['sumc'] = $sumcurrent;
+                        $data['CurrentEmployee'][$keyitem]['sumb'] = $sumbefore;
+                        $data['CurrentEmployee'][$keyitem]['sum'] = $sumbefore + $sumcurrent;
                         $data['SummaryCurrent'] += $sumcurrent;
 //                        
                         $data['SummaryBeforesum'] += $data['BeforeEmployee'][$keyitem]['summary'];
@@ -175,7 +180,55 @@ class PersonalController extends Controller {
 
                 #### End of cooperative 
             }
+//lv8
+            $monthName = PersonalController::getMonthName($curMonth);
 
+            $data = [];
+            $data['Position'] = 'นักวิชาการ 8';
+            $data['Month'] = $monthName;
+            $data['Quarter'] = ($i + 1);
+            $data['Year'] = ($curYear);
+            $data['SummaryCurrentsum'] = 0;
+            $data['SummaryBeforesum'] = 0;
+            $data['SummaryCurrentdirector'] = 0;
+            $data['SummaryBeforedirector'] = 0;
+            $data['SummaryCurrent'] = 0;
+            $data['SummaryBefore'] = 0;
+            $data['SummaryPercentage'] = 0;
+            $data['SummarysumPercentage'] = 0;
+            // get cooperative type
+
+            $data['CurrentEmployee'] = PersonalService::get8($curYear, $curMonth);
+
+            $data['BeforeEmployee'] = PersonalService::get8($beforeYear, $curMonth);
+            $data['CurrentEmployee'][0]['director'] = intval(0);
+            $data['BeforeEmployee'][0]['director'] = intval(0);
+            $data['CurrentEmployee'][0]['sumc'] = 0;
+            $data['CurrentEmployee'][0]['sumb'] = 0;
+            $data['CurrentEmployee'][0]['sum'] = 0;
+            if ($data['BeforeEmployee'] != '' && !is_null($data['BeforeEmployee'])) {
+
+                $sumcurrent = $data['CurrentEmployee'][0]['summary'];
+                $sumbefore = $data['BeforeEmployee'][0]['summary'];
+                $data['CurrentEmployee'][0]['sumc'] = $sumcurrent;
+                $data['CurrentEmployee'][0]['sumb'] = $sumbefore;
+                 $data['CurrentEmployee'][0]['sum'] = $sumcurrent+$sumbefore;
+                $data['SummaryCurrent'] += $sumcurrent;
+                $data['SummaryCurrentsum'] = $data['CurrentEmployee'][0]['summary'];
+                $data['SummaryBeforesum'] = $data['BeforeEmployee'][0]['summary'];
+                $data['SummaryBeforedirector'] += $data['BeforeEmployee'][0]['director'];
+                $data['SummaryBefore'] += $sumbefore;
+                if ($sumbefore != 0) {
+                    $data['CurrentEmployee'][0]['percent'] = (($sumcurrent - $sumbefore) * 100) / $sumbefore;
+                }
+
+                $data['SummaryPercentage'] += ($sumcurrent + $sumbefore);
+            }
+            if ($data['SummaryBefore'] != 0) {
+                $data['SummarysumPercentage'] = (($data['SummaryCurrent'] - $data['SummaryBefore']) * 100) / $data['SummaryBefore'];
+            }
+
+            array_push($DataList, $data);
             //tb2
             $DataSummary2['current'] = PersonalService::getMainListsheet3($curYear, $curMonth);
             $DataSummary2['before'] = PersonalService::getMainListsheet3($beforeYear, $curMonth);
@@ -367,6 +420,55 @@ class PersonalController extends Controller {
 
                 array_push($DataList, $data);
             }
+            //lv8
+            $monthName = PersonalController::getMonthName($curMonth);
+
+            $data = [];
+            $data['Position'] = 'นักวิชาการ 8';
+            $data['Month'] = $monthName;
+            $data['Quarter'] = ($i + 1);
+            $data['Year'] = ($curYear);
+            $data['SummaryCurrentsum'] = 0;
+            $data['SummaryBeforesum'] = 0;
+            $data['SummaryCurrentdirector'] = 0;
+            $data['SummaryBeforedirector'] = 0;
+            $data['SummaryCurrent'] = 0;
+            $data['SummaryBefore'] = 0;
+            $data['SummaryPercentage'] = 0;
+            $data['SummarysumPercentage'] = 0;
+            // get cooperative type
+
+            $data['CurrentEmployee'] = PersonalService::get8($curYear, $curMonth);
+
+            $data['BeforeEmployee'] = PersonalService::get8($beforeYear, $curMonth);
+            $data['CurrentEmployee'][0]['director'] = intval(0);
+            $data['BeforeEmployee'][0]['director'] = intval(0);
+            $data['CurrentEmployee'][0]['sumc'] = 0;
+            $data['CurrentEmployee'][0]['sumb'] = 0;
+            $data['CurrentEmployee'][0]['sum'] = 0;
+            if ($data['BeforeEmployee'] != '' && !is_null($data['BeforeEmployee'])) {
+
+                $sumcurrent = $data['CurrentEmployee'][0]['summary'];
+                $sumbefore = $data['BeforeEmployee'][0]['summary'];
+                $data['CurrentEmployee'][0]['sumc'] = $sumcurrent;
+                $data['CurrentEmployee'][0]['sumb'] = $sumbefore;
+                 $data['CurrentEmployee'][0]['sum'] = $sumcurrent+$sumbefore;
+                $data['SummaryCurrent'] += $sumcurrent;
+                $data['SummaryCurrentsum'] = $data['CurrentEmployee'][0]['summary'];
+                $data['SummaryBeforesum'] = $data['BeforeEmployee'][0]['summary'];
+                $data['SummaryBeforedirector'] += $data['BeforeEmployee'][0]['director'];
+                $data['SummaryBefore'] += $sumbefore;
+                if ($sumbefore != 0) {
+                    $data['CurrentEmployee'][0]['percent'] = (($sumcurrent - $sumbefore) * 100) / $sumbefore;
+                }
+
+                $data['SummaryPercentage'] += ($sumcurrent + $sumbefore);
+            }
+            if ($data['SummaryBefore'] != 0) {
+                $data['SummarysumPercentage'] = (($data['SummaryCurrent'] - $data['SummaryBefore']) * 100) / $data['SummaryBefore'];
+            }
+
+            array_push($DataList, $data);
 
             foreach ($DataSummary['current'] as $key => $t) {
 
@@ -507,6 +609,55 @@ class PersonalController extends Controller {
 
                 array_push($DataList, $data);
             }
+            //lv8
+            $monthName = PersonalController::getMonthName($curMonth);
+
+            $data = [];
+            $data['Position'] = 'นักวิชาการ 8';
+            $data['Month'] = $monthName;
+            $data['Quarter'] = ($i + 1);
+            $data['Year'] = ($curYear);
+            $data['SummaryCurrentsum'] = 0;
+            $data['SummaryBeforesum'] = 0;
+            $data['SummaryCurrentdirector'] = 0;
+            $data['SummaryBeforedirector'] = 0;
+            $data['SummaryCurrent'] = 0;
+            $data['SummaryBefore'] = 0;
+            $data['SummaryPercentage'] = 0;
+            $data['SummarysumPercentage'] = 0;
+            // get cooperative type
+
+            $data['CurrentEmployee'] = PersonalService::get8($curYear, $curMonth);
+
+            $data['BeforeEmployee'] = PersonalService::get8($beforeYear, $curMonth);
+            $data['CurrentEmployee'][0]['director'] = intval(0);
+            $data['BeforeEmployee'][0]['director'] = intval(0);
+            $data['CurrentEmployee'][0]['sumc'] = 0;
+            $data['CurrentEmployee'][0]['sumb'] = 0;
+            $data['CurrentEmployee'][0]['sum'] = 0;
+            if ($data['BeforeEmployee'] != '' && !is_null($data['BeforeEmployee'])) {
+
+                $sumcurrent = $data['CurrentEmployee'][0]['summary'];
+                $sumbefore = $data['BeforeEmployee'][0]['summary'];
+                $data['CurrentEmployee'][0]['sumc'] = $sumcurrent;
+                $data['CurrentEmployee'][0]['sumb'] = $sumbefore;
+                 $data['CurrentEmployee'][0]['sum'] = $sumcurrent+$sumbefore;
+                $data['SummaryCurrent'] += $sumcurrent;
+                $data['SummaryCurrentsum'] = $data['CurrentEmployee'][0]['summary'];
+                $data['SummaryBeforesum'] = $data['BeforeEmployee'][0]['summary'];
+                $data['SummaryBeforedirector'] += $data['BeforeEmployee'][0]['director'];
+                $data['SummaryBefore'] += $sumbefore;
+                if ($sumbefore != 0) {
+                    $data['CurrentEmployee'][0]['percent'] = (($sumcurrent - $sumbefore) * 100) / $sumbefore;
+                }
+
+                $data['SummaryPercentage'] += ($sumcurrent + $sumbefore);
+            }
+            if ($data['SummaryBefore'] != 0) {
+                $data['SummarysumPercentage'] = (($data['SummaryCurrent'] - $data['SummaryBefore']) * 100) / $data['SummaryBefore'];
+            }
+
+            array_push($DataList, $data);
             foreach ($DataSummary['current'] as $key => $t) {
 
                 if ($DataSummary['before'][$key]['summary'] != 0 && $DataSummary['before'][$key]['summary'] != '') {

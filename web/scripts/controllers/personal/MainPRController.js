@@ -26,6 +26,7 @@ angular.module('e-homework').controller('MainPRController', function($scope, $co
             if(result.data.STATUS == 'OK'){
                 $scope.List = result.data.DATA.DataList;
                 $scope.SummaryData = result.data.DATA.Summary;
+                 $scope.s2 = result.data.DATA.s2;
              //   console.log( $scope.SummaryData);
             }
             IndexOverlayFactory.overlayHide();

@@ -125,13 +125,13 @@ class AttachFileService {
         $row->save();
     }
 
-    public static function saverow2($sheetid, $data, $date) {
+    public static function saverow2($sheetid, $data, $date, $seq) {
         $row = new DataRows();
 
         $row->sheet_id = $sheetid;
         $row->positiontype = $data[0];
         $row->department = $data[1];
-
+        $row->seq = $seq;
         $row->lv1 = $data[2];
         $row->lv2 = $data[3];
         $row->lv3 = $data[4];
