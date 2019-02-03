@@ -25,7 +25,7 @@ angular.module('e-homework').controller('UpdateAccController', function($scope, 
     }
 
     $scope.loadMenuList = function(action){
-        HTTPService.clientRequest(action, null).then(function(result){
+        HTTPService.clientRequest(action, {'Manage' : 'Y'}).then(function(result){
             $scope.MenuList = result.data.DATA.Menu;
             $scope.loadAccountPermission('account-permission/get', $scope.ID);
         });
