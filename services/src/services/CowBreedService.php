@@ -8,18 +8,18 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class CowBreedService {
 
-    public static function getMainList($years, $months, $region_id, $cow_breed_type_id){
-            return CowBreed::select(DB::raw("SUM(amount) AS sum_amount")
-                                        ,DB::raw("SUM(`price`) AS sum_baht")
-                                        ,"cow_breed.update_date")
-                            ->join("cow_breed_detail", 'cow_breed_detail.cow_breed_id', '=', 'cow_breed.id')
-                            ->where("years", $years)
-                            ->where("months", $months)
-                            ->where("region_id", $region_id)
-                            ->where('cow_breed_type_id', $cow_breed_type_id)
-                            ->first()
-                            ->toArray();
-        }
+    public static function getMainList($years, $months, $region_id, $cow_breed_type_id) {
+        return CowBreed::select(DB::raw("SUM(amount) AS sum_amount")
+                                , DB::raw("SUM(`price`) AS sum_baht")
+                                , "cow_breed.update_date")
+                        ->join("cow_breed_detail", 'cow_breed_detail.cow_breed_id', '=', 'cow_breed.id')
+                        ->where("years", $years)
+                        ->where("months", $months)
+                        ->where("region_id", $region_id)
+                        ->where('cow_breed_type_id', $cow_breed_type_id)
+                        ->first()
+                        ->toArray();
+    }
 
     public static function getDataByID($id) {
         return CowBreed::where('id', $id)
@@ -31,6 +31,7 @@ class CowBreedService {
     }
 
     public static function getDetailmonth($years, $months, $type_id, $region) {
+        $ckid = null;
         return CowBreed::select(DB::raw("SUM(amount) AS amount")
                                 , DB::raw("SUM(`price`) AS price"))
                         ->join("cow_breed_detail", 'cow_breed_detail.cow_breed_id', '=', 'cow_breed.id')
@@ -38,25 +39,33 @@ class CowBreedService {
                         ->where("months", $months)
                         ->where("region_id", $region)
                         ->where("cow_breed_type_id", $type_id)
+                        ->where('office_approve_id', !$ckid)
+                        ->where(function($query) use ($ckid) {
+
+                            $query->where('office_approve_comment', $ckid);
+                            $query->orWhere('office_approve_comment', '');
+                        })
                         ->first()
                         ->toArray();
     }
+
     public static function getDetailyear($years, $type_id, $region) {
         return CowBreed::select(DB::raw("SUM(amount) AS amount")
                                 , DB::raw("SUM(`price`) AS price"))
                         ->join("cow_breed_detail", 'cow_breed_detail.cow_breed_id', '=', 'cow_breed.id')
                         ->where("years", $years)
-                        
                         ->where("region_id", $region)
                         ->where("cow_breed_type_id", $type_id)
                         ->first()
                         ->toArray();
     }
-     public static function getDetailquar($years, $type_id, $region, $quar) {
-         $st = 1;
+
+    public static function getDetailquar($years, $type_id, $region, $quar) {
+        $st = 1;
         $en = 3;
+        $ckid = null;
         if ($quar == 1) {
-           //$years-=1;
+            //$years-=1;
             $st = 10;
             $en = 12;
         } else if ($quar == 2) {
@@ -76,10 +85,15 @@ class CowBreedService {
                         ->whereBetween("months", [$st, $en])
                         ->where("region_id", $region)
                         ->where("cow_breed_type_id", $type_id)
+                        ->where('office_approve_id', !$ckid)
+                        ->where(function($query) use ($ckid) {
+
+                            $query->where('office_approve_comment', $ckid);
+                            $query->orWhere('office_approve_comment', '');
+                        })
                         ->first()
                         ->toArray();
     }
-    
 
     public static function getData($cooperative_id, $months, $years) {
         return CowBreed::where('cooperative_id', $cooperative_id)
@@ -131,7 +145,7 @@ class CowBreedService {
 
     public static function updateDataApprove($id, $obj) {
 
-            return CowBreed::where('id', $id)->update($obj);
-        }
+        return CowBreed::where('id', $id)->update($obj);
+    }
 
 }

@@ -65,7 +65,7 @@ class PersonalController extends Controller {
 
             $this->data_result['DATA']['DataList'] = $DataList;
             $this->data_result['DATA']['Summary'] = $Summary;
-//             print_r($Summary);
+//             print_r($DataList);
 //            die();
             return $this->returnResponse(200, $this->data_result, $response, false);
         } catch (\Exception $e) {
@@ -95,7 +95,8 @@ class PersonalController extends Controller {
         $DataSummary = [];
 
         $positiontype = PersonalService::getPositiontype();
-
+        $mf = PersonalController::getMonthName($condition['MonthFrom']);
+        $mt = PersonalController::getMonthName($condition['MonthTo']);
 //        die();
         if ($diffMonth == 0) {
             $diffMonth = 1;
@@ -114,10 +115,11 @@ class PersonalController extends Controller {
                 $monthName = PersonalController::getMonthName($curMonth);
 
                 $data = [];
-                $data['Position'] = $value['positiontype'];
+                $data['textdate'] = $mf . ' - ' . $mt . ' ' . $condition['YearTo'];
                 $data['Month'] = $monthName;
-                $data['Quarter'] = ($i + 1);
-                $data['Year'] = ($curYear);
+                $data['Position'] = $value['positiontype'];
+//                $data['Quarter'] = ($i + 1);
+//                $data['Year'] = ($curYear);
                 $data['SummaryCurrentsum'] = 0;
                 $data['SummaryBeforesum'] = 0;
                 $data['SummaryCurrentdirector'] = 0;
@@ -126,7 +128,16 @@ class PersonalController extends Controller {
                 $data['SummaryBefore'] = 0;
                 $data['SummaryPercentage'] = 0;
                 $data['SummarysumPercentage'] = 0;
-
+                $data['lv1'] = 0;
+                $data['lv2'] = 0;
+                $data['lv3'] = 0;
+                $data['lv4'] = 0;
+                $data['lv5'] = 0;
+                $data['lv6'] = 0;
+                $data['lv7'] = 0;
+                $data['lv8'] = 0;
+                $data['lv9'] = 0;
+                $data['lv10'] = 0;
                 // get cooperative type
 
                 $data['CurrentEmployee'] = PersonalService::getMainList($curYear, $curMonth, $value['positiontype']);
@@ -141,6 +152,16 @@ class PersonalController extends Controller {
                     $data['CurrentEmployee'][$key]['percent'] = 0;
                     $data['SummaryCurrentsum'] += $current['summary'];
                     $data['SummaryCurrentdirector'] += $current['director'];
+                    $data['lv1'] += $current['lv1'];
+                    $data['lv2'] += $current['lv2'];
+                    $data['lv3'] += $current['lv3'];
+                    $data['lv4'] += $current['lv4'];
+                    $data['lv5'] += $current['lv5'];
+                    $data['lv6'] += $current['lv6'];
+                    $data['lv7'] += $current['lv7'];
+                    $data['lv8'] += $current['lv8'];
+                    $data['lv9'] += $current['lv9'];
+                    $data['lv10'] += $current['lv10'];
                 }
 
                 if ($data['BeforeEmployee'] != '' && !is_null($data['BeforeEmployee'])) {
@@ -186,8 +207,8 @@ class PersonalController extends Controller {
             $data = [];
             $data['Position'] = 'นักวิชาการ 8';
             $data['Month'] = $monthName;
-            $data['Quarter'] = ($i + 1);
-            $data['Year'] = ($curYear);
+//            $data['Quarter'] = ($i + 1);
+//            $data['Year'] = ($curYear);
             $data['SummaryCurrentsum'] = 0;
             $data['SummaryBeforesum'] = 0;
             $data['SummaryCurrentdirector'] = 0;
@@ -212,7 +233,7 @@ class PersonalController extends Controller {
                 $sumbefore = $data['BeforeEmployee'][0]['summary'];
                 $data['CurrentEmployee'][0]['sumc'] = $sumcurrent;
                 $data['CurrentEmployee'][0]['sumb'] = $sumbefore;
-                 $data['CurrentEmployee'][0]['sum'] = $sumcurrent+$sumbefore;
+                $data['CurrentEmployee'][0]['sum'] = $sumcurrent + $sumbefore;
                 $data['SummaryCurrent'] += $sumcurrent;
                 $data['SummaryCurrentsum'] = $data['CurrentEmployee'][0]['summary'];
                 $data['SummaryBeforesum'] = $data['BeforeEmployee'][0]['summary'];
@@ -232,14 +253,36 @@ class PersonalController extends Controller {
             //tb2
             $DataSummary2['current'] = PersonalService::getMainListsheet3($curYear, $curMonth);
             $DataSummary2['before'] = PersonalService::getMainListsheet3($beforeYear, $curMonth);
+            $DataSummary2['lv1'] = 0;
+            $DataSummary2['lv2'] = 0;
+            $DataSummary2['lv3'] = 0;
+            $DataSummary2['lv4'] = 0;
+            $DataSummary2['lv5'] = 0;
+            $DataSummary2['lv6'] = 0;
+            $DataSummary2['lv7'] = 0;
+            $DataSummary2['lv8'] = 0;
+            $DataSummary2['lv9'] = 0;
+            $DataSummary2['lv10'] = 0;
             foreach ($DataSummary2['current'] as $key => $t) {
-                $DataSummary2['current'][$key]['Monthname'] = $monthName;
+                
+                $DataSummary2['text'] = 'รวม';
+                $DataSummary2['lv1'] += $t['lv1'];
+                $DataSummary2['lv2'] += $t['lv2'];
+                $DataSummary2['lv3'] += $t['lv3'];
+                $DataSummary2['lv4'] += $t['lv4'];
+                $DataSummary2['lv5'] += $t['lv5'];
+                $DataSummary2['lv6'] += $t['lv6'];
+                $DataSummary2['lv7'] += $t['lv7'];
+                $DataSummary2['lv8'] += $t['lv8'];
+                $DataSummary2['lv9'] += $t['lv9'];
+                $DataSummary2['lv10'] += $t['lv10'];
                 if ($DataSummary2['before'][$key]['summary'] != 0 && $DataSummary2['before'][$key]['summary'] != '') {
                     $DataSummary2['current'][$key]['percent'] = (($t['summary'] - $DataSummary2['before'][$key]['summary']) * 100) / $DataSummary2['before'][$key]['summary'];
                 } else {
                     $DataSummary2['current'][$key]['percent'] = 0;
                 }
             }
+            $DataSummary2['Monthname'] = $monthName;
             array_push($DataSummary, $DataSummary2);
             $curMonth++;
         }
@@ -315,10 +358,11 @@ class PersonalController extends Controller {
             foreach ($positiontype as $key => $value) {
 
                 $data = [];
+                $data['textdate'] = 'ไตรมาสที่ ' . $condition['QuarterFrom'] . ' ' . ($condition['YearFrom'] + 543) . ' - ' . ' ไตรมาสที่ ' . $condition['QuarterTo'] . ' ' . ($condition['YearTo'] + 543);
                 $data['Position'] = $value['positiontype'];
                 //$data['Month'] = $monthName;
                 $data['Quarter'] = ($curQuarter) . ' (' . ($curQuarter == 1 ? $curYear + 543 + 1 : $curYear + 543) . ')';
-                $data['Year'] = ($curYear);
+                //  $data['Year'] = ($curYear);
                 $data['SummaryCurrentsum'] = 0;
                 $data['SummaryBeforesum'] = 0;
                 $data['SummaryCurrentdirector'] = 0;
@@ -327,15 +371,22 @@ class PersonalController extends Controller {
                 $data['SummaryBefore'] = 0;
                 $data['SummaryPercentage'] = 0;
                 $data['SummarysumPercentage'] = 0;
-//                $data['CurrentEmployee'] = PersonalService::getMainList($curYear, $monthList[0], $value['positiontype']);
-//                $data['BeforeEmployee'] = PersonalService::getMainList($beforeYear, $monthList[0], $value['positiontype']);
+                $data['lv1'] = 0;
+                $data['lv2'] = 0;
+                $data['lv3'] = 0;
+                $data['lv4'] = 0;
+                $data['lv5'] = 0;
+                $data['lv6'] = 0;
+                $data['lv7'] = 0;
+                $data['lv8'] = 0;
+                $data['lv9'] = 0;
+                $data['lv10'] = 0;
                 $DataSummary = [];
-//                $DataSummary['current'] = PersonalService::getMainListsheet3($curYear, $monthList[0]);
-//                $DataSummary['before'] = PersonalService::getMainListsheet3($beforeYear, $monthList[0]);
+
                 $DataSummary['Quarter'] = ($curQuarter);
 
                 $start = 0;
-
+//find first
                 for ($j = 0; $j < count($monthList); $j++) {
                     $data['CurrentEmployee'] = PersonalService::getMainList($curYear, $monthList[$j], $value['positiontype']);
                     $data['BeforeEmployee'] = PersonalService::getMainList($beforeYear, $monthList[$j], $value['positiontype']);
@@ -355,6 +406,18 @@ class PersonalController extends Controller {
                     foreach ($data2['CurrentEmployee'] as $key => $itemdata2) {
                         $data['CurrentEmployee'][$key]['summary'] += $itemdata2['summary'];
                         $data['CurrentEmployee'][$key]['director'] += $itemdata2['director'];
+
+                        $data['CurrentEmployee'][$key]['lv1'] += $itemdata2['lv1'];
+                        $data['CurrentEmployee'][$key]['lv2'] += $itemdata2['lv2'];
+                        $data['CurrentEmployee'][$key]['lv3'] += $itemdata2['lv3'];
+                        $data['CurrentEmployee'][$key]['lv4'] += $itemdata2['lv4'];
+                        $data['CurrentEmployee'][$key]['lv5'] += $itemdata2['lv5'];
+                        $data['CurrentEmployee'][$key]['lv6'] += $itemdata2['lv6'];
+                        $data['CurrentEmployee'][$key]['lv7'] += $itemdata2['lv7'];
+                        $data['CurrentEmployee'][$key]['lv8'] += $itemdata2['lv8'];
+                        $data['CurrentEmployee'][$key]['lv9'] += $itemdata2['lv9'];
+                        $data['CurrentEmployee'][$key]['lv10'] += $itemdata2['lv10'];
+
 
                         $data['BeforeEmployee'][$key]['summary'] += $data2['BeforeEmployee'][$key]['summary'];
                         $data['BeforeEmployee'][$key]['director'] += $data2['BeforeEmployee'][$key]['director'];
@@ -390,6 +453,16 @@ class PersonalController extends Controller {
                     $data['CurrentEmployee'][$key]['percent'] = 0;
                     $data['SummaryCurrentsum'] += $current['summary'];
                     $data['SummaryCurrentdirector'] += $current['director'];
+                    $data['lv1'] += $current['lv1'];
+                    $data['lv2'] += $current['lv2'];
+                    $data['lv3'] += $current['lv3'];
+                    $data['lv4'] += $current['lv4'];
+                    $data['lv5'] += $current['lv5'];
+                    $data['lv6'] += $current['lv6'];
+                    $data['lv7'] += $current['lv7'];
+                    $data['lv8'] += $current['lv8'];
+                    $data['lv9'] += $current['lv9'];
+                    $data['lv10'] += $current['lv10'];
                 }
 
                 if ($data['BeforeEmployee'] != '' && !is_null($data['BeforeEmployee'])) {
@@ -425,9 +498,9 @@ class PersonalController extends Controller {
 
             $data = [];
             $data['Position'] = 'นักวิชาการ 8';
-            $data['Month'] = $monthName;
+//            $data['Month'] = $monthName;
             $data['Quarter'] = ($i + 1);
-            $data['Year'] = ($curYear);
+//            $data['Year'] = ($curYear);
             $data['SummaryCurrentsum'] = 0;
             $data['SummaryBeforesum'] = 0;
             $data['SummaryCurrentdirector'] = 0;
@@ -452,7 +525,7 @@ class PersonalController extends Controller {
                 $sumbefore = $data['BeforeEmployee'][0]['summary'];
                 $data['CurrentEmployee'][0]['sumc'] = $sumcurrent;
                 $data['CurrentEmployee'][0]['sumb'] = $sumbefore;
-                 $data['CurrentEmployee'][0]['sum'] = $sumcurrent+$sumbefore;
+                $data['CurrentEmployee'][0]['sum'] = $sumcurrent + $sumbefore;
                 $data['SummaryCurrent'] += $sumcurrent;
                 $data['SummaryCurrentsum'] = $data['CurrentEmployee'][0]['summary'];
                 $data['SummaryBeforesum'] = $data['BeforeEmployee'][0]['summary'];
@@ -471,13 +544,25 @@ class PersonalController extends Controller {
             array_push($DataList, $data);
 
             foreach ($DataSummary['current'] as $key => $t) {
-
+                $DataSummary['text'] = 'รวม';
+                $DataSummary['lv1'] += $t['lv1'];
+                $DataSummary['lv2'] += $t['lv2'];
+                $DataSummary['lv3'] += $t['lv3'];
+                $DataSummary['lv4'] += $t['lv4'];
+                $DataSummary['lv5'] += $t['lv5'];
+                $DataSummary['lv6'] += $t['lv6'];
+                $DataSummary['lv7'] += $t['lv7'];
+                $DataSummary['lv8'] += $t['lv8'];
+                $DataSummary['lv9'] += $t['lv9'];
+                $DataSummary['lv10'] += $t['lv10'];
                 if ($DataSummary['before'][$key]['summary'] != 0 && $DataSummary['before'][$key]['summary'] != '') {
                     $DataSummary['current'][$key]['percent'] = (($t['summary'] - $DataSummary['before'][$key]['summary']) * 100) / $DataSummary['before'][$key]['summary'];
                 } else {
                     $DataSummary['current'][$key]['percent'] = 0;
                 }
             }
+            $DataSummary['Monthname'] = ($curQuarter) . ' (' . ($curQuarter == 1 ? $curYear + 543 + 1 : $curYear + 543) . ')';
+
             array_push($Summary, $DataSummary);
             $curQuarter++;
             if ($curQuarter > 4) {
@@ -512,6 +597,7 @@ class PersonalController extends Controller {
 
                 $data = [];
                 $data['Position'] = $value['positiontype'];
+                $data['textdate'] = ($condition['YearFrom'] + 543) . ' - ' . ($condition['YearTo'] + 543);
 
                 $data['Year'] = ($curYear);
                 $data['SummaryCurrentsum'] = 0;
@@ -553,6 +639,16 @@ class PersonalController extends Controller {
                     foreach ($data2['CurrentEmployee'] as $key => $itemdata2) {
                         $data['CurrentEmployee'][$key]['summary'] += $itemdata2['summary'];
                         $data['CurrentEmployee'][$key]['director'] += $itemdata2['director'];
+                        $data['CurrentEmployee'][$key]['lv1'] += $itemdata2['lv1'];
+                        $data['CurrentEmployee'][$key]['lv2'] += $itemdata2['lv2'];
+                        $data['CurrentEmployee'][$key]['lv3'] += $itemdata2['lv3'];
+                        $data['CurrentEmployee'][$key]['lv4'] += $itemdata2['lv4'];
+                        $data['CurrentEmployee'][$key]['lv5'] += $itemdata2['lv5'];
+                        $data['CurrentEmployee'][$key]['lv6'] += $itemdata2['lv6'];
+                        $data['CurrentEmployee'][$key]['lv7'] += $itemdata2['lv7'];
+                        $data['CurrentEmployee'][$key]['lv8'] += $itemdata2['lv8'];
+                        $data['CurrentEmployee'][$key]['lv9'] += $itemdata2['lv9'];
+                        $data['CurrentEmployee'][$key]['lv10'] += $itemdata2['lv10'];
 
                         $data['BeforeEmployee'][$key]['summary'] += $data2['BeforeEmployee'][$key]['summary'];
                         $data['BeforeEmployee'][$key]['director'] += $data2['BeforeEmployee'][$key]['director'];
@@ -576,6 +672,16 @@ class PersonalController extends Controller {
                 }
 
                 foreach ($data['CurrentEmployee'] as $key => $current) {
+                    $data['lv1'] += $current['lv1'];
+                    $data['lv2'] += $current['lv2'];
+                    $data['lv3'] += $current['lv3'];
+                    $data['lv4'] += $current['lv4'];
+                    $data['lv5'] += $current['lv5'];
+                    $data['lv6'] += $current['lv6'];
+                    $data['lv7'] += $current['lv7'];
+                    $data['lv8'] += $current['lv8'];
+                    $data['lv9'] += $current['lv9'];
+                    $data['lv10'] += $current['lv10'];
                     $data['CurrentEmployee'][$key]['percent'] = 0;
                     $data['SummaryCurrentsum'] += $current['summary'];
                     $data['SummaryCurrentdirector'] += $current['director'];
@@ -614,8 +720,8 @@ class PersonalController extends Controller {
 
             $data = [];
             $data['Position'] = 'นักวิชาการ 8';
-            $data['Month'] = $monthName;
-            $data['Quarter'] = ($i + 1);
+//            $data['Month'] = $monthName;
+//            $data['Quarter'] = ($i + 1);
             $data['Year'] = ($curYear);
             $data['SummaryCurrentsum'] = 0;
             $data['SummaryBeforesum'] = 0;
@@ -641,7 +747,7 @@ class PersonalController extends Controller {
                 $sumbefore = $data['BeforeEmployee'][0]['summary'];
                 $data['CurrentEmployee'][0]['sumc'] = $sumcurrent;
                 $data['CurrentEmployee'][0]['sumb'] = $sumbefore;
-                 $data['CurrentEmployee'][0]['sum'] = $sumcurrent+$sumbefore;
+                $data['CurrentEmployee'][0]['sum'] = $sumcurrent + $sumbefore;
                 $data['SummaryCurrent'] += $sumcurrent;
                 $data['SummaryCurrentsum'] = $data['CurrentEmployee'][0]['summary'];
                 $data['SummaryBeforesum'] = $data['BeforeEmployee'][0]['summary'];
@@ -660,12 +766,24 @@ class PersonalController extends Controller {
             array_push($DataList, $data);
             foreach ($DataSummary['current'] as $key => $t) {
 
+                $DataSummary['text'] = 'รวม';
+                $DataSummary['lv1'] += $t['lv1'];
+                $DataSummary['lv2'] += $t['lv2'];
+                $DataSummary['lv3'] += $t['lv3'];
+                $DataSummary['lv4'] += $t['lv4'];
+                $DataSummary['lv5'] += $t['lv5'];
+                $DataSummary['lv6'] += $t['lv6'];
+                $DataSummary['lv7'] += $t['lv7'];
+                $DataSummary['lv8'] += $t['lv8'];
+                $DataSummary['lv9'] += $t['lv9'];
+                $DataSummary['lv10'] += $t['lv10'];
                 if ($DataSummary['before'][$key]['summary'] != 0 && $DataSummary['before'][$key]['summary'] != '') {
                     $DataSummary['current'][$key]['percent'] = (($t['summary'] - $DataSummary['before'][$key]['summary']) * 100) / $DataSummary['before'][$key]['summary'];
                 } else {
                     $DataSummary['current'][$key]['percent'] = 0;
                 }
             }
+            $DataSummary['Monthname'] = ($curYear + 543);
             array_push($Summary, $DataSummary);
             $curYear++;
         }

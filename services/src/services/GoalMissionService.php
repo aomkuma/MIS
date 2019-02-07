@@ -22,13 +22,12 @@ class GoalMissionService {
                             }
                         })
                         ->where(function($query) use ($UserID) {
-                            
+
                             $query->where('create_by', $UserID);
                             $query->orWhere('update_by', $UserID);
                             $query->orWhere('dep_approve_id', $UserID);
                             $query->orWhere('division_approve_id', $UserID);
                             $query->orWhere('office_approve_id', $UserID);
-                            
                         })
                         ->join('region', 'region.RegionID', '=', 'goal_mission.region_id')
                         ->orderBy("update_date", 'DESC')
@@ -111,24 +110,44 @@ class GoalMissionService {
     }
 
     public static function getGoaltravel($goalid, $year) {
+        $ckid = null;
         return GoalMission::where('years', $year)
                         ->where('goal_id', $goalid)
+                        ->where('office_approve_id', !$ckid)
+                        ->where(function($query) use ($ckid) {
+
+                            $query->where('office_approve_comment', $ckid);
+                            $query->orWhere('office_approve_comment', '');
+                        })
                         ->get()
                         ->toArray();
     }
 
     public static function getMission($goalid, $regid, $year) {
+        $ckid = null;
         return GoalMission::where('years', $year)
                         ->where('region_id', $regid)
                         ->where('goal_id', $goalid)
+                        ->where('office_approve_id', !is_null($ckid))
+                        ->where(function($query) use ($ckid) {
+
+                            $query->where('office_approve_comment', is_null($ckid));
+                            $query->orWhere('office_approve_comment', '');
+                        })
                         ->get()
                         ->toArray();
     }
 
     public static function getMissionforinsem($goalid, $year) {
-        print_r($year);
+        $ckid = null;
         return GoalMission::where('years', $year)
                         ->where('goal_id', $goalid)
+                        ->where('office_approve_id', !is_null($ckid))
+                        ->where(function($query) use ($ckid) {
+
+                            $query->where('office_approve_comment', is_null($ckid));
+                            $query->orWhere('office_approve_comment', '');
+                        })
                         ->join("region", 'goal_mission.region_id', '=', 'region.RegionID')
                         ->get()
                         ->toArray();
@@ -136,7 +155,7 @@ class GoalMissionService {
 
     public static function getMissionavg($goal_mission_id, $year, $month) {
         $date = $year . '-' . $month . '-01';
-        
+       
         return GoalMissionAvg::where('goal_mission_id', $goal_mission_id)
                         ->where('avg_date', $date)
                         ->get()
@@ -144,13 +163,13 @@ class GoalMissionService {
     }
 
     public static function getMissionavgquar($goal_mission_id, $year, $quar) {
-       
+
         $month = [];
         $years = $year;
 
         $result = ['amount' => 0, 'price_value' => 0];
         if ($quar == 1) {
-            
+
             $month = [10, 11, 12];
         } else if ($quar == 2) {
             $month = [1, 2, 3];
@@ -162,11 +181,11 @@ class GoalMissionService {
         foreach ($month as $value) {
             $date = $years . '-' . $value . '-01';
             $missionM = GoalMissionService::getMissionavg($goal_mission_id, $years, $value);
-           
+
             $result['amount'] += $missionM[0]['amount'];
             $result['price_value'] += $missionM[0]['price_value'];
         }
-         
+
         return $result;
     }
 

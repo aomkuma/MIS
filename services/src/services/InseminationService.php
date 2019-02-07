@@ -21,13 +21,19 @@ class InseminationService {
     }
 
     public static function getDetailmonth($years, $months, $region) {
+        $ckid = null;
         return Insemination::select(DB::raw("SUM(cow_amount) AS amount")
                                 , DB::raw("SUM(`service_cost`) AS price"))
                         ->join("insemination_detail", 'insemination_detail.insemination_id', '=', 'insemination.id')
                         ->where("years", $years)
                         ->where("months", $months)
                         ->where("region_id", $region)
-                        
+                        ->where('office_approve_id', !$ckid)
+                        ->where(function($query) use ($ckid) {
+
+                            $query->where('office_approve_comment', $ckid);
+                            $query->orWhere('office_approve_comment', '');
+                        })
                         ->first()
                         ->toArray();
     }
@@ -46,6 +52,7 @@ class InseminationService {
     public static function getDetailquar($years, $region, $quar) {
         $st = 1;
         $en = 3;
+        $ckid = null;
         if ($quar == 1) {
             //$years-=1;
             $st = 10;
@@ -66,7 +73,12 @@ class InseminationService {
                         ->where("years", $years)
                         ->whereBetween("months", [$st, $en])
                         ->where("region_id", $region)
-                        
+                        ->where('office_approve_id', !$ckid)
+                        ->where(function($query) use ($ckid) {
+
+                            $query->where('office_approve_comment', $ckid);
+                            $query->orWhere('office_approve_comment', '');
+                        })
                         ->first()
                         ->toArray();
     }

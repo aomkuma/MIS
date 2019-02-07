@@ -316,7 +316,7 @@ class ReportController extends Controller {
         // ini_set('display_errors','On');           
         try {
             $obj = $request->getParsedBody();
-           // print_r($obj);
+            // print_r($obj);
 
             $condition = $obj['obj']['condition'];
             $item = $obj['obj']['Item'];
@@ -642,7 +642,7 @@ class ReportController extends Controller {
                 } else {
                     $mission = GoalMissionService::getMission($value['id'], $data['Description']['region_id'], $data['Description']['years']);
                 }
-                
+
                 $spmonth = SpermService::getDetailquar($data['Description']['years'], $value['id'], $data['Description']['region_id'], $data['Description']['quarter']);
                 $missionM = GoalMissionService::getMissionavgquar($mission[0]['id'], $data['Description']['years'], $data['Description']['quarter']);
 
@@ -813,32 +813,33 @@ class ReportController extends Controller {
         $objPHPExcel->getActiveSheet()->setCellValue('A10', 'รวมรายได้ทั้งสิ้น');
         $objPHPExcel->getActiveSheet()->getStyle('A6:A9')->getFont()->setSize(16);
         $row = 0;
-
         $mastesgoaladult = MasterGoalService::getmision($mastesgoallist[0]['goal_name']);
-
-        $avgad = GoalMissionService::getMissionavg($missionad[0]['id'], $data['Description']['years'], $data['Description']['months']);
-//        
         $mastesgoalchild = MasterGoalService::getmision($mastesgoallist[1]['goal_name']);
-
-        $avgch = GoalMissionService::getMissionavg($missionch[0]['id'], $data['Description']['years'], $data['Description']['months']);
-//       
         $mastesgoalstudent = MasterGoalService::getmision($mastesgoallist[2]['goal_name']);
 
-        $avgst = GoalMissionService::getMissionavg($missionst[0]['id'], $data['Description']['years'], $data['Description']['months']);
-//       
+        $missionad = GoalMissionService::getGoaltravel($mastesgoaladult[0]['id'], $data['Description']['years']);
+        $missionch = GoalMissionService::getGoaltravel($mastesgoalchild[0]['id'], $data['Description']['years']);
+        $missionst = GoalMissionService::getGoaltravel($mastesgoalstudent[0]['id'], $data['Description']['years']);
+       
         if ($data['Description']['quarter'] == 1) {
             $y = $data['Description']['years'] + 1;
 
             $missionad = GoalMissionService::getGoaltravel($mastesgoaladult[0]['id'], $y);
             $missionch = GoalMissionService::getGoaltravel($mastesgoalchild[0]['id'], $y);
             $missionst = GoalMissionService::getGoaltravel($mastesgoalstudent[0]['id'], $y);
-        } else {
-            $missionad = GoalMissionService::getGoaltravel($mastesgoaladult[0]['id'], $data['Description']['years']);
-            $missionch = GoalMissionService::getGoaltravel($mastesgoalchild[0]['id'], $data['Description']['years']);
-            $missionst = GoalMissionService::getGoaltravel($mastesgoalstudent[0]['id'], $data['Description']['years']);
         }
 
+        $avgad = GoalMissionService::getMissionavg($missionad[0]['id'], $data['Description']['years'], $data['Description']['months']);
+//        
 
+
+        $avgch = GoalMissionService::getMissionavg($missionch[0]['id'], $data['Description']['years'], $data['Description']['months']);
+//       
+
+
+        $avgst = GoalMissionService::getMissionavg($missionst[0]['id'], $data['Description']['years'], $data['Description']['months']);
+//       
+      
         if ($type == 'annually') {
             $tvmonth = TravelService::getDetailmonth($data['Description']['years'], 9, $mastesgoallist[0]['id']);
             foreach ($this->monthList as $key => $item) {

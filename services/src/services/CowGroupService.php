@@ -9,7 +9,7 @@ use Illuminate\Database\Capsule\Manager as DB;
 class CowGroupService {
 
     public static function getMainList($years, $months, $region_id, $goal_id, $field_name) {
-        return CowGroup::select(DB::raw("SUM(".$field_name.") AS sum_baht")
+        return CowGroup::select(DB::raw("SUM(" . $field_name . ") AS sum_baht")
                                 // , DB::raw("SUM(".$field_price.") AS sum_baht")
                                 , "cow_group.update_date")
                         ->join("cow_group_detail", 'cow_group_detail.cow_group_id', '=', 'cow_group.id')
@@ -20,13 +20,14 @@ class CowGroupService {
                         ->first()
                         ->toArray();
     }
+
     public static function getMainListquar($years, $st, $en, $region_id, $goal_id, $field_name) {
-        return CowGroup::select(DB::raw("SUM(".$field_name.") AS sum_baht")
+        return CowGroup::select(DB::raw("SUM(" . $field_name . ") AS sum_baht")
                                 // , DB::raw("SUM(".$field_price.") AS sum_baht")
                                 , "cow_group.update_date")
                         ->join("cow_group_detail", 'cow_group_detail.cow_group_id', '=', 'cow_group.id')
                         ->where("years", $years)
-                         ->whereBetween("months", [$st, $en])
+                        ->whereBetween("months", [$st, $en])
                         ->where("region_id", $region_id)
                         ->where("cow_group_item_id", $goal_id)
                         ->first()
@@ -92,12 +93,18 @@ class CowGroupService {
     }
 
     public static function getDetailmonth($years, $months, $type_id, $region) {
+        $ckid = null;
         return CowGroup::select(DB::raw("SUM(total_sell) AS amount")
                                 , DB::raw("SUM(`total_sell_values`) AS price"))
                         ->join("cow_group_detail", 'cow_group_detail.cow_group_id', '=', 'cow_group.id')
                         ->where("years", $years)
                         ->where("months", $months)
-                    //    ->where("region_id", $region)
+                        ->where('office_approve_id', !$ckid)
+                        ->where(function($query) use ($ckid) {
+
+                            $query->where('office_approve_comment', $ckid);
+                            $query->orWhere('office_approve_comment', '');
+                        })
                         ->where("cow_group_item_id", $type_id)
                         ->first()
                         ->toArray();
@@ -117,8 +124,9 @@ class CowGroupService {
     public static function getDetailquar($years, $type_id, $region, $quar) {
         $st = 1;
         $en = 3;
-         if ($quar == 1) {
-      //      $years-=1;
+        $ckid = null;
+        if ($quar == 1) {
+            //      $years-=1;
             $st = 10;
             $en = 12;
         } else if ($quar == 2) {
@@ -138,12 +146,19 @@ class CowGroupService {
                         ->whereBetween("months", [$st, $en])
                         ->where("region_id", $region)
                         ->where("cow_group_item_id", $type_id)
+                        ->where('office_approve_id', !$ckid)
+                        ->where(function($query) use ($ckid) {
+
+                            $query->where('office_approve_comment', $ckid);
+                            $query->orWhere('office_approve_comment', '');
+                        })
                         ->first()
                         ->toArray();
     }
 
     public static function updateDataApprove($id, $obj) {
 
-            return CowGroup::where('id', $id)->update($obj);
-        }
+        return CowGroup::where('id', $id)->update($obj);
+    }
+
 }

@@ -125,9 +125,21 @@
 </div>
 
 <div class="col-lg-12 table-responsive" ng-show="ViewType == 'MAIN' && condition.DisplayType == 'monthly'">
-	<div>
-		<h4>จำนวนพนักงานและพนักงานสัญญาจ้าง</h4>
+	
+	<div class="row form-group">
+		<div class="col-lg-6">
+		
+		<h4 class="pull-left">จำนวนพนักงานและพนักงานสัญญาจ้าง</h4>
+
 	</div>
+	<div class="col-lg-6">
+		<caption class="caption-bg">
+			<button class="btn btn-info pull-right" ng-click="viewDetail()">รายละเอียด</button>
+			<button class="btn btn-primary pull-right" ng-click="ViewType = 'MAIN'">ข้อมูลโดยรวม</button>
+			
+		</caption>
+	</div>
+</div>
 	<table class="table table-bordered table-striped">
 		
 		<thead style="background-color: #BD1212; color: #FFF;">
@@ -235,9 +247,20 @@
 	</table>
 </div>
 <div class="col-lg-12 table-responsive" ng-show="ViewType == 'MAIN' && condition.DisplayType == 'quarter'">
-	<div>
-		<h4>จำนวนพนักงานและพนักงานสัญญาจ้าง</h4>
+	<div class="row form-group">
+		<div class="col-lg-6">
+		
+		<h4 class="pull-left">จำนวนพนักงานและพนักงานสัญญาจ้าง</h4>
+
 	</div>
+	<div class="col-lg-6">
+		<caption class="caption-bg">
+			<button class="btn btn-info pull-right" ng-click="viewDetail()">รายละเอียด</button>
+			<button class="btn btn-primary pull-right" ng-click="ViewType = 'MAIN'">ข้อมูลโดยรวม</button>
+			
+		</caption>
+	</div>
+</div>
 	<table class="table table-bordered table-striped">
 		
 		<thead style="background-color: #BD1212; color: #FFF;">
@@ -342,9 +365,20 @@
 	</table>
 </div>
 <div class="col-lg-12 table-responsive" ng-show="ViewType == 'MAIN' && condition.DisplayType == 'annually'">
-	<div>
-		<h4>จำนวนพนักงานและพนักงานสัญญาจ้าง</h4>
+	<div class="row form-group">
+		<div class="col-lg-6">
+		
+		<h4 class="pull-left">จำนวนพนักงานและพนักงานสัญญาจ้าง</h4>
+
 	</div>
+	<div class="col-lg-6">
+		<caption class="caption-bg">
+			<button class="btn btn-info pull-right" ng-click="viewDetail()">รายละเอียด</button>
+			<button class="btn btn-primary pull-right" ng-click="ViewType = 'MAIN'">ข้อมูลโดยรวม</button>
+			
+		</caption>
+	</div>
+</div>
 	<table class="table table-bordered table-striped">
 		
 		<thead style="background-color: #BD1212; color: #FFF;">
@@ -441,9 +475,196 @@
 
 
 
+<div class="col-lg-12 table-responsive" ng-show="ViewType == 'DETAIL'">
+	<div class="row form-group">
+		<div class="col-lg-6">
+		
+		<h4 class="pull-left">จำนวนพนักงานและพนักงานสัญญาจ้าง  </h4>
+		<h5 class="pull-right"> <b>{{List[0].textdate}}</b></h5>
 
-<div class="page-header">
-&nbsp;
+	</div>
+	<div class="col-lg-6">
+		
+		<caption class="caption-bg">
+			<button class="btn btn-info pull-right" ng-click="viewDetail()">รายละเอียด</button>
+			<button class="btn btn-primary pull-right" ng-click="ViewType = 'MAIN'">ข้อมูลโดยรวม</button>
+			
+		</caption>
+	</div>
+</div>
+	<table class="table table-bordered table-striped">
+		
+		<thead style="background-color: #BD1212; color: #FFF;">
+			<tr>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">รายการ</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;"></th>
+				<th colspan="11" style="text-align: center; vertical-align: middle;">จำนวนพนักงาน</th>
+			</tr>
+			<tr>
+				
+				<th  style="text-align: center; vertical-align: middle;">1</th>
+				<th  style="text-align: center; vertical-align: middle;">2</th>
+				<th  style="text-align: center; vertical-align: middle;">3</th>
+				<th  style="text-align: center; vertical-align: middle;">4</th>
+				<th  style="text-align: center; vertical-align: middle;">5</th>
+				<th  style="text-align: center; vertical-align: middle;">6</th>
+				<th  style="text-align: center; vertical-align: middle;">7</th>
+				<th  style="text-align: center; vertical-align: middle;">8</th>
+				<th  style="text-align: center; vertical-align: middle;">9</th>
+				<th  style="text-align: center; vertical-align: middle;">10</th>
+				<th style="text-align: center;">สัญญาจ้าง</th>
+				
+			</tr>
+			
+		</thead>
+		<tbody ng-repeat="data in List">
+			
+			<tr>
+				<td><b>{{data.Position}}  </b>  </td>
+				<td style="text-align: center;">{{data.Month}} {{data.Quarter}} {{data.Year}}</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+		
+			</tr>
+			<tr ng-repeat="row in data.CurrentEmployee">
+				<td>{{row.department}}</td>
+				<td></td>
+				<td style="text-align: center;">{{numberFormat(row.lv1)}}</td>
+				
+				<td style="text-align: center;">{{numberFormat(row.lv2)}}</td>
+				
+				<td style="text-align: center;">{{numberFormat(row.lv3)}}</td>
+				
+				<td style="text-align: center;">{{numberFormat(row.lv4)}}</td>
+				
+				<td style="text-align: center;">{{numberFormat(row.lv5)}}</td>
+				
+				<td style="text-align: center;">{{numberFormat(row.lv6)}}</td>
+				
+				<td style="text-align: center;">{{numberFormat(row.lv7)}}</td>
+				
+				<td style="text-align: center;">{{numberFormat(row.lv8)}}</td>
+				
+				<td style="text-align: center;">{{numberFormat(row.lv9)}}</td>
+				
+				<td style="text-align: center;">{{numberFormat(row.lv10)}}</td>
+				<td style="text-align: center;">{{numberFormat(row.director)}}</td>
+			</tr>
+			<tr style="background-color:#B2BABB">
+			<td></td>
+				<td style="text-align: center;">รวม</td>
+				<td style="text-align: center;">{{numberFormat(data.lv1)}}</td>
+				
+				<td style="text-align: center;">{{numberFormat(data.lv2)}}</td>
+				
+				<td style="text-align: center;">{{numberFormat(data.lv3)}}</td>
+				
+				<td style="text-align: center;">{{numberFormat(data.lv4)}}</td>
+				
+				<td style="text-align: center;">{{numberFormat(data.lv5)}}</td>
+				
+				<td style="text-align: center;">{{numberFormat(data.lv6)}}</td>
+				
+				<td style="text-align: center;">{{numberFormat(data.lv7)}}</td>
+				
+				<td style="text-align: center;">{{numberFormat(data.lv8)}}</td>
+				
+				<td style="text-align: center;">{{numberFormat(data.lv9)}}</td>
+				
+				<td style="text-align: center;">{{numberFormat(data.lv10)}}</td>
+				<td style="text-align: center;">{{numberFormat(data.SummaryCurrentdirector)}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<div>
+		<h4>ความเคลื่อนไหวของบุคลากร</h4>
+	</div>
+	<table class="table table-bordered table-striped">
+		
+		<thead style="background-color: #BD1212; color: #FFF;">
+			<tr>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">รายการ</th>
+				
+				<th colspan="10" style="text-align: center; vertical-align: middle;">ความเคลื่อนไหวของบุคลากร</th>
+				
+				
+			
+				
+			</tr>
+			<tr>
+				<th  style="text-align: center; vertical-align: middle;">1</th>
+				<th  style="text-align: center; vertical-align: middle;">2</th>
+				<th style="text-align: center; vertical-align: middle;">3</th>
+				<th  style="text-align: center; vertical-align: middle;">4</th>
+				<th  style="text-align: center; vertical-align: middle;">5</th>
+				<th  style="text-align: center; vertical-align: middle;">6</th>
+				<th  style="text-align: center; vertical-align: middle;">7</th>
+				<th  style="text-align: center; vertical-align: middle;">8</th>
+				<th  style="text-align: center; vertical-align: middle;">9</th>
+				<th  style="text-align: center; vertical-align: middle;">10</th>
+			</tr>
+		</thead>
+		<tbody ng-repeat="data in SummaryData">
+		<tr>
+			<td><b>{{data.Monthname}}</b></td>
+		</tr>
+
+			<tr ng-repeat="row in data.current">
+				<td>{{row.detail}}</td>
+				<td style="text-align: center;">{{numberFormat(row.lv1)}}</td>
+				
+				<td style="text-align: center;">{{numberFormat(row.lv2)}}</td>
+			
+				<td style="text-align: center;">{{numberFormat(row.lv3)}}</td>
+				
+				<td style="text-align: center;">{{numberFormat(row.lv4)}}</td>
+			
+				<td style="text-align: center;">{{numberFormat(row.lv5)}}</td>
+			
+				<td style="text-align: center;">{{numberFormat(row.lv6)}}</td>
+			
+				<td style="text-align: center;">{{numberFormat(row.lv7)}}</td>
+			
+				<td style="text-align: center;">{{numberFormat(row.lv8)}}</td>
+	
+				<td style="text-align: center;">{{numberFormat(row.lv9)}}</td>
+			
+				<td style="text-align: center;">{{numberFormat(row.lv10)}}</td>
+			</tr>
+			<tr >
+				<td style="text-align: center;">{{data.text}}</td>
+				<td style="text-align: center;">{{numberFormat(data.lv1)}}</td>
+				
+				<td style="text-align: center;">{{numberFormat(data.lv2)}}</td>
+			
+				<td style="text-align: center;">{{numberFormat(data.lv3)}}</td>
+				
+				<td style="text-align: center;">{{numberFormat(data.lv4)}}</td>
+			
+				<td style="text-align: center;">{{numberFormat(data.lv5)}}</td>
+			
+				<td style="text-align: center;">{{numberFormat(data.lv6)}}</td>
+			
+				<td style="text-align: center;">{{numberFormat(data.lv7)}}</td>
+			
+				<td style="text-align: center;">{{numberFormat(data.lv8)}}</td>
+	
+				<td style="text-align: center;">{{numberFormat(data.lv9)}}</td>
+			
+				<td style="text-align: center;">{{numberFormat(data.lv10)}}</td>
+
+			</tr>
+		</tbody>
+	</table>
 </div>
 <style type="text/css">
 	a{

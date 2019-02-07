@@ -33,6 +33,7 @@ class SpermService {
     }
 
     public static function getDetailmonth($years, $months, $sperm_item_id, $region) {
+        $ckid = null;
         return Sperm::select(DB::raw("SUM(amount) AS amount")
                                 , DB::raw("SUM(`price`) AS price"))
                         ->join("sperm_detail", 'sperm_detail.sperm_id', '=', 'sperm.id')
@@ -40,6 +41,12 @@ class SpermService {
                         ->where("months", $months)
                         ->where("region_id", $region)
                         ->where("sperm_item_id", $sperm_item_id)
+                        ->where('office_approve_id', !$ckid)
+                        ->where(function($query) use ($ckid) {
+
+                            $query->where('office_approve_comment', $ckid);
+                            $query->orWhere('office_approve_comment', '');
+                        })
                         ->first()
                         ->toArray();
         ;
@@ -59,6 +66,7 @@ class SpermService {
     public static function getDetailquar($years, $sperm_item_id, $region, $quar) {
         $st = 1;
         $en = 3;
+        $ckid = null;
         if ($quar == 1) {
 //            $years -= 1;
             $st = 10;
@@ -81,6 +89,12 @@ class SpermService {
                         ->where("region_id", $region)
                         ->whereBetween("months", [$st, $en])
                         ->where("sperm_item_id", $sperm_item_id)
+                        ->where('office_approve_id', !$ckid)
+                        ->where(function($query) use ($ckid) {
+
+                            $query->where('office_approve_comment', $ckid);
+                            $query->orWhere('office_approve_comment', '');
+                        })
                         ->first()
                         ->toArray();
     }
@@ -144,7 +158,7 @@ class SpermService {
 
     public static function updateDataApprove($id, $obj) {
 
-            return Sperm::where('id', $id)->update($obj);
-        }
+        return Sperm::where('id', $id)->update($obj);
+    }
 
 }

@@ -8,18 +8,18 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class TrainingCowBreedService {
 
-    public static function getMainList($years, $months, $region_id, $training_cowbreed_type_id){
-            return TrainingCowBreed::select(DB::raw("SUM(amount) AS sum_amount")
-                                        ,DB::raw("SUM(`values`) AS sum_baht")
-                                        ,"training_cowbreed.update_date")
-                            ->join("training_cowbreed_detail", 'training_cowbreed_detail.training_cowbreed_id', '=', 'training_cowbreed.id')
-                            ->where("years", $years)
-                            ->where("months", $months)
-                            // ->where("region_id", $region_id)
-                            ->where('training_cowbreed_type_id', $training_cowbreed_type_id)
-                            ->first()
-                            ->toArray();
-        }
+    public static function getMainList($years, $months, $region_id, $training_cowbreed_type_id) {
+        return TrainingCowBreed::select(DB::raw("SUM(amount) AS sum_amount")
+                                , DB::raw("SUM(`values`) AS sum_baht")
+                                , "training_cowbreed.update_date")
+                        ->join("training_cowbreed_detail", 'training_cowbreed_detail.training_cowbreed_id', '=', 'training_cowbreed.id')
+                        ->where("years", $years)
+                        ->where("months", $months)
+                        // ->where("region_id", $region_id)
+                        ->where('training_cowbreed_type_id', $training_cowbreed_type_id)
+                        ->first()
+                        ->toArray();
+    }
 
     public static function getDataByID($id) {
         return TrainingCowBreed::where('id', $id)
@@ -78,12 +78,18 @@ class TrainingCowBreedService {
     }
 
     public static function getDetailmonth($years, $months, $type_id, $region) {
+        $ckid = null;
         return TrainingCowBreed::select(DB::raw("SUM(amount) AS amount")
                                 , DB::raw("SUM(`values`) AS price"))
                         ->join("training_cowbreed_detail", 'training_cowbreed_detail.training_cowbreed_id', '=', 'training_cowbreed.id')
                         ->where("years", $years)
                         ->where("months", $months)
-//                        ->where("region_id", $region)
+                        ->where('office_approve_id', !$ckid)
+                        ->where(function($query) use ($ckid) {
+
+                            $query->where('office_approve_comment', $ckid);
+                            $query->orWhere('office_approve_comment', '');
+                        })
                         ->where("training_cowbreed_type_id", $type_id)
                         ->first()
                         ->toArray();
@@ -103,8 +109,9 @@ class TrainingCowBreedService {
     public static function getDetailquar($years, $type_id, $region, $quar) {
         $st = 1;
         $en = 3;
-         if ($quar == 1) {
-          //  $years-=1;
+        $ckid = null;
+        if ($quar == 1) {
+            //  $years-=1;
             $st = 10;
             $en = 12;
         } else if ($quar == 2) {
@@ -122,7 +129,12 @@ class TrainingCowBreedService {
                         ->join("training_cowbreed_detail", 'training_cowbreed_detail.training_cowbreed_id', '=', 'training_cowbreed.id')
                         ->where("years", $years)
                         ->whereBetween("months", [$st, $en])
-//                        ->where("region_id", $region)
+                        ->where('office_approve_id', !$ckid)
+                        ->where(function($query) use ($ckid) {
+
+                            $query->where('office_approve_comment', $ckid);
+                            $query->orWhere('office_approve_comment', '');
+                        })
                         ->where("training_cowbreed_type_id", $type_id)
                         ->first()
                         ->toArray();
@@ -130,7 +142,7 @@ class TrainingCowBreedService {
 
     public static function updateDataApprove($id, $obj) {
 
-            return TrainingCowBreed::where('id', $id)->update($obj);
-        }
+        return TrainingCowBreed::where('id', $id)->update($obj);
+    }
 
 }

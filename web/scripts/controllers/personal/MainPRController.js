@@ -32,7 +32,11 @@ angular.module('e-homework').controller('MainPRController', function($scope, $co
             IndexOverlayFactory.overlayHide();
         });
     }
-
+$scope.viewDetail = function(){
+        $scope.ViewType = 'DETAIL';
+        
+        $scope.loadList('personal/list/main');
+    }
     $scope.getThaiDate = function(date){
         // console.log(date);
         return convertDateToFullThaiDateIgnoreTime(new Date(date));
