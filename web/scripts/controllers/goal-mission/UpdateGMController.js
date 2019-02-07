@@ -14,6 +14,25 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
     $scope.$parent.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));      
     // console.log($scope.$parent.Menu);
 
+    $scope.getUserRole = function(){
+        var params = {'UserID' : $scope.currentUser.UserID};
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('account-permission/get', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.UserRole = result.data.DATA.Role;
+                for(var i =0; i < $scope.UserRole.length; i++){
+                    if($scope.UserRole[i].role == '1' && $scope.UserRole[i].actives == 'Y'){
+                        $scope.Maker = true;
+                    }
+                }
+                // console.log($scope.MasterGoalList);
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+    $scope.Maker = false;
+    $scope.getUserRole();
+
     $scope.loadMasterGoalList = function(action, menu_type){
         var params = {'actives' : 'Y', 'menu_type' : menu_type};
         IndexOverlayFactory.overlayShow();
@@ -84,6 +103,9 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
                 // }else{
                 //     location.reload();    
                 // }
+                IndexOverlayFactory.overlayHide();
+            }else{
+                alert(result.data.DATA);
                 IndexOverlayFactory.overlayHide();
             }
         });
@@ -236,7 +258,7 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
     }
 
     $scope.getMonthYearText = function(dateStr){
-        if(dateStr != null && dateStr != ''){
+        if(dateStr != null && dateStr != '' && dateStr != '0000-00-00'){
             return getMonthYearText(dateStr);
         }else{
             return '';
@@ -269,7 +291,9 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
         , 'editable':'Y'
         , 'actives':'Y'
         , 'create_date':''
+        , 'create_by':$scope.currentUser.UserID
         , 'update_date':''
+        , 'update_by':$scope.currentUser.UserID
     };
     $scope.avgList = [];
     $scope.avgIDList = [];

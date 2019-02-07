@@ -90,4 +90,9 @@ class SpermSaleService {
         
     }
 
+    public static function updateDataApprove($id, $obj) {
+
+            return SpermSale::where('id', $id)->update($obj);
+        }
+
 }

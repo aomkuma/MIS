@@ -14,6 +14,25 @@ angular.module('e-homework').controller('UpdateTCBController', function($scope, 
     $scope.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));    
     // console.log($scope.$parent.Menu);
 
+    $scope.getUserRole = function(){
+        var params = {'UserID' : $scope.currentUser.UserID};
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('account-permission/get', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.UserRole = result.data.DATA.Role;
+                for(var i =0; i < $scope.UserRole.length; i++){
+                    if($scope.UserRole[i].role == '1' && $scope.UserRole[i].actives == 'Y'){
+                        $scope.Maker = true;
+                    }
+                }
+                // console.log($scope.MasterGoalList);
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+    $scope.Maker = false;
+    $scope.getUserRole();
+
     $scope.loadCooperative = function(){
         var params = {'actives':'Y', 'RegionList':$scope.PersonRegion};
         IndexOverlayFactory.overlayShow();
@@ -272,6 +291,72 @@ angular.module('e-homework').controller('UpdateTCBController', function($scope, 
             , 'create_date':''
             , 'update_date':''
         };    
+    }
+
+    $scope.approve = function(Data, OrgType){
+        $scope.alertMessage = 'ต้องการอนุมัติข้อมูลนี้ ใช่หรือไม่ ?';
+        var modalInstance = $uibModal.open({
+            animation : false,
+            templateUrl : 'views/dialog_confirm.html',
+            size : 'sm',
+            scope : $scope,
+            backdrop : 'static',
+            controller : 'ModalDialogCtrl',
+            resolve : {
+                params : function() {
+                    return {};
+                } 
+            },
+        });
+
+        modalInstance.result.then(function (valResult) {
+
+            var params = {'id' : Data.id, 'OrgType' : OrgType, 'ApproveStatus' : 'approve'};
+            HTTPService.uploadRequest('training-cowbreed/update/approve', params).then(function(result){
+                console.log(result);
+                if(result.data.STATUS == 'OK'){
+                    alert('บันทึกสำเร็จ');
+                    window.location.href = '#/training-cowbreed/update/' + Data.id;
+                }else{
+                    alert(result.data.DATA);
+                }
+                IndexOverlayFactory.overlayHide();
+            });
+        });
+    }
+
+    $scope.ApproveComment = '';
+    $scope.reject = function(Data, OrgType){
+        $scope.alertMessage = 'ไม่ต้องการอนุมัติข้อมูลนี้ ใช่หรือไม่ ?';
+        $scope.ApproveComment = '';
+        var modalInstance = $uibModal.open({
+            animation : false,
+            templateUrl : 'reject_dialog.html',
+            size : 'md',
+            scope : $scope,
+            backdrop : 'static',
+            controller : 'ModalDialogReturnFromOKBtnCtrl',
+            resolve : {
+                params : function() {
+                    return {};
+                } 
+            },
+        });
+
+        modalInstance.result.then(function (valResult) {
+            console.log(valResult);
+            var params = {'id' : Data.id, 'OrgType' : OrgType, 'ApproveStatus' : 'reject', 'ApproveComment' : valResult};
+            HTTPService.uploadRequest('training-cowbreed/update/approve', params).then(function(result){
+                console.log(result);
+                if(result.data.STATUS == 'OK'){
+                    alert('บันทึกสำเร็จ');
+                    window.location.href = '#/training-cowbreed/update/' + Data.id;
+                }else{
+                    alert(result.data.DATA);
+                }
+                IndexOverlayFactory.overlayHide();
+            });
+        });
     }
 
     var curDate = new Date();

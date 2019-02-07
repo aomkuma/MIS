@@ -129,4 +129,9 @@ class CowBreedService {
         
     }
 
+    public static function updateDataApprove($id, $obj) {
+
+            return CowBreed::where('id', $id)->update($obj);
+        }
+
 }

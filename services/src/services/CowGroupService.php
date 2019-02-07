@@ -142,4 +142,8 @@ class CowGroupService {
                         ->toArray();
     }
 
+    public static function updateDataApprove($id, $obj) {
+
+            return CowGroup::where('id', $id)->update($obj);
+        }
 }

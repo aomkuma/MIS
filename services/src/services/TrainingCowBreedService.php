@@ -128,4 +128,9 @@ class TrainingCowBreedService {
                         ->toArray();
     }
 
+    public static function updateDataApprove($id, $obj) {
+
+            return TrainingCowBreed::where('id', $id)->update($obj);
+        }
+
 }

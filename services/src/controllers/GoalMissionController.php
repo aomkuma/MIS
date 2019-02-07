@@ -18,7 +18,8 @@
             try{
                 $params = $request->getParsedBody();
                 $condition = $params['obj']['condition'];
-                $_List = GoalMissionService::getList($condition);
+                $UserID = $params['obj']['UserID'];
+                $_List = GoalMissionService::getList($condition, $UserID);
 
                 $this->data_result['DATA']['List'] = $_List;
 
@@ -189,6 +190,16 @@
                     if($value == 'null'){
                         $_Data[$key] = NULL;
                     }
+                }
+
+                // Check duplicate data
+                $GoalMission = GoalMissionService::checkDuplicate($_Data['id'], $_Data['years'], $_Data['goal_id'], $_Data['region_id']);
+                if(!empty($GoalMission)){
+                    $this->data_result['STATUS'] = 'ERROR';
+                    $this->data_result['DATA'] = 'ไม่สามารถบันทึกข้อมูลได้ เนื่องจากมีรายการนี้อยู่ในระบบแล้ว';
+                
+                    return $this->returnResponse(200, $this->data_result, $response, false);
+                    exit();
                 }
 
                 $_AvgData = $params['obj']['AvgList'];

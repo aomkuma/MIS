@@ -9,7 +9,7 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class GoalMissionService {
 
-    public static function getList($condition) {
+    public static function getList($condition, $UserID) {
         return GoalMission::where(function($query) use ($condition) {
                             if (!empty($condition['Year']['yearText'])) {
                                 $query->where('years', $condition['Year']['yearText']);
@@ -21,6 +21,16 @@ class GoalMissionService {
                                 $query->where('goal_id', $condition['Goal']['id']);
                             }
                         })
+                        ->where(function($query) use ($UserID) {
+                            
+                            $query->where('create_by', $UserID);
+                            $query->orWhere('update_by', $UserID);
+                            $query->orWhere('dep_approve_id', $UserID);
+                            $query->orWhere('division_approve_id', $UserID);
+                            $query->orWhere('office_approve_id', $UserID);
+                            
+                        })
+                        ->join('region', 'region.RegionID', '=', 'goal_mission.region_id')
                         ->orderBy("update_date", 'DESC')
                         ->get();
     }
@@ -30,6 +40,14 @@ class GoalMissionService {
                         ->where('region_id', $regid)
                         ->get()
                         ->toArray();
+    }
+
+    public static function checkDuplicate($id, $years, $goal_id, $region_id) {
+        return GoalMission::where('id', '<>', $id)
+                        ->where('years', $years)
+                        ->where('goal_id', $goal_id)
+                        ->where('region_id', $region_id)
+                        ->first();
     }
 
     public static function getData($id) {

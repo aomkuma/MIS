@@ -21,6 +21,10 @@ angular.module('e-homework').controller('MainGMController', function($scope, $co
             if(result.data.STATUS == 'OK'){
                 $scope.UserRole = result.data.DATA.Role;
                 for(var i =0; i < $scope.UserRole.length; i++){
+                    if($scope.UserRole[i].role == '1' && $scope.UserRole[i].actives == 'Y'){
+                        $scope.Maker = true;
+                    }
+
                     if($scope.UserRole[i].role == '2' && $scope.UserRole[i].actives == 'Y'){
                         $scope.Approval = true;
                     }
@@ -30,6 +34,7 @@ angular.module('e-homework').controller('MainGMController', function($scope, $co
             IndexOverlayFactory.overlayHide();
         });
     }
+    $scope.Maker = false;
 
     $scope.loadMasterGoalList = function(action){
         var params = {'actives' : 'Y'};
@@ -45,7 +50,7 @@ angular.module('e-homework').controller('MainGMController', function($scope, $co
     }
 
     $scope.loadList = function(action){
-        var params = {'condition' : $scope.condition};
+        var params = {'condition' : $scope.condition, 'UserID' : $scope.currentUser.UserID};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest(action, params).then(function(result){
             if(result.data.STATUS == 'OK'){
@@ -58,7 +63,7 @@ angular.module('e-homework').controller('MainGMController', function($scope, $co
 
     $scope.getThaiDate = function(date){
         // console.log(date);
-        return convertDateToFullThaiDate(new Date(date));
+        return convertSQLDateTimeToReportDateTime(date);
     }
 
     $scope.goUpdate = function(id){

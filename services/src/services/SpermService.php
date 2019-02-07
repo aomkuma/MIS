@@ -142,4 +142,9 @@ class SpermService {
         
     }
 
+    public static function updateDataApprove($id, $obj) {
+
+            return Sperm::where('id', $id)->update($obj);
+        }
+
 }

@@ -2,7 +2,7 @@
 <div class="page-header">
 	<h3>บริหารจัดการข้อมูล > เป้าหมายการดำเนินงาน</h3>
 </div>
-<fieldset ng-disabled="Data.editable == 'N'">
+<fieldset ng-disabled="Data.editable == 'N' || !Maker">
 	<div class="col-lg-10 col-lg-offset-1" ng-form="form_data">
 	<!--
 		<div class="row form-group">
@@ -222,9 +222,19 @@
 				</button>
 
 			</div>
-			<div class="row form-group" ng-show="Data.dep_approve_comment != null && Data.dep_approve_comment != ''">
+			<div class="row form-group" ng-show="(Data.dep_approve_comment != null && Data.dep_approve_comment != '')">
 				<div class="col-lg-12 text-center" style="color: red;">
 					ไม่อนุมัติ เนื่องจาก {{Data.dep_approve_comment}}
+				</div>
+			</div>
+			<div class="row form-group" ng-show="(Data.division_approve_comment != null && Data.division_approve_comment != '')">
+				<div class="col-lg-12 text-center" style="color: red;">
+					ไม่อนุมัติ เนื่องจาก {{Data.division_approve_comment}}
+				</div>
+			</div>
+			<div class="row form-group" ng-show="(Data.office_approve_comment != null && Data.office_approve_comment != '')">
+				<div class="col-lg-12 text-center" style="color: red;">
+					ไม่อนุมัติ เนื่องจาก {{Data.office_approve_comment}}
 				</div>
 			</div>
 		</div>	

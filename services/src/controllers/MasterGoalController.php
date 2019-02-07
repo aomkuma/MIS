@@ -58,9 +58,18 @@
                 $_Data = $params['obj']['Data'];
                 // print_r($_Data);exit;
                 // // Update to none role
-                $id = MasterGoalService::updateData($_Data);
+                $result = MasterGoalService::checkDuplicate($_Data['id'], $_Data['menu_type'], trim($_Data['goal_name']));
 
-                $this->data_result['DATA']['id'] = $id;
+                if(empty($result)){
+                    $id = MasterGoalService::updateData($_Data);
+                    $this->data_result['DATA']['id'] = $id;
+                }else{
+                    // print_r($result);exit;
+                    $this->data_result['STATUS'] = 'ERROR';
+                    $this->data_result['DATA'] = 'บันทึกข้อมูลซ้ำ';
+                }
+
+                
                 
                 return $this->returnResponse(200, $this->data_result, $response, false);
                 

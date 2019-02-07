@@ -38,8 +38,11 @@ angular.module('e-homework').controller('UpdateMGController', function($scope, $
                 // }else{
                 //     location.reload();    
                 // }
-                IndexOverlayFactory.overlayHide();
+                
+            }else{
+                alert(result.data.DATA);
             }
+            IndexOverlayFactory.overlayHide();
         });
     }
 

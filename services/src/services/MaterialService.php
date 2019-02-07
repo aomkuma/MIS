@@ -78,4 +78,9 @@
 		public static function removeData($id){
 
 		}
+
+        public static function updateDataApprove($id, $obj) {
+
+            return Material::where('id', $id)->update($obj);
+        }
     }

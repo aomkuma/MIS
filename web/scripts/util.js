@@ -362,11 +362,15 @@ function convertDateToReportDate(dateObj){
 }
 
 function convertSQLDateTimeToReportDateTime(d){
-    var dateObj = d.split(' ');
-    var date = dateObj[0].split('-');
-    var time = dateObj[1].split(':');
-    return date[2] + '/' + date[1] + '/' + (parseInt(date[0]) + 543) + ' ' 
-            + time[0] + '.' + time[1] + ' น.';
+    if(d != null && d != ''){
+        var dateObj = d.split(' ');
+        var date = dateObj[0].split('-');
+        var time = dateObj[1].split(':');
+        return date[2] + '/' + date[1] + '/' + (parseInt(date[0]) + 543) + ' ' 
+                + time[0] + '.' + time[1] + ' น.';
+    }else{
+        return '';
+    }
 }
 
 function convertSQLDateTimeToReportDate(d){

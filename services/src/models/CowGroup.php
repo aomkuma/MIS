@@ -23,6 +23,15 @@ class CowGroup extends \Illuminate\Database\Eloquent\Model {
                   , 'cow_group_avg'
   								, 'create_date'
   								, 'update_date'
+                  , 'dep_approve_id'
+                  , 'dep_approve_date'
+                  , 'sep_approve_comment'
+                  , 'division_approve_id'
+                  , 'division_approve_date'
+                  , 'division_approve_comment'
+                  , 'office_approve_id'
+                  , 'office_approve_date'
+                  , 'office_approve_comment'
   							);
 
     public function cowGroupDetail()

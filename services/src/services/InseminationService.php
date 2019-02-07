@@ -128,4 +128,9 @@ class InseminationService {
         
     }
 
+    public static function updateDataApprove($id, $obj) {
+
+            return Insemination::where('id', $id)->update($obj);
+        }
+
 }

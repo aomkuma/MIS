@@ -13,6 +13,25 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));    
     // console.log($scope.$parent.Menu);
 
+    $scope.getUserRole = function(){
+        var params = {'UserID' : $scope.currentUser.UserID};
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('account-permission/get', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.UserRole = result.data.DATA.Role;
+                for(var i =0; i < $scope.UserRole.length; i++){
+                    if($scope.UserRole[i].role == '1' && $scope.UserRole[i].actives == 'Y'){
+                        $scope.Maker = true;
+                    }
+                }
+                // console.log($scope.MasterGoalList);
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+    $scope.Maker = false;
+    $scope.getUserRole();
+
     $scope.loadCooperative = function(){
         var params = {'actives':'Y'};
         IndexOverlayFactory.overlayShow();
@@ -314,6 +333,72 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
         SpermDetail.adult_prices = SpermDetail.adult_prices == null?0:SpermDetail.adult_prices;
         
         SpermDetail.total_prices = SpermDetail.except_prices + SpermDetail.student_prices + SpermDetail.child_prices + SpermDetail.adult_prices; 
+    }
+
+    $scope.approve = function(Data, OrgType){
+        $scope.alertMessage = 'ต้องการอนุมัติข้อมูลนี้ ใช่หรือไม่ ?';
+        var modalInstance = $uibModal.open({
+            animation : false,
+            templateUrl : 'views/dialog_confirm.html',
+            size : 'sm',
+            scope : $scope,
+            backdrop : 'static',
+            controller : 'ModalDialogCtrl',
+            resolve : {
+                params : function() {
+                    return {};
+                } 
+            },
+        });
+
+        modalInstance.result.then(function (valResult) {
+
+            var params = {'id' : Data.id, 'OrgType' : OrgType, 'ApproveStatus' : 'approve'};
+            HTTPService.uploadRequest('travel/update/approve', params).then(function(result){
+                console.log(result);
+                if(result.data.STATUS == 'OK'){
+                    alert('บันทึกสำเร็จ');
+                    window.location.href = '#/travel/update/' + Data.id;
+                }else{
+                    alert(result.data.DATA);
+                }
+                IndexOverlayFactory.overlayHide();
+            });
+        });
+    }
+
+    $scope.ApproveComment = '';
+    $scope.reject = function(Data, OrgType){
+        $scope.alertMessage = 'ไม่ต้องการอนุมัติข้อมูลนี้ ใช่หรือไม่ ?';
+        $scope.ApproveComment = '';
+        var modalInstance = $uibModal.open({
+            animation : false,
+            templateUrl : 'reject_dialog.html',
+            size : 'md',
+            scope : $scope,
+            backdrop : 'static',
+            controller : 'ModalDialogReturnFromOKBtnCtrl',
+            resolve : {
+                params : function() {
+                    return {};
+                } 
+            },
+        });
+
+        modalInstance.result.then(function (valResult) {
+            console.log(valResult);
+            var params = {'id' : Data.id, 'OrgType' : OrgType, 'ApproveStatus' : 'reject', 'ApproveComment' : valResult};
+            HTTPService.uploadRequest('travel/update/approve', params).then(function(result){
+                console.log(result);
+                if(result.data.STATUS == 'OK'){
+                    alert('บันทึกสำเร็จ');
+                    window.location.href = '#/travel/update/' + Data.id;
+                }else{
+                    alert(result.data.DATA);
+                }
+                IndexOverlayFactory.overlayHide();
+            });
+        });
     }
 
     $scope.YearList = getYearList(20);

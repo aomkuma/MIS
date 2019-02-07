@@ -146,4 +146,9 @@ class TravelService {
                         ->toArray();
     }
 
+    public static function updateDataApprove($id, $obj) {
+
+            return Travel::where('id', $id)->update($obj);
+        }
+
 }

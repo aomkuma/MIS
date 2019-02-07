@@ -108,5 +108,10 @@
                     ->orderBy("id", 'DESC')
                     ->get();   
         }
+
+        public static function updateDataApprove($id, $obj) {
+
+            return Mineral::where('id', $id)->update($obj);
+        }
 		
     }

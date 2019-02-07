@@ -18,6 +18,11 @@ caption.caption-bg{
 	
 }
 
+th{
+	text-align: center;
+	vertical-align: middle;
+}
+
 .navbar-inverse{
 	background-color: #FFFFFF;
 	color:#000;

@@ -235,15 +235,90 @@
 	<hr>
 	<div class="row form-group">
 		<div class="col-lg-12 text-center">
-			<button class="btn btn-primary" ng-click="save(Sperm, SpermDetailList)" ng-disabled="!form_data.$valid">
-				<span class="glyphicon glyphicon-floppy-save"></span> 
-				บันทึก
-			</button>
 			<button class="btn btn-default" ng-click="cancelUpdate()">
 				<span class="glyphicon glyphicon-arrow-left"></span> 
 				กลับหน้าหลัก
 			</button>
+			<button class="btn btn-primary" ng-click="save(Sperm, SpermDetailList)" ng-disabled="!form_data.$valid" ng-show="Maker">
+				<span class="glyphicon glyphicon-floppy-save"></span> 
+				บันทึก
+			</button>
+
+			<button class="btn btn-success" ng-click="approve(Sperm, 'dep')" 
+						ng-show="Sperm.id != '' && Sperm.dep_approve_id == currentUser.UserID 
+								&& Sperm.dep_approve_date == null
+								&& Sperm.division_approve_id == null
+								&& Sperm.office_approve_id == null">
+					<span class="glyphicon glyphicon-check"></span> 
+					อนุมัติ
+				</button>
+				<button class="btn btn-danger" ng-click="reject(Sperm, 'dep')" 
+						ng-show="Sperm.id != '' && Sperm.dep_approve_id == currentUser.UserID 
+								&& Sperm.dep_approve_date == null
+								&& Sperm.division_approve_id == null
+								&& Sperm.office_approve_id == null">
+					<span class="glyphicon glyphicon-remove-sign"></span> 
+					ไม่อนุมัติ
+				</button>
+
+				<button class="btn btn-success" ng-click="approve(Sperm, 'division')" 
+						ng-show="Sperm.id != '' && Sperm.division_approve_id == currentUser.UserID 
+								&& Sperm.dep_approve_date != null
+								&& Sperm.division_approve_date == null
+								&& Sperm.office_approve_id == null">
+					<span class="glyphicon glyphicon-check"></span> 
+					อนุมัติ
+				</button>
+				<button class="btn btn-danger" ng-click="reject(Sperm, 'division')" 
+						ng-show="Sperm.id != '' && Sperm.division_approve_id == currentUser.UserID 
+								&& Sperm.dep_approve_date != null
+								&& Sperm.division_approve_date == null
+								&& Sperm.office_approve_id == null">
+					<span class="glyphicon glyphicon-remove-sign"></span> 
+					ไม่อนุมัติ
+				</button>
+
+				<button class="btn btn-success" ng-click="approve(Sperm, 'office')" 
+						ng-show="Sperm.id != '' && Sperm.office_approve_id == currentUser.UserID 
+								&& Sperm.dep_approve_date != null
+								&& Sperm.division_approve_date != null
+								&& Sperm.office_approve_date == null">
+					<span class="glyphicon glyphicon-check"></span> 
+					อนุมัติ
+				</button>
+				<button class="btn btn-danger" ng-click="reject(Sperm, 'office')" 
+						ng-show="Sperm.id != '' && Sperm.office_approve_id == currentUser.UserID 
+								&& Sperm.dep_approve_date != null
+								&& Sperm.division_approve_date != null
+								&& Sperm.office_approve_date == null">
+					<span class="glyphicon glyphicon-remove-sign"></span> 
+					ไม่อนุมัติ
+				</button>
+	</div>
+	<div class="row form-group" ng-show="Sperm.id != '' && 
+	((Sperm.dep_approve_comment != null && Sperm.dep_approve_comment != '') || (Sperm.division_approve_comment != null && Sperm.division_approve_comment != '') || (Sperm.office_approve_comment != null && Sperm.office_approve_comment != ''))">
+		<div class="col-lg-12 text-center" style="color: red;">
+			
+			ไม่อนุมัติ เนื่องจาก {{Sperm.dep_approve_comment + Sperm.division_approve_comment + Sperm.office_approve_comment}}
+			
 		</div>
 	</div>
-	
 </div>
+<script type="text/ng-template" id="reject_dialog.html">
+	<div class="modal-header">
+		<h5 class="modal-title">Confirm</h5>
+	</div>
+	<div class="modal-body">
+		<div  class="obj_center" bind-html-compile="alertMessage"></div>
+		<br>
+		<div class="row form-group">
+			<div class="col-lg-10 col-lg-offset-1">
+				<textarea class="form-control" ng-model="ApproveComment" placeholder="ระบุเหตุผลที่ไม่อนุมัติ.."></textarea>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+	<button class="btn btn-default" ng-click="ok(ApproveComment)">OK</button>
+	<button class="btn btn-default" ng-click="cancel()">Cancel</button>
+	</div>
+</script>

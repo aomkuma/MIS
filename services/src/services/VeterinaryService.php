@@ -131,4 +131,9 @@
             return VeterinaryItem::find($id)->delete();
         }
 
+        public static function updateDataApprove($id, $obj) {
+
+            return Veterinary::where('id', $id)->update($obj);
+        }
+
     }

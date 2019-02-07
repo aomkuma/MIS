@@ -7,6 +7,14 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class MasterGoalService {
 
+    
+    public static function checkDuplicate($id, $menu_type, $goal_name) {
+        return MasterGoal::where('id', '<>', $id)
+                        ->where('menu_type', $menu_type)
+                        ->where('goal_name', $goal_name)
+                        ->first();
+    }
+
     public static function getList($actives = '', $menu_type = '', $condition = []) {
         return MasterGoal::where(function($query) use ($actives, $menu_type, $condition) {
                             if (!empty($actives)) {
