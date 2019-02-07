@@ -71,14 +71,19 @@
                     if($OrgType == 'dep'){
                         $data['dep_approve_date'] = date('Y-m-d H:i:s');
                         $data['dep_approve_comment'] = $ApproveComment;
+                        $data['dep_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
+
                         $data['division_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
                     }else if($OrgType == 'division'){
                         $data['division_approve_date'] = date('Y-m-d H:i:s');
                         $data['division_approve_comment'] = $ApproveComment;
+                        $data['division_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
+
                         $data['office_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
                     }else if($OrgType == 'office'){
                         $data['office_approve_date'] = date('Y-m-d H:i:s');
                         $data['office_approve_comment'] = $ApproveComment;
+                        $data['office_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
                         
                     }
                 }else if($ApproveStatus == 'reject'){
@@ -217,10 +222,15 @@
                 // print_r($HeaderData);exit;
                 if($HeaderData['data']['DATA']['Header']['OrgType'] == 'DEPARTMENT'){
                     $_Data['dep_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                    $data['dep_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
+
                 }else if($HeaderData['data']['DATA']['Header']['OrgType'] == 'DIVISION'){
                     $_Data['division_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                    $data['division_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
+
                 }else if($HeaderData['data']['DATA']['Header']['OrgType'] == 'OFFICE'){
                     $_Data['office_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                    $data['office_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
                 }
 
                 $id = GoalMissionService::updateData($_Data);

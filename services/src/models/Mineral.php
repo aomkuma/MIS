@@ -14,13 +14,16 @@ class Mineral extends \Illuminate\Database\Eloquent\Model {
   								, 'update_date'
                   , 'dep_approve_id'
                   , 'dep_approve_date'
-                  , 'sep_approve_comment'
+                  , 'dep_approve_comment'
                   , 'division_approve_id'
                   , 'division_approve_date'
                   , 'division_approve_comment'
                   , 'office_approve_id'
                   , 'office_approve_date'
                   , 'office_approve_comment'
+                  , 'dep_approve_name'
+                  , 'division_approve_name'
+                  , 'office_approve_name'
   							);
 
     public function mineralDetail()

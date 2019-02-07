@@ -19,6 +19,9 @@ class TrainingCowBreed extends \Illuminate\Database\Eloquent\Model {
                   , 'office_approve_id'
                   , 'office_approve_date'
                   , 'office_approve_comment'
+                  , 'dep_approve_name'
+                  , 'division_approve_name'
+                  , 'office_approve_name'
   							);
 
     public function trainingCowBreedDetail()
