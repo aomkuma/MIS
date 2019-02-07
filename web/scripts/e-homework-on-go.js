@@ -230,7 +230,7 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 		}
 	})
 
-	.when("/veterinary/update/:id?", {
+	.when("/veterinary/update/:id?/:month?/:year?", {
         templateUrl : "views/veterinary/update.html",
         controller : "UpdateVTController",
         resolve : {

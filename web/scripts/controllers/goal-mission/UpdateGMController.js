@@ -59,6 +59,8 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
             if(result.data.STATUS == 'OK'){
                 $scope.Data = result.data.DATA.Data;
                 $scope.avgList = $scope.Data.goal_mission_avg;
+                $scope.totalAmount = 0;
+                $scope.totalPriceValue = 0;
                 for(var i = 0; i < $scope.avgList.length; i++){
                     $scope.avgIDList.push({'id':$scope.avgList[i].id});
                     $scope.avgList[i].amount = parseFloat($scope.avgList[i].amount);
@@ -134,7 +136,7 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
                 console.log(result);
                 if(result.data.STATUS == 'OK'){
                     alert('บันทึกสำเร็จ');
-                    $scope.PAGE = 'MAIN';
+                    window.location.href = '#/goal-mission/';
                 }else{
                     alert(result.data.DATA);
                 }
@@ -168,7 +170,7 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
                 console.log(result);
                 if(result.data.STATUS == 'OK'){
                     alert('บันทึกสำเร็จ');
-                    $scope.PAGE = 'MAIN';
+                    window.location.href = '#/goal-mission/';
                 }else{
                     alert(result.data.DATA);
                 }

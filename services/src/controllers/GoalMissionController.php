@@ -71,33 +71,35 @@
                     if($OrgType == 'dep'){
                         $data['dep_approve_date'] = date('Y-m-d H:i:s');
                         $data['dep_approve_comment'] = $ApproveComment;
-                        $data['dep_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
+                        $data['dep_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
 
                         $data['division_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
                     }else if($OrgType == 'division'){
                         $data['division_approve_date'] = date('Y-m-d H:i:s');
                         $data['division_approve_comment'] = $ApproveComment;
-                        $data['division_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
+                        $data['division_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
 
                         $data['office_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
                     }else if($OrgType == 'office'){
                         $data['office_approve_date'] = date('Y-m-d H:i:s');
                         $data['office_approve_comment'] = $ApproveComment;
-                        $data['office_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
+                        $data['office_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
                         
                     }
                 }else if($ApproveStatus == 'reject'){
 
                     if($OrgType == 'dep'){
-                        $data['dep_approve_date'] = NULL;                  
+                        $data['dep_approve_date'] = date('Y-m-d H:i:s');                  
                         $data['dep_approve_comment'] = $ApproveComment;
+                        $data['dep_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
                     }else if($OrgType == 'division'){
                         $data['dep_approve_date'] = NULL;                  
                         $data['dep_approve_comment'] = NULL;
                         
                         $data['division_approve_id'] = NULL;
-                        $data['division_approve_date'] = NULL;
+                        $data['division_approve_date'] = date('Y-m-d H:i:s');
                         $data['division_approve_comment'] = $ApproveComment;
+                        $data['division_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
                     }else if($OrgType == 'office'){
 
                         $data['dep_approve_date'] = NULL;                  
@@ -108,16 +110,25 @@
                         $data['division_approve_comment'] = NULL;
 
                         $data['office_approve_id'] = NULL;    
-                        $data['office_approve_date'] = NULL;                        
+                        $data['office_approve_date'] = date('Y-m-d H:i:s');                        
                         $data['office_approve_comment'] = $ApproveComment;
+                        $data['office_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
                     }
+
+                    // add reject to history
+                    $HistoryData = [];
+                    $HistoryData['change_date'] = date('Y-m-d H:i:s');
+                    $HistoryData['goal_mission_id'] = $id;
+                    $HistoryData['edit_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+                    $HistoryData['remark'] = $ApproveComment;
+                    GoalMissionService::addHistory($HistoryData);
                 }
 
                 // print_r($data );
                 // exit;
                 $result = GoalMissionService::updateDataApprove($id, $data);
 
-                GoalMissionService::addHistory($arr_history);
+                // GoalMissionService::addHistory($arr_history);
 
                 $this->data_result['DATA']['result'] = $result;
                 
@@ -189,6 +200,7 @@
                 // error_reporting(E_ALL);
                 // ini_set('display_errors','On');
                 $params = $request->getParsedBody();
+                $user_session = $params['user_session'];
                 $_Data = $params['obj']['Data'];
 
                 foreach ($_Data as $key => $value) {
@@ -222,16 +234,24 @@
                 // print_r($HeaderData);exit;
                 if($HeaderData['data']['DATA']['Header']['OrgType'] == 'DEPARTMENT'){
                     $_Data['dep_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
-                    $data['dep_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
+                    $_Data['dep_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+
 
                 }else if($HeaderData['data']['DATA']['Header']['OrgType'] == 'DIVISION'){
                     $_Data['division_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
-                    $data['division_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
+                    $_Data['division_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
 
                 }else if($HeaderData['data']['DATA']['Header']['OrgType'] == 'OFFICE'){
                     $_Data['office_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
-                    $data['office_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
+                    $_Data['office_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
                 }
+
+                $_Data['dep_approve_date'] = NULL;                  
+                $_Data['dep_approve_comment'] = NULL;
+                $_Data['division_approve_date'] = NULL;                  
+                $_Data['division_approve_comment'] = NULL;
+                $_Data['office_approve_date'] = NULL;                  
+                $_Data['office_approve_comment'] = NULL;
 
                 $id = GoalMissionService::updateData($_Data);
 
@@ -243,6 +263,7 @@
                         // Save to history
                         $HistoryData = $_AvgData[$cnt];
                         unset($HistoryData['id']);
+                        $HistoryData['change_date'] = date('Y-m-d H:i:s');
                         $HistoryData['goal_mission_id'] = $id;
                         $HistoryData['edit_name'] = $edit_name;
                         GoalMissionService::addHistory($HistoryData);

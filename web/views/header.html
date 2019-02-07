@@ -4,11 +4,11 @@
   </div>
   <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
     <span class="pull-right" style="padding-top: 6%;">
-      ชื่อผู้ใช้ : {{currentUser.FirstName + ' ' + currentUser.LastName}}
+      <span class="glyphicon glyphicon-user" style="color: #4D84BC;"></span> : {{currentUser.FirstName + ' ' + currentUser.LastName}}
       <br>
-      หน่วยงาน : {{currentUser.Org}}
+      <span class="glyphicon glyphicon-home"></span> : {{currentUser.Org}}
       <br>
-      <a ng-click="logout()">ลงชื่อออก</a>
+      <a ng-click="logout()"><span class="glyphicon glyphicon-log-out" style="color: red;"></span> : ออกจากระบบ</a>
     </span>
   </div>
 </div>

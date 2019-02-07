@@ -13,6 +13,25 @@ angular.module('e-homework').controller('MainVTController', function($scope, $co
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));    
     $scope.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));   
 
+    $scope.getUserRole = function(){
+        var params = {'UserID' : $scope.currentUser.UserID};
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('account-permission/get', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.UserRole = result.data.DATA.Role;
+                for(var i =0; i < $scope.UserRole.length; i++){
+                    if($scope.UserRole[i].role == '2' && $scope.UserRole[i].actives == 'Y'){
+                        $scope.Approver = true;
+                    }
+                }
+                // console.log($scope.MasterGoalList);
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+    $scope.Approver = false;
+    $scope.getUserRole();
+
     $scope.loadList = function(action){
         $scope.CurYear = $scope.condition.YearTo + 543;
         $scope.LastYear = $scope.CurYear - 1;
@@ -77,6 +96,10 @@ angular.module('e-homework').controller('MainVTController', function($scope, $co
 
     $scope.goUpdate = function(id){
         window.location.href = '#/veterinary/update/' + id;
+    }
+
+    $scope.goApprove = function(id, month, year){
+        window.location.href = '#/veterinary/update/' + id + '/' + month + '/' + year;
     }
 
     $scope.goSearch = function(){

@@ -168,8 +168,15 @@ class VeterinaryController extends Controller {
                 }
                 
                 $data['CreateDate'] = $CurrentCowData['update_date'];
-                $data['ApproveDate'] = '';
-                $data['Status'] = '';
+                $data['ApproveDate'] = $CurrentCowData['office_approve_date'];
+                if(!empty($CurrentCowData['office_approve_id'])){
+                    if(empty($CurrentCowData['office_approve_comment'])){
+                        $data['Status'] = 'อนุมัติ';        
+                    }else{
+                        $data['Status'] = 'ไม่อนุมัติ';        
+                    }
+                }
+                
                 $data['Description'] = ['farm_type' => $farm_type
                     , 'item_type' => $item_type
                     , 'months' => $curMonth
@@ -229,8 +236,15 @@ class VeterinaryController extends Controller {
                 //     $data['DiffServiceDataPercentage'] = 0;
                 // }
                 $data['CreateDate'] = $CurrentCowData['update_date'];
-                $data['ApproveDate'] = '';
-                $data['Status'] = '';
+                $data['ApproveDate'] = $CurrentCowData['office_approve_date'];
+                if(!empty($CurrentCowData['office_approve_id'])){
+                    if(empty($CurrentCowData['office_approve_comment'])){
+                        $data['Status'] = 'อนุมัติ';        
+                    }else{
+                        $data['Status'] = 'ไม่อนุมัติ';        
+                    }
+                    
+                }
                 $data['Description'] = ['farm_type' => $farm_type
                     , 'item_type' => $item_type
                     , 'months' => $curMonth
@@ -324,11 +338,18 @@ class VeterinaryController extends Controller {
                 $Co_SumBeforeCowData = 0;
                 $Co_SumCurrentServiceData = 0;
                 $Co_SumBeforeServiceData = 0;
+                $Co_UpdateDate = '';
+                $Co_ApproveDate = '';
+                $Co_ApproveComment = '';
 
                 $Lab_SumCurrentCowData = 0;
                 $Lab_SumBeforeCowData = 0;
                 $Lab_SumCurrentServiceData = 0;
                 $Lab_SumBeforeServiceData = 0;
+                $Lab_UpdateDate = '';
+                $Lab_ApproveDate = '';
+                $Lab_ApproveComment = '';
+
                 // loop get quarter sum data
                 for ($j = 0; $j < count($monthList); $j++) {
                     $curMonth = $monthList[$j];
@@ -345,6 +366,16 @@ class VeterinaryController extends Controller {
                     $BeforeServiceData = VeterinaryService::getMainList($beforeYear, $curMonth, $region_id, $farm_type, $item_type);
                     $Co_SumBeforeServiceData += floatval($BeforeServiceData['sum_amount']);
 
+                    if (!empty($CurrentCowData['update_date'])) {
+                        $Co_UpdateDate = $CurrentCowData['update_date'];
+                    }
+                    if (!empty($CurrentCowData['office_approve_id'])) {
+                        $Co_ApproveDate = $CurrentCowData['office_approve_date'];
+                    }
+                    if (!empty($CurrentCowData['office_approve_comment'])) {
+                        $Co_ApproveComment = $CurrentCowData['office_approve_comment'];
+                    }
+
                     $farm_type = 'lab';
                     $item_type = 'โคนม';
                     $CurrentCowData = VeterinaryService::getMainList($curYear, $curMonth, $region_id, $farm_type, $item_type);
@@ -357,6 +388,16 @@ class VeterinaryController extends Controller {
                     $Lab_SumCurrentServiceData += floatval($CurrentServiceData['sum_amount']);
                     $BeforeServiceData = VeterinaryService::getMainList($beforeYear, $curMonth, $region_id, $farm_type, $item_type);
                     $Lab_SumBeforeServiceData += floatval($BeforeServiceData['sum_amount']);
+
+                    if (!empty($CurrentCowData['update_date'])) {
+                        $Lab_UpdateDate = $CurrentCowData['update_date'];
+                    }
+                    if (!empty($CurrentCowData['office_approve_id'])) {
+                        $Lab_ApproveDate = $CurrentCowData['office_approve_date'];
+                    }
+                    if (!empty($CurrentCowData['office_approve_comment'])) {
+                        $Lab_ApproveComment = $CurrentCowData['office_approve_comment'];
+                    }
                 }
 
                 // Cooperative
@@ -371,9 +412,15 @@ class VeterinaryController extends Controller {
                 $data['DiffCowDataPercentage'] = 0;
                 $data['DiffServiceData'] = $Co_SumCurrentServiceData - $Co_SumBeforeServiceData;
                 $data['DiffServiceDataPercentage'] = 0;
-                $data['CreateDate'] = $CurrentCowData['update_date'];
-                $data['ApproveDate'] = '';
-                $data['Status'] = '';
+                $data['CreateDate'] = $Co_UpdateDate;
+                $data['ApproveDate'] = $Co_ApproveDate;
+                if(!empty($Co_ApproveDate)){
+                    if(empty($Co_ApproveComment)){
+                        $data['Status'] = 'อนุมัติ';        
+                    }else{
+                        $data['Status'] = 'ไม่อนุมัติ';        
+                    }
+                }
                 $data['Description'] = ['farm_type' => $farm_type
                     , 'item_type' => $item_type
                     , 'quarter' => $curQuarter
@@ -401,9 +448,15 @@ class VeterinaryController extends Controller {
                 $data['DiffCowDataPercentage'] = 0;
                 $data['DiffServiceData'] = $Lab_SumCurrentServiceData - $Lab_SumBeforeServiceData;
                 $data['DiffServiceDataPercentage'] = 0;
-                $data['CreateDate'] = $CurrentCowData['update_date'];
-                $data['ApproveDate'] = '';
-                $data['Status'] = '';
+                $data['CreateDate'] = $Lab_UpdateDate;
+                $data['ApproveDate'] = $Lab_ApproveDate;
+                if(!empty($Lab_ApproveDate)){
+                    if(empty($Lab_ApproveComment)){
+                        $data['Status'] = 'อนุมัติ';        
+                    }else{
+                        $data['Status'] = 'ไม่อนุมัติ';        
+                    }
+                }
                 $data['Description'] = ['farm_type' => $farm_type
                     , 'item_type' => $item_type
                     , 'quarter' => $curQuarter
@@ -453,12 +506,17 @@ class VeterinaryController extends Controller {
                 $Co_SumCurrentServiceData = 0;
                 $Co_SumBeforeServiceData = 0;
                 $Co_UpdateDate = '';
+                
+                $Co_ApproveDate = '';
+                $Co_ApproveComment = '';
 
                 $Lab_SumCurrentCowData = 0;
                 $Lab_SumBeforeCowData = 0;
                 $Lab_SumCurrentServiceData = 0;
                 $Lab_SumBeforeServiceData = 0;
                 $Lab_UpdateDate = '';
+                $Lab_ApproveDate = '';
+                $Lab_ApproveComment = '';
 
                 for ($j = 0; $j < 12; $j++) {
 
@@ -486,6 +544,12 @@ class VeterinaryController extends Controller {
                     if (!empty($CurrentCowData['update_date'])) {
                         $Co_UpdateDate = $CurrentCowData['update_date'];
                     }
+                    if (!empty($CurrentCowData['office_approve_id'])) {
+                        $Co_ApproveDate = $CurrentCowData['office_approve_date'];
+                    }
+                    if (!empty($CurrentCowData['office_approve_comment'])) {
+                        $Co_ApproveComment = $CurrentCowData['office_approve_comment'];
+                    }
 
                     $farm_type = 'lab';
                     $item_type = 'โคนม';
@@ -504,6 +568,12 @@ class VeterinaryController extends Controller {
                     if (!empty($CurrentCowData['update_date'])) {
                         $Lab_UpdateDate = $CurrentCowData['update_date'];
                     }
+                    if (!empty($CurrentCowData['office_approve_id'])) {
+                        $Lab_ApproveDate = $CurrentCowData['office_approve_date'];
+                    }
+                    if (!empty($CurrentCowData['office_approve_comment'])) {
+                        $Lab_ApproveComment = $CurrentCowData['office_approve_comment'];
+                    }
                 }
 
                 // Cooperative
@@ -519,8 +589,14 @@ class VeterinaryController extends Controller {
                 $data['DiffServiceData'] = $Co_SumCurrentServiceData - $Co_SumBeforeServiceData;
                 $data['DiffServiceDataPercentage'] = 0;
                 $data['CreateDate'] = $Co_UpdateDate;
-                $data['ApproveDate'] = '';
-                $data['Status'] = '';
+                $data['ApproveDate'] = $Co_ApproveDate;
+                if(!empty($Co_ApproveDate)){
+                    if(empty($Co_ApproveComment)){
+                        $data['Status'] = 'อนุมัติ';        
+                    }else{
+                        $data['Status'] = 'ไม่อนุมัติ';        
+                    }
+                }
                 $data['Description'] = ['farm_type' => $farm_type
                     , 'item_type' => $item_type
                     , 'years' => $curYear
@@ -548,8 +624,15 @@ class VeterinaryController extends Controller {
                 $data['DiffServiceData'] = $Lab_SumCurrentServiceData - $Lab_SumBeforeServiceData;
                 $data['DiffServiceDataPercentage'] = 0;
                 $data['CreateDate'] = $Lab_UpdateDate;
-                $data['ApproveDate'] = '';
-                $data['Status'] = '';
+                $data['ApproveDate'] = $Lab_ApproveDate;
+                if(!empty($Lab_ApproveDate)){
+                    if(empty($Lab_ApproveComment)){
+                        $data['Status'] = 'อนุมัติ';        
+                    }else{
+                        $data['Status'] = 'ไม่อนุมัติ';        
+                    }
+                }
+
                 $data['Description'] = ['farm_type' => $farm_type
                     , 'item_type' => $item_type
                     , 'years' => $curYear
@@ -1129,12 +1212,17 @@ class VeterinaryController extends Controller {
             $HeaderData = json_decode(trim($HeaderData), TRUE);
             // print_r($HeaderData);exit;
             if($HeaderData['data']['DATA']['Header']['OrgType'] == 'DEPARTMENT'){
-                $_Veterinary['dep_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
-            }else if($HeaderData['data']['DATA']['Header']['OrgType'] == 'DIVISION'){
-                $_Veterinary['division_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
-            }else if($HeaderData['data']['DATA']['Header']['OrgType'] == 'OFFICE'){
-                $_Veterinary['office_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
-            }
+                    $_Data['dep_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                    $data['dep_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
+
+                }else if($HeaderData['data']['DATA']['Header']['OrgType'] == 'DIVISION'){
+                    $_Data['division_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                    $data['division_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
+
+                }else if($HeaderData['data']['DATA']['Header']['OrgType'] == 'OFFICE'){
+                    $_Data['office_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                    $data['office_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
+                }
             
             $_VeterinaryDetailList = $params['obj']['VeterinaryDetailList'];
             unset($_Veterinary['veterinary_detail']);
@@ -1241,28 +1329,35 @@ class VeterinaryController extends Controller {
                     if($OrgType == 'dep'){
                         $data['dep_approve_date'] = date('Y-m-d H:i:s');
                         $data['dep_approve_comment'] = $ApproveComment;
+                        $data['dep_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+
                         $data['division_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
                     }else if($OrgType == 'division'){
                         $data['division_approve_date'] = date('Y-m-d H:i:s');
                         $data['division_approve_comment'] = $ApproveComment;
+                        $data['division_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+
                         $data['office_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
                     }else if($OrgType == 'office'){
                         $data['office_approve_date'] = date('Y-m-d H:i:s');
                         $data['office_approve_comment'] = $ApproveComment;
+                        $data['office_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
                         
                     }
                 }else if($ApproveStatus == 'reject'){
 
                     if($OrgType == 'dep'){
-                        $data['dep_approve_date'] = NULL;                  
+                        $data['dep_approve_date'] = date('Y-m-d H:i:s');                  
                         $data['dep_approve_comment'] = $ApproveComment;
+                        $data['dep_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
                     }else if($OrgType == 'division'){
                         $data['dep_approve_date'] = NULL;                  
                         $data['dep_approve_comment'] = NULL;
                         
                         $data['division_approve_id'] = NULL;
-                        $data['division_approve_date'] = NULL;
+                        $data['division_approve_date'] = date('Y-m-d H:i:s');
                         $data['division_approve_comment'] = $ApproveComment;
+                        $data['division_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
                     }else if($OrgType == 'office'){
 
                         $data['dep_approve_date'] = NULL;                  
@@ -1273,8 +1368,9 @@ class VeterinaryController extends Controller {
                         $data['division_approve_comment'] = NULL;
 
                         $data['office_approve_id'] = NULL;    
-                        $data['office_approve_date'] = NULL;                        
+                        $data['office_approve_date'] = date('Y-m-d H:i:s');                        
                         $data['office_approve_comment'] = $ApproveComment;
+                        $data['office_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
                     }
                 }
 

@@ -13,6 +13,7 @@ class GoalMissionHistory extends \Illuminate\Database\Eloquent\Model {
                   , 'edit_name'
                   , 'unlock_name'
                   , 'change_date'
+                  , 'remark'
   							);
 
 

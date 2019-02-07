@@ -241,7 +241,7 @@
 			</div>
 		-->
 		</div>	
-		<div ng-show="historyList.length > 0">
+		<div ><!--ng-show="historyList.length > 0"-->
 			<div class="row form-group">
 				<div class="col-lg-12"  style="background-color: #B6CCFF; padding: 5px;">
 					<b>ประวัติการเปลี่ยนแปลง</b>
@@ -261,33 +261,35 @@
 							</tr>
 						</thead>
 						<tbody>
+							<!--
 							<tr ng-show="(Data.dep_approve_comment != null && Data.dep_approve_comment != '')">
-								<td>{{data.dep_approve_date}}</td>
+								<td>{{Data.dep_approve_date}}</td>
 								<td>{{Data.dep_approve_comment}}</td>
 								<td></td>
 								<td></td>
-								<td>{{data.dep_approve_name}}</td>
+								<td>{{Data.dep_approve_name}}</td>
 								<td></td>
 							</tr>
 							<tr ng-show="(Data.division_approve_comment != null && Data.division_approve_comment != '')">
-								<td>{{data.division_approve_date}}</td>
+								<td>{{Data.division_approve_date}}</td>
 								<td>{{Data.division_approve_comment}}</td>
 								<td></td>
 								<td></td>
-								<td>{{data.division_approve_name}}</td>
+								<td>{{Data.division_approve_name}}</td>
 								<td></td>
 							</tr>
 							<tr ng-show="(Data.office_approve_comment != null && Data.office_approve_comment != '')">
-								<td>{{data.office_approve_date}}</td>
+								<td>{{Data.office_approve_date}}</td>
 								<td>{{Data.office_approve_comment}}</td>
 								<td></td>
 								<td></td>
-								<td>{{data.office_approve_name}}</td>
+								<td>{{Data.office_approve_name}}</td>
 								<td></td>
 							</tr>
+							-->
 							<tr ng-repeat="data in historyList">
 								<td>{{data.change_date}}</td>
-								<td>{{getMonthYearText(data.avg_date)}}</td>
+								<td>{{getMonthYearText(data.avg_date)}}{{data.remark}}</td>
 								<td>{{data.amount}}</td>
 								<td>{{data.price_value}}</td>
 								<td>{{data.edit_name}}</td>

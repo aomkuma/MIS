@@ -124,9 +124,15 @@
                     $data['DiffBaht'] = $DiffBaht;
                     $data['DiffBahtPercentage'] = 0;
 
-                    $data['CreateDate'] = $CurrentCowService['update_date'];
-                    $data['ApproveDate'] = '';
-                    $data['Status'] = '';
+                    $data['CreateDate'] = $Current['update_date'];
+                    $data['ApproveDate'] = $Current['office_approve_date'];
+                    if(!empty($Current['office_approve_id'])){
+                        if(empty($Current['office_approve_comment'])){
+                            $data['Status'] = 'อนุมัติ';        
+                        }else{
+                            $data['Status'] = 'ไม่อนุมัติ';        
+                        }
+                    }
                     $data['Description'] = ['months' => $curMonth
                                             ,'years' => $curYear
                                             ,'region_id' => $region_id
@@ -220,6 +226,9 @@
                     $SumCurrentBaht = 0;
                     $SumBeforeAmount = 0;
                     $SumBeforeBaht = 0;
+                    $UpdateDate = '';
+                    $ApproveDate = '';
+                    $ApproveComment = '';
                      // loop get quarter sum data
                     for($j = 0; $j < count($monthList); $j++){
                         $curMonth = $monthList[$j];
@@ -231,6 +240,16 @@
                         $Before = SpermService::getMainList($beforeYear, $curMonth, $region_id); 
                         $SumBeforeAmount += floatval($Before['sum_amount']);
                         $SumBeforeBaht += floatval($Before['sum_baht']);
+
+                        if (!empty($Current['update_date'])) {
+                            $UpdateDate = $Current['update_date'];
+                        }
+                        if (!empty($Current['office_approve_id'])) {
+                            $ApproveDate = $Current['office_approve_date'];
+                        }
+                        if (!empty($Current['office_approve_comment'])) {
+                            $ApproveComment = $Current['office_approve_comment'];
+                        }
                     }
 
                     $data = [];
@@ -251,9 +270,15 @@
                     $data['DiffBaht'] = $DiffBaht;
                     $data['DiffBahtPercentage'] = 0;
 
-                    $data['CreateDate'] = $CurrentCowService['update_date'];
-                    $data['ApproveDate'] = '';
-                    $data['Status'] = '';
+                    $data['CreateDate'] = $UpdateDate;
+                    $data['ApproveDate'] = $ApproveDate;
+                    if(!empty($ApproveDate)){
+                        if(empty($ApproveComment)){
+                            $data['Status'] = 'อนุมัติ';        
+                        }else{
+                            $data['Status'] = 'ไม่อนุมัติ';        
+                        }
+                    }
                     $data['Description'] = ['months' => $curMonth
                                             ,'years' => $curYear
                                             ,'quarter' => $curQuarter
@@ -303,6 +328,9 @@
                     $SumCurrentBaht = 0;
                     $SumBeforeAmount = 0;
                     $SumBeforeBaht = 0;
+                    $UpdateDate = '';
+                    $ApproveDate = '';
+                    $ApproveComment = '';
                      // loop get quarter sum data
                     for($j = 0; $j < 12; $j++){
                         $curMonth = $monthList[$j];
@@ -314,6 +342,16 @@
                         $Before = SpermService::getMainList($beforeYear, $curMonth, $region_id); 
                         $SumBeforeAmount += floatval($Before['sum_amount']);
                         $SumBeforeBaht += floatval($Before['sum_baht']);
+
+                        if (!empty($Current['update_date'])) {
+                            $UpdateDate = $Current['update_date'];
+                        }
+                        if (!empty($Current['office_approve_id'])) {
+                            $ApproveDate = $Current['office_approve_date'];
+                        }
+                        if (!empty($Current['office_approve_comment'])) {
+                            $ApproveComment = $Current['office_approve_comment'];
+                        }
                     }
 
                     $data = [];
@@ -334,9 +372,15 @@
                     $data['DiffBaht'] = $DiffBaht;
                     $data['DiffBahtPercentage'] = 0;
 
-                    $data['CreateDate'] = $CurrentCowService['update_date'];
-                    $data['ApproveDate'] = '';
-                    $data['Status'] = '';
+                    $data['CreateDate'] = $UpdateDate;
+                    $data['ApproveDate'] = $ApproveDate;
+                    if(!empty($ApproveDate)){
+                        if(empty($ApproveComment)){
+                            $data['Status'] = 'อนุมัติ';        
+                        }else{
+                            $data['Status'] = 'ไม่อนุมัติ';        
+                        }
+                    }
                     $data['Description'] = ['months' => $curMonth
                                             ,'years' => $curYear
                                             ,'region_id' => $region_id
@@ -497,10 +541,15 @@
                 // print_r($HeaderData);exit;
                 if($HeaderData['data']['DATA']['Header']['OrgType'] == 'DEPARTMENT'){
                     $_Data['dep_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                    $data['dep_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
+
                 }else if($HeaderData['data']['DATA']['Header']['OrgType'] == 'DIVISION'){
                     $_Data['division_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                    $data['division_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
+
                 }else if($HeaderData['data']['DATA']['Header']['OrgType'] == 'OFFICE'){
                     $_Data['office_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                    $data['office_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
                 }
                 
                 $_Detail = $params['obj']['Detail'];
@@ -567,28 +616,35 @@
                     if($OrgType == 'dep'){
                         $data['dep_approve_date'] = date('Y-m-d H:i:s');
                         $data['dep_approve_comment'] = $ApproveComment;
+                        $data['dep_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+
                         $data['division_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
                     }else if($OrgType == 'division'){
                         $data['division_approve_date'] = date('Y-m-d H:i:s');
                         $data['division_approve_comment'] = $ApproveComment;
+                        $data['division_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+
                         $data['office_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
                     }else if($OrgType == 'office'){
                         $data['office_approve_date'] = date('Y-m-d H:i:s');
                         $data['office_approve_comment'] = $ApproveComment;
+                        $data['office_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
                         
                     }
                 }else if($ApproveStatus == 'reject'){
 
                     if($OrgType == 'dep'){
-                        $data['dep_approve_date'] = NULL;                  
+                        $data['dep_approve_date'] = date('Y-m-d H:i:s');                  
                         $data['dep_approve_comment'] = $ApproveComment;
+                        $data['dep_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
                     }else if($OrgType == 'division'){
                         $data['dep_approve_date'] = NULL;                  
                         $data['dep_approve_comment'] = NULL;
                         
                         $data['division_approve_id'] = NULL;
-                        $data['division_approve_date'] = NULL;
+                        $data['division_approve_date'] = date('Y-m-d H:i:s');
                         $data['division_approve_comment'] = $ApproveComment;
+                        $data['division_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
                     }else if($OrgType == 'office'){
 
                         $data['dep_approve_date'] = NULL;                  
@@ -599,8 +655,9 @@
                         $data['division_approve_comment'] = NULL;
 
                         $data['office_approve_id'] = NULL;    
-                        $data['office_approve_date'] = NULL;                        
+                        $data['office_approve_date'] = date('Y-m-d H:i:s');                        
                         $data['office_approve_comment'] = $ApproveComment;
+                        $data['office_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
                     }
                 }
 

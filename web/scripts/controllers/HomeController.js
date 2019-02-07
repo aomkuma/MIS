@@ -225,7 +225,7 @@ angular.module('e-homework').controller('HomeController', function($scope, $cook
         options: {
             title: {
                 display: true,
-                text: 'ข้อมูลให้บริการและกิจการโคนม'
+                text: 'ข้อมูลอุตสาหกรรม'
             },
             tooltips: {
                 mode: 'index',
