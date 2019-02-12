@@ -149,3 +149,6 @@ $container['ChartController'] = function ($c) {
 $container['ERPController'] = function ($c) {
     return new \App\Controller\ERPController($c->get('logger'), $c->get('db'));
 };
+$container['SubcommitteeReportController'] = function ($c) {
+    return new \App\Controller\SubcommitteeReportController($c->get('logger'), $c->get('db'));
+};

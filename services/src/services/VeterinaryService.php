@@ -162,5 +162,22 @@
 
             return Veterinary::where('id', $id)->update($obj);
         }
+         public static function getDetailmonth($years, $months, $type_id, $region) {
+        $ckid = null;
+        return Veterinary::select(DB::raw("SUM(item_amount) AS amount")
+                               )
+                        ->join("veterinary_detail", 'veterinary_detail.veterinary_id', '=', 'veterinary.id')
+                        ->where("years", $years)
+                        ->where("months", $months)
+                        ->where('office_approve_id', !$ckid)
+                        ->where(function($query) use ($ckid) {
+
+                            $query->where('office_approve_comment', $ckid);
+                            $query->orWhere('office_approve_comment', '');
+                        })
+                        ->where("item_type", $type_id)
+                        ->first()
+                        ->toArray();
+    }
 
     }

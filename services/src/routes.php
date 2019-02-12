@@ -163,6 +163,7 @@ $app->post('/cow-group/list/approve/', 'CowGroupController:loadDataApprove');
 $app->post('/monthreport/report/', 'MonthReportController:exportmonthreportExcel');
 $app->post('/quarterreport/report/', 'QuarterReportController:exportquarterreportExcel');
 $app->post('/annuallyreport/report/', 'AnnualReportController:exportannuallyreportExcel');
+$app->post('/subcommittee/report/', 'SubcommitteeReportController:exportsubreportExcel');
 
 $app->post('/import-personal/', 'ImportPersonalController:import');
 $app->post('/import-personal/list/main/', 'ImportPersonalController:getMainList');

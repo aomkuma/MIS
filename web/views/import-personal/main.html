@@ -16,7 +16,7 @@
 						
 					
 					
-						<label class="col-lg-2 for="exampleInputName2"> ปี: </label>
+						<label class="col-lg-2 "> ปี: </label>
 						<div class="col-lg-4">
 							<select name="Year" class="form-control " ng-model="Data.Year" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
 							<option value="">กรุณาเลือก..</option>
@@ -49,9 +49,13 @@
 				          </span>
 				        </p>
 					</div>
-					<div class="col-lg-4">
+					<div class="col-lg-2">
 						<div class="file-alert" ng-show="fle.attachFile.invalidFile.$error === 'maxSize'">ขนาดไฟล์ต้องไม่เกิน : {{AttachFile.invalidFile.$errorParam}}</div>
 					</div>
+					<div class="col-lg-4">
+						<a  href="../files/files/report/เพิ่มลดจำนวนพนักงานรายเดือน.xlsx" target="_self" download="เพิ่มลดจำนวนพนักงานรายเดือน.xlsx"><span class="glyphicon glyphicon-download"></span> Template สำหรับนำเข้า</a>
+					</div>
+
 			</div>
 			<div class="row form-group">
 				<button class="btn btn-primary" ng-click="updateData(Data,AttachFile)">อัพโหลด</button>

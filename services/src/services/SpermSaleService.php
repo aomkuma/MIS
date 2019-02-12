@@ -115,5 +115,22 @@ class SpermSaleService {
 
             return SpermSale::where('id', $id)->update($obj);
         }
+        public static function getDetailmonth($years, $months, $type_id, $region) {
+        $ckid = null;
+        return SpermSale::select(DB::raw("SUM(amount) AS amount")
+                                , DB::raw("SUM(`values`) AS price"))
+                         ->join("sperm_sale_detail", 'sperm_sale_detail.sperm_sale_id', '=', 'sperm_sale.id')
+                        ->where("years", $years)
+                        ->where("months", $months)
+                        ->where('office_approve_id', !$ckid)
+                        ->where(function($query) use ($ckid) {
+
+                            $query->where('office_approve_comment', $ckid);
+                            $query->orWhere('office_approve_comment', '');
+                        })
+                        ->where("sperm_sale_type_id", $type_id)
+                        ->first()
+                        ->toArray();
+    }
 
 }
