@@ -10,10 +10,30 @@
     
     class MineralService {
 
+        public static function loadDataApprove($UserID){
+            return Mineral::select("mineral.*", 'cooperative.cooperative_name')
+                            ->join('cooperative', 'cooperative.id', '=', 'mineral.cooperative_id')
+                            ->where(function($query) use ($UserID){
+                                $query->where('dep_approve_id' , $UserID);    
+                                $query->whereNull('dep_approve_date');    
+                            })
+                            ->orWhere(function($query) use ($UserID){
+                                $query->where('division_approve_id' , $UserID);    
+                                $query->whereNull('division_approve_date');    
+                            })
+                            ->orWhere(function($query) use ($UserID){
+                                $query->where('office_approve_id' , $UserID);    
+                                $query->whereNull('office_approve_date');    
+                            })
+                            ->get();
+        }
+
         public static function getMainList($years, $months, $region_id){
             return Mineral::select(DB::raw("SUM(amount) AS sum_weight")
                                         ,DB::raw("SUM(`values`) AS sum_baht")
-                                        ,"mineral.update_date")
+                                        ,"mineral.update_date","office_approve_id"
+                                    ,"office_approve_date"
+                                    ,"office_approve_comment")
                             ->join("mineral_detail", 'mineral_detail.mineral_id', '=', 'mineral.id')
                             ->where("years", $years)
                             ->where("months", $months)

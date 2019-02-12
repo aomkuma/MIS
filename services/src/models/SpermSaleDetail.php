@@ -6,7 +6,7 @@ class SpermSaleDetail extends \Illuminate\Database\Eloquent\Model {
   	protected $primaryKey = 'id';
   	public $timestamps = false;
   	protected $fillable = array('id'
-  								, 'spermsale_id'
+  								, 'sperm_sale_id'
                   , 'sperm_sale_type_id'
   								, 'amount'
                   , 'price'

@@ -10,6 +10,24 @@
     
     class CooperativeMilkService {
 
+        public static function loadDataApprove($UserID){
+            return CooperativeMilk::select("cooperative_milk.*", 'region.RegionName')
+                            ->join('region', 'region.RegionID', '=', 'cooperative_milk.region_id')
+                            ->where(function($query) use ($UserID){
+                                $query->where('dep_approve_id' , $UserID);    
+                                $query->whereNull('dep_approve_date');    
+                            })
+                            ->orWhere(function($query) use ($UserID){
+                                $query->where('division_approve_id' , $UserID);    
+                                $query->whereNull('division_approve_date');    
+                            })
+                            ->orWhere(function($query) use ($UserID){
+                                $query->where('office_approve_id' , $UserID);    
+                                $query->whereNull('office_approve_date');    
+                            })
+                            ->get();
+        }
+
         public static function getMainList($years, $months, $region_id, $cooperative_id = '') {
         return CooperativeMilk::select(DB::raw("SUM(total_person) AS sum_total_person")
                                 , DB::raw("SUM(total_person_sent) AS sum_total_person_sent")
@@ -19,7 +37,9 @@
                                 , DB::raw("SUM(total_values) AS sum_total_values")
                                 , DB::raw("SUM(average_values) AS sum_average_values")
 
-                                , "cooperative_milk.update_date")
+                                , "cooperative_milk.update_date","office_approve_id"
+                                    ,"office_approve_date"
+                                    ,"office_approve_comment")
                         ->join("cooperative_milk_detail", 'cooperative_milk_detail.cooperative_milk_id', '=', 'cooperative_milk.id')
                         ->where("years", $years)
                         ->where("months", $months)

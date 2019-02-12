@@ -10,11 +10,31 @@
     
     class VeterinaryService {
 
-
+        public static function loadDataApprove($UserID){
+            return Veterinary::select("veterinary.*", 'cooperative.cooperative_name')
+                            ->join('cooperative', 'cooperative.id', '=', 'veterinary.cooperative_id')
+                            ->where(function($query) use ($UserID){
+                                $query->where('dep_approve_id' , $UserID);    
+                                $query->whereNull('dep_approve_date');    
+                            })
+                            ->orWhere(function($query) use ($UserID){
+                                $query->where('division_approve_id' , $UserID);    
+                                $query->whereNull('division_approve_date');    
+                            })
+                            ->orWhere(function($query) use ($UserID){
+                                $query->where('office_approve_id' , $UserID);    
+                                $query->whereNull('office_approve_date');    
+                            })
+                            ->get();
+        }
 
         public static function getMainList($years, $months, $region_id, $farm_type, $item_type){
             return Veterinary::select(DB::raw("SUM(mis_veterinary_item.item_amount) AS sum_amount")
-                                    ,"veterinary.update_date")
+                                    ,"veterinary.update_date"
+                                    ,"office_approve_id"
+                                    ,"office_approve_date"
+                                    ,"office_approve_comment"
+                                )
                             ->join("veterinary_detail", 'veterinary_detail.veterinary_id', '=', 'veterinary.id')
                             ->join("veterinary_item", 'veterinary_detail.id', '=', 'veterinary_item.veterinary_detail_id')
                             ->where("years", $years)
@@ -22,6 +42,7 @@
                             ->where("region_id", $region_id)
                             ->where("farm_type", $farm_type)
                             ->where('veterinary_item.item_type', $item_type)
+                            ->orderBy('update_date', 'DESC')
                             ->first()
                             ->toArray();
         }
@@ -64,7 +85,13 @@
         }
 
         public static function getData($cooperative_id, $months, $years){
-            return Veterinary::where('cooperative_id', $cooperative_id)
+            return Veterinary::
+                    where(function($query) use ($cooperative_id){
+                        if(!empty($cooperative_id)){
+                            $query->where('cooperative_id' , $cooperative_id);
+                        }  
+                    })
+                    // where('cooperative_id', $cooperative_id)
                     ->where('months', $months)
                     ->where('years', $years)
                     //->with('mouHistories')

@@ -98,6 +98,7 @@
 					<option value="กิโลกรัม">กิโลกรัม</option>
 					<option value="ร้อยละ">ร้อยละ</option>
 					<option value="คน">คน</option>
+					<option value="ตัว">ตัว</option>
 					<option value="หลอด">หลอด</option>
 				</select>
 			</div>
@@ -165,7 +166,7 @@
 					<span class="glyphicon glyphicon-arrow-left"></span> 
 					กลับหน้าหลัก
 				</button>
-				<button class="btn btn-primary" ng-click="save(Data, avgList)" ng-disabled="!form_data.$valid || Data.editable == 'N' || !AVGAction">
+				<button class="btn btn-primary" ng-click="save(Data, avgList)" ng-disabled="!form_data.$valid || Data.editable == 'N'"><!-- || !AVGAction-->
 					<span class="glyphicon glyphicon-floppy-save"></span> 
 					บันทึก
 				</button>

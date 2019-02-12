@@ -220,6 +220,7 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
 
     $scope.avgData = function(Data){
         $scope.AVGAction = true;
+        
         $scope.avgList = [];
         $scope.totalAmount = 0;
         $scope.totalPriceValue = 0;
@@ -256,6 +257,7 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
 
         $scope.totalAmount = 0;//parseFloat($scope.totalAmount.toFixed(2));
         $scope.totalPriceValue = 0;//parseFloat($scope.totalPriceValue.toFixed(2));
+        
         // console.log($scope.avgList);
     }
 

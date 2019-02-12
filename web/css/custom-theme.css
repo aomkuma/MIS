@@ -5,7 +5,7 @@ a{
 html {
     position: relative;
     min-height: 100%;
-    
+   	
 	
 }
 caption.caption-bg{
@@ -15,7 +15,7 @@ caption.caption-bg{
 .container{
 	width: 100%;
 	
-	
+	font-size: 1.2em;
 }
 
 th{
@@ -77,5 +77,16 @@ th{
 }
 thead{
 	background-color: #BD1212; color: #FFF;
+}
+.form-control{
+	font-size: 1em;
+}
+
+.btn{
+	font-size: 1em;
+}
+
+.dropdown-menu{
+	font-size: 1em;
 }
 

@@ -57,6 +57,7 @@ $app->post('/veterinary/delete/detail/', 'VeterinaryController:removeDetailData'
 $app->post('/veterinary/delete/item/', 'VeterinaryController:removeItemData');
 $app->post('/veterinary/report/', 'ReportController:exportVeterinaryExcel');
 $app->post('/veterinary/update/approve/', 'VeterinaryController:updateDataApprove');
+$app->post('/veterinary/list/approve/', 'VeterinaryController:loadDataApprove');
 
 $app->post('/production-factor/list/', 'ProductionFactorController:getList');
 $app->post('/production-factor/get/', 'ProductionFactorController:getData');
@@ -86,6 +87,7 @@ $app->post('/insemination/update/', 'InseminationController:updateData');
 $app->post('/insemination/delete/detail/', 'InseminationController:removeDetailData');
 $app->post('/insemination/report/', 'ReportController:exportInseminationExcel');
 $app->post('/insemination/update/approve/', 'InseminationController:updateDataApprove');
+$app->post('/insemination/list/approve/', 'InseminationController:loadDataApprove');
 
 $app->post('/mineral/list/main/', 'MineralController:getMainList');
 $app->post('/mineral/list/detail/', 'MineralController:getDetailList');
@@ -94,18 +96,21 @@ $app->post('/mineral/update/', 'MineralController:updateData');
 $app->post('/mineral/delete/detail/', 'MineralController:removeDetailData');
 $app->post('/mineral/report/', 'ReportController:exportMineralExcel');
 $app->post('/mineral/update/approve/', 'MineralController:updateDataApprove');
+$app->post('/mineral/list/approve/', 'MineralController:loadDataApprove');
 
 $app->post('/sperm-sale/list/main/', 'SpermSaleController:getMainList');
 $app->post('/sperm-sale/get/', 'SpermSaleController:getData');
 $app->post('/sperm-sale/update/', 'SpermSaleController:updateData');
 $app->post('/sperm-sale/delete/detail/', 'SpermSaleController:removeDetailData');
 $app->post('/sperm-sale/update/approve/', 'SpermSaleController:updateDataApprove');
+$app->post('/sperm-sale/list/approve/', 'SpermSaleController:loadDataApprove');
 
 $app->post('/material/list/main/', 'MaterialController:getMainList');
 $app->post('/material/get/', 'MaterialController:getData');
 $app->post('/material/update/', 'MaterialController:updateData');
 $app->post('/material/delete/detail/', 'MaterialController:removeDetailData');
 $app->post('/material/update/approve/', 'MaterialController:updateDataApprove');
+$app->post('/material/list/approve/', 'MaterialController:loadDataApprove');
 
 $app->post('/cow-breed/list/main/', 'CowBreedController:getMainList');
 $app->post('/cow-breed/get/', 'CowBreedController:getData');
@@ -113,6 +118,7 @@ $app->post('/cow-breed/update/', 'CowBreedController:updateData');
 $app->post('/cow-breed/delete/detail/', 'CowBreedController:removeDetailData');
 $app->post('/cow-breed/report/', 'ReportController:exportCowbreedExcel');
 $app->post('/cow-breed/update/approve/', 'CowBreedController:updateDataApprove');
+$app->post('/cow-breed/list/approve/', 'CowBreedController:loadDataApprove');
 
 $app->post('/training-cowbreed/list/main/', 'TrainingCowBreedController:getMainList');
 $app->post('/training-cowbreed/get/', 'TrainingCowBreedController:getData');
@@ -120,6 +126,7 @@ $app->post('/training-cowbreed/update/', 'TrainingCowBreedController:updateData'
 $app->post('/training-cowbreed/delete/detail/','TrainingCowBreedController:removeDetailData');
 $app->post('/training-cowbreed/report/', 'ReportController:exportTrainingcowbreedExcel');
 $app->post('/training-cowbreed/update/approve/', 'TrainingCowBreedController:updateDataApprove');
+$app->post('/training-cowbreed/list/approve/', 'TrainingCowBreedController:loadDataApprove');
 
 $app->post('/sperm/list/main/', 'SpermController:getMainList');
 $app->post('/sperm/list/detail/', 'SpermController:getDetailList');
@@ -128,6 +135,7 @@ $app->post('/sperm/update/', 'SpermController:updateData');
 $app->post('/sperm/delete/detail/', 'SpermController:removeDetailData');
 $app->post('/sperm/report/', 'ReportController:exportSpermExcel');
 $app->post('/sperm/update/approve/', 'SpermController:updateDataApprove');
+$app->post('/sperm/list/approve/', 'SpermController:loadDataApprove');
 
 $app->post('/travel/list/main/', 'TravelController:getMainList');
 $app->post('/travel/get/', 'TravelController:getData');
@@ -135,12 +143,14 @@ $app->post('/travel/update/', 'TravelController:updateData');
 $app->post('/travel/delete/detail/', 'TravelController:removeDetailData');
 $app->post('/travel/report/', 'ReportController:exportTravelExcel');
 $app->post('/travel/update/approve/', 'TravelController:updateDataApprove');
+$app->post('/travel/list/approve/', 'TravelController:loadDataApprove');
 
 $app->post('/cooperative-milk/list/main/', 'CooperativeMilkController:getMainList');
 $app->post('/cooperative-milk/get/', 'CooperativeMilkController:getData');
 $app->post('/cooperative-milk/update/', 'CooperativeMilkController:updateData');
 $app->post('/cooperative-milk/delete/detail/', 'CooperativeMilkController:removeDetailData');
 $app->post('/cooperative-milk/update/approve/', 'CooperativeMilkController:updateDataApprove');
+$app->post('/cooperative-milk/list/approve/', 'CooperativeMilkController:loadDataApprove');
 
 $app->post('/cow-group/list/main/', 'CowGroupController:getMainList');
 $app->post('/cow-group/get/', 'CowGroupController:getData');
@@ -148,6 +158,7 @@ $app->post('/cow-group/update/', 'CowGroupController:updateData');
 $app->post('/cow-group/delete/detail/', 'CowGroupController:removeDetailData');
 $app->post('/cow-group/report/', 'ReportController:exportCowgroupExcel');
 $app->post('/cow-group/update/approve/', 'CowGroupController:updateDataApprove');
+$app->post('/cow-group/list/approve/', 'CowGroupController:loadDataApprove');
 
 $app->post('/monthreport/report/', 'MonthReportController:exportmonthreportExcel');
 $app->post('/quarterreport/report/', 'QuarterReportController:exportquarterreportExcel');
@@ -160,6 +171,9 @@ $app->post('/personal/list/main/', 'PersonalController:getMainList');
 
 $app->post('/chart/main/dbi/', 'ChartController:getDataDBI');
 $app->post('/chart/main/ii/', 'ChartController:getDataII');
+
+$app->post('/erp/list/', 'ERPController:getList');
+
 // Default action
 $app->get('/[{name}]', function ($request, $response, $args) {
     // Sample log message

@@ -88,25 +88,28 @@
                     }
                 }else if($ApproveStatus == 'reject'){
 
+                    $data['editable'] = 'Y';
                     if($OrgType == 'dep'){
+                        $data['dep_approve_id'] = NULL;
                         $data['dep_approve_date'] = date('Y-m-d H:i:s');                  
                         $data['dep_approve_comment'] = $ApproveComment;
                         $data['dep_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
                     }else if($OrgType == 'division'){
-                        $data['dep_approve_date'] = NULL;                  
-                        $data['dep_approve_comment'] = NULL;
+                        $data['division_approve_id'] = NULL;
+                        // $data['dep_approve_date'] = NULL;                  
+                        // $data['dep_approve_comment'] = NULL;
                         
                         $data['division_approve_id'] = NULL;
                         $data['division_approve_date'] = date('Y-m-d H:i:s');
                         $data['division_approve_comment'] = $ApproveComment;
                         $data['division_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
                     }else if($OrgType == 'office'){
-
-                        $data['dep_approve_date'] = NULL;                  
+                        $data['dep_approve_id'] = NULL;
+                        // $data['dep_approve_date'] = NULL;                  
                         $data['dep_approve_comment'] = NULL;
                         
                         $data['division_approve_id'] = NULL;
-                        $data['division_approve_date'] = NULL;
+                        // $data['division_approve_date'] = NULL;
                         $data['division_approve_comment'] = NULL;
 
                         $data['office_approve_id'] = NULL;    

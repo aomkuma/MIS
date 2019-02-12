@@ -8,14 +8,35 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class SpermSaleService {
 
+    public static function loadDataApprove($UserID){
+            return SpermSale::select("sperm_sale.*", 'cooperative.cooperative_name')
+                            ->join('cooperative', 'cooperative.id', '=', 'sperm_sale.cooperative_id')
+                            ->where(function($query) use ($UserID){
+                                $query->where('dep_approve_id' , $UserID);    
+                                $query->whereNull('dep_approve_date');    
+                            })
+                            ->orWhere(function($query) use ($UserID){
+                                $query->where('division_approve_id' , $UserID);    
+                                $query->whereNull('division_approve_date');    
+                            })
+                            ->orWhere(function($query) use ($UserID){
+                                $query->where('office_approve_id' , $UserID);    
+                                $query->whereNull('office_approve_date');    
+                            })
+                            ->get();
+        }
+
     public static function getMainList($years, $months, $region_id) {
         return SpermSale::select(DB::raw("SUM(amount) AS sum_amount")
                                 , DB::raw("SUM(`values`) AS sum_baht")
-                                , "sperm_sale.update_date")
+                                , "sperm_sale.update_date","office_approve_id"
+                                    ,"office_approve_date"
+                                    ,"office_approve_comment")
                         ->join("sperm_sale_detail", 'sperm_sale_detail.sperm_sale_id', '=', 'sperm_sale.id')
                         ->where("years", $years)
                         ->where("months", $months)
                         ->where("region_id", $region_id)
+                        ->orderBy('update_date', 'DESC')
                         ->first()
                         ->toArray();
     }

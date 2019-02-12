@@ -52,6 +52,22 @@ class MineralController extends Controller {
         return $monthTxt;
     }
 
+    public function loadDataApprove($request, $response, $args) {
+        try {
+           
+            $params = $request->getParsedBody();
+            $user_session = $params['user_session'];
+            
+            $Data = MineralService::loadDataApprove($user_session['UserID']);
+            
+            $this->data_result['DATA']['DataList'] = $Data;
+            
+            return $this->returnResponse(200, $this->data_result, $response, false);
+        } catch (\Exception $e) {
+            return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+        }
+    }
+
     public function getMainList($request, $response, $args) {
         try {
             // error_reporting(E_ERROR);

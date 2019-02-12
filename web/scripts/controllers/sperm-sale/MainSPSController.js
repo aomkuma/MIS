@@ -12,6 +12,78 @@ angular.module('e-homework').controller('MainSPSController', function($scope, $c
 
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));    
     $scope.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));   
+
+    $scope.getUserRole = function(){
+        var params = {'UserID' : $scope.currentUser.UserID};
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('account-permission/get', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.UserRole = result.data.DATA.Role;
+                for(var i =0; i < $scope.UserRole.length; i++){
+                    if($scope.UserRole[i].role == '2' && $scope.UserRole[i].actives == 'Y'){
+                        $scope.Approver = true;
+                        $scope.loadApproveList();
+                    }
+                }
+                // console.log($scope.MasterGoalList);
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+    $scope.Approver = false;
+    $scope.getUserRole();
+
+    $scope.loadApproveList = function(){
+        
+      //  IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('sperm-sale/list/approve', null).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.ApproveList = result.data.DATA.DataList;
+                // console.log($scope.List);
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+
+    $scope.showApproveList = function(){
+        var modalInstance = $uibModal.open({
+            animation : false,
+            templateUrl : 'approve_list_dialog.html',
+            size : 'lg',
+            scope : $scope,
+            backdrop : 'static',
+            controller : 'ModalDialogReturnFromOKBtnCtrl',
+            resolve : {
+                params : function() {
+                    return {};
+                } 
+            },
+        });
+    }
+
+    $scope.getMonthName = function(m){
+        var monthTxt = '';
+        switch(parseInt(m)){
+            case 1 : monthTxt = 'มกราคม';break;
+            case 2 : monthTxt = 'กุมภาพันธ์';break;
+            case 3 : monthTxt = 'มีนาคม';break;
+            case 4 : monthTxt = 'เมษายน';break;
+            case 5 : monthTxt = 'พฤษภาคม';break;
+            case 6 : monthTxt = 'มิถุนายน';break;
+            case 7 : monthTxt = 'กรกฎาคม';break;
+            case 8 : monthTxt = 'สิงหาคม';break;
+            case 9 : monthTxt = 'กันยายน';break;
+            case 10 : monthTxt = 'ตุลาคม';break;
+            case 11 : monthTxt = 'พฤศจิกายน';break;
+            case 12 : monthTxt = 'ธันวาคม';break;
+        }
+        return monthTxt;
+    }
+
+    $scope.getShortDateTime = function(d){
+        return convertSQLDateTimeToReportDateTime(d);
+    }
+
     $scope.loadList = function(action){
         $scope.CurYear = $scope.condition.YearTo + 543;
         $scope.LastYear = $scope.CurYear - 1;

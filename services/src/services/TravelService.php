@@ -8,10 +8,28 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class TravelService {
 
+    public static function loadDataApprove($UserID){
+            return Travel::where(function($query) use ($UserID){
+                                $query->where('dep_approve_id' , $UserID);    
+                                $query->whereNull('dep_approve_date');    
+                            })
+                            ->orWhere(function($query) use ($UserID){
+                                $query->where('division_approve_id' , $UserID);    
+                                $query->whereNull('division_approve_date');    
+                            })
+                            ->orWhere(function($query) use ($UserID){
+                                $query->where('office_approve_id' , $UserID);    
+                                $query->whereNull('office_approve_date');    
+                            })
+                            ->get();
+        }
+
     public static function getMainList($years, $months, $field_amount, $field_price) {
         return Travel::select(DB::raw("SUM(" . $field_amount . ") AS sum_amount")
                                 , DB::raw("SUM(" . $field_price . ") AS sum_baht")
-                                , "travel.update_date")
+                                , "travel.update_date","office_approve_id"
+                                    ,"office_approve_date"
+                                    ,"office_approve_comment")
                         ->join("travel_detail", 'travel_detail.travel_id', '=', 'travel.id')
                         ->where("years", $years)
                         ->where("months", $months)

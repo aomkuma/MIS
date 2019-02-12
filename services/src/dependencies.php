@@ -145,3 +145,7 @@ $container['PersonalController'] = function ($c) {
 $container['ChartController'] = function ($c) {
     return new \App\Controller\ChartController($c->get('logger'), $c->get('db'));
 };
+
+$container['ERPController'] = function ($c) {
+    return new \App\Controller\ERPController($c->get('logger'), $c->get('db'));
+};

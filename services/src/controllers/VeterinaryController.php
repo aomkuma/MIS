@@ -52,6 +52,22 @@ class VeterinaryController extends Controller {
         return $monthTxt;
     }
 
+    public function loadDataApprove($request, $response, $args) {
+        try {
+           
+            $params = $request->getParsedBody();
+            $user_session = $params['user_session'];
+            
+            $Data = VeterinaryService::loadDataApprove($user_session['UserID']);
+            
+            $this->data_result['DATA']['DataList'] = $Data;
+            
+            return $this->returnResponse(200, $this->data_result, $response, false);
+        } catch (\Exception $e) {
+            return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+        }
+    }
+
     public function getMainList($request, $response, $args) {
         try {
             error_reporting(E_ERROR);
@@ -1212,16 +1228,16 @@ class VeterinaryController extends Controller {
             $HeaderData = json_decode(trim($HeaderData), TRUE);
             // print_r($HeaderData);exit;
             if($HeaderData['data']['DATA']['Header']['OrgType'] == 'DEPARTMENT'){
-                    $_Data['dep_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
-                    $data['dep_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
+                    $_Veterinary['dep_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                    $_Veterinary['dep_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
 
                 }else if($HeaderData['data']['DATA']['Header']['OrgType'] == 'DIVISION'){
-                    $_Data['division_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
-                    $data['division_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
+                    $_Veterinary['division_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                    $_Veterinary['division_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
 
                 }else if($HeaderData['data']['DATA']['Header']['OrgType'] == 'OFFICE'){
-                    $_Data['office_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
-                    $data['office_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
+                    $_Veterinary['office_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                    $_Veterinary['office_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
                 }
             
             $_VeterinaryDetailList = $params['obj']['VeterinaryDetailList'];

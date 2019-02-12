@@ -8,10 +8,30 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class CowGroupService {
 
+    public static function loadDataApprove($UserID){
+            return CowGroup::select("cow_group.*", 'cooperative.cooperative_name')
+                            ->join('cooperative', 'cooperative.id', '=', 'cow_group.cooperative_id')
+                            ->where(function($query) use ($UserID){
+                                $query->where('dep_approve_id' , $UserID);    
+                                $query->whereNull('dep_approve_date');    
+                            })
+                            ->orWhere(function($query) use ($UserID){
+                                $query->where('division_approve_id' , $UserID);    
+                                $query->whereNull('division_approve_date');    
+                            })
+                            ->orWhere(function($query) use ($UserID){
+                                $query->where('office_approve_id' , $UserID);    
+                                $query->whereNull('office_approve_date');    
+                            })
+                            ->get();
+        }
+
     public static function getMainList($years, $months, $region_id, $goal_id, $field_name) {
         return CowGroup::select(DB::raw("SUM(" . $field_name . ") AS sum_baht")
                                 // , DB::raw("SUM(".$field_price.") AS sum_baht")
-                                , "cow_group.update_date")
+                                , "cow_group.update_date","office_approve_id"
+                                    ,"office_approve_date"
+                                    ,"office_approve_comment")
                         ->join("cow_group_detail", 'cow_group_detail.cow_group_id', '=', 'cow_group.id')
                         ->where("years", $years)
                         ->where("months", $months)

@@ -10,10 +10,30 @@
     
     class MaterialService {
 
+        public static function loadDataApprove($UserID){
+            return Material::select("material.*", 'cooperative.cooperative_name')
+                            ->join('cooperative', 'cooperative.id', '=', 'material.cooperative_id')
+                            ->where(function($query) use ($UserID){
+                                $query->where('dep_approve_id' , $UserID);    
+                                $query->whereNull('dep_approve_date');    
+                            })
+                            ->orWhere(function($query) use ($UserID){
+                                $query->where('division_approve_id' , $UserID);    
+                                $query->whereNull('division_approve_date');    
+                            })
+                            ->orWhere(function($query) use ($UserID){
+                                $query->where('office_approve_id' , $UserID);    
+                                $query->whereNull('office_approve_date');    
+                            })
+                            ->get();
+        }
+
         public static function getMainList($years, $months, $region_id, $material_type_id){
             return Material::select(DB::raw("SUM(amount) AS sum_amount")
                                         ,DB::raw("SUM(`price`) AS sum_baht")
-                                        ,"material.update_date")
+                                        ,"material.update_date","office_approve_id"
+                                    ,"office_approve_date"
+                                    ,"office_approve_comment")
                             ->join("material_detail", 'material_detail.material_id', '=', 'material.id')
                             ->where("years", $years)
                             ->where("months", $months)

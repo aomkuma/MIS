@@ -8,10 +8,28 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class TrainingCowBreedService {
 
+    public static function loadDataApprove($UserID){
+            return TrainingCowBreed::where(function($query) use ($UserID){
+                                $query->where('dep_approve_id' , $UserID);    
+                                $query->whereNull('dep_approve_date');    
+                            })
+                            ->orWhere(function($query) use ($UserID){
+                                $query->where('division_approve_id' , $UserID);    
+                                $query->whereNull('division_approve_date');    
+                            })
+                            ->orWhere(function($query) use ($UserID){
+                                $query->where('office_approve_id' , $UserID);    
+                                $query->whereNull('office_approve_date');    
+                            })
+                            ->get();
+        }
+
     public static function getMainList($years, $months, $region_id, $training_cowbreed_type_id) {
         return TrainingCowBreed::select(DB::raw("SUM(amount) AS sum_amount")
                                 , DB::raw("SUM(`values`) AS sum_baht")
-                                , "training_cowbreed.update_date")
+                                , "training_cowbreed.update_date","office_approve_id"
+                                    ,"office_approve_date"
+                                    ,"office_approve_comment")
                         ->join("training_cowbreed_detail", 'training_cowbreed_detail.training_cowbreed_id', '=', 'training_cowbreed.id')
                         ->where("years", $years)
                         ->where("months", $months)
