@@ -57,6 +57,14 @@
 			<input type="number" class="form-control" ng-model="Data.mou_amount" required="true">
 		</div>
 	</div>
+	<div class="row form-group">
+		<div class="field-label col-lg-2 col-md-2 col-sm-12 col-xs-12">
+			มูลค่า
+		</div>
+		<div class="col-lg-3 col-md-13 col-sm-12 col-xs-12">
+			<input type="number" class="form-control" ng-model="Data.mou_value" required="true">
+		</div>
+	</div>
 	<hr>
 	<div ng-show="HistoryList.length > 0">
 		<div class="row form-group">
@@ -75,6 +83,7 @@
 							<th>วันที่เริ่ม</th>
 							<th>วันที่สิ้นสุด</th>
 							<th>ปริมาณที่ระบุใน MOU</th>
+							<th>มูลค่า</th>
 							<th>บริหารจัดการ</th>
 						</tr>
 					</thead>
@@ -86,6 +95,7 @@
 							<td>{{getThaiDate(data.start_date)}}</td>
 							<td>{{getThaiDate(data.end_date)}}</td>
 							<td>{{data.mou_amount}}</td>
+							<td>{{data.mou_value}}</td>
 							<td></td>
 						</tr>
 					</tbody>

@@ -174,8 +174,14 @@ $app->post('/chart/main/dbi/', 'ChartController:getDataDBI');
 $app->post('/chart/main/ii/', 'ChartController:getDataII');
 
 $app->post('/erp/list/', 'ERPController:getList');
-$app->post('/erp/list/milk-buy-info/', 'ERPController:getListMBI');
+$app->post('/erp/list/milk-buy-info/month/', 'ERPController:getListMBIMonth');
+$app->post('/erp/list/milk-buy-info/quarter/', 'ERPController:getListMBIQuarter');
+$app->post('/erp/list/milk-buy-info/year/', 'ERPController:getListMBIYear');
 $app->post('/erp/list/milk-buy-info/detail/', 'ERPController:getListMBIDetail');
+$app->post('/erp/list/milk-buy-info/mou/month/', 'ERPController:getListMBIMOUMonth');
+$app->post('/erp/list/milk-buy-info/mou/quarter/', 'ERPController:getListMBIMOUQuarter');
+$app->post('/erp/list/milk-buy-info/mou/year/', 'ERPController:getListMBIMOUYear');
+$app->post('/erp/list/milk-buy-info/mou/detail/', 'ERPController:getListMBIMOUDetail');
 
 // Default action
 $app->get('/[{name}]', function ($request, $response, $args) {

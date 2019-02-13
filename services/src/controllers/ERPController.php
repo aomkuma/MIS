@@ -375,6 +375,187 @@
             }
         }
 
+        public function getListMBIMOU($request, $response, $args){
+            // error_reporting(E_ERROR);
+            //     error_reporting(E_ALL);
+            //     ini_set('display_errors','On');
+            
+            try{
+                $params = $request->getParsedBody();
+                $user_session = $params['user_session'];
+                $regions = $params['obj']['region'];
+                $years = $params['obj']['condition']['YearTo'];
+
+                $region_list = [];
+                foreach ($regions as $key => $value) {
+                    $region = ERPController::checkRegion($value['RegionID']);
+                    $region_list[] = $region;
+                }
+                
+                $DataList = [];
+
+                $years = $years - 1;
+                $beforYear = intval($years) - 1;
+                $curMonth = 10;
+
+                $quarter = 1;
+                $Q_CurrentAmount = 0;
+                $Q_CurrentBaht = 0;
+                $Q_BeforeAmount = 0;
+                $Q_BeforeBaht = 0;
+
+                $Y_CurrentAmount = 0;
+                $Y_CurrentBaht = 0;
+                $Y_BeforeAmount = 0;
+                $Y_BeforeBaht = 0;
+
+                for ($i = 0; $i < 12; $i++) {
+
+                    if($curMonth > 12){
+                        $curMonth = 1;
+                        $years += 1;
+                        $beforYear += 1;
+                    }
+
+                    $monthName = ERPController::getMonthName($curMonth);
+                        
+                    $data = [];
+                    $data['Month'] = $monthName;
+
+                    // Cur year
+                    
+                    $fromTime = $years . '-' . str_pad($curMonth, 2, "0", STR_PAD_LEFT) . '-01';
+                    $ymTo = $years . '-' . str_pad($curMonth, 2, "0", STR_PAD_LEFT);
+                    $toTime = $years . '-' . str_pad($curMonth, 2, "0", STR_PAD_LEFT) . '-'  . $this->getLastDayOfMonth($ymTo);
+                    
+                    $Current = ERPService::getListMBIDetail($fromTime, $toTime, $region_list);
+                    
+                    $data['CurrentAmount'] = floatval($Current['sum_amount']);
+                    $data['CurrentBaht'] = floatval($Current['sum_baht']);
+
+                    // Before year
+                    
+                    $fromTime = $beforYear . '-' . str_pad($curMonth, 2, "0", STR_PAD_LEFT) . '-01';
+                    $ymTo = $beforYear . '-' . str_pad($curMonth, 2, "0", STR_PAD_LEFT);
+                    $toTime = $beforYear . '-' . str_pad($curMonth, 2, "0", STR_PAD_LEFT) . '-' . $this->getLastDayOfMonth($ymTo);
+
+                    $Before = ERPService::getListMBIDetail($fromTime, $toTime, $region_list);
+                    $data['BeforeAmount'] = floatval($Before['sum_amount']);
+                    $data['BeforeBaht'] = floatval($Before['sum_baht']);
+
+                    $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+                    $data['DiffAmount'] = $DiffAmount;
+
+                    if ($data['BeforeAmount'] != 0) {
+                        $data['DiffAmountPercentage'] = ($data['CurrentAmount'] / $data['BeforeAmount']) * 100;
+                    } else {
+                        $data['DiffAmountPercentage'] = 0;
+                    }
+
+
+                    $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                    $data['DiffBaht'] = $DiffBaht;
+
+                    if ($data['BeforeBaht'] != 0) {
+                        $data['DiffBahtPercentage'] = ($data['CurrentBaht'] / $data['BeforeBaht']) * 100;
+                    } else {
+                        $data['DiffBahtPercentage'] = 0;
+                    }
+
+                    $Q_CurrentAmount += $data['CurrentAmount'];
+                    $Q_CurrentBaht += $data['CurrentBaht'];
+                    $Q_BeforeAmount += $data['BeforeAmount'];
+                    $Q_BeforeBaht += $data['BeforeBaht'];
+
+                    $Y_CurrentAmount += $data['CurrentAmount'];
+                    $Y_CurrentBaht += $data['CurrentBaht'];
+                    $Y_BeforeAmount += $data['BeforeAmount'];
+                    $Y_BeforeBaht += $data['BeforeBaht'];
+
+                    $curMonth++;
+
+                    array_push($DataList, $data);
+
+                    if($i > 0 && ($i+1)%3 == 0){
+
+                        $data = [];
+                        $data['Month'] = 'ไตรมาส ' . $quarter;
+                        $data['CurrentAmount'] = $Q_CurrentAmount;
+                        $data['CurrentBaht'] = $Q_CurrentBaht;
+                        $data['BeforeAmount'] = $Q_BeforeAmount;
+                        $data['BeforeBaht'] = $Q_BeforeBaht;
+
+                        $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+                        $data['DiffAmount'] = $DiffAmount;
+
+                        if ($data['BeforeAmount'] != 0) {
+                            $data['DiffAmountPercentage'] = ($data['CurrentAmount'] / $data['BeforeAmount']) * 100;
+                        } else {
+                            $data['DiffAmountPercentage'] = 0;
+                        }
+
+
+                        $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                        $data['DiffBaht'] = $DiffBaht;
+
+                        if ($data['BeforeBaht'] != 0) {
+                            $data['DiffBahtPercentage'] = ($data['CurrentBaht'] / $data['BeforeBaht']) * 100;
+                        } else {
+                            $data['DiffBahtPercentage'] = 0;
+                        }
+
+                        $Q_CurrentAmount = 0;
+                        $Q_CurrentBaht = 0;
+                        $Q_BeforeAmount = 0;
+                        $Q_BeforeBaht = 0;
+
+                        $data['bg_color'] = '#ccc';
+
+                        $quarter++;
+
+                        array_push($DataList, $data);
+                    }
+
+                }
+
+                $data = [];
+                $data['Month'] = 'รวม';
+                $data['CurrentAmount'] = $Y_CurrentAmount;
+                $data['CurrentBaht'] = $Y_CurrentBaht;
+                $data['BeforeAmount'] = $Y_BeforeAmount;
+                $data['BeforeBaht'] = $Y_BeforeBaht;
+
+                $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+                $data['DiffAmount'] = $DiffAmount;
+
+                if ($data['BeforeAmount'] != 0) {
+                    $data['DiffAmountPercentage'] = ($data['CurrentAmount'] / $data['BeforeAmount']) * 100;
+                } else {
+                    $data['DiffAmountPercentage'] = 0;
+                }
+
+
+                $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                $data['DiffBaht'] = $DiffBaht;
+
+                if ($data['BeforeBaht'] != 0) {
+                    $data['DiffBahtPercentage'] = ($data['CurrentBaht'] / $data['BeforeBaht']) * 100;
+                } else {
+                    $data['DiffBahtPercentage'] = 0;
+                }
+                $data['bg_color'] = '#999';
+                array_push($DataList, $data);
+
+                // exit;
+                
+                $this->data_result['DATA']['List'] = $DataList;
+
+                return $this->returnResponse(200, $this->data_result, $response, false);
+                
+            }catch(\Exception $e){
+                return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+            }
+        }
         public function getList($request, $response, $args){
             error_reporting(E_ERROR);
                 error_reporting(E_ALL);

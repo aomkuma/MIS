@@ -85,6 +85,14 @@ angular.module('e-homework').controller('MainMBIController', function($scope, $c
     }
 
     $scope.loadList = function(action){
+
+        if($scope.condition.DisplayType == 'monthly'){
+            action = 'erp/list/milk-buy-info/month';
+        }else if($scope.condition.DisplayType == 'quarter'){
+            action = 'erp/list/milk-buy-info/quarter';
+        }else if($scope.condition.DisplayType == 'annually'){
+            action = 'erp/list/milk-buy-info/year';
+        }
         $scope.CurYear = $scope.condition.YearTo + 543;
         $scope.LastYear = $scope.CurYear - 1;
         var params = {
@@ -120,6 +128,32 @@ angular.module('e-homework').controller('MainMBIController', function($scope, $c
         });
     }
 
+    $scope.loadListMOU = function(action){
+
+        if($scope.condition.DisplayType == 'monthly'){
+            action = 'erp/list/milk-buy-info/mou/month';
+        }else if($scope.condition.DisplayType == 'quarter'){
+            action = 'erp/list/milk-buy-info/mou/month/quarter';
+        }else if($scope.condition.DisplayType == 'annually'){
+            action = 'erp/list/milk-buy-info/mou/month/year';
+        }
+        
+        $scope.CurYear = $scope.condition.YearTo + 543;
+        $scope.LastYear = $scope.CurYear - 1;
+        var params = {
+            'condition' : $scope.condition
+            , 'region' : $scope.PersonRegion
+        };
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest(action, params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.MOUList = result.data.DATA.List;
+                console.log($scope.DetailList);
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+
     $scope.getThaiDate = function(date){
         // console.log(date);
         return convertDateToFullThaiDateIgnoreTime(new Date(date));
@@ -140,6 +174,12 @@ angular.module('e-homework').controller('MainMBIController', function($scope, $c
         $scope.loadListDetail('erp/list/milk-buy-info/detail');
         // console.log($scope.DetailList);
     }
+
+    $scope.viewMOU = function(){
+        $scope.ViewType = 'MOU';
+        $scope.loadListMOU('erp/list/milk-buy-info/mou');
+    }
+
     $scope.exportReport = function(data,condition){
        // console.log(DetailList, $scope.data_description);
         // return;

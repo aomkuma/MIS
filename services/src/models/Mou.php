@@ -9,6 +9,7 @@ class Mou extends \Illuminate\Database\Eloquent\Model {
   								, 'cooperative_id'
   								, 'years'
   								, 'mou_amount'
+                  , 'mou_value'
   								, 'start_date'
   								, 'end_date'
   								, 'create_date'

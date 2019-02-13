@@ -7,7 +7,15 @@
 	<div class="col-lg-12 text-center">
 		<form name="search_form" class="form-inline">
 	  		<div ng-show="condition.DisplayType == 'monthly'">
-		  		
+		  		<div class="form-group">
+				    <label for="exampleInputName2">&nbsp; การแสดงข้อมูล : </label>
+				    &nbsp; <select name="Year" class="form-control" ng-model="condition.DisplayType" ng-change="goSearch()">
+						<option value="">กรุณาเลือก</option>
+						<option value="monthly">รายเดือน</option>
+						<option value="quarter">รายไตรมาส</option>
+						<option value="annually">รายปี</option>
+					</select>
+			  	</div>
 				<div class="form-group">
 				    <label for="exampleInputName2">&nbsp; เดือน : </label>
 				    &nbsp; <select name="Year" class="form-control" ng-model="condition.MonthFrom" ng-options="month.monthValue as month.monthText for month in MonthList" required="required">
@@ -32,7 +40,35 @@
 			  	</div>
 			  	<button class="btn btn-primary" ng-click="goSearch()"><span class="glyphicon glyphicon-search"></span> ค้นหา</button>
 			</div>
-			
+			<div ng-show="condition.DisplayType == 'quarter'">
+				<div class="form-group">
+				    <label for="exampleInputName2">&nbsp; การแสดงข้อมูล : </label>
+				    &nbsp; <select name="Year" class="form-control" ng-model="condition.DisplayType" ng-change="goSearch()">
+						<option value="">กรุณาเลือก</option>
+						<option value="monthly">รายเดือน</option>
+						<option value="quarter">รายไตรมาส</option>
+						<option value="annually">รายปี</option>
+					</select>
+			  	</div>
+				<div class="form-group">
+				    <label for="exampleInputName2">&nbsp; ไตรมาสที่: </label>
+				    &nbsp; <select name="Year" class="form-control" ng-model="condition.QuarterFrom" required="required">
+						<option value="">กรุณาเลือก..</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+					</select>
+			  	</div>
+				<div class="form-group">
+				    <label for="exampleInputName2">&nbsp; ปีงบประมาณ: </label>
+				    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearFrom" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
+						<option value="">กรุณาเลือก..</option>
+					</select>
+			  	</div>
+			  	
+			  	<button class="btn btn-primary" ng-click="goSearch()"><span class="glyphicon glyphicon-search"></span> ค้นหา</button>
+			</div>
 		</form>
 	</div>
 </div>
@@ -92,7 +128,7 @@
 				<td>{{numberFormatComma(data.DiffBaht)}}</td>
 				<td>{{numberFormatComma(data.DiffBahtPercentage)}}</td>
 				<td>
-					<button class="btn btn-info" ng-click="viewDetail(data.Description)">
+					<button class="btn btn-info" ng-click="viewMOU()">
 						<span class="glyphicon glyphicon-zoom-in"></span> 
 						MOU
 					</button>
@@ -143,17 +179,46 @@
 				<td>{{numberFormatComma(data.DiffBahtPercentage)}}</td>
 			</tr>
 		</tbody>
-		<!-- <tr>
-			<td>รวม</td>
-			<td>{{numberFormat(DetailSummary.CurrentAmount)}}</td>
-			<td>{{numberFormatComma(DetailSummary.SumCurrentBaht)}}</td>
-			<td>{{numberFormat(DetailSummary.SumBeforeAmount)}}</td>
-			<td>{{numberFormatComma(DetailSummary.SumBeforeBaht)}}</td>
-			<td>{{numberFormat(DetailSummary.SumDiffAmount)}}</td>
-			<td>{{numberFormatComma(DetailSummary.SumDiffAmountPercentage)}}</td>
-			<td>{{numberFormatComma(DetailSummary.SumDiffBaht)}}</td>
-			<td>{{numberFormatComma(DetailSummary.SumDiffBahtPercentage)}}</td>
-		</tr> -->
+	</table>
+</div>
+<div class="col-lg-12 table-responsive" ng-show="ViewType == 'MOU'">
+	<table class="table table-bordered table-striped">
+		
+		<thead style="background-color: #BD1212; color: #FFF;">
+			<tr>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">อ.ส.ค.</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">เดือน</th>
+				<th colspan="2" style="text-align: center; vertical-align: middle;">MOU ปีงบประมาณ {{CurYear}}</th>
+				<th colspan="2" style="text-align: center; vertical-align: middle;">ผลปีงบประมาณ {{CurYear}}</th>
+				<th colspan="2" style="text-align: center; vertical-align: middle;">MOU สะสมเดือน ตค. {{LastYear}} - กย. {{CurYear}}</th>
+				<th colspan="2" style="text-align: center; vertical-align: middle;">ผล สะสมเดือน ตค. {{LastYear}} - กย. {{CurYear}}</th>
+			</tr>
+			<tr>
+				<th style="text-align: center;">ปริมาณ (กิโลกรัม)</th>
+				<th style="text-align: center;">มูลค่า</th>
+				<th style="text-align: center;">ปริมาณ (กิโลกรัม)</th>
+				<th style="text-align: center;">มูลค่า</th>
+				<th style="text-align: center;">ปริมาณ (กิโลกรัม)</th>
+				<th style="text-align: center;">มูลค่า</th>
+				<th style="text-align: center;">ปริมาณ (กิโลกรัม)</th>
+				<th style="text-align: center;">มูลค่า</th>
+
+			</tr>
+		</thead>
+		<tbody >
+			<tr ng-repeat="data in MOUList" style="background-color: {{data.bg_color}};">
+				<td>{{data.RegionName}}</td>
+				<td>{{data.Month}}</td>
+				<td>{{numberFormat(data.MOUAmount)}}</td>
+				<td>{{numberFormatComma(data.MOUBaht)}}</td>
+				<td>{{numberFormat(data.DataAmount)}}</td>
+				<td>{{numberFormatComma(data.DataBaht)}}</td>
+				<td>{{numberFormat(data.TotalMOUAmount)}}</td>
+				<td>{{numberFormatComma(data.TotalMOUBaht)}}</td>
+				<td>{{numberFormatComma(data.TotalDataAmount)}}</td>
+				<td>{{numberFormatComma(data.TotalDataBaht)}}</td>
+			</tr>
+		</tbody>
 	</table>
 </div>
 <div class="page-header">

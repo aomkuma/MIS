@@ -18,12 +18,13 @@
 				<th>วันที่เริ่ม</th>
 				<th>วันที่สิ้นสุด</th>
 				<th>ปริมาณที่ระบุใน MOU</th>
+				<th>มูลค่า</th>
 				<th>บริหารจัดการ</th>
 			</tr>
 		</thead>
 		<tbody ng-repeat="data in List">
 			<tr style="background-color: #B6CCFF; padding: 5px;">
-				<td colspan="7">{{getRegionName(data.region_id)}}</td>
+				<td colspan="8">{{getRegionName(data.region_id)}}</td>
 			</tr>
 			<tr ng-repeat="sub_data in data.Data">
 				<td>{{sub_data.update_date}}</td>
@@ -32,6 +33,7 @@
 				<td>{{getThaiDate(sub_data.start_date)}}</td>
 				<td>{{getThaiDate(sub_data.end_date)}}</td>
 				<td>{{numberFormatComma(sub_data.mou_amount)}}</td>
+				<td>{{numberFormatComma(sub_data.mou_value)}}</td>
 				<td>
 					<button class="btn btn-success" ng-click="goUpdate(sub_data.id)">
 						<span class="glyphicon glyphicon-edit"></span> 
