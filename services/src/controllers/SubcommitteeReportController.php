@@ -16,6 +16,7 @@ use App\Service\MineralService;
 use App\Service\SpermSaleService;
 use App\Service\MouService;
 use App\Service\MBIService;
+use App\Service\MSIService;
 use PHPExcel;
 
 class SubcommitteeReportController extends Controller {
@@ -100,6 +101,7 @@ class SubcommitteeReportController extends Controller {
                 case 'annually' :$header = 'สรุปรายงานผลการดำเนินงานประจำ ปี ' . ($condition['YearFrom'] + 543);
                     $objPHPExcel = $this->generatesheet1($objPHPExcel, $condition, $header);
                     $objPHPExcel = $this->generatesheet2($objPHPExcel, $condition, $header);
+                    $objPHPExcel = $this->generatesheet3($objPHPExcel, $condition, $header);
                     break;
                 case 'monthly' :$header = 'สรุปรายงานผลการดำเนินงานประจำเดือน ' . $this->getMonthName($condition['MonthFrom']) . ' ปี ' . ($condition['YearTo'] + 543);
                     $objPHPExcel = $this->generatesheet1($objPHPExcel, $condition, $header);
@@ -109,6 +111,7 @@ class SubcommitteeReportController extends Controller {
                 case 'quarter' :$header = 'สรุปรายงานผลการดำเนินงานประจำ ไตรมาสที่ ' . $condition['QuarterFrom'] . ' ปี ' . ($condition['YearFrom'] + 543);
                     $objPHPExcel = $this->generatesheet1($objPHPExcel, $condition, $header);
                     $objPHPExcel = $this->generatesheet2($objPHPExcel, $condition, $header);
+                    $objPHPExcel = $this->generatesheet3($objPHPExcel, $condition, $header);
                     break;
 
                 default : $result = null;
@@ -897,14 +900,17 @@ class SubcommitteeReportController extends Controller {
                 $beforemontharr = [10, 11, 12];
                 $beforeyear--;
                 $loop = [10, 11, 12, 1, 2, 3];
+                $beforeQuarter--;
             } else if ($condition['QuarterFrom'] == 3) {
                 $montharr = [4, 5, 6];
                 $beforemontharr = [1, 2, 3];
                 $loop = [10, 11, 12, 1, 2, 3, 4, 5, 6];
+                $beforeQuarter--;
             } else if ($condition['QuarterFrom'] == 4) {
                 $montharr = [7, 8, 9];
                 $beforemontharr = [4, 5, 6];
                 $loop = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+                $beforeQuarter--;
             }
 
             $position = 1;
@@ -973,7 +979,6 @@ class SubcommitteeReportController extends Controller {
                         $beforeavg = GoalMissionService::getMissionavg($mission[0]['id'], $beforeyear, $bm);
                         $detail['beforemonth']['amount'] += $beforeavg[0]['amount'];
                         $detail['beforemonth']['price_value'] += $beforeavg[0]['price_value'] / 1000000;
-                        ;
                     }
 
                     foreach ($montharr as $ma) {
@@ -1053,7 +1058,7 @@ class SubcommitteeReportController extends Controller {
                         $detail['unit'] = $mission[0]['unit'];
                         $detail['yeartarget']['amount'] += $mission[0]['amount'];
                         $detail['yeartarget']['price_value'] += $mission[0]['price_value'] / 1000000;
-                        ;
+
 
                         foreach ($loop as $key => $ml) {
                             $octavg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'] - $yearlist[$key], $ml);
@@ -1245,6 +1250,112 @@ class SubcommitteeReportController extends Controller {
             $objPHPExcel->getActiveSheet()->setCellValue('J5', $this->getMonthName(10) . ' - ' . $this->getMonthName(9) . ' ' . ($condition['YearFrom'] + 543));
             $objPHPExcel->getActiveSheet()->setCellValue('K5', '%/เป้าหมายสะสม');
             $data = [];
+
+            ////////รับซื้อ
+
+            $moumission = MouService::getMission($condition['YearFrom'], $condition['MonthFrom']);
+            $mbi = MBIService::getactualMBIDetail($condition['YearFrom'], $condition['MonthFrom']);
+
+            $beforeyearmbi = MBIService::getactualMBIDetail($condition['YearFrom'] - 1, $condition['MonthFrom']);
+            $moumissionyear = MouService::getMissionyear($condition['YearFrom']);
+            $detail['name'] = '1.การรับซื้อน้ำนม';
+            $detail['detailname'] = '1 การรับซื้อน้ำนม (ตัน) ';
+            $detail['beforemonth'] = 0;
+            $detail['target'] = $moumissionyear['amount'] / 1000;
+            $detail['collectmonth'] = 0;
+            $detail['permonth'] = 0;
+            $detail['beforeyear'] = $beforeyearmbi['sum_amount'] / 1000;
+            $detail['perbeforeyear'] = 0;
+            $detail['yeartarget'] = $moumissionyear['amount'] / 1000;
+            $detail['targetoct'] = 0;
+            $detail['collectoct'] = 0;
+            $detail['peroct'] = 0;
+
+//        
+
+
+            foreach ($monthList as $key => $ml) {
+                $beforembi = MBIService::getactualMBIDetail($condition['YearFrom'] - $yearlist[$key] - 1, $ml);
+                $detail['beforemonth'] += $beforembi['sum_amount'] / 1000;
+                $mbi = MBIService::getactualMBIDetail($condition['YearFrom'] - $yearlist[$key], $ml);
+                $detail['collectmonth'] += $mbi['sum_amount'] / 1000;
+                $mbioct = MBIService::getactualMBIDetail($condition['YearFrom'] - $yearlist[$key], $ml);
+                $mouoct = MouService::getMission($condition['YearFrom'] - $yearlist[$key], $ml);
+                $detail['collectoct'] += $mbioct['sum_amount'] / 1000;
+                $detail['targetoct'] += $mouoct['amount'] / 1000;
+            }
+            if ($detail['target'] > 0) {
+                $detail['permonth'] = ($detail['collectmonth'] * 100) / $detail['target'];
+            }
+            if ($detail['beforeyear'] > 0) {
+                $detail['perbeforeyear'] = (($detail['collectmonth'] - $detail['beforeyear']) * 100) / $detail['beforeyear'];
+            }
+            if ($detail['targetoct'] > 0) {
+                $detail['peroct'] = ($detail['collectoct'] * 100) / $detail['targetoct'];
+            }
+            array_push($data, $detail);
+            /////จำหน่าย
+            $type['goal_type'] = 'II';
+            $type['keyword'] = 'การจำหน่ายน้ำนม';
+            $mastes = MasterGoalService::getList('Y', 'ข้อมูลจำหน่ายน้ำนม', $type);
+            $mission = GoalMissionService::getMission($mastes[0]['id'], 3, $condition['YearTo']);
+            $beforeavg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $beforemonth);
+            $avg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $condition['MonthFrom']);
+
+
+            $msi = MSIService::getactualMSIDetail($condition['YearTo'], $condition['MonthFrom']);
+            $beforemsi = MSIService::getactualMSIDetail($year, $beforemonth);
+            $beforeyearmsi = MSIService::getactualMSIDetail($condition['YearTo'] - 1, $condition['MonthFrom']);
+
+            $detail['detailname'] = '2 การจำหน่ายน้ำนม (ตัน) ';
+            $detail['beforemonth'] = 0;
+            $detail['target'] = 0;
+            $detail['collectmonth'] = 0;
+            $detail['permonth'] = 0;
+            $detail['beforeyear'] = 0;
+            $detail['perbeforeyear'] = 0;
+            $detail['yeartarget'] = 0;
+            $detail['targetoct'] = 0;
+            $detail['collectoct'] = 0;
+            $detail['peroct'] = 0;
+
+
+
+            $detail['beforemonth'] = $beforeyearmsi['sum_amount'] / 1000;
+
+            $detail['target'] = $mission[0]['amount'];
+            $detail['collectmonth'] = $msi['sum_amount'] / 1000;
+            $detail['permonth'] = 0;
+            $detail['beforeyear'] = $beforeyearmsi['sum_amount'] / 1000;
+            $detail['perbeforeyear'] = 0;
+            $detail['yeartarget'] = $mission[0]['amount'];
+            $detail['targetoct'] = 0;
+            $detail['collectoct'] = 0;
+            $detail['peroct'] = 0;
+
+            foreach ($monthList as $key => $ml) {
+                $octavg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'] - $yearlist[$key], $ml);
+
+                $msioct = MSIService::getactualMSIDetail($condition['YearTo'] - $yearlist[$key], $ml);
+
+                $detail['collectoct'] += $msioct['sum_amount'] / 1000;
+                $detail['targetoct'] += $octavg[0]['amount'];
+
+//                if ($ml == $condition['MonthFrom']) {
+//                    break;
+//                }
+            }
+            if ($detail['target'] > 0) {
+                $detail['permonth'] = ($detail['collectmonth'] * 100) / $detail['target'];
+            }
+            if ($detail['beforeyear'] > 0) {
+                $detail['perbeforeyear'] = (($detail['collectmonth'] - $detail['beforeyear']) * 100) / $detail['beforeyear'];
+            }
+            if ($detail['targetoct'] > 0) {
+                $detail['peroct'] = ($detail['collectoct'] * 100) / $detail['targetoct'];
+            }
+            array_push($data, $detail);
+            /////
         } else if ($condition['DisplayType'] == 'monthly') {
             $beforemonth = $condition['MonthFrom'];
             $year = $condition['YearTo'];
@@ -1326,12 +1437,18 @@ class SubcommitteeReportController extends Controller {
             }
             array_push($data, $detail);
             /////จำหน่าย
-            $moumission = MouService::getMission($condition['YearTo'], $condition['MonthFrom']);
-            $msi = MBIService::getactualMSIDetail($condition['YearTo'], $condition['MonthFrom']);
-            $beforembi = MBIService::getactualMBIDetail($year, $beforemonth);
-            $beforeyearmbi = MBIService::getactualMBIDetail($condition['YearTo'] - 1, $condition['MonthFrom']);
-            $moumissionyear = MouService::getMissionyear($condition['YearTo']);
-          //  $detail['name'] = '1.การรับซื้อน้ำนม';
+            $type['goal_type'] = 'II';
+            $type['keyword'] = 'การจำหน่ายน้ำนม';
+            $mastes = MasterGoalService::getList('Y', 'ข้อมูลจำหน่ายน้ำนม', $type);
+            $mission = GoalMissionService::getMission($mastes[0]['id'], 3, $condition['YearTo']);
+            $beforeavg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $beforemonth);
+            $avg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $condition['MonthFrom']);
+
+
+            $msi = MSIService::getactualMSIDetail($condition['YearTo'], $condition['MonthFrom']);
+            $beforemsi = MSIService::getactualMSIDetail($year, $beforemonth);
+            $beforeyearmsi = MSIService::getactualMSIDetail($condition['YearTo'] - 1, $condition['MonthFrom']);
+
             $detail['detailname'] = '2 การจำหน่ายน้ำนม (ตัน) ';
             $detail['beforemonth'] = 0;
             $detail['target'] = 0;
@@ -1343,25 +1460,28 @@ class SubcommitteeReportController extends Controller {
             $detail['targetoct'] = 0;
             $detail['collectoct'] = 0;
             $detail['peroct'] = 0;
-            
-            
-            
-            $detail['beforemonth'] = $beforembi['sum_amount'] / 1000;
-            $detail['target'] = $moumission['amount'] / 1000;
+
+
+
+            $detail['beforemonth'] = $beforemsi['sum_amount'] / 1000;
+
+            $detail['target'] = $avg[0]['amount'];
             $detail['collectmonth'] = $msi['sum_amount'] / 1000;
             $detail['permonth'] = 0;
-            $detail['beforeyear'] = $beforeyearmbi['sum_amount'] / 1000;
+            $detail['beforeyear'] = $beforeyearmsi['sum_amount'] / 1000;
             $detail['perbeforeyear'] = 0;
-            $detail['yeartarget'] = $moumissionyear['amount'] / 1000;
+            $detail['yeartarget'] = $mission[0]['amount'];
             $detail['targetoct'] = 0;
             $detail['collectoct'] = 0;
             $detail['peroct'] = 0;
 
             foreach ($monthList as $key => $ml) {
-                $msioct = MSIService::getactualMBIDetail($condition['YearTo'] - $yearlist[$key], $ml);
-                $mouoct = MouService::getMission($condition['YearTo'] - $yearlist[$key], $ml);
+                $octavg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'] - $yearlist[$key], $ml);
+
+                $msioct = MSIService::getactualMSIDetail($condition['YearTo'] - $yearlist[$key], $ml);
+
                 $detail['collectoct'] += $msioct['sum_amount'] / 1000;
-                $detail['targetoct'] += $mouoct['amount'] / 1000;
+                $detail['targetoct'] += $octavg[0]['amount'];
 
                 if ($ml == $condition['MonthFrom']) {
                     break;
@@ -1394,14 +1514,17 @@ class SubcommitteeReportController extends Controller {
                 $beforemontharr = [10, 11, 12];
                 $beforeyear--;
                 $loop = [10, 11, 12, 1, 2, 3];
+                $beforeQuarter--;
             } else if ($condition['QuarterFrom'] == 3) {
                 $montharr = [4, 5, 6];
                 $beforemontharr = [1, 2, 3];
                 $loop = [10, 11, 12, 1, 2, 3, 4, 5, 6];
+                $beforeQuarter--;
             } else if ($condition['QuarterFrom'] == 4) {
                 $montharr = [7, 8, 9];
                 $beforemontharr = [4, 5, 6];
                 $loop = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+                $beforeQuarter--;
             }
 
             $position = 1;
@@ -1424,23 +1547,142 @@ class SubcommitteeReportController extends Controller {
             $objPHPExcel->getActiveSheet()->setCellValue('F5', '%เพิ่ม/ลด ' . 'ไตรมาสที่ ' . $condition['QuarterFrom'] . ' ' . ($condition['YearTo'] + 542));
             $objPHPExcel->getActiveSheet()->setCellValue('G4', 'กิจกรรม ');
             $objPHPExcel->getActiveSheet()->mergeCells('G4:G5');
-            $objPHPExcel->getActiveSheet()->setCellValue('H4', 'หน่วย ');
+
+            $objPHPExcel->getActiveSheet()->setCellValue('H4', 'เป้าหมายทั้งปี ');
             $objPHPExcel->getActiveSheet()->mergeCells('H4:H5');
-            $objPHPExcel->getActiveSheet()->setCellValue('I4', 'เป้าหมายทั้งปี ');
+            $objPHPExcel->getActiveSheet()->setCellValue('I4', 'เป้าหมาย ไตรมาสที่1 - ' . 'ไตรมาสที่ ' . $condition['QuarterFrom'] . ' ' . ($condition['YearTo'] + 543));
             $objPHPExcel->getActiveSheet()->mergeCells('I4:I5');
-            $objPHPExcel->getActiveSheet()->setCellValue('J4', 'เป้าหมาย ไตรมาสที่1 - ' . 'ไตรมาสที่ ' . $condition['QuarterFrom'] . ' ' . ($condition['YearTo'] + 543));
-            $objPHPExcel->getActiveSheet()->mergeCells('J4:J5');
-            $objPHPExcel->getActiveSheet()->setCellValue('K4', 'ผลการดำเนินงานสะสม');
-            $objPHPExcel->getActiveSheet()->mergeCells('K4:L4');
-            $objPHPExcel->getActiveSheet()->setCellValue('K5', 'ไตรมาสที่1 - ' . 'ไตรมาสที่ ' . $condition['QuarterFrom'] . ' ' . ($condition['YearTo'] + 543));
-            $objPHPExcel->getActiveSheet()->setCellValue('L5', '%/เป้าหมายสะสม');
+            $objPHPExcel->getActiveSheet()->setCellValue('J4', 'ผลการดำเนินงานสะสม');
+            $objPHPExcel->getActiveSheet()->mergeCells('J4:K4');
+            $objPHPExcel->getActiveSheet()->setCellValue('J5', 'ไตรมาสที่1 - ' . 'ไตรมาสที่ ' . $condition['QuarterFrom'] . ' ' . ($condition['YearTo'] + 543));
+            $objPHPExcel->getActiveSheet()->setCellValue('K5', '%/เป้าหมายสะสม');
             $data = [];
+
+
+
+
+            foreach ($beforemontharr as $bm) {
+                $beforembi = MBIService::getactualMBIDetail($year, $bm);
+                $detail['beforemonth'] += $beforembi['sum_amount'] / 1000;
+            }
+            foreach ($montharr as $ma) {
+                $moumission = MouService::getMission($year, $ma);
+                $detail['target'] += $moumission['amount'] / 1000;
+                $mbi = MBIService::getactualMBIDetail($year, $ma);
+                $detail['collectmonth'] += $mbi['sum_amount'] / 1000;
+                $beforeyearmbi = MBIService::getactualMBIDetail($year - 1, $ma);
+                $detail['beforeyear'] += $beforeyearmbi['sum_amount'] / 1000;
+            }
+
+            foreach ($loop as $key => $ml) {
+                $mbioct = MBIService::getactualMBIDetail($year - $yearlist[$key], $ml);
+                $mouoct = MouService::getMission($year - $yearlist[$key], $ml);
+                $detail['collectoct'] += $mbioct['sum_amount'] / 1000;
+                $detail['targetoct'] += $mouoct['amount'] / 1000;
+            }
+
+
+
+            $moumissionyear = MouService::getMissionyear($condition['YearFrom']);
+            $detail['name'] = '1.การรับซื้อน้ำนม';
+            $detail['detailname'] = '1 การรับซื้อน้ำนม (ตัน) ';
+
+
+
+            $detail['permonth'] = 0;
+
+            $detail['perbeforeyear'] = 0;
+            $detail['yeartarget'] = $moumissionyear['amount'] / 1000;
+            $detail['targetoct'] = 0;
+            $detail['collectoct'] = 0;
+            $detail['peroct'] = 0;
+
+
+
+
+            if ($detail['target'] > 0) {
+                $detail['permonth'] = ($detail['collectmonth'] * 100) / $detail['target'];
+            }
+            if ($detail['beforeyear'] > 0) {
+                $detail['perbeforeyear'] = (($detail['collectmonth'] - $detail['beforeyear']) * 100) / $detail['beforeyear'];
+            }
+            if ($detail['targetoct'] > 0) {
+                $detail['peroct'] = ($detail['collectoct'] * 100) / $detail['targetoct'];
+            }
+            array_push($data, $detail);
+            /////จำหน่าย
+            $type['goal_type'] = 'II';
+            $type['keyword'] = 'การจำหน่ายน้ำนม';
+            $mastes = MasterGoalService::getList('Y', 'ข้อมูลจำหน่ายน้ำนม', $type);
+            $mission = GoalMissionService::getMission($mastes[0]['id'], 3, $condition['YearFrom']);
+
+
+            $beforeavg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $beforemonth);
+
+
+
+
+
+
+
+            $detail['detailname'] = '2 การจำหน่ายน้ำนม (ตัน) ';
+            $detail['beforemonth'] = 0;
+            $detail['target'] = 0;
+            $detail['collectmonth'] = 0;
+            $detail['permonth'] = 0;
+            $detail['beforeyear'] = 0;
+            $detail['perbeforeyear'] = 0;
+            $detail['yeartarget'] = 0;
+            $detail['targetoct'] = 0;
+            $detail['collectoct'] = 0;
+            $detail['peroct'] = 0;
+
+            foreach ($beforemontharr as $bm) {
+                $beforemsi = MSIService::getactualMSIDetail($year, $bm);
+                $detail['beforemonth'] += $beforemsi['sum_amount'] / 1000;
+            }
+            foreach ($montharr as $ma) {
+
+                $avg = GoalMissionService::getMissionavg($mission[0]['id'], $year, $ma);
+                $detail['target'] = $avg[0]['amount'];
+                $msi = MSIService::getactualMSIDetail($year, $ma);
+                $detail['collectmonth'] = $msi['sum_amount'] / 1000;
+                $beforeyearmsi = MSIService::getactualMSIDetail($year - 1, $ma);
+                $detail['beforeyear'] = $beforeyearmsi['sum_amount'] / 1000;
+            }
+
+            foreach ($loop as $key => $ml) {
+                $octavg = GoalMissionService::getMissionavg($mission[0]['id'], $year - $yearlist[$key], $ml);
+
+                $msioct = MSIService::getactualMSIDetail($year - $yearlist[$key], $ml);
+
+                $detail['collectoct'] += $msioct['sum_amount'] / 1000;
+                $detail['targetoct'] += $octavg[0]['amount'];
+            }
+
+            
+            $detail['yeartarget'] = $mission[0]['amount'];
+          
+
+
+            if ($detail['target'] > 0) {
+                $detail['permonth'] = ($detail['collectmonth'] * 100) / $detail['target'];
+            }
+            if ($detail['beforeyear'] > 0) {
+                $detail['perbeforeyear'] = (($detail['collectmonth'] - $detail['beforeyear']) * 100) / $detail['beforeyear'];
+            }
+            if ($detail['targetoct'] > 0) {
+                $detail['peroct'] = ($detail['collectoct'] * 100) / $detail['targetoct'];
+            }
+            array_push($data, $detail);
+            /////
         }
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . (6 + $row), $data[0]['name']);
+        $objPHPExcel->getActiveSheet()->getStyle('G' . (6 + $row))->getFont()->setSize(14);
+        $objPHPExcel->getActiveSheet()->getStyle('G' . (6 + $row))->getFont()->setBold(true);
+        $row++;
         foreach ($data as $key => $itemdata) {
-            $objPHPExcel->getActiveSheet()->setCellValue('G' . (6 + $row), $itemdata['name']);
-            $objPHPExcel->getActiveSheet()->getStyle('G' . (6 + $row))->getFont()->setSize(14);
-            $objPHPExcel->getActiveSheet()->getStyle('G' . (6 + $row))->getFont()->setBold(true);
-            $row++;
+
 
             $objPHPExcel->getActiveSheet()->setCellValue('A' . (6 + $row), $itemdata['beforemonth']);
             $objPHPExcel->getActiveSheet()->setCellValue('B' . (6 + $row), $itemdata['target']);
@@ -1448,7 +1690,7 @@ class SubcommitteeReportController extends Controller {
             $objPHPExcel->getActiveSheet()->setCellValue('D' . (6 + $row), $itemdata['permonth']);
             $objPHPExcel->getActiveSheet()->setCellValue('E' . (6 + $row), $itemdata['beforeyear']);
             $objPHPExcel->getActiveSheet()->setCellValue('F' . (6 + $row), $itemdata['perbeforeyear']);
-            $objPHPExcel->getActiveSheet()->setCellValue('G' . (6 + $row), ($position + $key) . '.' . $itemdata['detailname']);
+            $objPHPExcel->getActiveSheet()->setCellValue('G' . (6 + $row), ('    1') . '.' . $itemdata['detailname']);
 
             $objPHPExcel->getActiveSheet()->setCellValue('H' . (6 + $row), $itemdata['yeartarget']);
             $objPHPExcel->getActiveSheet()->setCellValue('I' . (6 + $row), $itemdata['targetoct']);

@@ -124,14 +124,15 @@ class GoalMissionService {
     }
 
     public static function getMission($goalid, $regid, $year) {
+        
         $ckid = null;
         return GoalMission::where('years', $year)
                         ->where('region_id', $regid)
                         ->where('goal_id', $goalid)
-                        ->where('office_approve_id', !is_null($ckid))
+                        ->where('office_approve_id', !($ckid))
                         ->where(function($query) use ($ckid) {
 
-                            $query->where('office_approve_comment', is_null($ckid));
+                            $query->where('office_approve_comment', ($ckid));
                             $query->orWhere('office_approve_comment', '');
                         })
                         ->get()
@@ -142,10 +143,10 @@ class GoalMissionService {
         $ckid = null;
         return GoalMission::where('years', $year)
                         ->where('goal_id', $goalid)
-                        ->where('office_approve_id', !is_null($ckid))
+                        ->where('office_approve_id', !($ckid))
                         ->where(function($query) use ($ckid) {
 
-                            $query->where('office_approve_comment', is_null($ckid));
+                            $query->where('office_approve_comment', ($ckid));
                             $query->orWhere('office_approve_comment', '');
                         })
                         ->join("region", 'goal_mission.region_id', '=', 'region.RegionID')
