@@ -35,7 +35,7 @@
                 case 8 : $monthTxt = 'สิงหาคม';break;
                 case 9 : $monthTxt = 'กันยายน';break;
                 case 10 : $monthTxt = 'ตุลาคม';break;
-                case 11 : $monthTxt = 'พฤษจิกายน';break;
+                case 11 : $monthTxt = 'พฤศจิกายน';break;
                 case 12 : $monthTxt = 'ธันวาคม';break;
             }
             return $monthTxt;

@@ -660,6 +660,18 @@ angular.module('e-homework').config(function($routeProvider, $locationProvider) 
 		}
 	})
 
+	.when("/milk-buy-info", {
+        templateUrl : "views/milk-buy-info/main.html",
+        controller : "MainMBIController",
+        resolve : {
+			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
+				return $ocLazyLoad.load({
+					files : [ "scripts/controllers/milk-buy-info//MainMBIController.js" ]
+				});
+			} ]
+		}
+	})
+
 	;
 
 

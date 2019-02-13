@@ -174,6 +174,8 @@ $app->post('/chart/main/dbi/', 'ChartController:getDataDBI');
 $app->post('/chart/main/ii/', 'ChartController:getDataII');
 
 $app->post('/erp/list/', 'ERPController:getList');
+$app->post('/erp/list/milk-buy-info/', 'ERPController:getListMBI');
+$app->post('/erp/list/milk-buy-info/detail/', 'ERPController:getListMBIDetail');
 
 // Default action
 $app->get('/[{name}]', function ($request, $response, $args) {

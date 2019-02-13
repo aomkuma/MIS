@@ -38,7 +38,7 @@ class CowGroupController extends Controller {
                 break;
             case 10 : $monthTxt = 'ตุลาคม';
                 break;
-            case 11 : $monthTxt = 'พฤษจิกายน';
+            case 11 : $monthTxt = 'พฤศจิกายน';
                 break;
             case 12 : $monthTxt = 'ธันวาคม';
                 break;
