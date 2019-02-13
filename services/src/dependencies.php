@@ -149,6 +149,11 @@ $container['ChartController'] = function ($c) {
 $container['MBIController'] = function ($c) {
     return new \App\Controller\MBIController($c->get('logger'), $c->get('db'));
 };
+
+$container['MSIController'] = function ($c) {
+    return new \App\Controller\MSIController($c->get('logger'), $c->get('db'));
+};
+
 $container['SubcommitteeReportController'] = function ($c) {
     return new \App\Controller\SubcommitteeReportController($c->get('logger'), $c->get('db'));
 };

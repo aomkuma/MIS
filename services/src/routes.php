@@ -181,6 +181,11 @@ $app->post('/mbi/list/milk-buy-info/detail/', 'MBIController:getListMBIDetail');
 $app->post('/mbi/list/milk-buy-info/mou/', 'MBIController:getListMBIMOU');
 $app->post('/mbi/list/milk-buy-info/mou/detail/', 'MBIController:getListMBIMOUDetail');
 
+$app->post('/msi/list/milk-sale-info/month/', 'MSIController:getListMSIMonth');
+$app->post('/msi/list/milk-sale-info/quarter/', 'MSIController:getListMSIQuarter');
+$app->post('/msi/list/milk-sale-info/year/', 'MSIController:getListMSIYear');
+$app->post('/msi/list/milk-sale-info/detail/', 'MSIController:getListMSIDetail');
+
 $app->post('/product-milk/list/', 'ProductMilkController:getList');
 $app->post('/product-milk/get/', 'ProductMilkController:getData');
 $app->post('/product-milk/update/', 'ProductMilkController:updateData');

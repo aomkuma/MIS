@@ -672,6 +672,18 @@ angular.module('e-homework').config(function ($routeProvider, $locationProvider)
                 }
             })
 
+            .when("/milk-sale-info", {
+			        templateUrl : "views/milk-sale-info/main.html",
+			        controller : "MainMSIController",
+			        resolve : {
+			loadMyCtrl : [ '$ocLazyLoad', function($ocLazyLoad) {
+			return $ocLazyLoad.load({
+			files : [ "scripts/controllers/milk-sale-info//MainMSIController.js" ]
+			});
+			} ]
+			}
+			})
+
             .when("/product-milk", {
                 templateUrl: "views/product-milk/main.html",
                 controller: "MainPMController",
