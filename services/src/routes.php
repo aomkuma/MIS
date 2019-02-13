@@ -173,15 +173,13 @@ $app->post('/personal/list/main/', 'PersonalController:getMainList');
 $app->post('/chart/main/dbi/', 'ChartController:getDataDBI');
 $app->post('/chart/main/ii/', 'ChartController:getDataII');
 
-$app->post('/erp/list/', 'ERPController:getList');
-$app->post('/erp/list/milk-buy-info/month/', 'ERPController:getListMBIMonth');
-$app->post('/erp/list/milk-buy-info/quarter/', 'ERPController:getListMBIQuarter');
-$app->post('/erp/list/milk-buy-info/year/', 'ERPController:getListMBIYear');
-$app->post('/erp/list/milk-buy-info/detail/', 'ERPController:getListMBIDetail');
-$app->post('/erp/list/milk-buy-info/mou/month/', 'ERPController:getListMBIMOUMonth');
-$app->post('/erp/list/milk-buy-info/mou/quarter/', 'ERPController:getListMBIMOUQuarter');
-$app->post('/erp/list/milk-buy-info/mou/year/', 'ERPController:getListMBIMOUYear');
-$app->post('/erp/list/milk-buy-info/mou/detail/', 'ERPController:getListMBIMOUDetail');
+$app->post('/mbi/list/', 'MBIController:getList');
+$app->post('/mbi/list/milk-buy-info/month/', 'MBIController:getListMBIMonth');
+$app->post('/mbi/list/milk-buy-info/quarter/', 'MBIController:getListMBIQuarter');
+$app->post('/mbi/list/milk-buy-info/year/', 'MBIController:getListMBIYear');
+$app->post('/mbi/list/milk-buy-info/detail/', 'MBIController:getListMBIDetail');
+$app->post('/mbi/list/milk-buy-info/mou/', 'MBIController:getListMBIMOU');
+$app->post('/mbi/list/milk-buy-info/mou/detail/', 'MBIController:getListMBIMOUDetail');
 
 // Default action
 $app->get('/[{name}]', function ($request, $response, $args) {

@@ -87,14 +87,15 @@ angular.module('e-homework').controller('MainMBIController', function($scope, $c
     $scope.loadList = function(action){
 
         if($scope.condition.DisplayType == 'monthly'){
-            action = 'erp/list/milk-buy-info/month';
+            action = 'mbi/list/milk-buy-info/month';
         }else if($scope.condition.DisplayType == 'quarter'){
-            action = 'erp/list/milk-buy-info/quarter';
+            action = 'mbi/list/milk-buy-info/quarter';
         }else if($scope.condition.DisplayType == 'annually'){
-            action = 'erp/list/milk-buy-info/year';
+            action = 'mbi/list/milk-buy-info/year';
         }
         $scope.CurYear = $scope.condition.YearTo + 543;
         $scope.LastYear = $scope.CurYear - 1;
+        console.log($scope.condition.DisplayType, $scope.CurYear, $scope.LastYear);
         var params = {
             'condition' : $scope.condition
             , 'region' : $scope.PersonRegion
@@ -130,14 +131,14 @@ angular.module('e-homework').controller('MainMBIController', function($scope, $c
 
     $scope.loadListMOU = function(action){
 
-        if($scope.condition.DisplayType == 'monthly'){
-            action = 'erp/list/milk-buy-info/mou/month';
-        }else if($scope.condition.DisplayType == 'quarter'){
-            action = 'erp/list/milk-buy-info/mou/month/quarter';
-        }else if($scope.condition.DisplayType == 'annually'){
-            action = 'erp/list/milk-buy-info/mou/month/year';
-        }
-        
+        // if($scope.condition.DisplayType == 'monthly'){
+        //     action = 'mbi/list/milk-buy-info/mou/month';
+        // }else if($scope.condition.DisplayType == 'quarter'){
+        //     action = 'mbi/list/milk-buy-info/mou/month/quarter';
+        // }else if($scope.condition.DisplayType == 'annually'){
+        //     action = 'mbi/list/milk-buy-info/mou/month/year';
+        // }
+
         $scope.CurYear = $scope.condition.YearTo + 543;
         $scope.LastYear = $scope.CurYear - 1;
         var params = {
@@ -154,9 +155,31 @@ angular.module('e-homework').controller('MainMBIController', function($scope, $c
         });
     }
 
+    $scope.loadListMOUDetail = function(action, condition){
+        $scope.CurYear = $scope.condition.YearTo + 543;
+        $scope.LastYear = $scope.CurYear - 1;
+        var params = {
+            'condition' : condition
+            , 'region' : $scope.PersonRegion
+        };
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest(action, params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.MOUDetailList = result.data.DATA.List;
+                
+                console.log($scope.MOUDetailList);
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+
     $scope.getThaiDate = function(date){
         // console.log(date);
         return convertDateToFullThaiDateIgnoreTime(new Date(date));
+    }
+
+    $scope.getMonthName = function(month){
+        return getThaiMonthInt(month);
     }
 
     $scope.goUpdate = function(id){
@@ -165,19 +188,24 @@ angular.module('e-homework').controller('MainMBIController', function($scope, $c
 
     $scope.goSearch = function(){
         $scope.ViewType = 'MAIN';
-         $scope.loadList('erp/list/milk-buy-info');
+         $scope.loadList('mbi/list/milk-buy-info');
     }
 
 
     $scope.viewDetail = function(data){
         $scope.ViewType = 'DETAIL';
-        $scope.loadListDetail('erp/list/milk-buy-info/detail');
+        $scope.loadListDetail('mbi/list/milk-buy-info/detail');
         // console.log($scope.DetailList);
     }
 
     $scope.viewMOU = function(){
         $scope.ViewType = 'MOU';
-        $scope.loadListMOU('erp/list/milk-buy-info/mou');
+        $scope.loadListMOU('mbi/list/milk-buy-info/mou');
+    }
+
+    $scope.viewMOUDetail = function(condition){
+        $scope.ViewType = 'MOU-DETAIL';
+        $scope.loadListMOUDetail('mbi/list/milk-buy-info/mou/detail', condition);
     }
 
     $scope.exportReport = function(data,condition){
@@ -424,6 +452,6 @@ angular.module('e-homework').controller('MainMBIController', function($scope, $c
         ,{'values':'0'}
         ,{'values':'0'}
     ];
-    $scope.loadList('erp/list/milk-buy-info');
+    $scope.loadList('mbi/list/milk-buy-info');
 
 });
