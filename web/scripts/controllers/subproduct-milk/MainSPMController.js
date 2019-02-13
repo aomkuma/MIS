@@ -28,6 +28,10 @@ angular.module('e-homework').controller('MainSPMController', function ($scope, $
         // console.log(date);
         return convertDateToFullThaiDate(new Date(date));
     }
+     $scope.cancelUpdate = function () {
+        window.location.href = '#/product-milk';
+    }
+
 
     $scope.goUpdate = function (id) {
         window.location.href = '#/subproduct-milk/update/' + id;
