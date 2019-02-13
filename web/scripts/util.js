@@ -454,6 +454,27 @@ function getThaiMonth()
             ];
 }
 
+function getThaiMonthInt(month)
+{
+    var monthTxt = '';
+    switch(parseInt(month)){
+        case 1 : monthTxt = 'มกราคม';break;
+        case 2 : monthTxt = 'กุมภาพันธ์';break;
+        case 3 : monthTxt = 'มีนาคม';break;
+        case 4 : monthTxt = 'เมษายน';break;
+        case 5 : monthTxt = 'พฤษภาคม';break;
+        case 6 : monthTxt = 'มิถุนายน';break;
+        case 7 : monthTxt = 'กรกฎาคม';break;
+        case 8 : monthTxt = 'สิงหาคม';break;
+        case 9 : monthTxt = 'กันยายน';break;
+        case 10 : monthTxt = 'ตุลาคม';break;
+        case 11 : monthTxt = 'พฤศจิกายน';break;
+        case 12 : monthTxt = 'ธันวาคม';break;
+    }
+
+    return monthTxt;
+}
+
 function getMonthYearText(dateStr){
     var dateArr = dateStr.split('-');
     var month = dateArr[1];

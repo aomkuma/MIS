@@ -146,8 +146,8 @@ $container['ChartController'] = function ($c) {
     return new \App\Controller\ChartController($c->get('logger'), $c->get('db'));
 };
 
-$container['ERPController'] = function ($c) {
-    return new \App\Controller\ERPController($c->get('logger'), $c->get('db'));
+$container['MBIController'] = function ($c) {
+    return new \App\Controller\MBIController($c->get('logger'), $c->get('db'));
 };
 $container['SubcommitteeReportController'] = function ($c) {
     return new \App\Controller\SubcommitteeReportController($c->get('logger'), $c->get('db'));
