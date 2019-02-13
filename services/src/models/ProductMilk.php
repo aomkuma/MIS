@@ -2,18 +2,18 @@
 
 namespace App\Model;
 
-class MasterGoal extends \Illuminate\Database\Eloquent\Model {
+class ProductMilk extends \Illuminate\Database\Eloquent\Model {
 
-    protected $table = 'master_goal';
+    protected $table = 'product_milk';
     protected $primaryKey = 'id';
     public $timestamps = false;
     protected $fillable = array('id'
-        , 'goal_type'
-        , 'menu_type'
-        , 'goal_name'
-        , 'actives'
+        , 'name'
+        , 'editable'
         , 'create_date'
         , 'update_date'
+        , 'create_by'
+        , 'update_by'
     );
 
 }

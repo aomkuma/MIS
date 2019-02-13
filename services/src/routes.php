@@ -183,6 +183,18 @@ $app->post('/erp/list/milk-buy-info/mou/quarter/', 'ERPController:getListMBIMOUQ
 $app->post('/erp/list/milk-buy-info/mou/year/', 'ERPController:getListMBIMOUYear');
 $app->post('/erp/list/milk-buy-info/mou/detail/', 'ERPController:getListMBIMOUDetail');
 
+$app->post('/product-milk/list/', 'ProductMilkController:getList');
+$app->post('/product-milk/get/', 'ProductMilkController:getData');
+$app->post('/product-milk/update/', 'ProductMilkController:updateData');
+
+$app->post('/subproduct-milk/list/', 'SubProductMilkController:getList');
+$app->post('/subproduct-milk/get/', 'SubProductMilkController:getData');
+$app->post('/subproduct-milk/update/', 'SubProductMilkController:updateData');
+
+$app->post('/product-milk-detail/list/', 'ProductMilkDetailController:getList');
+$app->post('/product-milk-detail/get/', 'ProductMilkDetailController:getData');
+$app->post('/product-milk-detail/update/', 'ProductMilkDetailController:updateData');
+
 // Default action
 $app->get('/[{name}]', function ($request, $response, $args) {
     // Sample log message

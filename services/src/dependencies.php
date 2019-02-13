@@ -152,3 +152,12 @@ $container['ERPController'] = function ($c) {
 $container['SubcommitteeReportController'] = function ($c) {
     return new \App\Controller\SubcommitteeReportController($c->get('logger'), $c->get('db'));
 };
+$container['ProductMilkController'] = function ($c) {
+    return new \App\Controller\ProductMilkController($c->get('logger'), $c->get('db'));
+};
+$container['SubProductMilkController'] = function ($c) {
+    return new \App\Controller\SubProductMilkController($c->get('logger'), $c->get('db'));
+};
+$container['ProductMilkDetailController'] = function ($c) {
+    return new \App\Controller\ProductMilkDetailController($c->get('logger'), $c->get('db'));
+};
