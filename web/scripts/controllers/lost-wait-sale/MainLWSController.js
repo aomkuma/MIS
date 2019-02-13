@@ -36,7 +36,7 @@ angular.module('e-homework').controller('MainLWSController', function($scope, $c
     $scope.loadApproveList = function(){
         
       //  IndexOverlayFactory.overlayShow();
-        HTTPService.clientRequest('lost-out-process/list/approve', null).then(function(result){
+        HTTPService.clientRequest('lost-wait-sale/list/approve', null).then(function(result){
             if(result.data.STATUS == 'OK'){
                 $scope.ApproveList = result.data.DATA.DataList;
                 // console.log($scope.List);
@@ -53,7 +53,7 @@ angular.module('e-homework').controller('MainLWSController', function($scope, $c
                 $scope.FactoryList = result.data.DATA.DataList;
                 // console.log($scope.List);
                 $scope.condition.Factory = $scope.FactoryList[0].id;
-                $scope.loadList('lost-out-process/list/main');
+                $scope.loadList('lost-wait-sale/list/main');
             }
             IndexOverlayFactory.overlayHide();
         });
@@ -122,12 +122,12 @@ angular.module('e-homework').controller('MainLWSController', function($scope, $c
     }
 
     $scope.goUpdate = function(id){
-        window.location.href = '#/lost-out-process/update/' + id;
+        window.location.href = '#/lost-wait-sale/update/' + id;
     }
 
     $scope.goSearch = function(){
         $scope.ViewType = 'MAIN';
-        $scope.loadList('lost-out-process/list/main');
+        $scope.loadList('lost-wait-sale/list/main');
     }
 
 
@@ -144,7 +144,7 @@ angular.module('e-homework').controller('MainLWSController', function($scope, $c
            , 'condition' : condition
         };
         IndexOverlayFactory.overlayShow();
-        HTTPService.clientRequest('lost-out-process/report', params).then(function(result){
+        HTTPService.clientRequest('lost-wait-sale/report', params).then(function(result){
             if(result.data.STATUS == 'OK'){
                 window.location.href="../" + result.data.DATA;
             }
@@ -204,7 +204,7 @@ angular.module('e-homework').controller('MainLWSController', function($scope, $c
                 ,{'years' : (curDate.getFullYear() + 543) - 1}
             ];
 
-    // $scope.loadList('lost-out-process/list', '');
+    // $scope.loadList('lost-wait-sale/list', '');
     IndexOverlayFactory.overlayHide();
 
     // Dummy Data

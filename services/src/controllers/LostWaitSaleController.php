@@ -624,7 +624,7 @@
                 $id = LostWaitSaleService::updateData($_Data);
 
  				foreach ($_Detail as $key => $value) {
- 					$value['lost_in_process_id'] = $id;
+ 					$value['lost_wait_sale_id'] = $id;
                 	LostWaitSaleService::updateDetailData($value);
                 }
 

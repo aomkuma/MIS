@@ -93,7 +93,7 @@ angular.module('e-homework').controller('UpdateLWSController', function($scope, 
             if(result.data.STATUS == 'OK' && result.data.DATA.Data != null){
                 $scope.Data = result.data.DATA.Data;
                 $scope.Data.factory_id = parseInt($scope.Data.factory_id);
-                $scope.DataDetailList = $scope.Data.lost_out_process_detail;
+                $scope.DataDetailList = $scope.Data.lost_wait_sale_detail;
                 // load sub dar=iry farming
                 // for(var i =0; i < $scope.DataDetailList.length; i++){
                 //     $scope.loadDairyFarming('CHILD', $scope.DataDetailList[i].dairy_farming_id);

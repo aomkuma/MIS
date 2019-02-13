@@ -637,6 +637,43 @@ angular.module('e-homework').config(function ($routeProvider, $locationProvider)
                         }]
                 }
             })
+
+            .when("/production-info/update/:id?", {
+                templateUrl: "views/production-info/update.html",
+                controller: "UpdatePFController",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load({
+                                files: ["scripts/controllers/production-info/UpdatePFController.js"]
+                            });
+                        }]
+                }
+            })
+
+            .when("/production-sale-info", {
+                templateUrl: "views/production-sale-info/main.html",
+                controller: "MainPSIController",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load({
+                                files: ["scripts/controllers/production-sale-info/MainPSIController.js"]
+                            });
+                        }]
+                }
+            })
+
+            .when("/production-info/update/:id?", {
+                templateUrl: "views/production-info/update.html",
+                controller: "UpdatePSIController",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load({
+                                files: ["scripts/controllers/production-sale-info/UpdatePSIController.js"]
+                            });
+                        }]
+                }
+            })
+
             .when("/import-personal", {
                 templateUrl: "views/import-personal/main.html",
                 controller: "ImportController",

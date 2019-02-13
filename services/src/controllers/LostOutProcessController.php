@@ -624,7 +624,7 @@
                 $id = LostOutProcessService::updateData($_Data);
 
                 foreach ($_Detail as $key => $value) {
-                    $value['lost-out-process_id'] = $id;
+                    $value['lost_out_process_id'] = $id;
                     LostOutProcessService::updateDetailData($value);
                 }
 

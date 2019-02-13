@@ -170,6 +170,14 @@ $container['FactoryController'] = function ($c) {
     return new \App\Controller\FactoryController($c->get('logger'), $c->get('db'));
 };
 
+$container['ProductionInfoController'] = function ($c) {
+    return new \App\Controller\ProductionInfoController($c->get('logger'), $c->get('db'));
+};
+
+$container['ProductionSaleInfoController'] = function ($c) {
+    return new \App\Controller\ProductionSaleInfoController($c->get('logger'), $c->get('db'));
+};
+
 $container['SubcommitteeReportController'] = function ($c) {
     return new \App\Controller\SubcommitteeReportController($c->get('logger'), $c->get('db'));
 };

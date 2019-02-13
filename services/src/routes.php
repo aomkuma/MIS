@@ -202,7 +202,6 @@ $app->post('/lost-in-process/list/main/', 'LostInProcessController:getMainList')
 $app->post('/lost-in-process/get/', 'LostInProcessController:getData');
 $app->post('/lost-in-process/update/', 'LostInProcessController:updateData');
 $app->post('/lost-in-process/delete/detail/', 'LostInProcessController:removeDetailData');
-$app->post('/lost-in-process/report/', 'LostInProcessController:exportCowbreedExcel');
 $app->post('/lost-in-process/update/approve/', 'LostInProcessController:updateDataApprove');
 $app->post('/lost-in-process/list/approve/', 'LostInProcessController:loadDataApprove');
 
@@ -210,7 +209,6 @@ $app->post('/lost-out-process/list/main/', 'LostOutProcessController:getMainList
 $app->post('/lost-out-process/get/', 'LostOutProcessController:getData');
 $app->post('/lost-out-process/update/', 'LostOutProcessController:updateData');
 $app->post('/lost-out-process/delete/detail/', 'LostOutProcessController:removeDetailData');
-$app->post('/lost-out-process/report/', 'LostOutProcessController:exportCowbreedExcel');
 $app->post('/lost-out-process/update/approve/', 'LostOutProcessController:updateDataApprove');
 $app->post('/lost-out-process/list/approve/', 'LostOutProcessController:loadDataApprove');
 
@@ -218,9 +216,22 @@ $app->post('/lost-wait-sale/list/main/', 'LostWaitSaleController:getMainList');
 $app->post('/lost-wait-sale/get/', 'LostWaitSaleController:getData');
 $app->post('/lost-wait-sale/update/', 'LostWaitSaleController:updateData');
 $app->post('/lost-wait-sale/delete/detail/', 'LostWaitSaleController:removeDetailData');
-$app->post('/lost-wait-sale/report/', 'LostWaitSaleController:exportCowbreedExcel');
 $app->post('/lost-wait-sale/update/approve/', 'LostWaitSaleController:updateDataApprove');
 $app->post('/lost-wait-sale/list/approve/', 'LostWaitSaleController:loadDataApprove');
+
+$app->post('/production-info/list/main/', 'ProductionInfoController:getMainList');
+$app->post('/production-info/get/', 'ProductionInfoController:getData');
+$app->post('/production-info/update/', 'ProductionInfoController:updateData');
+$app->post('/production-info/delete/detail/', 'ProductionInfoController:removeDetailData');
+$app->post('/production-info/update/approve/', 'ProductionInfoController:updateDataApprove');
+$app->post('/production-info/list/approve/', 'ProductionInfoController:loadDataApprove');
+
+$app->post('/production-sale-info/list/main/', 'ProductionSaleInfoController:getMainList');
+$app->post('/production-sale-info/get/', 'ProductionSaleInfoController:getData');
+$app->post('/production-sale-info/update/', 'ProductionSaleInfoController:updateData');
+$app->post('/production-sale-info/delete/detail/', 'ProductionSaleInfoController:removeDetailData');
+$app->post('/production-sale-info/update/approve/', 'ProductionSaleInfoController:updateDataApprove');
+$app->post('/production-sale-info/list/approve/', 'ProductionSaleInfoController:loadDataApprove');
 
 $app->post('/factory/list/', 'FactoryController:getList');
 
