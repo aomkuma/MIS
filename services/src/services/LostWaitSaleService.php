@@ -2,16 +2,16 @@
     
     namespace App\Service;
     
-    use App\Model\LostInProcess;
-    use App\Model\LostInProcessDetail;
+    use App\Model\LostWaitSale;
+    use App\Model\LostWaitSaleDetail;
 
     use Illuminate\Database\Capsule\Manager as DB;
     
-    class LostInProcessService {
+    class LostWaitSaleService {
 
         public static function loadDataApprove($UserID){
-            return LostInProcess::select("lost_in_process.*", 'factory.factory_name')
-                            ->join('factory', 'factory.id', '=', 'lost_in_process.factory_id')
+            return LostWaitSale::select("lost_wait_sale.*", 'factory.factory_name')
+                            ->join('factory', 'factory.id', '=', 'lost_wait_sale.factory_id')
                             ->where(function($query) use ($UserID){
                                 $query->where('dep_approve_id' , $UserID);    
                                 $query->whereNull('dep_approve_date');    
@@ -28,26 +28,26 @@
         }
 
         public static function getMainList($years, $months, $factory_id, $master_type_id){
-            return LostInProcess::select(DB::raw("SUM(mis_lost_in_process_detail.amount) AS sum_amount")
-                                        ,DB::raw("SUM(mis_lost_in_process_detail.price_value) AS sum_baht")
+            return LostWaitSale::select(DB::raw("SUM(mis_lost_wait_sale_detail.amount) AS sum_amount")
+                                        ,DB::raw("SUM(mis_lost_wait_sale_detail.price_value) AS sum_baht")
                                     
-                                    ,"lost_in_process.update_date"
+                                    ,"lost_wait_sale.update_date"
                                     ,"office_approve_id"
                                     ,"office_approve_date"
                                     ,"office_approve_comment"
                                 )
-                            ->join("lost_in_process_detail", 'lost_in_process_detail.lost_in_process_id', '=', 'lost_in_process.id')
+                            ->join("lost_wait_sale_detail", 'lost_wait_sale_detail.lost_wait_sale_id', '=', 'lost_wait_sale.id')
                             ->where("years", $years)
                             ->where("months", $months)
                             ->where("factory_id", $factory_id)
-                            ->where("lost_in_process_type", $master_type_id)
+                            ->where("lost_wait_sale_type", $master_type_id)
                             ->orderBy('update_date', 'DESC')
                             ->first()
                             ->toArray();
         }
 
         public static function getDataByID($id){
-            return LostInProcess::where('id', $id)
+            return LostWaitSale::where('id', $id)
                     //->with('mouHistories')
                     ->with(array('lostInProcessDetail' => function($query){
                         $query->orderBy('update_date', 'DESC');
@@ -56,7 +56,7 @@
         }
 
         public static function getData($factory_id, $months, $years){
-            return LostInProcess::
+            return LostWaitSale::
                     where(function($query) use ($factory_id){
                         if(!empty($factory_id)){
                             $query->where('factory_id' , $factory_id);
@@ -76,11 +76,11 @@
             if(empty($obj['id'])){
                 $obj['create_date'] = date('Y-m-d H:i:s');
                 $obj['update_date'] = date('Y-m-d H:i:s');
-                $model = LostInProcess::create($obj);
+                $model = LostWaitSale::create($obj);
                 return $model->id;
             }else{
                 $obj['update_date'] = date('Y-m-d H:i:s');
-                $model = LostInProcess::find($obj['id'])->update($obj);
+                $model = LostWaitSale::find($obj['id'])->update($obj);
                 return $obj['id'];
             }
         }
@@ -89,29 +89,29 @@
             if(empty($obj['id'])){
                 $obj['create_date'] = date('Y-m-d H:i:s');
                 $obj['update_date'] = date('Y-m-d H:i:s');
-                $model = LostInProcessDetail::create($obj);
+                $model = LostWaitSaleDetail::create($obj);
                 return $model->id;
             }else{
                 $obj['update_date'] = date('Y-m-d H:i:s');
-                $model = LostInProcessDetail::find($obj['id'])->update($obj);
+                $model = LostWaitSaleDetail::find($obj['id'])->update($obj);
                 return $obj['id'];
             }
         }
 
         public static function removeData($id){
             
-            LostInProcessDetail::where('lost_in_process_id', $id)->delete();
-            return LostInProcess::find($id)->delete();
+            LostWaitSaleDetail::where('lost_wait_sale_id', $id)->delete();
+            return LostWaitSale::find($id)->delete();
         }
 
         public static function removeDetailData($id){
             
-            return LostInProcessDetail::find($id)->delete();
+            return LostWaitSaleDetail::find($id)->delete();
         }
 
         public static function updateDataApprove($id, $obj) {
 
-            return LostInProcess::where('id', $id)->update($obj);
+            return LostWaitSale::where('id', $id)->update($obj);
         }
         
     }

@@ -755,6 +755,78 @@ angular.module('e-homework').config(function ($routeProvider, $locationProvider)
                         }]
                 }
             })
+
+            .when("/lost-in-process", {
+                templateUrl: "views/lost-in-process/main.html",
+                controller: "MainLIPController",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load({
+                                files: ["scripts/controllers/lost-in-process/MainLIPController.js"]
+                            });
+                        }]
+                }
+            })
+
+            .when("/lost-in-process/update/:id?", {
+                templateUrl: "views/lost-in-process/update.html",
+                controller: "UpdateLIPController",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load({
+                                files: ["scripts/controllers/lost-in-process/UpdateLIPController.js"]
+                            });
+                        }]
+                }
+            })
+
+            .when("/lost-out-process", {
+                templateUrl: "views/lost-out-process/main.html",
+                controller: "MainLOPController",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load({
+                                files: ["scripts/controllers/lost-out-process/MainLOPController.js"]
+                            });
+                        }]
+                }
+            })
+
+            .when("/lost-out-process/update/:id?", {
+                templateUrl: "views/lost-out-process/update.html",
+                controller: "UpdateLOPController",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load({
+                                files: ["scripts/controllers/lost-out-process/UpdateLOPController.js"]
+                            });
+                        }]
+                }
+            })
+
+            .when("/lost-wait-sale", {
+                templateUrl: "views/lost-wait-sale/main.html",
+                controller: "MainLWSController",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load({
+                                files: ["scripts/controllers/lost-wait-sale/MainLWSController.js"]
+                            });
+                        }]
+                }
+            })
+
+            .when("/lost-wait-sale/update/:id?", {
+                templateUrl: "views/lost-wait-sale/update.html",
+                controller: "UpdateLWSController",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load({
+                                files: ["scripts/controllers/lost-wait-sale/UpdateLWSController.js"]
+                            });
+                        }]
+                }
+            })
             ;
 
 

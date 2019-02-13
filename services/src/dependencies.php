@@ -154,6 +154,22 @@ $container['MSIController'] = function ($c) {
     return new \App\Controller\MSIController($c->get('logger'), $c->get('db'));
 };
 
+$container['LostInProcessController'] = function ($c) {
+    return new \App\Controller\LostInProcessController($c->get('logger'), $c->get('db'));
+};
+
+$container['LostOutProcessController'] = function ($c) {
+    return new \App\Controller\LostOutProcessController($c->get('logger'), $c->get('db'));
+};
+
+$container['LostWaitSaleController'] = function ($c) {
+    return new \App\Controller\LostWaitSaleController($c->get('logger'), $c->get('db'));
+};
+
+$container['FactoryController'] = function ($c) {
+    return new \App\Controller\FactoryController($c->get('logger'), $c->get('db'));
+};
+
 $container['SubcommitteeReportController'] = function ($c) {
     return new \App\Controller\SubcommitteeReportController($c->get('logger'), $c->get('db'));
 };

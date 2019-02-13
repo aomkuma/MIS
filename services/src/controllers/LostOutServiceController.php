@@ -2,10 +2,10 @@
 
     namespace App\Controller;
     
-    use App\Service\LostInProcessService;
+    use App\Service\LostWaitSaleService;
     use App\Service\MasterGoalService;
 
-    class LostInProcessController extends Controller {
+    class LostWaitSaleController extends Controller {
         
         protected $logger;
         protected $db;
@@ -45,7 +45,7 @@
                 $params = $request->getParsedBody();
                 $user_session = $params['user_session'];
                 
-                $Data = LostInProcessService::loadDataApprove($user_session['UserID']);
+                $Data = LostWaitSaleService::loadDataApprove($user_session['UserID']);
                 
                 $this->data_result['DATA']['DataList'] = $Data;
                 
@@ -109,7 +109,7 @@
             $DataSummary = [];
 
             // get master goal
-            $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียในกระบวนการ');
+            $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียรอจำหน่าย');
 
             $Sum_CurrentAmount = 0;
             $Sum_CurrentBaht = 0;
@@ -126,20 +126,20 @@
                         
                     $master_type_id = $v['id'];
                     
-                    $monthName = LostInProcessController::getMonthName($curMonth);
+                    $monthName = LostWaitSaleController::getMonthName($curMonth);
 
                     $data = [];
                     // $data['RegionName'] = $value['RegionName'];
-                    $data['LostInProcessName'] = $v['goal_name'];
+                    $data['LostWaitSaleName'] = $v['goal_name'];
                     $data['Month'] = $monthName;
                     
                     // get cooperative type
-                    $Current = LostInProcessService::getMainList($curYear, $curMonth, $factory_id, $master_type_id);
+                    $Current = LostWaitSaleService::getMainList($curYear, $curMonth, $factory_id, $master_type_id);
                     // print_r($Current);exit;
                     $data['CurrentAmount'] = floatval($Current['sum_amount']);
                     $data['CurrentBaht'] = floatval($Current['sum_baht']);
 
-                    $Before = LostInProcessService::getMainList($beforeYear, $curMonth, $factory_id, $master_type_id); 
+                    $Before = LostWaitSaleService::getMainList($beforeYear, $curMonth, $factory_id, $master_type_id); 
                     $data['BeforeAmount'] = floatval($Before['sum_amount']);
                      $data['BeforeBaht'] = floatval($Before['sum_baht']);
 
@@ -266,7 +266,7 @@
             $DataSummary = [];
 
             // get master goal
-            $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียในกระบวนการ');
+            $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียรอจำหน่าย');
             $Sum_CurrentAmount = 0;
             $Sum_CurrentBaht = 0;
             $Sum_BeforeAmount = 0;
@@ -306,11 +306,11 @@
                     for($j = 0; $j < count($monthList); $j++){
                         $curMonth = $monthList[$j];
                         
-                        $Current = LostInProcessService::getMainList($curYear, $curMonth, $factory_id, $master_type_id);
+                        $Current = LostWaitSaleService::getMainList($curYear, $curMonth, $factory_id, $master_type_id);
                         $SumCurrentAmount += floatval($Current['sum_amount']);
                         $SumCurrentBaht += floatval($Current['sum_baht']);
 
-                        $Before = LostInProcessService::getMainList($beforeYear, $curMonth, $factory_id, $master_type_id); 
+                        $Before = LostWaitSaleService::getMainList($beforeYear, $curMonth, $factory_id, $master_type_id); 
                         $SumBeforeAmount += floatval($Before['sum_amount']);
                         $SumBeforeBaht += floatval($Before['sum_baht']);
 
@@ -327,7 +327,7 @@
 
                     $data = [];
                     $data['RegionName'] = $value['RegionName'];
-                    $data['LostInProcessName'] = $v['goal_name'];
+                    $data['LostWaitSaleName'] = $v['goal_name'];
                     $data['Quarter'] = $curQuarter . ' (' . (($curQuarter == 1?$curYear + 543 + 1:$curYear + 543)) . ')';
 
                     $data['CurrentAmount'] = $SumCurrentAmount;
@@ -427,7 +427,7 @@
             $curYear = $condition['YearTo'];
 
             // get master goal
-            $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียในกระบวนการ');
+            $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียรอจำหน่าย');
             $Sum_CurrentAmount = 0;
             $Sum_CurrentBaht = 0;
             $Sum_BeforeAmount = 0;
@@ -454,11 +454,11 @@
                     for($j = 0; $j < 12; $j++){
                         $curMonth = $monthList[$j];
                         
-                        $Current = LostInProcessService::getMainList($curYear, $curMonth, $factory_id, $master_type_id);
+                        $Current = LostWaitSaleService::getMainList($curYear, $curMonth, $factory_id, $master_type_id);
                         $SumCurrentAmount += floatval($Current['sum_amount']);
                         $SumCurrentBaht += floatval($Current['sum_baht']);
 
-                        $Before = LostInProcessService::getMainList($beforeYear, $curMonth, $factory_id, $master_type_id); 
+                        $Before = LostWaitSaleService::getMainList($beforeYear, $curMonth, $factory_id, $master_type_id); 
                         $SumBeforeAmount += floatval($Before['sum_amount']);
                         $SumBeforeBaht += floatval($Before['sum_baht']);
 
@@ -475,7 +475,7 @@
 
                     $data = [];
                     $data['RegionName'] = $value['RegionName'];
-                    $data['LostInProcessName'] = $v['goal_name'];
+                    $data['LostWaitSaleName'] = $v['goal_name'];
                     $data['Year'] = $curYear + 543;
 
                     $data['CurrentAmount'] = $SumCurrentAmount;
@@ -570,9 +570,9 @@
                 $years = $params['obj']['years'];
 
                 if(!empty($id)){
-                    $_Data = LostInProcessService::getDataByID($id);
+                    $_Data = LostWaitSaleService::getDataByID($id);
                 }else{
-                    $_Data = LostInProcessService::getData($factory_id, $months, $years);
+                    $_Data = LostWaitSaleService::getData($factory_id, $months, $years);
                 }
                 
                 $this->data_result['DATA']['Data'] = $_Data;
@@ -621,11 +621,11 @@
                 // print_r($_Data);
                 // exit();
 
-                $id = LostInProcessService::updateData($_Data);
+                $id = LostWaitSaleService::updateData($_Data);
 
  				foreach ($_Detail as $key => $value) {
  					$value['lost_in_process_id'] = $id;
-                	LostInProcessService::updateDetailData($value);
+                	LostWaitSaleService::updateDetailData($value);
                 }
 
      //           
@@ -642,7 +642,7 @@
 
                 $params = $request->getParsedBody();
                 $id = $params['obj']['id'];
-                $result = LostInProcessService::removeDetailData($id);
+                $result = LostWaitSaleService::removeDetailData($id);
 
                 $this->data_result['DATA']['result'] = $result;
 
@@ -724,7 +724,7 @@
 
                 // print_r($data );
                 // exit;
-                $result = LostInProcessService::updateDataApprove($id, $data);
+                $result = LostWaitSaleService::updateDataApprove($id, $data);
 
                 $this->data_result['DATA']['result'] = $result;
                 
