@@ -49,7 +49,7 @@
         public static function getDataByID($id){
             return LostOutProcess::where('id', $id)
                     //->with('mouHistories')
-                    ->with(array('lostInProcessDetail' => function($query){
+                    ->with(array('lostOutProcessDetail' => function($query){
                         $query->orderBy('update_date', 'DESC');
                     }))
                     ->first();      
@@ -66,7 +66,7 @@
                     ->where('months', $months)
                     ->where('years', $years)
                     //->with('mouHistories')
-                    ->with(array('lostInProcessDetail' => function($query){
+                    ->with(array('lostOutProcessDetail' => function($query){
                         $query->orderBy('update_date', 'DESC');
                     }))
                     ->first();      
