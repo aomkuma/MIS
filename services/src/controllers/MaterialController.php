@@ -144,11 +144,21 @@
 
                         $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
                         $data['DiffAmount'] = $DiffAmount;
-                        $data['DiffAmountPercentage'] = 0;
+                        if ($data['BeforeAmount'] != 0) {
+                            $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                        }  else if(empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])){
+                            $data['DiffAmountPercentage'] = 100;
+                        }
+
 
                         $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
                         $data['DiffBaht'] = $DiffBaht;
-                        $data['DiffBahtPercentage'] = 0;
+
+                        if ($data['BeforeBaht'] != 0) {
+                            $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
+                        } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                            $data['DiffBahtPercentage'] = 100;
+                        }
 
                         $data['CreateDate'] = $Current['update_date'];
                         $data['ApproveDate'] = $Current['office_approve_date'];
@@ -180,6 +190,9 @@
 
                 $curMonth++;
             }
+
+            $DataSummary['SummaryMaterialAmountPercentage'] = (($DataSummary['SummaryCurrentMaterialAmount'] - $DataSummary['SummaryBeforeMaterialAmount']) /$DataSummary['SummaryBeforeMaterialAmount']) * 100;
+            $DataSummary['SummaryMaterialIncomePercentage'] = (($DataSummary['SummaryCurrentMaterialIncome'] - $DataSummary['SummaryBeforeMaterialIncome']) /$DataSummary['SummaryBeforeMaterialIncome']) * 100;
 
             return ['DataList' => $DataList, 'Summary' => $DataSummary];                
         }
@@ -301,11 +314,21 @@
 
                         $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
                         $data['DiffAmount'] = $DiffAmount;
-                        $data['DiffAmountPercentage'] = 0;
+                        if ($data['BeforeAmount'] != 0) {
+                            $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                        }  else if(empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])){
+                            $data['DiffAmountPercentage'] = 100;
+                        }
+
 
                         $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
                         $data['DiffBaht'] = $DiffBaht;
-                        $data['DiffBahtPercentage'] = 0;
+
+                        if ($data['BeforeBaht'] != 0) {
+                            $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
+                        } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                            $data['DiffBahtPercentage'] = 100;
+                        }
 
                         $data['CreateDate'] = $UpdateDate;
                         $data['ApproveDate'] = $ApproveDate;
@@ -340,6 +363,9 @@
                     $curQuarter = 1;
                 }
             }
+
+            $DataSummary['SummaryMaterialAmountPercentage'] = (($DataSummary['SummaryCurrentMaterialAmount'] - $DataSummary['SummaryBeforeMaterialAmount']) /$DataSummary['SummaryBeforeMaterialAmount']) * 100;
+            $DataSummary['SummaryMaterialIncomePercentage'] = (($DataSummary['SummaryCurrentMaterialIncome'] - $DataSummary['SummaryBeforeMaterialIncome']) /$DataSummary['SummaryBeforeMaterialIncome']) * 100;
 
             return ['DataList' => $DataList, 'Summary' => $DataSummary];
         }
@@ -415,11 +441,21 @@
 
                         $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
                         $data['DiffAmount'] = $DiffAmount;
-                        $data['DiffAmountPercentage'] = 0;
+                        if ($data['BeforeAmount'] != 0) {
+                            $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                        }  else if(empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])){
+                            $data['DiffAmountPercentage'] = 100;
+                        }
+
 
                         $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
                         $data['DiffBaht'] = $DiffBaht;
-                        $data['DiffBahtPercentage'] = 0;
+
+                        if ($data['BeforeBaht'] != 0) {
+                            $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
+                        } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                            $data['DiffBahtPercentage'] = 100;
+                        }
 
                         $data['CreateDate'] = $UpdateDate;
                         $data['ApproveDate'] = $ApproveDate;
@@ -450,6 +486,9 @@
                 
                 $curYear++;
             }
+
+            $DataSummary['SummaryMaterialAmountPercentage'] = (($DataSummary['SummaryCurrentMaterialAmount'] - $DataSummary['SummaryBeforeMaterialAmount']) /$DataSummary['SummaryBeforeMaterialAmount']) * 100;
+            $DataSummary['SummaryMaterialIncomePercentage'] = (($DataSummary['SummaryCurrentMaterialIncome'] - $DataSummary['SummaryBeforeMaterialIncome']) /$DataSummary['SummaryBeforeMaterialIncome']) * 100;
 
             return ['DataList' => $DataList, 'Summary' => $DataSummary];
         }

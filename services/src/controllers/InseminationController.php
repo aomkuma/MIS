@@ -136,12 +136,20 @@
                     
                     $diffCowData = $data['CurrentCowService'] - $data['BeforeCowService'];
                     $data['DiffCowService'] = $diffCowData;
-
-                    $data['DiffCowServicePercentage'] = 0;
-
+                    if ($data['BeforeCowService'] != 0) {
+                        $data['DiffCowServicePercentage'] = (($data['CurrentCowService'] - $data['BeforeCowService']) / $data['BeforeCowService']) * 100;
+                    }  else if(empty($data['BeforeCowService']) && !empty($data['CurrentCowService'])){
+                        $data['DiffCowServicePercentage'] = 100;
+                    }
+                    
                     $diffServiceData = $data['CurrentIncomeService'] - $data['BeforeIncomeService'];
                     $data['DiffIncomeService'] = $diffServiceData;
-                    $data['DiffIncomeServicePercentage'] = 0;
+                    if ($data['BeforeIncomeService'] != 0) {
+                        $data['DiffIncomeServicePercentage'] = (($data['CurrentIncomeService'] - $data['BeforeIncomeService']) / $data['BeforeIncomeService']) * 100;
+                    }  else if(empty($data['BeforeIncomeService']) && !empty($data['CurrentIncomeService'])){
+                        $data['DiffIncomeServicePercentage'] = 100;
+                    }
+                    
                     $data['CreateDate'] = $CurrentCowService['update_date'];
                     $data['ApproveDate'] = $CurrentCowService['office_approve_date'];
                     if(!empty($CurrentCowService['office_approve_id'])){
@@ -169,6 +177,9 @@
 
                 $curMonth++;
             }
+
+            $DataSummary['SummaryCowServicePercentage'] = (($DataSummary['SummaryCurrentCowService'] - $DataSummary['SummaryBeforeCowService']) /$DataSummary['SummaryBeforeCowService']) * 100;
+            $DataSummary['SummaryIncomeServicePercentage'] = (($DataSummary['SummaryCurrentIncomeService'] - $DataSummary['SummaryBeforeIncomeService']) /$DataSummary['SummaryBeforeIncomeService']) * 100;
 
             return ['DataList' => $DataList, 'Summary' => $DataSummary];                
         }
@@ -282,11 +293,20 @@
                     $diffCowData = $data['CurrentCowService'] - $data['BeforeCowService'];
                     $data['DiffCowService'] = $diffCowData;
 
-                    $data['DiffCowServicePercentage'] = 0;
-
+                    if ($data['BeforeCowService'] != 0) {
+                        $data['DiffCowServicePercentage'] = (($data['CurrentCowService'] - $data['BeforeCowService']) / $data['BeforeCowService']) * 100;
+                    }  else if(empty($data['BeforeCowService']) && !empty($data['CurrentCowService'])){
+                        $data['DiffCowServicePercentage'] = 100;
+                    }
+                    
                     $diffServiceData = $data['CurrentIncomeService'] - $data['BeforeIncomeService'];
                     $data['DiffIncomeService'] = $diffServiceData;
-                    $data['DiffIncomeServicePercentage'] = 0;
+                    if ($data['BeforeIncomeService'] != 0) {
+                        $data['DiffIncomeServicePercentage'] = (($data['CurrentIncomeService'] - $data['BeforeIncomeService']) / $data['BeforeIncomeService']) * 100;
+                    }  else if(empty($data['BeforeIncomeService']) && !empty($data['CurrentIncomeService'])){
+                        $data['DiffIncomeServicePercentage'] = 100;
+                    }
+
                     $data['CreateDate'] = $UpdateDate;
                     $data['ApproveDate'] = $ApproveDate;
                     if(!empty($ApproveDate)){
@@ -316,6 +336,9 @@
                     $curQuarter = 1;
                 }
             }
+
+            $DataSummary['SummaryCowServicePercentage'] = (($DataSummary['SummaryCurrentCowService'] - $DataSummary['SummaryBeforeCowService']) /$DataSummary['SummaryBeforeCowService']) * 100;
+            $DataSummary['SummaryIncomeServicePercentage'] = (($DataSummary['SummaryCurrentIncomeService'] - $DataSummary['SummaryBeforeIncomeService']) /$DataSummary['SummaryBeforeIncomeService']) * 100;
 
             return ['DataList' => $DataList, 'Summary' => $DataSummary];                
         }
@@ -390,11 +413,20 @@
                     $diffCowData = $data['CurrentCowService'] - $data['BeforeCowService'];
                     $data['DiffCowService'] = $diffCowData;
 
-                    $data['DiffCowServicePercentage'] = 0;
-
+                    if ($data['BeforeCowService'] != 0) {
+                        $data['DiffCowServicePercentage'] = (($data['CurrentCowService'] - $data['BeforeCowService']) / $data['BeforeCowService']) * 100;
+                    }  else if(empty($data['BeforeCowService']) && !empty($data['CurrentCowService'])){
+                        $data['DiffCowServicePercentage'] = 100;
+                    }
+                    
                     $diffServiceData = $data['CurrentIncomeService'] - $data['BeforeIncomeService'];
                     $data['DiffIncomeService'] = $diffServiceData;
-                    $data['DiffIncomeServicePercentage'] = 0;
+                    if ($data['BeforeIncomeService'] != 0) {
+                        $data['DiffIncomeServicePercentage'] = (($data['CurrentIncomeService'] - $data['BeforeIncomeService']) / $data['BeforeIncomeService']) * 100;
+                    }  else if(empty($data['BeforeIncomeService']) && !empty($data['CurrentIncomeService'])){
+                        $data['DiffIncomeServicePercentage'] = 100;
+                    }
+                    
                     $data['CreateDate'] = $UpdateDate;
                     $data['ApproveDate'] = $ApproveDate;
                     if(!empty($ApproveDate)){
@@ -422,6 +454,9 @@
 
                 $curYear++;
             }
+
+            $DataSummary['SummaryCowServicePercentage'] = (($DataSummary['SummaryCurrentCowService'] - $DataSummary['SummaryBeforeCowService']) /$DataSummary['SummaryBeforeCowService']) * 100;
+            $DataSummary['SummaryIncomeServicePercentage'] = (($DataSummary['SummaryCurrentIncomeService'] - $DataSummary['SummaryBeforeIncomeService']) /$DataSummary['SummaryBeforeIncomeService']) * 100;
 
             return ['DataList' => $DataList, 'Summary' => $DataSummary];                
         }

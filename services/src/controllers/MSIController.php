@@ -149,9 +149,9 @@
                         $data['DiffAmount'] = $DiffAmount;
 
                         if ($data['BeforeAmount'] != 0) {
-                            $data['DiffAmountPercentage'] = ($data['CurrentAmount'] / $data['BeforeAmount']) * 100;
-                        } else {
-                            $data['DiffAmountPercentage'] = 0;
+                            $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                        }  else if(empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])){
+                            $data['DiffAmountPercentage'] = 100;
                         }
 
 
@@ -159,9 +159,9 @@
                         $data['DiffBaht'] = $DiffBaht;
 
                         if ($data['BeforeBaht'] != 0) {
-                            $data['DiffBahtPercentage'] = ($data['CurrentBaht'] / $data['BeforeBaht']) * 100;
-                        } else {
-                            $data['DiffBahtPercentage'] = 0;
+                            $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
+                        } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                            $data['DiffBahtPercentage'] = 100;
                         }
 
                         $data['Description'] = ['months' => $curMonth
@@ -259,9 +259,9 @@
                     $data['DiffAmount'] = $DiffAmount;
 
                     if ($data['BeforeAmount'] != 0) {
-                        $data['DiffAmountPercentage'] = ($data['CurrentAmount'] / $data['BeforeAmount']) * 100;
-                    } else {
-                        $data['DiffAmountPercentage'] = 0;
+                        $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                    }  else if(empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])){
+                        $data['DiffAmountPercentage'] = 100;
                     }
 
 
@@ -269,9 +269,9 @@
                     $data['DiffBaht'] = $DiffBaht;
 
                     if ($data['BeforeBaht'] != 0) {
-                        $data['DiffBahtPercentage'] = ($data['CurrentBaht'] / $data['BeforeBaht']) * 100;
-                    } else {
-                        $data['DiffBahtPercentage'] = 0;
+                        $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
+                    } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                        $data['DiffBahtPercentage'] = 100;
                     }
 
                     $data['Description'] = ['months' => $curMonth
@@ -357,20 +357,20 @@
                     $data['DiffAmount'] = $DiffAmount;
 
                     if ($data['BeforeAmount'] != 0) {
-                        $data['DiffAmountPercentage'] = ($data['CurrentAmount'] / $data['BeforeAmount']) * 100;
-                    } else {
-                        $data['DiffAmountPercentage'] = 0;
-                    }
+                            $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                        }  else if(empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])){
+                            $data['DiffAmountPercentage'] = 100;
+                        }
 
 
-                    $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
-                    $data['DiffBaht'] = $DiffBaht;
+                        $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                        $data['DiffBaht'] = $DiffBaht;
 
-                    if ($data['BeforeBaht'] != 0) {
-                        $data['DiffBahtPercentage'] = ($data['CurrentBaht'] / $data['BeforeBaht']) * 100;
-                    } else {
-                        $data['DiffBahtPercentage'] = 0;
-                    }
+                        if ($data['BeforeBaht'] != 0) {
+                            $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
+                        } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                            $data['DiffBahtPercentage'] = 100;
+                        }
 
                     $data['Description'] = ['months' => $curMonth
                         , 'years' => $years
@@ -516,9 +516,9 @@
                         $data['DiffAmount'] = $DiffAmount;
 
                         if ($data['BeforeAmount'] != 0) {
-                            $data['DiffAmountPercentage'] = ($data['CurrentAmount'] / $data['BeforeAmount']) * 100;
-                        } else {
-                            $data['DiffAmountPercentage'] = 0;
+                            $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                        }  else if(empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])){
+                            $data['DiffAmountPercentage'] = 100;
                         }
 
 
@@ -526,9 +526,9 @@
                         $data['DiffBaht'] = $DiffBaht;
 
                         if ($data['BeforeBaht'] != 0) {
-                            $data['DiffBahtPercentage'] = ($data['CurrentBaht'] / $data['BeforeBaht']) * 100;
-                        } else {
-                            $data['DiffBahtPercentage'] = 0;
+                            $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
+                        } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                            $data['DiffBahtPercentage'] = 100;
                         }
 
                         $Q_CurrentAmount = 0;
@@ -556,20 +556,20 @@
                 $data['DiffAmount'] = $DiffAmount;
 
                 if ($data['BeforeAmount'] != 0) {
-                    $data['DiffAmountPercentage'] = ($data['CurrentAmount'] / $data['BeforeAmount']) * 100;
-                } else {
-                    $data['DiffAmountPercentage'] = 0;
-                }
+                            $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                        }  else if(empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])){
+                            $data['DiffAmountPercentage'] = 100;
+                        }
 
 
-                $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
-                $data['DiffBaht'] = $DiffBaht;
+                        $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                        $data['DiffBaht'] = $DiffBaht;
 
-                if ($data['BeforeBaht'] != 0) {
-                    $data['DiffBahtPercentage'] = ($data['CurrentBaht'] / $data['BeforeBaht']) * 100;
-                } else {
-                    $data['DiffBahtPercentage'] = 0;
-                }
+                        if ($data['BeforeBaht'] != 0) {
+                            $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
+                        } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                            $data['DiffBahtPercentage'] = 100;
+                        }
                 $data['bg_color'] = '#999';
                 array_push($DataList, $data);
 

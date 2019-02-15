@@ -159,11 +159,21 @@ class SpermSaleController extends Controller {
 
                 $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
                 $data['DiffAmount'] = $DiffAmount;
-                $data['DiffAmountPercentage'] = 0;
+                if ($data['BeforeAmount'] != 0) {
+                            $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                        }  else if(empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])){
+                            $data['DiffAmountPercentage'] = 100;
+                        }
 
-                $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
-                $data['DiffBaht'] = $DiffBaht;
-                $data['DiffBahtPercentage'] = 0;
+
+                        $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                        $data['DiffBaht'] = $DiffBaht;
+
+                        if ($data['BeforeBaht'] != 0) {
+                            $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
+                        } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                            $data['DiffBahtPercentage'] = 100;
+                        }
 
                 $data['CreateDate'] = $Current['update_date'];
                 $data['ApproveDate'] = $Current['office_approve_date'];
@@ -193,6 +203,9 @@ class SpermSaleController extends Controller {
 
             $curMonth++;
         }
+
+        $DataSummary['SummarySpermSaleAmountPercentage'] = (($DataSummary['SummarySpermSaleAmount'] - $DataSummary['SummaryBeforSpermSaleAmount']) /$DataSummary['SummaryBeforSpermSaleAmount']) * 100;
+            $DataSummary['SummarySpermSaleIncomePercentage'] = (($DataSummary['SummarySpermSaleIncome'] - $DataSummary['SummaryBeforeSpermSaleIncome']) /$DataSummary['SummaryBeforeSpermSaleIncome']) * 100;
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
@@ -273,6 +286,9 @@ class SpermSaleController extends Controller {
 
             $curMonth++;
         }
+
+        $DataSummary['SummarySpermSaleAmountPercentage'] = (($DataSummary['SummarySpermSaleAmount'] - $DataSummary['SummaryBeforSpermSaleAmount']) /$DataSummary['SummaryBeforSpermSaleAmount']) * 100;
+            $DataSummary['SummarySpermSaleIncomePercentage'] = (($DataSummary['SummarySpermSaleIncome'] - $DataSummary['SummaryBeforeSpermSaleIncome']) /$DataSummary['SummaryBeforeSpermSaleIncome']) * 100;
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
@@ -386,11 +402,21 @@ class SpermSaleController extends Controller {
 
                 $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
                 $data['DiffAmount'] = $DiffAmount;
-                $data['DiffAmountPercentage'] = 0;
+                if ($data['BeforeAmount'] != 0) {
+                            $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                        }  else if(empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])){
+                            $data['DiffAmountPercentage'] = 100;
+                        }
 
-                $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
-                $data['DiffBaht'] = $DiffBaht;
-                $data['DiffBahtPercentage'] = 0;
+
+                        $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                        $data['DiffBaht'] = $DiffBaht;
+
+                        if ($data['BeforeBaht'] != 0) {
+                            $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
+                        } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                            $data['DiffBahtPercentage'] = 100;
+                        }
 
                 $data['CreateDate'] = $UpdateDate;
                 $data['ApproveDate'] = $ApproveDate;
@@ -424,6 +450,9 @@ class SpermSaleController extends Controller {
                 $curQuarter = 1;
             }
         }
+
+        $DataSummary['SummarySpermSaleAmountPercentage'] = (($DataSummary['SummarySpermSaleAmount'] - $DataSummary['SummaryBeforSpermSaleAmount']) /$DataSummary['SummaryBeforSpermSaleAmount']) * 100;
+            $DataSummary['SummarySpermSaleIncomePercentage'] = (($DataSummary['SummarySpermSaleIncome'] - $DataSummary['SummaryBeforeSpermSaleIncome']) /$DataSummary['SummaryBeforeSpermSaleIncome']) * 100;
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
@@ -490,11 +519,21 @@ class SpermSaleController extends Controller {
 
                 $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
                 $data['DiffAmount'] = $DiffAmount;
-                $data['DiffAmountPercentage'] = 0;
+                if ($data['BeforeAmount'] != 0) {
+                            $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                        }  else if(empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])){
+                            $data['DiffAmountPercentage'] = 100;
+                        }
 
-                $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
-                $data['DiffBaht'] = $DiffBaht;
-                $data['DiffBahtPercentage'] = 0;
+
+                        $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                        $data['DiffBaht'] = $DiffBaht;
+
+                        if ($data['BeforeBaht'] != 0) {
+                            $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
+                        } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                            $data['DiffBahtPercentage'] = 100;
+                        }
 
                 $data['CreateDate'] = $UpdateDate;
                 $data['ApproveDate'] = $ApproveDate;
@@ -524,6 +563,9 @@ class SpermSaleController extends Controller {
 
             $curYear++;
         }
+
+        $DataSummary['SummarySpermSaleAmountPercentage'] = (($DataSummary['SummarySpermSaleAmount'] - $DataSummary['SummaryBeforSpermSaleAmount']) /$DataSummary['SummaryBeforSpermSaleAmount']) * 100;
+            $DataSummary['SummarySpermSaleIncomePercentage'] = (($DataSummary['SummarySpermSaleIncome'] - $DataSummary['SummaryBeforeSpermSaleIncome']) /$DataSummary['SummaryBeforeSpermSaleIncome']) * 100;
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }

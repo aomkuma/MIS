@@ -33,6 +33,25 @@
             }
         }
 
+        public function getListByParent($request, $response, $args){
+            try{
+                $params = $request->getParsedBody();
+               $sub_product_milk_id = $params['obj']['sub_product_milk_id'];
+//                $menu_type = $params['obj']['menu_type'];
+//                $condition = $params['obj']['condition'];
+
+                $_List = ProductMilkDetailService::getListByParent($sub_product_milk_id);
+//                print_r($_List);
+//                die();
+                $this->data_result['DATA']['List'] = $_List;
+
+                return $this->returnResponse(200, $this->data_result, $response, false);
+                
+            }catch(\Exception $e){
+                return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+            }
+        }
+
         public function getData($request, $response, $args){
             try{
                 $params = $request->getParsedBody();

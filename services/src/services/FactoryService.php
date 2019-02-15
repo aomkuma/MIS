@@ -12,4 +12,8 @@
             return Factory::all();      
         }
 
+        public static function getData($id){
+            return Factory::where('id', $id)->get();      
+        }
+
     }

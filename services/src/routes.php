@@ -191,10 +191,12 @@ $app->post('/product-milk/get/', 'ProductMilkController:getData');
 $app->post('/product-milk/update/', 'ProductMilkController:updateData');
 
 $app->post('/subproduct-milk/list/', 'SubProductMilkController:getList');
+$app->post('/subproduct-milk/list/byparent/', 'SubProductMilkController:getListByParent');
 $app->post('/subproduct-milk/get/', 'SubProductMilkController:getData');
 $app->post('/subproduct-milk/update/', 'SubProductMilkController:updateData');
 
 $app->post('/product-milk-detail/list/', 'ProductMilkDetailController:getList');
+$app->post('/product-milk-detail/list/byparent/', 'ProductMilkDetailController:getListByParent');
 $app->post('/product-milk-detail/get/', 'ProductMilkDetailController:getData');
 $app->post('/product-milk-detail/update/', 'ProductMilkDetailController:updateData');
 
@@ -220,6 +222,7 @@ $app->post('/lost-wait-sale/update/approve/', 'LostWaitSaleController:updateData
 $app->post('/lost-wait-sale/list/approve/', 'LostWaitSaleController:loadDataApprove');
 
 $app->post('/production-info/list/main/', 'ProductionInfoController:getMainList');
+$app->post('/production-info/list/detail/', 'ProductionInfoController:getMainListDetail');
 $app->post('/production-info/get/', 'ProductionInfoController:getData');
 $app->post('/production-info/update/', 'ProductionInfoController:updateData');
 $app->post('/production-info/delete/detail/', 'ProductionInfoController:removeDetailData');
@@ -227,6 +230,7 @@ $app->post('/production-info/update/approve/', 'ProductionInfoController:updateD
 $app->post('/production-info/list/approve/', 'ProductionInfoController:loadDataApprove');
 
 $app->post('/production-sale-info/list/main/', 'ProductionSaleInfoController:getMainList');
+$app->post('/production-sale-info/list/detail/', 'ProductionSaleInfoController:getMainListDetail');
 $app->post('/production-sale-info/get/', 'ProductionSaleInfoController:getData');
 $app->post('/production-sale-info/update/', 'ProductionSaleInfoController:updateData');
 $app->post('/production-sale-info/delete/detail/', 'ProductionSaleInfoController:removeDetailData');

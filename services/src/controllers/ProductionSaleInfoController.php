@@ -2,10 +2,14 @@
 
     namespace App\Controller;
     
-    use App\Service\LostOutProcessService;
+    use App\Service\ProductionSaleInfoService;
     use App\Service\MasterGoalService;
+    use App\Service\ProductMilkService;
+    use App\Service\SubProductMilkService;
+    use App\Service\ProductMilkDetailService;
+    use App\Service\FactoryService;
 
-    class LostOutProcessController extends Controller {
+    class ProductionSaleInfoController extends Controller {
         
         protected $logger;
         protected $db;
@@ -45,7 +49,7 @@
                 $params = $request->getParsedBody();
                 $user_session = $params['user_session'];
                 
-                $Data = LostOutProcessService::loadDataApprove($user_session['UserID']);
+                $Data = ProductionSaleInfoService::loadDataApprove($user_session['UserID']);
                 
                 $this->data_result['DATA']['DataList'] = $Data;
                 
@@ -108,40 +112,171 @@
             $DataList = [];
             $DataSummary = [];
 
-            // get master goal
-            $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียนอกกระบวนการ');
+            $GrandTotal_CurrentAmount = 0;
+            $GrandTotal_CurrentBaht = 0;
+            $GrandTotal_BeforeAmount = 0;
+            $GrandTotal_BeforeBaht = 0;
 
-            $Sum_CurrentAmount = 0;
-            $Sum_CurrentBaht = 0;
-            $Sum_BeforeAmount = 0;
-            $Sum_BeforeBaht = 0;
+            // get ProductMilkService
+            $ProducMilkList = ProductMilkService::getList();
+
+            // get Factory
+            $FactoryList = FactoryService::getList();
+            $curYear = $condition['YearTo'];
+            $beforeYear = $condition['YearTo'] - 1;
 
             for($i = 0; $i < $diffMonth; $i++){
 
-                // Prepare condition
-                $curYear = $condition['YearTo'];
-                $beforeYear = $condition['YearTo'] - 1;
-                
-                foreach ($MasterGoalList as $k => $v) {
-                        
-                    $master_type_id = $v['id'];
-                    
-                    $monthName = LostOutProcessController::getMonthName($curMonth);
+                foreach ($ProducMilkList as $key => $value) {
 
                     $data = [];
-                    // $data['RegionName'] = $value['RegionName'];
-                    $data['LostOutProcessName'] = $v['goal_name'];
-                    $data['Month'] = $monthName;
-                    
-                    // get cooperative type
-                    $Current = LostOutProcessService::getMainList($curYear, $curMonth, $factory_id, $master_type_id);
-                    // print_r($Current);exit;
-                    $data['CurrentAmount'] = floatval($Current['sum_amount']);
-                    $data['CurrentBaht'] = floatval($Current['sum_baht']);
+                    $data['bg_color'] = '#ccc';
+                    $data['ProductionSaleInfoName'] = $value['name'];
+                    array_push($DataList, $data);
 
-                    $Before = LostOutProcessService::getMainList($beforeYear, $curMonth, $factory_id, $master_type_id); 
-                    $data['BeforeAmount'] = floatval($Before['sum_amount']);
-                     $data['BeforeBaht'] = floatval($Before['sum_baht']);
+                    $Total_CurrentAmount = 0;
+                    $Total_CurrentBaht = 0;
+                    $Total_BeforeAmount = 0;
+                    $Total_BeforeBaht = 0;
+
+                    // loop by factory
+                    foreach ($FactoryList as $key1 => $value1) {
+
+                        $data = [];
+                        $data['bg_color'] = '#ccc';
+                        $data['ProductionSaleInfoName'] = $value1['factory_name'];
+                        $data['show_button'] = 'Y';
+                        $data['Description'] = ['months' => $curMonth
+                                                    ,'years' => $curYear
+                                                    ,'factory_id' => $factory_id
+                                                    ];
+                        array_push($DataList, $data);
+
+                        // get SubProductMilkService
+                        $SubProductMilkList = SubProductMilkService::getListByProductMilk($value['id']);
+                        
+                        // Prepare condition
+                        
+                        $Sum_CurrentAmount = 0;
+                        $Sum_CurrentBaht = 0;
+                        $Sum_BeforeAmount = 0;
+                        $Sum_BeforeBaht = 0;
+                        
+                        $factory_id = $value1['id'];
+
+                        foreach ($SubProductMilkList as $k => $v) {
+                                
+                            $master_type_id = $v['id'];
+                            
+                            $monthName = ProductionSaleInfoController::getMonthName($curMonth);
+
+                            $data = [];
+                            // $data['RegionName'] = $value['RegionName'];
+                            $data['ProductionSaleInfoName'] = $v['name'];
+                            $data['Month'] = $monthName;
+                            
+                            // get cooperative type
+                            $Current = ProductionSaleInfoService::getMainList($curYear, $curMonth, $factory_id, $master_type_id);
+                            // print_r($Current);exit;
+                            $data['CurrentAmount'] = floatval($Current['sum_amount']);
+                            $data['CurrentBaht'] = floatval($Current['sum_baht']);
+
+                            $Before = ProductionSaleInfoService::getMainList($beforeYear, $curMonth, $factory_id, $master_type_id); 
+                            $data['BeforeAmount'] = floatval($Before['sum_amount']);
+                             $data['BeforeBaht'] = floatval($Before['sum_baht']);
+
+                            $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+                            $data['DiffAmount'] = $DiffAmount;
+                            if ($data['BeforeAmount'] != 0) {
+                                $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                            }  else if(empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])){
+                                $data['DiffAmountPercentage'] = 100;
+                            }
+
+
+                            $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                            $data['DiffBaht'] = $DiffBaht;
+
+                            if ($data['BeforeBaht'] != 0) {
+                                $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
+                            } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                                $data['DiffBahtPercentage'] = 100;
+                            }
+
+                            $data['CreateDate'] = $Current['update_date'];
+                            $data['ApproveDate'] = $Current['office_approve_date'];
+                            if(!empty($Current['office_approve_id'])){
+                                if(empty($Current['office_approve_comment'])){
+                                    $data['Status'] = 'อนุมัติ';        
+                                }else{
+                                    $data['Status'] = 'ไม่อนุมัติ';        
+                                }
+                            }
+                            $data['Description'] = ['months' => $curMonth
+                                                    ,'years' => $curYear
+                                                    ,'factory_id' => $factory_id
+                                                    ];
+
+                            array_push($DataList, $data);
+
+                            $DataSummary['SummaryAmount'] = $DataSummary['SummaryAmount'] + $data['CurrentAmount'];
+                            $DataSummary['SummaryBaht'] = $DataSummary['SummaryBaht'] + $data['CurrentBaht'];
+
+                            $Sum_CurrentAmount += $data['CurrentAmount'];
+                            $Sum_CurrentBaht += $data['CurrentBaht'];
+                            $Sum_BeforeAmount += $data['BeforeAmount'];
+                            $Sum_BeforeBaht += $data['BeforeBaht'];
+
+                            $Total_CurrentAmount += $data['CurrentAmount'];
+                            $Total_CurrentBaht += $data['CurrentBaht'];
+                            $Total_BeforeAmount += $data['BeforeAmount'];
+                            $Total_BeforeBaht += $data['BeforeBaht'];
+
+                            $GrandTotal_CurrentAmount += $data['CurrentAmount'];
+                            $GrandTotal_CurrentBaht += $data['CurrentBaht'];
+                            $GrandTotal_BeforeAmount += $data['BeforeAmount'];
+                            $GrandTotal_BeforeBaht += $data['BeforeBaht'];
+                        }
+
+                        $data = [];
+                        $data['bg_color'] = '#AFE1FA';
+                        $data['ProductionSaleInfoName'] = 'รวม';
+
+                        $data['CurrentAmount'] = $Sum_CurrentAmount;
+                        $data['CurrentBaht'] = $Sum_CurrentBaht;
+ 
+                        $data['BeforeAmount'] = $Sum_BeforeAmount;
+                        $data['BeforeBaht'] = $Sum_BeforeBaht;
+
+                        $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+                        $data['DiffAmount'] = $DiffAmount;
+                        if ($data['BeforeAmount'] != 0) {
+                            $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                        }  else if(empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])){
+                            $data['DiffAmountPercentage'] = 100;
+                        }
+
+
+                        $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                        $data['DiffBaht'] = $DiffBaht;
+
+                        if ($data['BeforeBaht'] != 0) {
+                            $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
+                        } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                            $data['DiffBahtPercentage'] = 100;
+                        }
+                        array_push($DataList, $data);
+
+                    }
+                    $data = [];
+                    $data['bg_color'] = '#A0DEFD';
+                    $data['ProductionSaleInfoName'] = 'รวมทั้งสิ้น';
+
+                    $data['CurrentAmount'] = $Total_CurrentAmount;
+                    $data['CurrentBaht'] = $Total_CurrentBaht;
+
+                    $data['BeforeAmount'] = $Total_BeforeAmount;
+                    $data['BeforeBaht'] = $Total_BeforeBaht;
 
                     $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
                     $data['DiffAmount'] = $DiffAmount;
@@ -160,30 +295,7 @@
                     } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
                         $data['DiffBahtPercentage'] = 100;
                     }
-
-                    $data['CreateDate'] = $Current['update_date'];
-                    $data['ApproveDate'] = $Current['office_approve_date'];
-                    if(!empty($Current['office_approve_id'])){
-                        if(empty($Current['office_approve_comment'])){
-                            $data['Status'] = 'อนุมัติ';        
-                        }else{
-                            $data['Status'] = 'ไม่อนุมัติ';        
-                        }
-                    }
-                    $data['Description'] = ['months' => $curMonth
-                                            ,'years' => $curYear
-                                            ,'factory_id' => $factory_id
-                                            ];
-
                     array_push($DataList, $data);
-
-                    $DataSummary['SummaryAmount'] = $DataSummary['SummaryAmount'] + $data['CurrentAmount'];
-                    $DataSummary['SummaryBaht'] = $DataSummary['SummaryBaht'] + $data['CurrentBaht'];
-
-                    $Sum_CurrentAmount += $data['CurrentAmount'];
-                    $Sum_CurrentBaht += $data['CurrentBaht'];
-                    $Sum_BeforeAmount += $data['BeforeAmount'];
-                    $Sum_BeforeBaht += $data['BeforeBaht'];
                 }
 
                 $curMonth++;
@@ -191,12 +303,12 @@
             
             $data = [];
             // $data['RegionName'] = $value['RegionName'];
-            $data['bg_color'] = '#ccc';
-            $data['Month'] = 'รวม';
-            $data['CurrentAmount'] = $Sum_CurrentAmount;
-            $data['CurrentBaht'] = $Sum_CurrentBaht;
-            $data['BeforeAmount'] = $Sum_BeforeAmount;
-            $data['BeforeBaht'] = $Sum_BeforeBaht;
+            $data['bg_color'] = '#87D0F5';
+            $data['Month'] = 'รวมทุกรายการ';
+            $data['CurrentAmount'] = $GrandTotal_CurrentAmount;
+            $data['CurrentBaht'] = $GrandTotal_CurrentBaht;
+            $data['BeforeAmount'] = $GrandTotal_BeforeAmount;
+            $data['BeforeBaht'] = $GrandTotal_BeforeBaht;
 
             $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
             $data['DiffAmount'] = $DiffAmount;
@@ -269,7 +381,7 @@
             $DataSummary = [];
 
             // get master goal
-            $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียนอกกระบวนการ');
+            $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียในกระบวนการ');
             $Sum_CurrentAmount = 0;
             $Sum_CurrentBaht = 0;
             $Sum_BeforeAmount = 0;
@@ -309,11 +421,11 @@
                     for($j = 0; $j < count($monthList); $j++){
                         $curMonth = $monthList[$j];
                         
-                        $Current = LostOutProcessService::getMainList($curYear, $curMonth, $factory_id, $master_type_id);
+                        $Current = ProductionSaleInfoService::getMainList($curYear, $curMonth, $factory_id, $master_type_id);
                         $SumCurrentAmount += floatval($Current['sum_amount']);
                         $SumCurrentBaht += floatval($Current['sum_baht']);
 
-                        $Before = LostOutProcessService::getMainList($beforeYear, $curMonth, $factory_id, $master_type_id); 
+                        $Before = ProductionSaleInfoService::getMainList($beforeYear, $curMonth, $factory_id, $master_type_id); 
                         $SumBeforeAmount += floatval($Before['sum_amount']);
                         $SumBeforeBaht += floatval($Before['sum_baht']);
 
@@ -330,7 +442,7 @@
 
                     $data = [];
                     $data['RegionName'] = $value['RegionName'];
-                    $data['LostOutProcessName'] = $v['goal_name'];
+                    $data['ProductionSaleInfoName'] = $v['goal_name'];
                     $data['Quarter'] = $curQuarter . ' (' . (($curQuarter == 1?$curYear + 543 + 1:$curYear + 543)) . ')';
 
                     $data['CurrentAmount'] = $SumCurrentAmount;
@@ -433,7 +545,7 @@
             $curYear = $condition['YearTo'];
 
             // get master goal
-            $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียนอกกระบวนการ');
+            $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียในกระบวนการ');
             $Sum_CurrentAmount = 0;
             $Sum_CurrentBaht = 0;
             $Sum_BeforeAmount = 0;
@@ -460,11 +572,11 @@
                     for($j = 0; $j < 12; $j++){
                         $curMonth = $monthList[$j];
                         
-                        $Current = LostOutProcessService::getMainList($curYear, $curMonth, $factory_id, $master_type_id);
+                        $Current = ProductionSaleInfoService::getMainList($curYear, $curMonth, $factory_id, $master_type_id);
                         $SumCurrentAmount += floatval($Current['sum_amount']);
                         $SumCurrentBaht += floatval($Current['sum_baht']);
 
-                        $Before = LostOutProcessService::getMainList($beforeYear, $curMonth, $factory_id, $master_type_id); 
+                        $Before = ProductionSaleInfoService::getMainList($beforeYear, $curMonth, $factory_id, $master_type_id); 
                         $SumBeforeAmount += floatval($Before['sum_amount']);
                         $SumBeforeBaht += floatval($Before['sum_baht']);
 
@@ -481,7 +593,7 @@
 
                     $data = [];
                     $data['RegionName'] = $value['RegionName'];
-                    $data['LostOutProcessName'] = $v['goal_name'];
+                    $data['ProductionSaleInfoName'] = $v['goal_name'];
                     $data['Year'] = $curYear + 543;
 
                     $data['CurrentAmount'] = $SumCurrentAmount;
@@ -568,6 +680,242 @@
             return ['DataList' => $DataList, 'Summary' => $DataSummary];
         }
 
+        public function getMainListDetail($request, $response, $args){
+
+            try {
+               
+                $params = $request->getParsedBody();
+                $user_session = $params['user_session'];
+                $condition = $params['obj']['condition'];
+
+                $factory_id = $condition['factory_id'];
+                $ymFrom = $condition['years'] . '-' . str_pad($condition['months'], 2, "0", STR_PAD_LEFT);
+                $ymTo = $condition['years'] . '-' . str_pad($condition['months'], 2, "0", STR_PAD_LEFT);
+                $toTime = $condition['years'] . '-' . str_pad($condition['months'], 2, "0", STR_PAD_LEFT) . '-28';
+                $fromTime = $condition['years']  . '-' . str_pad($condition['months'], 2, "0", STR_PAD_LEFT) .'-01';
+                
+                $date1 = new \DateTime($toTime);
+                $date2 = new \DateTime($fromTime);
+                $diff = $date1->diff($date2);
+                $diffMonth = (($diff->format('%y') * 12) + $diff->format('%m'));
+                if ($diffMonth == 0) {
+                    $diffMonth = 1;
+                }else{
+                    $diffMonth += 1;
+                }
+                $curMonth = $condition['months'];
+                $curYear = $condition['years'];
+                $DataList = [];
+                $DataSummary = [];
+
+                $GrandTotal_CurrentAmount = 0;
+                $GrandTotal_CurrentBaht = 0;
+                $GrandTotal_BeforeAmount = 0;
+                $GrandTotal_BeforeBaht = 0;
+
+                // get ProductMilkService
+                $ProducMilkList = ProductMilkService::getList();
+
+                // get Factory
+                $FactoryList = FactoryService::getData($factory_id);
+
+                for($i = 0; $i < $diffMonth; $i++){
+
+
+                    // loop by factory
+                    foreach ($FactoryList as $key1 => $value1) {
+
+                        $data = [];
+                        $data['bg_color'] = '#ccc';
+                        $data['ProductionSaleInfoName'] = $value1['factory_name'];
+                        $data['show_button'] = 'Y';
+                        array_push($DataList, $data);
+
+                        $Total_CurrentAmount = 0;
+                        $Total_CurrentBaht = 0;
+                        $Total_BeforeAmount = 0;
+                        $Total_BeforeBaht = 0;
+
+
+                        foreach ($ProducMilkList as $key => $value) {
+
+                            $data = [];
+                            $data['bg_color'] = '#ccc';
+                            $data['ProductionSaleInfoName'] = $value['name'];
+                            array_push($DataList, $data);
+
+                            // get SubProductMilkService
+                            $SubProductMilkList = SubProductMilkService::getListByProductMilk($value['id']);
+                            
+                            // Prepare condition
+                            
+
+                            $Sum_CurrentAmount = 0;
+                            $Sum_CurrentBaht = 0;
+                            $Sum_BeforeAmount = 0;
+                            $Sum_BeforeBaht = 0;
+                            
+                            $factory_id = $value1['id'];
+                            
+                            foreach ($SubProductMilkList as $k => $v) {
+
+                                $data = [];
+                                $data['bg_color'] = '#ccc';
+                                $data['ProductionSaleInfoName'] = $v['name'];
+                                array_push($DataList, $data);
+
+                                // get ProductMilkDetailService
+                                $ProductMilkDetailList = ProductMilkDetailService::getListByParent($v['id']);
+
+                                foreach ($ProductMilkDetailList as $k1 => $v1) {
+                                    
+                                    $master_type_id = $v1['id'];
+                                    
+                                    $monthName = ProductionSaleInfoController::getMonthName($curMonth);
+
+                                    $data = [];
+                                    // $data['RegionName'] = $value['RegionName'];
+                                    $data['ProductionSaleInfoName'] = $v1['name'];
+                                    $data['Month'] = $monthName;
+                                    
+                                    // get cooperative type
+                                    $Current = ProductionSaleInfoService::getDetailList($curYear, $curMonth, $factory_id, $master_type_id);
+                                    // print_r($Current);exit;
+                                    $data['CurrentAmount'] = floatval($Current['sum_amount']);
+                                    $data['CurrentBaht'] = floatval($Current['sum_baht']);
+
+                                    $Before = ProductionSaleInfoService::getDetailList($beforeYear, $curMonth, $factory_id, $master_type_id); 
+                                    $data['BeforeAmount'] = floatval($Before['sum_amount']);
+                                     $data['BeforeBaht'] = floatval($Before['sum_baht']);
+
+                                    $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+                                    $data['DiffAmount'] = $DiffAmount;
+                                    if ($data['BeforeAmount'] != 0) {
+                                        $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                                    }  else if(empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])){
+                                        $data['DiffAmountPercentage'] = 100;
+                                    }
+
+
+                                    $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                                    $data['DiffBaht'] = $DiffBaht;
+
+                                    if ($data['BeforeBaht'] != 0) {
+                                        $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
+                                    } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                                        $data['DiffBahtPercentage'] = 100;
+                                    }
+
+                                    $data['CreateDate'] = $Current['update_date'];
+                                    $data['ApproveDate'] = $Current['office_approve_date'];
+                                    if(!empty($Current['office_approve_id'])){
+                                        if(empty($Current['office_approve_comment'])){
+                                            $data['Status'] = 'อนุมัติ';        
+                                        }else{
+                                            $data['Status'] = 'ไม่อนุมัติ';        
+                                        }
+                                    }
+                                    $data['Description'] = ['months' => $curMonth
+                                                            ,'years' => $curYear
+                                                            ,'factory_id' => $factory_id
+                                                            ];
+
+                                    array_push($DataList, $data);
+
+                                    $DataSummary['SummaryAmount'] = $DataSummary['SummaryAmount'] + $data['CurrentAmount'];
+                                    $DataSummary['SummaryBaht'] = $DataSummary['SummaryBaht'] + $data['CurrentBaht'];
+
+                                    $Sum_CurrentAmount += $data['CurrentAmount'];
+                                    $Sum_CurrentBaht += $data['CurrentBaht'];
+                                    $Sum_BeforeAmount += $data['BeforeAmount'];
+                                    $Sum_BeforeBaht += $data['BeforeBaht'];
+
+                                    $Total_CurrentAmount += $data['CurrentAmount'];
+                                    $Total_CurrentBaht += $data['CurrentBaht'];
+                                    $Total_BeforeAmount += $data['BeforeAmount'];
+                                    $Total_BeforeBaht += $data['BeforeBaht'];
+
+                                    $GrandTotal_CurrentAmount += $data['CurrentAmount'];
+                                    $GrandTotal_CurrentBaht += $data['CurrentBaht'];
+                                    $GrandTotal_BeforeAmount += $data['BeforeAmount'];
+                                    $GrandTotal_BeforeBaht += $data['BeforeBaht'];
+                                }
+                            }
+
+                            $data = [];
+                            $data['bg_color'] = '#AFE1FA';
+                            $data['ProductionSaleInfoName'] = 'รวม';
+
+                            $data['CurrentAmount'] = $Sum_CurrentAmount;
+                            $data['CurrentBaht'] = $Sum_CurrentBaht;
+     
+                            $data['BeforeAmount'] = $Sum_BeforeAmount;
+                            $data['BeforeBaht'] = $Sum_BeforeBaht;
+
+                            $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+                            $data['DiffAmount'] = $DiffAmount;
+                            if ($data['BeforeAmount'] != 0) {
+                                $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                            }  else if(empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])){
+                                $data['DiffAmountPercentage'] = 100;
+                            }
+
+
+                            $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                            $data['DiffBaht'] = $DiffBaht;
+
+                            if ($data['BeforeBaht'] != 0) {
+                                $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
+                            } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                                $data['DiffBahtPercentage'] = 100;
+                            }
+                            array_push($DataList, $data);
+
+                        }
+                        $data = [];
+                        $data['bg_color'] = '#A0DEFD';
+                        $data['ProductionSaleInfoName'] = 'รวมทั้งสิ้น';
+
+                        $data['CurrentAmount'] = $Total_CurrentAmount;
+                        $data['CurrentBaht'] = $Total_CurrentBaht;
+
+                        $data['BeforeAmount'] = $Total_BeforeAmount;
+                        $data['BeforeBaht'] = $Total_BeforeBaht;
+
+                        $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+                        $data['DiffAmount'] = $DiffAmount;
+                        if ($data['BeforeAmount'] != 0) {
+                            $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                        }  else if(empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])){
+                            $data['DiffAmountPercentage'] = 100;
+                        }
+
+
+                        $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                        $data['DiffBaht'] = $DiffBaht;
+
+                        if ($data['BeforeBaht'] != 0) {
+                            $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
+                        } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                            $data['DiffBahtPercentage'] = 100;
+                        }
+                        array_push($DataList, $data);
+                    }
+
+                    $curMonth++;
+                }
+                
+                
+
+                $this->data_result['DATA']['DataList'] = $DataList;
+
+                return $this->returnResponse(200, $this->data_result, $response, false);
+                
+            }catch(\Exception $e){
+                return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+            }
+        }
+
         public function getData($request, $response, $args){
             try{
                 $params = $request->getParsedBody();
@@ -579,9 +927,9 @@
                 $years = $params['obj']['years'];
 
                 if(!empty($id)){
-                    $_Data = LostOutProcessService::getDataByID($id);
+                    $_Data = ProductionSaleInfoService::getDataByID($id);
                 }else{
-                    $_Data = LostOutProcessService::getData($factory_id, $months, $years);
+                    $_Data = ProductionSaleInfoService::getData($factory_id, $months, $years);
                 }
                 
                 $this->data_result['DATA']['Data'] = $_Data;
@@ -630,11 +978,11 @@
                 // print_r($_Data);
                 // exit();
 
-                $id = LostOutProcessService::updateData($_Data);
+                $id = ProductionSaleInfoService::updateData($_Data);
 
-                foreach ($_Detail as $key => $value) {
-                    $value['lost_out_process_id'] = $id;
-                    LostOutProcessService::updateDetailData($value);
+ 				foreach ($_Detail as $key => $value) {
+ 					$value['production_sale_info_id'] = $id;
+                	ProductionSaleInfoService::updateDetailData($value);
                 }
 
      //           
@@ -651,7 +999,7 @@
 
                 $params = $request->getParsedBody();
                 $id = $params['obj']['id'];
-                $result = LostOutProcessService::removeDetailData($id);
+                $result = ProductionSaleInfoService::removeDetailData($id);
 
                 $this->data_result['DATA']['result'] = $result;
 
@@ -733,7 +1081,7 @@
 
                 // print_r($data );
                 // exit;
-                $result = LostOutProcessService::updateDataApprove($id, $data);
+                $result = ProductionSaleInfoService::updateDataApprove($id, $data);
 
                 $this->data_result['DATA']['result'] = $result;
                 

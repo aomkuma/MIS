@@ -151,11 +151,19 @@ class MineralController extends Controller {
 
                 $DiffWeight = $data['CurrentWeight'] - $data['BeforeWeight'];
                 $data['DiffWeight'] = $DiffWeight;
-                $data['DiffWeightPercentage'] = 0;
+                if ($data['BeforeAmount'] != 0) {
+                    $data['DiffWeightPercentage'] = (($data['CurrentWeight'] - $data['BeforeWeight']) / $data['BeforeWeight']) * 100;
+                }  else if(empty($data['BeforeWeight']) && !empty($data['CurrentWeight'])){
+                    $data['DiffWeightPercentage'] = 100;
+                }
 
                 $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
                 $data['DiffBaht'] = $DiffBaht;
-                $data['DiffBahtPercentage'] = 0;
+                if ($data['BeforeBaht'] != 0) {
+                    $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
+                } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                    $data['DiffBahtPercentage'] = 100;
+                }
 
                 $data['CreateDate'] = $Current['update_date'];
                 $data['ApproveDate'] = $Current['office_approve_date'];
@@ -183,6 +191,9 @@ class MineralController extends Controller {
 
             $curMonth++;
         }
+
+        $DataSummary['SummaryMineralAmountPercentage'] = (($DataSummary['SummaryCurrentMineralAmount'] - $DataSummary['SummaryBeforMineralAmount']) /$DataSummary['SummaryBeforMineralAmount']) * 100;
+            $DataSummary['SummaryMineralIncomePercentage'] = (($DataSummary['SummaryCurrentMineralIncome'] - $DataSummary['SummaryBeforeMineralIncome']) /$DataSummary['SummaryBeforeMineralIncome']) * 100;
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
@@ -272,6 +283,9 @@ class MineralController extends Controller {
 
             $curMonth++;
         }
+
+        $DataSummary['SummaryMineralAmountPercentage'] = (($DataSummary['SummaryCurrentMineralAmount'] - $DataSummary['SummaryBeforMineralAmount']) /$DataSummary['SummaryBeforMineralAmount']) * 100;
+            $DataSummary['SummaryMineralIncomePercentage'] = (($DataSummary['SummaryCurrentMineralIncome'] - $DataSummary['SummaryBeforeMineralIncome']) /$DataSummary['SummaryBeforeMineralIncome']) * 100;
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
@@ -382,12 +396,19 @@ class MineralController extends Controller {
                 $data['BeforeBaht'] = $SumBeforeBaht;
 
                 $DiffWeight = $data['CurrentWeight'] - $data['BeforeWeight'];
-                $data['DiffWeight'] = $DiffWeight;
-                $data['DiffWeightPercentage'] = 0;
+                if ($data['BeforeAmount'] != 0) {
+                    $data['DiffWeightPercentage'] = (($data['CurrentWeight'] - $data['BeforeWeight']) / $data['BeforeWeight']) * 100;
+                }  else if(empty($data['BeforeWeight']) && !empty($data['CurrentWeight'])){
+                    $data['DiffWeightPercentage'] = 100;
+                }
 
                 $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
                 $data['DiffBaht'] = $DiffBaht;
-                $data['DiffBahtPercentage'] = 0;
+                if ($data['BeforeBaht'] != 0) {
+                    $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
+                } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                    $data['DiffBahtPercentage'] = 100;
+                }
 
                 $data['CreateDate'] = $UpdateDate;
                 $data['ApproveDate'] = $ApproveDate;
@@ -419,6 +440,9 @@ class MineralController extends Controller {
                 $curQuarter = 1;
             }
         }
+
+        $DataSummary['SummaryMineralAmountPercentage'] = (($DataSummary['SummaryCurrentMineralAmount'] - $DataSummary['SummaryBeforMineralAmount']) /$DataSummary['SummaryBeforMineralAmount']) * 100;
+            $DataSummary['SummaryMineralIncomePercentage'] = (($DataSummary['SummaryCurrentMineralIncome'] - $DataSummary['SummaryBeforeMineralIncome']) /$DataSummary['SummaryBeforeMineralIncome']) * 100;
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
@@ -492,11 +516,19 @@ class MineralController extends Controller {
 
                 $DiffWeight = $data['CurrentWeight'] - $data['BeforeWeight'];
                 $data['DiffWeight'] = $DiffWeight;
-                $data['DiffWeightPercentage'] = 0;
+                if ($data['BeforeAmount'] != 0) {
+                    $data['DiffWeightPercentage'] = (($data['CurrentWeight'] - $data['BeforeWeight']) / $data['BeforeWeight']) * 100;
+                }  else if(empty($data['BeforeWeight']) && !empty($data['CurrentWeight'])){
+                    $data['DiffWeightPercentage'] = 100;
+                }
 
                 $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
                 $data['DiffBaht'] = $DiffBaht;
-                $data['DiffBahtPercentage'] = 0;
+                if ($data['BeforeBaht'] != 0) {
+                    $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
+                } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                    $data['DiffBahtPercentage'] = 100;
+                }
 
                 $data['CreateDate'] = $UpdateDate;
                 $data['ApproveDate'] = $ApproveDate;
@@ -522,6 +554,9 @@ class MineralController extends Controller {
             }
             $curYear++;
         }
+
+        $DataSummary['SummaryMineralAmountPercentage'] = (($DataSummary['SummaryCurrentMineralAmount'] - $DataSummary['SummaryBeforMineralAmount']) /$DataSummary['SummaryBeforMineralAmount']) * 100;
+            $DataSummary['SummaryMineralIncomePercentage'] = (($DataSummary['SummaryCurrentMineralIncome'] - $DataSummary['SummaryBeforeMineralIncome']) /$DataSummary['SummaryBeforeMineralIncome']) * 100;
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }

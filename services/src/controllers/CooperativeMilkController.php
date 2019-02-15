@@ -184,6 +184,9 @@ class CooperativeMilkController extends Controller {
             $curMonth++;
         }
 
+        $DataSummary['SummaryCooperativeMilkAmountPercentage'] = (($DataSummary['SummaryCooperativeMilkAmount'] - $DataSummary['SummaryBeforCooperativeMilkAmount']) /$DataSummary['SummaryBeforCooperativeMilkAmount']) * 100;
+            $DataSummary['SummaryCooperativeMilkIncomePercentage'] = (($DataSummary['SummaryCooperativeMilkIncome'] - $DataSummary['SummaryBeforeCooperativeMilkIncome']) /$DataSummary['SummaryBeforeCooperativeMilkIncome']) * 100;
+
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
 

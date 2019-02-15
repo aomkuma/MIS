@@ -20,6 +20,14 @@ class SubProductMilkService {
                         ->get()->toArray();
     }
 
+    public static function getListByProductMilk($product_milk_id) {
+        return SubProductMilk::select("subproduct_milk.*", 'product_milk.name as proname')
+                        ->join('product_milk', 'product_milk.id', '=', 'subproduct_milk.product_milk_id')
+                        ->where('product_milk_id' , $product_milk_id)
+                        ->orderBy("subproduct_milk.id", 'DESC')
+                        ->get()->toArray();
+    }
+
     public static function getData($id) {
         return SubProductMilk::select("subproduct_milk.id as subid", 'product_milk.name as proname','subproduct_milk.name as subname')
                 ->join('product_milk', 'product_milk.id', '=', 'subproduct_milk.product_milk_id')

@@ -167,9 +167,9 @@ class VeterinaryController extends Controller {
                 $data['DiffCowData'] = $diffCowData;
 
                 if($data['BeforeCowData'] != 0){
-                    $data['DiffCowDataPercentage'] = ($data['CurrentCowData'] / $data['BeforeCowData']) * 100;
-                }else{
-                    $data['DiffCowDataPercentage'] = 0;
+                    $data['DiffCowDataPercentage'] = (($data['CurrentCowData'] - $data['BeforeCowData']) / $data['BeforeCowData']) * 100;
+                }else if(empty($data['BeforeCowData']) && !empty($data['CurrentCowData'])){
+                    $data['DiffCowDataPercentage'] = 100;
                 }
                 
 
@@ -178,9 +178,9 @@ class VeterinaryController extends Controller {
                 
 
                 if($data['BeforeServiceData'] != 0){
-                    $data['DiffServiceDataPercentage'] = ($data['CurrentServiceData'] / $data['BeforeServiceData']) * 100;
-                }else{
-                    $data['DiffServiceDataPercentage'] = 0;
+                    $data['DiffServiceDataPercentage'] = (($data['CurrentServiceData'] - $data['BeforeServiceData']) /$data['BeforeServiceData']) * 100;
+                }else if(empty($data['BeforeServiceData']) && !empty($data['CurrentServiceData'])){
+                    $data['DiffServiceDataPercentage'] = 100;
                 }
                 
                 $data['CreateDate'] = $CurrentCowData['update_date'];
@@ -271,13 +271,16 @@ class VeterinaryController extends Controller {
 
                 $DataSummary['SummaryCurrentCow'] = $DataSummary['SummaryCurrentCow'] + $data['CurrentCowData'];
                 $DataSummary['SummaryBeforeCow'] = $DataSummary['SummaryBeforeCow'] + $data['BeforeCowData'];
-                $DataSummary['SummaryCowPercentage'] = 0;
+                
                 $DataSummary['SummaryCurrentService'] = $DataSummary['SummaryCurrentService'] + $data['CurrentServiceData'];
                 $DataSummary['SummaryBeforeService'] = $DataSummary['SummaryBeforeService'] + $data['BeforeServiceData'];
-                $DataSummary['SummaryServicePercentage'] = 0;
+                
             }
             $curMonth++;
         }
+
+        $DataSummary['SummaryCowPercentage'] = (($DataSummary['SummaryCurrentCow'] - $DataSummary['SummaryBeforeCow']) /$DataSummary['SummaryBeforeCow']) * 100;
+        $DataSummary['SummaryServicePercentage'] = (($DataSummary['SummaryCurrentService'] - $DataSummary['SummaryBeforeService']) /$DataSummary['SummaryBeforeService']) * 100;
       
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
@@ -428,6 +431,20 @@ class VeterinaryController extends Controller {
                 $data['DiffCowDataPercentage'] = 0;
                 $data['DiffServiceData'] = $Co_SumCurrentServiceData - $Co_SumBeforeServiceData;
                 $data['DiffServiceDataPercentage'] = 0;
+
+                if($data['BeforeCowData'] != 0){
+                    $data['DiffCowDataPercentage'] = (($data['CurrentCowData'] - $data['BeforeCowData']) / $data['BeforeCowData']) * 100;
+                }else if(empty($data['BeforeCowData']) && !empty($data['CurrentCowData'])){
+                    $data['DiffCowDataPercentage'] = 100;
+                }
+                
+
+                if($data['BeforeServiceData'] != 0){
+                    $data['DiffServiceDataPercentage'] = (($data['CurrentServiceData'] - $data['BeforeServiceData']) /$data['BeforeServiceData']) * 100;
+                }else if(empty($data['BeforeServiceData']) && !empty($data['CurrentServiceData'])){
+                    $data['DiffServiceDataPercentage'] = 100;
+                }
+
                 $data['CreateDate'] = $Co_UpdateDate;
                 $data['ApproveDate'] = $Co_ApproveDate;
                 if(!empty($Co_ApproveDate)){
@@ -483,10 +500,10 @@ class VeterinaryController extends Controller {
 
                 $DataSummary['SummaryCurrentCow'] = $DataSummary['SummaryCurrentCow'] + $data['CurrentCowData'];
                 $DataSummary['SummaryBeforeCow'] = $DataSummary['SummaryBeforeCow'] + $data['BeforeCowData'];
-                $DataSummary['SummaryCowPercentage'] = 0;
+                $DataSummary['SummaryCowPercentage'] = (($DataSummary['SummaryCurrentCow'] - $DataSummary['SummaryBeforeCow']) /$DataSummary['SummaryBeforeCow']) * 100;
                 $DataSummary['SummaryCurrentService'] = $DataSummary['SummaryCurrentService'] + $data['CurrentServiceData'];
                 $DataSummary['SummaryBeforeService'] = $DataSummary['SummaryBeforeService'] + $data['BeforeServiceData'];
-                $DataSummary['SummaryServicePercentage'] = 0;
+                $DataSummary['SummaryServicePercentage'] = (($DataSummary['SummaryCurrentService'] - $DataSummary['SummaryBeforeService']) /$DataSummary['SummaryBeforeService']) * 100;
             }
 
             $curQuarter++;
@@ -495,6 +512,8 @@ class VeterinaryController extends Controller {
             }
         }
 
+        $DataSummary['SummaryCowPercentage'] = (($DataSummary['SummaryCurrentCow'] - $DataSummary['SummaryBeforeCow']) /$DataSummary['SummaryBeforeCow']) * 100;
+        $DataSummary['SummaryServicePercentage'] = (($DataSummary['SummaryCurrentService'] - $DataSummary['SummaryBeforeService']) /$DataSummary['SummaryBeforeService']) * 100;
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
@@ -604,6 +623,20 @@ class VeterinaryController extends Controller {
                 $data['DiffCowDataPercentage'] = 0;
                 $data['DiffServiceData'] = $Co_SumCurrentServiceData - $Co_SumBeforeServiceData;
                 $data['DiffServiceDataPercentage'] = 0;
+
+                if($data['BeforeCowData'] != 0){
+                    $data['DiffCowDataPercentage'] = (($data['CurrentCowData'] - $data['BeforeCowData']) / $data['BeforeCowData']) * 100;
+                }else if(empty($data['BeforeCowData']) && !empty($data['CurrentCowData'])){
+                    $data['DiffCowDataPercentage'] = 100;
+                }
+                
+
+                if($data['BeforeServiceData'] != 0){
+                    $data['DiffServiceDataPercentage'] = (($data['CurrentServiceData'] - $data['BeforeServiceData']) /$data['BeforeServiceData']) * 100;
+                }else if(empty($data['BeforeServiceData']) && !empty($data['CurrentServiceData'])){
+                    $data['DiffServiceDataPercentage'] = 100;
+                }
+
                 $data['CreateDate'] = $Co_UpdateDate;
                 $data['ApproveDate'] = $Co_ApproveDate;
                 if(!empty($Co_ApproveDate)){
@@ -658,14 +691,16 @@ class VeterinaryController extends Controller {
 
                 $DataSummary['SummaryCurrentCow'] = $DataSummary['SummaryCurrentCow'] + $data['CurrentCowData'];
                 $DataSummary['SummaryBeforeCow'] = $DataSummary['SummaryBeforeCow'] + $data['BeforeCowData'];
-                $DataSummary['SummaryCowPercentage'] = 0;
+                $DataSummary['SummaryCowPercentage'] = (($DataSummary['SummaryCurrentCow'] - $DataSummary['SummaryBeforeCow']) /$DataSummary['SummaryBeforeCow']) * 100;
                 $DataSummary['SummaryCurrentService'] = $DataSummary['SummaryCurrentService'] + $data['CurrentServiceData'];
                 $DataSummary['SummaryBeforeService'] = $DataSummary['SummaryBeforeService'] + $data['BeforeServiceData'];
-                $DataSummary['SummaryServicePercentage'] = 0;
+                $DataSummary['SummaryServicePercentage'] = (($DataSummary['SummaryCurrentService'] - $DataSummary['SummaryBeforeService']) /$DataSummary['SummaryBeforeService']) * 100;
             }
 
             $curYear++;
         }
+        $DataSummary['SummaryCowPercentage'] = (($DataSummary['SummaryCurrentCow'] - $DataSummary['SummaryBeforeCow']) /$DataSummary['SummaryBeforeCow']) * 100;
+        $DataSummary['SummaryServicePercentage'] = (($DataSummary['SummaryCurrentService'] - $DataSummary['SummaryBeforeService']) /$DataSummary['SummaryBeforeService']) * 100;
         // exit;
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }

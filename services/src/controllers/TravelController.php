@@ -179,20 +179,20 @@ class TravelController extends Controller {
                 $data['DiffAmount'] = $DiffAmount;
 
                 if ($data['BeforeAmount'] != 0) {
-                    $data['DiffAmountPercentage'] = ($data['CurrentAmount'] / $data['BeforeAmount']) * 100;
-                } else {
-                    $data['DiffAmountPercentage'] = 0;
-                }
+                            $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                        }  else if(empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])){
+                            $data['DiffAmountPercentage'] = 100;
+                        }
 
 
-                $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
-                $data['DiffBaht'] = $DiffBaht;
+                        $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                        $data['DiffBaht'] = $DiffBaht;
 
-                if ($data['BeforeBaht'] != 0) {
-                    $data['DiffBahtPercentage'] = ($data['CurrentBaht'] / $data['BeforeBaht']) * 100;
-                } else {
-                    $data['DiffBahtPercentage'] = 0;
-                }
+                        if ($data['BeforeBaht'] != 0) {
+                            $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
+                        } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                            $data['DiffBahtPercentage'] = 100;
+                        }
 
 
                 $data['CreateDate'] = $Current['update_date'];
@@ -223,6 +223,9 @@ class TravelController extends Controller {
 
             $curMonth++;
         }
+
+        $DataSummary['SummaryTravelAmountPercentage'] = (($DataSummary['SummaryCurrentTravelAmount'] - $DataSummary['SummaryBeforTravelAmount']) /$DataSummary['SummaryBeforTravelAmount']) * 100;
+        $DataSummary['SummaryTravelIncomePercentage'] = (($DataSummary['SummaryCurrentTravelIncome'] - $DataSummary['SummaryBeforeTravelIncome']) /$DataSummary['SummaryBeforeTravelIncome']) * 100;
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
@@ -360,11 +363,21 @@ class TravelController extends Controller {
 
                 $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
                 $data['DiffAmount'] = $DiffAmount;
-                $data['DiffAmountPercentage'] = 0;
+                if ($data['BeforeAmount'] != 0) {
+                    $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                }  else if(empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])){
+                    $data['DiffAmountPercentage'] = 100;
+                }
+
 
                 $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
                 $data['DiffBaht'] = $DiffBaht;
-                $data['DiffBahtPercentage'] = 0;
+
+                if ($data['BeforeBaht'] != 0) {
+                    $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
+                } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                    $data['DiffBahtPercentage'] = 100;
+                }
 
                 $data['CreateDate'] = $UpdateDate;
                 $data['ApproveDate'] = $ApproveDate;
@@ -399,6 +412,9 @@ class TravelController extends Controller {
                 $curQuarter = 1;
             }
         }
+
+        $DataSummary['SummaryTravelAmountPercentage'] = (($DataSummary['SummaryCurrentTravelAmount'] - $DataSummary['SummaryBeforTravelAmount']) /$DataSummary['SummaryBeforTravelAmount']) * 100;
+        $DataSummary['SummaryTravelIncomePercentage'] = (($DataSummary['SummaryCurrentTravelIncome'] - $DataSummary['SummaryBeforeTravelIncome']) /$DataSummary['SummaryBeforeTravelIncome']) * 100;
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
@@ -474,11 +490,21 @@ class TravelController extends Controller {
 
                 $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
                 $data['DiffAmount'] = $DiffAmount;
-                $data['DiffAmountPercentage'] = 0;
+                if ($data['BeforeAmount'] != 0) {
+                    $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                }  else if(empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])){
+                    $data['DiffAmountPercentage'] = 100;
+                }
+
 
                 $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
                 $data['DiffBaht'] = $DiffBaht;
-                $data['DiffBahtPercentage'] = 0;
+
+                if ($data['BeforeBaht'] != 0) {
+                    $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
+                } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                    $data['DiffBahtPercentage'] = 100;
+                }
 
                 $data['CreateDate'] = $UpdateDate;
                 $data['ApproveDate'] = $ApproveDate;
@@ -509,6 +535,9 @@ class TravelController extends Controller {
 
             $curYear++;
         }
+
+        $DataSummary['SummaryTravelAmountPercentage'] = (($DataSummary['SummaryCurrentTravelAmount'] - $DataSummary['SummaryBeforTravelAmount']) /$DataSummary['SummaryBeforTravelAmount']) * 100;
+        $DataSummary['SummaryTravelIncomePercentage'] = (($DataSummary['SummaryCurrentTravelIncome'] - $DataSummary['SummaryBeforeTravelIncome']) /$DataSummary['SummaryBeforeTravelIncome']) * 100;
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }

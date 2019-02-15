@@ -159,8 +159,8 @@ class CowGroupController extends Controller {
                     $DiffAmount = $data['CurrentPercentage'] - $data['BeforePercentage'];
                     $sub_data['DiffUnit'] = 'ตัว'; //$DiffAmount;
                     if ($sub_data['BeforePercentage'] != 0) {
-                        $sub_data['DiffPercentage'] = ($sub_data['CurrentPercentage'] / $sub_data['BeforePercentage']) * 100;
-                    } else {
+                        $sub_data['DiffPercentage'] = (($sub_data['CurrentPercentage'] - $sub_data['BeforePercentage']) /$sub_data['BeforePercentage']) * 100;
+                    } else if(empty($sub_data['BeforePercentage']) && !empty($sub_data['CurrentPercentage'])){
                         $sub_data['DiffPercentage'] = 100;
                     }
 
@@ -184,6 +184,9 @@ class CowGroupController extends Controller {
 
             $curMonth++;
         }
+
+        $DataSummary['SummaryCowGroupAmountPercentage'] = (($DataSummary['SummaryCurrentCowGroupAmount'] - $DataSummary['SummaryBeforCowGroupAmount']) /$DataSummary['SummaryBeforCowGroupAmount']) * 100;
+            $DataSummary['SummaryCowGroupIncomePercentage'] = (($DataSummary['SummaryCurrentCowGroupIncome'] - $DataSummary['SummaryBeforeCowGroupIncome']) /$DataSummary['SummaryBeforeCowGroupIncome']) * 100;
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }

@@ -1,0 +1,219 @@
+<div ng-include src="'views/header.html'"></div>
+<div class="page-header">
+	<h3>ข้อมูลอุตสาหกรรม  >  ข้อมูลการจำหน่ายผลิตภัณฑ์</h3>
+</div>
+<div class="col-lg-10 col-lg-offset-1" ng-form="form_data">
+	<div class="row form-group">
+		<div class="field-label col-lg-1 col-md-1 col-sm-12 col-xs-12">
+			โรงงาน
+		</div>
+		<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+			<select class="form-control" ng-model="Data.factory_id" ng-options="data.id as data.factory_name for data in FactoryList" required="required">
+				<option value="">กรุณาเลือก..</option>
+			</select>
+		</div>
+		<div class="field-label col-lg-1 col-md-1 col-sm-12 col-xs-12">
+			เดือน
+		</div>
+		<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+			<select name="Year" class="form-control" ng-model="Data.months" ng-options="month.monthValue as month.monthText for month in MonthList" required="required">
+					<option value="">กรุณาเลือก..</option>
+				</select>
+		</div>
+		<div class="field-label col-lg-1 col-md-1 col-sm-12 col-xs-12">
+			ปี
+		</div>
+		<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+			<select name="Year" class="form-control" ng-model="Data.years" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
+					<option value="">กรุณาเลือก..</option>
+				</select>
+		</div>
+		<div class="field-label col-lg-1 col-md-1 col-sm-12 col-xs-12">
+			<button class="btn btn-info" ng-click="goSearch(Data)" ng-disabled="!form_data.$valid">
+				<span class="glyphicon glyphicon-search"></span> 
+				ค้นหา
+			</button>
+		</div>
+	</div>
+	<hr>
+	<div ng-show="Search || DataDetailList.length > 0">
+		<div class="row form-group">
+			<label class="col-lg-12 form-control-static">
+				โรงงาน : {{FactoryName}}
+			</label>
+			<label class="col-lg-12 form-control-static">
+				 เดือน : {{MonthName}}
+			</label>
+			<label class="col-lg-12 form-control-static">
+				ปี : {{YearName}}
+			</label>
+		</div>
+		<div class="row form-group">
+			<div class="col-lg-12">
+				<button class="btn btn-danger  pull-right" ng-click="addDataDetail()" ><!--ng-disabled="!form_data.$valid"-->
+				<span class="glyphicon glyphicon-plus"></span> 
+				เพิ่ม
+			</button>
+			</div>
+		</div>
+		<div>
+			<fieldset style="border: 1px solid #999; padding: 10px; margin-top: 10px;">
+			<div ng-form="sub_form_data">
+				<div class="row form-group" ng-repeat="DataDetail in DataDetailList" ng-init="parentIndex = $index">
+					<div class="col-lg-12">
+						<div class="row form-group">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+								วันที่แก้ไขล่าสุด {{getThaiDateTimeFromString(DataDetail.update_date)}}
+							</div>
+							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+								ประเภทหลัก
+							</div>
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select class="form-control" ng-model="DataDetail.production_sale_info_type1" ng-options="data.id as data.name for data in ProductMilkList" ng-change="loadSubProductMilk(DataDetail.production_sale_info_type1)"><!--ng-change="loadDairyFarming('CHILD', DataDetail.dairy_farming_id)" -->
+									<option value="">กรุณาเลือก..</option>
+								</select>
+							</div>
+							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+								ประเภทย่อย
+							</div>
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select class="form-control" ng-model="DataDetail.production_sale_info_type2" ng-options="data.id as data.name for data in SubProductMilkList" ng-change="loadProductMilkDetail(DataDetail.production_sale_info_type2)"><!--ng-change="loadDairyFarming('CHILD', DataDetail.dairy_farming_id)" -->
+									<option value="">กรุณาเลือก..</option>
+								</select>
+							</div>
+							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+								รายการ
+							</div>
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select class="form-control" ng-model="DataDetail.production_sale_info_type3" ng-options="data.id as data.name for data in ProductMilkDetailList" ><!--ng-change="loadDairyFarming('CHILD', DataDetail.dairy_farming_id)" -->
+									<option value="">กรุณาเลือก..</option>
+								</select>
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+								ปริมาณ (ลิตร)
+							</div>
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input type="text" class="form-control" ng-model="DataDetail.amount">
+							</div>
+							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+								มูลค่า (บาท)
+							</div>
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input type="text" class="form-control" ng-model="DataDetail.price_value">
+							</div>
+							
+							<div class="col-lg-1 col-md-1">
+								<button class="btn btn-danger" ng-click="removeDetail(DataDetail.id, parentIndex)">
+									<span class="glyphicon glyphicon-trash"></span> 
+									
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--<div class="row form-group">
+					<div class="col-lg-12">
+						<button class="btn btn-primary pull-right" ng-click="addDataItem($index)">
+							<span class="glyphicon glyphicon-plus"></span> 
+							เพิ่มรายการ
+						</button>
+					</div>
+				</div>-->
+			</div>
+			<br><br>
+			</fieldset>
+		</div>
+	</div>
+	<hr>
+	<div class="row form-group">
+		<div class="col-lg-12 text-center">
+			<button class="btn btn-default" ng-click="cancelUpdate()">
+				<span class="glyphicon glyphicon-arrow-left"></span> 
+				กลับหน้าหลัก
+			</button>
+			<button class="btn btn-primary" ng-click="save(Data, DataDetailList)" ng-disabled="!form_data.$valid" ng-show="Maker">
+				<span class="glyphicon glyphicon-floppy-save"></span> 
+				บันทึก
+			</button>
+			<button class="btn btn-success" ng-click="approve(Data, 'dep')" 
+						ng-show="Data.id != '' && Data.dep_approve_id == currentUser.UserID 
+								&& Data.dep_approve_date == null
+								&& Data.division_approve_id == null
+								&& Data.office_approve_id == null">
+					<span class="glyphicon glyphicon-check"></span> 
+					อนุมัติ
+				</button>
+				<button class="btn btn-danger" ng-click="reject(Data, 'dep')" 
+						ng-show="Data.id != '' && Data.dep_approve_id == currentUser.UserID 
+								&& Data.dep_approve_date == null
+								&& Data.division_approve_id == null
+								&& Data.office_approve_id == null">
+					<span class="glyphicon glyphicon-remove-sign"></span> 
+					ไม่อนุมัติ
+				</button>
+
+				<button class="btn btn-success" ng-click="approve(Data, 'division')" 
+						ng-show="Data.id != '' && Data.division_approve_id == currentUser.UserID 
+								&& Data.dep_approve_date != null
+								&& Data.division_approve_date == null
+								&& Data.office_approve_id == null">
+					<span class="glyphicon glyphicon-check"></span> 
+					อนุมัติ
+				</button>
+				<button class="btn btn-danger" ng-click="reject(Data, 'division')" 
+						ng-show="Data.id != '' && Data.division_approve_id == currentUser.UserID 
+								&& Data.dep_approve_date != null
+								&& Data.division_approve_date == null
+								&& Data.office_approve_id == null">
+					<span class="glyphicon glyphicon-remove-sign"></span> 
+					ไม่อนุมัติ
+				</button>
+
+				<button class="btn btn-success" ng-click="approve(Data, 'office')" 
+						ng-show="Data.id != '' && Data.office_approve_id == currentUser.UserID 
+								&& Data.dep_approve_date != null
+								&& Data.division_approve_date != null
+								&& Data.office_approve_date == null">
+					<span class="glyphicon glyphicon-check"></span> 
+					อนุมัติ
+				</button>
+				<button class="btn btn-danger" ng-click="reject(Data, 'office')" 
+						ng-show="Data.id != '' && Data.office_approve_id == currentUser.UserID 
+								&& Data.dep_approve_date != null
+								&& Data.division_approve_date != null
+								&& Data.office_approve_date == null">
+					<span class="glyphicon glyphicon-remove-sign"></span> 
+					ไม่อนุมัติ
+				</button>
+
+		</div>
+	</div>
+	<div class="row form-group" ng-show="Data.id != '' && 
+	((Data.dep_approve_comment != null && Data.dep_approve_comment != '') || (Data.division_approve_comment != null && Data.division_approve_comment != '') || (Data.office_approve_comment != null && Data.office_approve_comment != ''))">
+		<div class="col-lg-12 text-center" style="color: red;">
+			
+			ไม่อนุมัติ เนื่องจาก {{Data.dep_approve_comment + Data.division_approve_comment + Data.office_approve_comment}}
+			
+		</div>
+	</div>
+</div>
+<script type="text/ng-template" id="reject_dialog.html">
+	<div class="modal-header">
+		<h5 class="modal-title">Confirm</h5>
+	</div>
+	<div class="modal-body">
+		<div  class="obj_center" bind-html-compile="alertMessage"></div>
+		<br>
+		<div class="row form-group">
+			<div class="col-lg-10 col-lg-offset-1">
+				<textarea class="form-control" ng-model="ApproveComment" placeholder="ระบุเหตุผลที่ไม่อนุมัติ.."></textarea>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+	<button class="btn btn-default" ng-click="ok(ApproveComment)">OK</button>
+	<button class="btn btn-default" ng-click="cancel()">Cancel</button>
+	</div>
+</script>

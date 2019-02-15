@@ -662,8 +662,8 @@ angular.module('e-homework').config(function ($routeProvider, $locationProvider)
                 }
             })
 
-            .when("/production-info/update/:id?", {
-                templateUrl: "views/production-info/update.html",
+            .when("/production-sale-info/update/:id?", {
+                templateUrl: "views/production-sale-info/update.html",
                 controller: "UpdatePSIController",
                 resolve: {
                     loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {

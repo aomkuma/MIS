@@ -111,7 +111,7 @@ angular.module('e-homework').controller('MainCMController', function($scope, $co
 
     $scope.goSearch = function(){
         $scope.ViewType = 'MAIN';
-        // $scope.loadList('cooperative-milk/list/main');
+        $scope.loadList('cooperative-milk/list/main');
     }
 
 
