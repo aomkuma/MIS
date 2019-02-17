@@ -13,7 +13,7 @@ use Illuminate\Database\Capsule\Manager as DB;
 class MBIService {
 
     public static function getListMBI($fromTime, $toTime, $region) {
-        // echo "$fromTime, $toTime, $region";
+        echo "$fromTime, $toTime, $region";
         return XxCustPoRmV::select(
                                 'REGION'
                                 , DB::raw("SUM(AMOUNT) AS sum_baht")
@@ -22,7 +22,20 @@ class MBIService {
                         ->whereBetween('TRANSACTION_DATE', [$fromTime, $toTime])
                         ->where('REGION', $region)
                         // ->groupBy('REGION')
-                        ->first();
+                        ->first()->toArray();
+    }
+
+    public static function getListMBIreoprt($fromTime, $toTime) {
+        // echo "$fromTime, $toTime, $region";
+        return XxCustPoRmV::select(
+                                DB::raw("SUM(AMOUNT) AS sum_baht")
+                                , DB::raw("SUM(QUANTITY) AS sum_amount")
+                        )
+                        ->whereBetween('TRANSACTION_DATE', [$fromTime, $toTime])
+                        //->where('REGION', $region)
+                        // ->groupBy('REGION')
+                        ->first()
+                        ->toArray();
     }
 
     public static function getListMBIByVendor($fromTime, $toTime, $region) {
@@ -117,9 +130,24 @@ class MBIService {
                                 , DB::raw("SUM(QUANTITY) AS sum_amount")
                         )
                         ->whereBetween('TRANSACTION_DATE', [$st, $en])
-                     
+
                         // ->groupBy('REGION')
                         ->first()->toArray();
     }
+
+    public static function getListMBIByVendorreport($fromTime, $toTime, $region) {
+        // echo "$fromTime, $toTime, $region";
+        return XxCustPoRmVendorV::select(
+                                'VENDOR_NAME'
+                                , DB::raw("SUM(AMOUNT) AS sum_baht")
+                                , DB::raw("SUM(QUANTITY) AS sum_amount")
+                        )
+                        ->whereBetween('TRANSACTION_DATE', [$fromTime, $toTime])
+                        ->where('REGION', $region)
+                        ->groupBy('VENDOR_NAME')
+                        ->get()
+                        ->toArray();
+    }
+    
 
 }

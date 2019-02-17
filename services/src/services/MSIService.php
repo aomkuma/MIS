@@ -24,6 +24,18 @@ class MSIService {
                         // ->groupBy('REGION')
                         ->first();
     }
+    public static function getListMSIreoprt($fromTime, $toTime) {
+        // echo "$fromTime, $toTime, $region";
+        return XxcustOrderRmV::select(
+                                DB::raw("SUM(AMOUNT) AS sum_baht")
+                                , DB::raw("SUM(QUANTITY) AS sum_amount")
+                        )
+                        ->whereBetween('TRANSACTION_DATE', [$fromTime, $toTime])
+                        //->where('REGION', $region)
+                        // ->groupBy('REGION')
+                        ->first()
+                        ->toArray();
+    }
 
     public static function getListMSIByVendor($fromTime, $toTime, $region) {
         // echo "$fromTime, $toTime, $region";
