@@ -58,6 +58,7 @@ class ProductionInfoService {
                         ->toArray();
     }
  public static function getDetailListsub($years, $months, $master_type_id) {
+     
         return ProductionInfo::select(DB::raw("SUM(mis_production_info_detail.amount) AS sum_amount")
                                 , DB::raw("SUM(mis_production_info_detail.price_value) AS sum_baht")
                         )
