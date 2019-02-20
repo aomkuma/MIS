@@ -33,7 +33,7 @@
 				<form name="search_form" class="form-inline">
 					<div class="form-group">
 					    <label for="exampleInputName2">&nbsp; ปีงบประมาณ : </label>
-					    &nbsp; <select name="Year" class="form-control" ng-model="condition.Year1" ng-options="year.yearText as year.yearValue for year in YearList">
+					    &nbsp; <select name="Year" class="form-control" ng-model="condition.Year1" ng-options="year.yearText as year.yearValue for year in YearList"  ng-change="loadData2()">
 							<option value="">กรุณาเลือก</option>
 						</select>
 			  		</div>

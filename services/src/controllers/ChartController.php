@@ -100,6 +100,74 @@
                 return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
             }
         }
+
+        public function getDataII($request, $response, $args){
+            try{
+                $params = $request->getParsedBody();
+                $user_session = $params['user_session'];
+                $years = $params['obj']['condition']['Year1'];
+
+                // Goal Mission
+                $Data = [];
+                $Label = ['ข้อมูลการผลิต', 'ข้อมูลการขาย', 'ข้อมูลรับซื้อน้ำนม', 'ข้อมูลจำหน่ายน้ำนม', 'การสูญเสียในกระบวนการ', 'การสูญเสียนอกกระบวนการ', 'การสูญเสียรอจำหน่าย', 'การสูญเสียในกระบวนการขนส่ง'];
+
+                foreach ($Label as $key => $value) {
+                    $menu_type = $value;
+                    $_GoalMission = ChartService::getGoalMissionData($years, $menu_type);
+                    $Data['Amount'][] = $this->checkNullToZero($_GoalMission['amount']);
+                    $Data['Price'][] = $this->checkNullToZero($_GoalMission['price_value']);
+                }
+                
+                $this->data_result['GOAL'] = $Data;
+
+                // Data
+                $Data = [];
+                // Veterinary
+                $ProductionInfo = ChartService::getProductionInfoData($years);
+                $Data['Amount'][] = $this->checkNullToZero($ProductionInfo['sum_amount']);
+                $Data['Price'][] = $this->checkNullToZero($ProductionInfo['sum_value']);
+
+                // Insemination
+                $ProductionSaleInfo = ChartService::getProductionSaleInfoData($years);
+                $Data['Amount'][] = $this->checkNullToZero($ProductionSaleInfo['sum_amount']);
+                $Data['Price'][] = $this->checkNullToZero($ProductionSaleInfo['sum_value']);
+
+                // Mineral
+                $XxcustOrderRmV = ChartService::getXxcustOrderRmVData($years);
+                $Data['Amount'][] = $this->checkNullToZero($XxcustOrderRmV['sum_amount']);
+                $Data['Price'][] = $this->checkNullToZero($XxcustOrderRmV['sum_value']);
+
+                // Sperm
+                $XxCustPoRmV = ChartService::getXxCustPoRmVData($years);
+                $Data['Amount'][] = $this->checkNullToZero($XxCustPoRmV['sum_amount']);
+                $Data['Price'][] = $this->checkNullToZero($XxCustPoRmV['sum_value']);
+
+                // SpermSale
+                $LostInProcess = ChartService::getLostInProcessData($years);
+                $Data['Amount'][] = $this->checkNullToZero($LostInProcess['sum_amount']);
+                $Data['Price'][] = $this->checkNullToZero($LostInProcess['sum_value']);
+
+                // Material
+                $LostOutProcess = ChartService::getLostOutProcessData($years);
+                $Data['Amount'][] = $this->checkNullToZero($LostOutProcess['sum_amount']);
+                $Data['Price'][] = $this->checkNullToZero($LostOutProcess['sum_value']);
+
+                // CowBreed
+                $LostWaitSale = ChartService::getLostWaitSaleData($years);
+                $Data['Amount'][] = $this->checkNullToZero($LostWaitSale['sum_amount']);
+                $Data['Price'][] = $this->checkNullToZero($LostWaitSale['sum_value']);
+
+                $this->data_result['DATA'] = $Data;
+
+                $this->data_result['LABEL'] = $Label;
+
+                return $this->returnResponse(200, $this->data_result, $response, false);
+                
+            }catch(\Exception $e){
+                return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+            }
+        }
+
         private function checkNullToZero($val){
             return $val == null?0:$val;
         }

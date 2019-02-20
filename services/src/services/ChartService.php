@@ -15,6 +15,14 @@
     use App\Model\CowGroup;
     use App\Model\GoalMission;
 
+    use App\Model\ProductionInfo;
+    use App\Model\ProductionSaleInfo;
+    use App\Model\XxcustOrderRmV;
+    use App\Model\XxCustPoRmV;
+    use App\Model\LostInProcess;
+    use App\Model\LostOutProcess;
+    use App\Model\LostWaitSale;
+
     use Illuminate\Database\Capsule\Manager as DB;
     
     class ChartService {
@@ -111,6 +119,60 @@
             return CowGroup::select(DB::raw("SUM(go_factory_weight) AS sum_amount")
                                 , DB::raw("SUM(go_factory_values) AS sum_value"))
                             // ->join("cow_group_detail", 'cow_group_detail.cow_group_id', '=', 'cow_group.id')
+                            ->where("years", $years)
+                            ->first();
+        }
+
+        public static function getProductionInfoData($years) {
+            return ProductionInfo::select(DB::raw("SUM(amount) AS sum_amount")
+                                , DB::raw("SUM(price_value) AS sum_value"))
+                            ->join("production_info_detail", 'production_info_detail.production_info_id', '=', 'production_info.id')
+                            ->where("years", $years)
+                            ->first();
+        }
+
+        public static function getProductionSaleInfoData($years) {
+            return ProductionSaleInfo::select(DB::raw("SUM(amount) AS sum_amount")
+                                , DB::raw("SUM(price_value) AS sum_value"))
+                            ->join("production_sale_info_detail", 'production_sale_info_detail.production_sale_info_id', '=', 'production_sale_info.id')
+                            ->where("years", $years)
+                            ->first();
+        }
+
+        public static function getXxcustOrderRmVData($years) {
+            return XxcustOrderRmV::select(DB::raw("SUM(QUANTITY) AS sum_amount")
+                                , DB::raw("SUM(AMOUNT) AS sum_value"))
+                            ->whereBetween("TRANSACTION_DATE", [($years - 1) . '-10-01', ($years) . '-09-30'])
+                            ->first();
+        }
+
+        public static function getXxCustPoRmVData($years) {
+            return XxCustPoRmV::select(DB::raw("SUM(QUANTITY) AS sum_amount")
+                                , DB::raw("SUM(AMOUNT) AS sum_value"))
+                            ->whereBetween("TRANSACTION_DATE", [($years - 1) . '-10-01', ($years) . '-09-30'])
+                            ->first();
+        }
+
+        public static function getLostInProcessData($years) {
+            return LostInProcess::select(DB::raw("SUM(amount) AS sum_amount")
+                                , DB::raw("SUM(price_value) AS sum_value"))
+                            ->join("lost_in_process_detail", 'lost_in_process_detail.lost_in_process_id', '=', 'lost_in_process.id')
+                            ->where("years", $years)
+                            ->first();
+        }
+
+        public static function getLostOutProcessData($years) {
+            return LostOutProcess::select(DB::raw("SUM(amount) AS sum_amount")
+                                , DB::raw("SUM(price_value) AS sum_value"))
+                            ->join("lost_out_process_detail", 'lost_out_process_detail.lost_out_process_id', '=', 'lost_out_process.id')
+                            ->where("years", $years)
+                            ->first();
+        }
+
+        public static function getLostWaitSaleData($years) {
+            return LostWaitSale::select(DB::raw("SUM(amount) AS sum_amount")
+                                , DB::raw("SUM(price_value) AS sum_value"))
+                            ->join("lost_wait_sale_detail", 'lost_wait_sale_detail.lost_wait_sale_id', '=', 'lost_wait_sale.id')
                             ->where("years", $years)
                             ->first();
         }
