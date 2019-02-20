@@ -232,7 +232,7 @@ class ProductionInfoController extends Controller {
         } else if (empty($DataSummary['sumBeforeAmount']) && !empty($DataSummary['sumCurrentAmount'])) {
             $DataSummary['sumDiffAmountPercentage'] = 100;
         }
-        print_r($DataList);
+       // print_r($DataList);
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
 
