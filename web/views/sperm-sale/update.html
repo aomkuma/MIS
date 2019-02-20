@@ -75,19 +75,19 @@
 						จำนวน (หลอด)
 					</div>
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						<input type="text" class="form-control" ng-model="SpermDetail.amount" ng-blur="calcTotalValues(SpermDetail)">
+						<input type="text" class="form-control" ng-model="SpermDetail.amount"><!-- ng-blur="calcTotalValues(SpermDetail)"-->
 					</div>
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+					<!--<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						ราคาต่อหลอด
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<input type="text" class="form-control" ng-model="SpermDetail.price" ng-blur="calcTotalValues(SpermDetail)">
-					</div>
+					</div>-->
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						มูลค่า (บาท)
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<input type="text" class="form-control" ng-model="SpermDetail.values" readonly="true">
+						<input type="text" class="form-control" ng-model="SpermDetail.values">
 					</div>
 					<div class="col-lg-1 col-md-1">
 						<button class="btn btn-danger" ng-click="removeDetail(SpermDetail.id, parentIndex)">

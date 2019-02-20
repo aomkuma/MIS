@@ -68,7 +68,7 @@ angular.module('e-homework').controller('UpdateCMController', function($scope, $
         
         
         var params = {
-            'cooperative_id' : $scope.Sperm.cooperative_id
+            'region_id' : $scope.Sperm.region_id
             ,'months' : $scope.Sperm.months
             ,'years' : $scope.Sperm.years
         };
@@ -76,7 +76,7 @@ angular.module('e-homework').controller('UpdateCMController', function($scope, $
             params = {'id':id};
         }else{
             params = {
-                'cooperative_id' : $scope.Sperm.cooperative_id
+                'region_id' : $scope.Sperm.region_id
                 ,'months' : $scope.Sperm.months
                 ,'years' : $scope.Sperm.years
             };
@@ -86,7 +86,7 @@ angular.module('e-homework').controller('UpdateCMController', function($scope, $
         HTTPService.clientRequest(action, params).then(function(result){
             if(result.data.STATUS == 'OK' && result.data.DATA.Data != null){
                 $scope.Sperm = result.data.DATA.Data;
-                $scope.Sperm.cooperative_id = parseInt($scope.Sperm.cooperative_id);
+                $scope.Sperm.region_id = parseInt($scope.Sperm.region_id);
                 $scope.SpermDetailList = $scope.Sperm.cooperative_milk_detail;
                 // load sub dar=iry farming
                 // for(var i =0; i < $scope.SpermDetailList.length; i++){

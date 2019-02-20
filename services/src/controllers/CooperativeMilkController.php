@@ -197,14 +197,14 @@ class CooperativeMilkController extends Controller {
 
             $id = $params['obj']['id'];
 
-            $cooperative_id = $params['obj']['cooperative_id'];
+            $region_id = $params['obj']['region_id'];
             $months = $params['obj']['months'];
             $years = $params['obj']['years'];
 
             if (!empty($id)) {
                 $_Data = CooperativeMilkService::getDataByID($id);
             } else {
-                $_Data = CooperativeMilkService::getData($cooperative_id, $months, $years);
+                $_Data = CooperativeMilkService::getData($region_id, $months, $years);
             }
 
             $this->data_result['DATA']['Data'] = $_Data;

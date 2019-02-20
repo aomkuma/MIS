@@ -36,86 +36,26 @@ angular.module('e-homework').controller('HomeController', function($scope, $cook
                         backgroundColor: '#FFB6B6',
                         stack: 'Stack0',
                         data: $scope.Chart1.DATA.Price
-                        /*
-                        [
-                            7000000,
-                            7000000,
-                            700000,
-                            7000000,
-                            6000000,
-                            7000000,
-                            6000000,
-                            1000000,
-                            1500000,
-                            3500000,
-                            700000,
-                            9500000,
-                        ]
-                        */
+                        
                     },
                     {
                         label: 'เป้าหมาย (บาท)',
                         backgroundColor: '#C2FFB6',
                         stack: 'Stack0',
                         data: $scope.Chart1.GOAL.Price
-                        /*
-                        [
-                            3000000,
-                            9000000,
-                            1000000,
-                            1000000,
-                            7000000,
-                            7000000,
-                            7000000,
-                            3000000,
-                            2000000,
-                            5000000,
-                            1000000,
-                            1000000,
-                        ]
-                        */
+                        
                     }, {
                         label: 'ข้อมูลปัจจุบัน (จำนวน)',
                         backgroundColor: '#CDF9F3',
                         stack: 'Stack1',
                         data: $scope.Chart1.DATA.Amount
-                        /*
-                        [
-                            500000,
-                            900000,
-                            500000,
-                            500000,
-                            1000000,
-                            500000,
-                            500000,
-                            500000,
-                            500000,
-                            1500000,
-                            500000,
-                            500000,
-                        ]
-                        */
+                       
                     }, {
                         label: 'เป้าหมาย (จำนวน)',
                         backgroundColor: '#F9EFCD',
                         stack: 'Stack1',
                         data: $scope.Chart1.GOAL.Amount
-                        /*
-                        [
-                            620000,
-                            620000,
-                            820000,
-                            720000,
-                            620000,
-                            620000,
-                            920000,
-                            620000,
-                            1020000,
-                            620000,
-                            620000,
-                            620000,
-                        ]
-                        */
+                        
                     }]
                 },
                 options: {
@@ -144,10 +84,75 @@ angular.module('e-homework').controller('HomeController', function($scope, $cook
         });
     }
 
+    var ctx1 = null;
+    var myChart1 = null;
     $scope.loadData2 = function(data){
-        var params = {'DataType' : 'II'};
-        HTTPService.clientRequest('chart/main', params).then(function(result){
-            $scope.Chart2 = result.data.DATA;
+        
+        if(myChart1!=null){
+            myChart1.destroy();
+        }
+        IndexOverlayFactory.overlayShow();
+        var params = {'condition':$scope.condition, 'DataType' : 'II'};
+        HTTPService.clientRequest('chart/main/ii', params).then(function(result){
+            IndexOverlayFactory.overlayHide();
+            $scope.Chart2 = result.data;
+
+            ctx1 = document.getElementById("myChart1").getContext('2d');
+            myChart1 = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels:  $scope.Chart2.LABEL/*["บริการสัตว์แพทย์", "ผสมเทียม", "แร่ธาตุ", "อาหารสัตว์", "ผลิตน้ำเชื้อแช่แข็ง", "จำหน่ายน้ำเชื้อแช่แข็ง", "วัสดุผสมเทียมและอื่นๆ", "ปัจจัยการการเลี้ยงโค", "ฝึกอบรม", "ท่องเที่ยว", "สหกรณ์และปริมาณน้ำนม", "ข้อมูลฝูงโค"]*/,
+                    datasets: [
+                    {
+                        label: 'ข้อมูลปัจจุบัน (บาท)',
+                        backgroundColor: '#FFDDB6',
+                        stack: 'Stack0',
+                        data: $scope.Chart2.DATA.Price
+                        
+                    },
+                    {
+                        label: 'เป้าหมาย (บาท)',
+                        backgroundColor: '#B6B9FF',
+                        stack: 'Stack0',
+                        data: $scope.Chart2.GOAL.Price
+                        
+                    }, {
+                        label: 'ข้อมูลปัจจุบัน (จำนวน)',
+                        backgroundColor: '#FFBCBC',
+                        stack: 'Stack1',
+                        data: $scope.Chart2.DATA.Amount
+                       
+                    }, {
+                        label: 'เป้าหมาย (จำนวน)',
+                        backgroundColor: '#F9CDF6',
+                        stack: 'Stack1',
+                        data: $scope.Chart2.GOAL.Amount
+                        
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'ข้อมูลอุตสาหกรรม'
+                    },
+                    tooltips: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    responsive: true,
+                    scales: {
+                        xAxes: [{
+                            stacked: true,
+                        }],
+                        yAxes: [{
+                            stacked: true,
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }]
+                    }
+                }
+            });
         });
     }
 
@@ -173,52 +178,52 @@ angular.module('e-homework').controller('HomeController', function($scope, $cook
                 backgroundColor: '#FFDDB6',
                 stack: 'Stack0',
                 data: [
-                    12000000,
-                    11000000,
-                    11000000,
-                    11000000,
-                    11000000,
-                    11000000,
-                    11000000,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
                 ]
             }, {
                 label: 'เป้าหมาย (บาท)',
                 backgroundColor: '#B6B9FF',
                 stack: 'Stack0',
                 data: [
-                    10000000,
-                    20000000,
-                    20000000,
-                    20000000,
-                    20000000,
-                    20000000,
-                    20000000,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
                 ]
             }, {
                 label: 'ข้อมูลปัจจุบัน (จำนวน)',
                 backgroundColor: '#FFBCBC',
                 stack: 'Stack1',
                 data: [
-                    12000000,
-                    11000000,
-                    11000000,
-                    11000000,
-                    11000000,
-                    11000000,
-                    11000000,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
                 ]
             },{
                 label: 'เป้าหมาย (จำนวน)',
                 backgroundColor: '#F9CDF6',
                 stack: 'Stack1',
                 data: [
-                    12000000,
-                    11000000,
-                    11000000,
-                    11000000,
-                    11000000,
-                    11000000,
-                    11000000,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
                 ]
             }]
         },
@@ -247,5 +252,19 @@ angular.module('e-homework').controller('HomeController', function($scope, $cook
     });
 
     $scope.loadData1();
+    $scope.loadData2();
+
+    function addCommas(nStr)
+    {
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
+    }
 
 });
