@@ -17,6 +17,9 @@ use App\Service\FactoryService;
 use App\Service\SubProductMilkService;
 use App\Service\ProductMilkService;
 use App\Controller\ProductionSaleInfoController;
+use App\Controller\LostInProcessController;
+use App\Controller\LostOutProcessController;
+use App\Controller\LostWaitSaleController;
 use PHPExcel;
 
 class MonthReportController extends Controller {
@@ -113,15 +116,22 @@ class MonthReportController extends Controller {
             $objPHPExcel = $this->generateCooperativeMilkExcel($objPHPExcel, $condition, $region);
             $objPHPExcel = $this->generateCowgroupExcel($objPHPExcel, $condition, $region);
             $objPHPExcel = $this->generateCowgroup2Excel($objPHPExcel, $condition, $region);
-            $objPHPExcel = $this->generateCowgroup3Excel($objPHPExcel, $condition, $region);
+         //   $objPHPExcel = $this->generateCowgroup3Excel($objPHPExcel, $condition, $region);
             $objPHPExcel = $this->generateCowgroup4Excel($objPHPExcel, $condition, $region);
             $objPHPExcel = $this->generateCowgroup5Excel($objPHPExcel, $condition, $region);
-            $objPHPExcel = $this->generateCowgroup6Excel($objPHPExcel, $condition, $region);
+           // $objPHPExcel = $this->generateCowgroup6Excel($objPHPExcel, $condition, $region);
             $objPHPExcel = $this->generateMilkExcel($objPHPExcel, $condition, $region);
             $objPHPExcel = $this->generatesaleMilkExcel($objPHPExcel, $condition, $region);
             $objPHPExcel = $this->generateproductMilkExcel($objPHPExcel, $condition, $region);
 //            die();
             $objPHPExcel = $this->generatesaleproductMilkExcel($objPHPExcel, $condition, $region);
+            $objPHPExcel = $this->generatelostproductionExcel($objPHPExcel, $condition, $region);
+            $objPHPExcel = $this->generatelostINproductionExcel($objPHPExcel, $condition, $region);
+            $objPHPExcel = $this->generatelostOUTproductionExcel($objPHPExcel, $condition, $region);
+            $objPHPExcel = $this->generatelostOUTproductionExcel2($objPHPExcel, $condition, $region);
+            $objPHPExcel = $this->generatelostWAITproductionExcel($objPHPExcel, $condition, $region);
+            $objPHPExcel = $this->generatelostWAITproductionExcel2($objPHPExcel, $condition, $region);
+//            die();
             // $objPHPExcel = $this->generatesheet($objPHPExcel);
             // $filename = 'MIS_Report-รายงานรายเดือน' . '_' . date('YmdHis') . '.xlsx';
             $filename = 'MIS_Report-monthly_' . '_' . date('YmdHis') . '.xlsx';
@@ -301,10 +311,12 @@ class MonthReportController extends Controller {
     }
 
     private function generatePower2Excel($objPHPExcel, $condition, $region) {
-        $objPHPExcel->createSheet(1);
+        $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
         $data = PersonalController::getMonthDataList($condition);
 
-        $objPHPExcel->setActiveSheetIndex(1);
+
         $objPHPExcel->getActiveSheet()->setTitle("1. อัตรากำลัง (2)");
         $objPHPExcel->getActiveSheet()->setCellValue('A3', '2. การดำเนินงานด้านการให้บริการของ อ.ส.ค.');
 
@@ -340,7 +352,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateVeterinaryExcel($objPHPExcel, $condition, $region) {
-        $objPHPExcel->createSheet(2);
+        $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
         $data = VeterinaryController::getMonthDataList($condition, $region);
         $showm = 0;
         $showy = $condition['YearFrom'];
@@ -350,7 +364,7 @@ class MonthReportController extends Controller {
         } else {
             $showm = $condition['YearFrom'];
         }
-        $objPHPExcel->setActiveSheetIndex(2);
+
         $objPHPExcel->getActiveSheet()->setTitle("2.1 สัตวแพทย์-ผสมเทียม (2)");
         $objPHPExcel->getActiveSheet()->setCellValue('A3', '2. การดำเนินงานด้านการให้บริการของ อ.ส.ค.');
         $objPHPExcel->getActiveSheet()->setCellValue('A4', '  2.1 การบริการสัตวแพทย์และการบริการผสมเทียม');
@@ -685,7 +699,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateInseminationExcel($objPHPExcel, $condition, $region) {
-        $objPHPExcel->createSheet(3);
+        $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
         $data = InseminationController::getMonthDataList($condition, $region);
         $showm = 0;
         $showy = $condition['YearFrom'];
@@ -695,7 +711,7 @@ class MonthReportController extends Controller {
         } else {
             $showm = $condition['YearFrom'];
         }
-        $objPHPExcel->setActiveSheetIndex(3);
+
         $objPHPExcel->getActiveSheet()->setTitle("2.1 สัตวแพท-ผสมเทียม (3)");
         $objPHPExcel->getActiveSheet()->setCellValue('A3', '2. การดำเนินงานด้านการให้บริการของ อ.ส.ค.');
         $objPHPExcel->getActiveSheet()->setCellValue('A4', '  2.1 การบริการสัตวแพทย์และการบริการผสมเทียม');
@@ -1033,7 +1049,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateMineralExcel($objPHPExcel, $condition, $region) {
-        $objPHPExcel->createSheet(4);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
         $data = MineralController::getMonthDataListByMaster($condition, $region);
         $showm = 0;
         $showy = $condition['YearFrom'];
@@ -1043,7 +1061,7 @@ class MonthReportController extends Controller {
         } else {
             $showm = $condition['YearFrom'];
         }
-        $objPHPExcel->setActiveSheetIndex(4);
+      
         $objPHPExcel->getActiveSheet()->setTitle("2.2 อาหารสัตว์");
         $objPHPExcel->getActiveSheet()->setCellValue('A3', '2. การดำเนินงานด้านการให้บริการของ อ.ส.ค.');
         $objPHPExcel->getActiveSheet()->setCellValue('A4', '  2.2 อาหารสัตว์');
@@ -1314,8 +1332,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateTrainingCowbreedExcel($objPHPExcel, $condition, $region) {
-        $objPHPExcel->createSheet(5);
-        $objPHPExcel->setActiveSheetIndex(5);
+        $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
         $showm = 0;
         $showy = $condition['YearFrom'];
         $start = $condition['MonthTo'];
@@ -1592,8 +1611,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateTravelExcel($objPHPExcel, $condition, $region) {
-        $objPHPExcel->createSheet(6);
-        $objPHPExcel->setActiveSheetIndex(6);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
 
         $data = TravelController::getMonthDataList($condition, $region);
         $showm = 0;
@@ -1871,8 +1891,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateSpermSaleExcel($objPHPExcel, $condition, $region) {
-        $objPHPExcel->createSheet(7);
-        $objPHPExcel->setActiveSheetIndex(7);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
         $data = SpermSaleController::getMonthDataListreport($condition, $region);
         $objPHPExcel->getActiveSheet()->setTitle("2.5 ปัจจัยการผลิต");
         $objPHPExcel->getActiveSheet()->setCellValue('A3', '2. การดำเนินงานด้านการให้บริการของ อ.ส.ค.');
@@ -1982,8 +2003,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateSpermSale2Excel($objPHPExcel, $condition, $region) {
-        $objPHPExcel->createSheet(8);
-        $objPHPExcel->setActiveSheetIndex(8);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
         $objPHPExcel->getActiveSheet()->setTitle("2.5 ปัจจัยการผลิต (2)");
         $data = SpermSaleController::getMonthDataListreport($condition, $region);
         $showm = 0;
@@ -2134,8 +2156,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateCooperativeMilkExcel($objPHPExcel, $condition) {
-        $objPHPExcel->createSheet(9);
-        $objPHPExcel->setActiveSheetIndex(9);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
         $region = [0 => ['RegionID' => 1, 'RegionName' => 'อ.ส.ค. สำนักงานใหญ่ มวกเหล็ก'], 1 => ['RegionID' => 2, 'RegionName' => 'อ.ส.ค. สำนักงานกรุงเทพฯ Office'],
             2 => ['RegionID' => 3, 'RegionName' => 'อ.ส.ค. สำนักงานภาคกลาง'], 3 => ['RegionID' => 4, 'RegionName' => 'อ.ส.ค. ภาคใต้ (ประจวบคีรีขันธ์)'],
             4 => ['RegionID' => 5, 'RegionName' => 'อ.ส.ค. ภาคตะวันออกเฉียงเหนือ (ขอนแก่น)'], 5 => ['RegionID' => 6, 'RegionName' => 'อ.ส.ค. ภาคเหนือตอนล่าง (สุโขทัย)'],
@@ -2316,8 +2339,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateCooperativeMilk2Excel($objPHPExcel, $condition, $region) {
-        $objPHPExcel->createSheet(10);
-        $objPHPExcel->setActiveSheetIndex(10);
+        $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
         $objPHPExcel->getActiveSheet()->setTitle("3.1 จำนวนสมาชิก (2)");
         $objPHPExcel->getActiveSheet()->setCellValue('A3', '3. การดำเนินงานด้านกิจการโคนมของ อ.ส.ค.');
         $objPHPExcel->getActiveSheet()->setCellValue('A4', '  3.1 จำนวนเกษตรกร/สมาชิกผู้เลี้ยงโคนม, จำนวนโค และปริมาณน้ำนม');
@@ -2448,8 +2472,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateCooperativeMilk3Excel($objPHPExcel, $condition, $region) {
-        $objPHPExcel->createSheet(11);
-        $objPHPExcel->setActiveSheetIndex(11);
+        $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
         $objPHPExcel->getActiveSheet()->setTitle("3.1 จำนวนสมาชิก (3)");
         $objPHPExcel->getActiveSheet()->setCellValue('A3', '3. การดำเนินงานด้านกิจการโคนมของ อ.ส.ค.');
         $objPHPExcel->getActiveSheet()->setCellValue('A4', '  3.1 จำนวนเกษตรกร/สมาชิกผู้เลี้ยงโคนม, จำนวนโค และปริมาณน้ำนม');
@@ -2578,8 +2603,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateCooperativeMilk4Excel($objPHPExcel, $condition, $region) {
-        $objPHPExcel->createSheet(12);
-        $objPHPExcel->setActiveSheetIndex(12);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
         $objPHPExcel->getActiveSheet()->setTitle("3.1 จำนวนสมาชิก (4)");
         $objPHPExcel->getActiveSheet()->setCellValue('A3', '3. การดำเนินงานด้านกิจการโคนมของ อ.ส.ค.');
         $objPHPExcel->getActiveSheet()->setCellValue('A4', '  3.1 จำนวนเกษตรกร/สมาชิกผู้เลี้ยงโคนม, จำนวนโค และปริมาณน้ำนม');
@@ -2708,8 +2734,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateCooperativeMilk5Excel($objPHPExcel, $condition, $region) {
-        $objPHPExcel->createSheet(13);
-        $objPHPExcel->setActiveSheetIndex(13);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
         $objPHPExcel->getActiveSheet()->setTitle("3.1 จำนวนสมาชิก (5)");
         $objPHPExcel->getActiveSheet()->setCellValue('A3', '3. การดำเนินงานด้านกิจการโคนมของ อ.ส.ค.');
         $objPHPExcel->getActiveSheet()->setCellValue('A4', '  3.1 จำนวนเกษตรกร/สมาชิกผู้เลี้ยงโคนม, จำนวนโค และปริมาณน้ำนม');
@@ -2838,8 +2865,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateCooperativeMilk6Excel($objPHPExcel, $condition, $region) {
-        $objPHPExcel->createSheet(14);
-        $objPHPExcel->setActiveSheetIndex(14);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
         $objPHPExcel->getActiveSheet()->setTitle("3.1 จำนวนสมาชิก (6)");
         $objPHPExcel->getActiveSheet()->setCellValue('A3', '3. การดำเนินงานด้านกิจการโคนมของ อ.ส.ค.');
         $objPHPExcel->getActiveSheet()->setCellValue('A4', '  3.1 จำนวนเกษตรกร/สมาชิกผู้เลี้ยงโคนม, จำนวนโค และปริมาณน้ำนม');
@@ -2968,8 +2996,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateCooperativeMilk7Excel($objPHPExcel, $condition, $region) {
-        $objPHPExcel->createSheet(15);
-        $objPHPExcel->setActiveSheetIndex(15);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
         $objPHPExcel->getActiveSheet()->setTitle("3.1 จำนวนสมาชิก (7)");
         $objPHPExcel->getActiveSheet()->setCellValue('A3', '3. การดำเนินงานด้านกิจการโคนมของ อ.ส.ค.');
         $objPHPExcel->getActiveSheet()->setCellValue('A4', '  3.1 จำนวนเกษตรกร/สมาชิกผู้เลี้ยงโคนม, จำนวนโค และปริมาณน้ำนม');
@@ -3098,8 +3127,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateCowgroupExcel($objPHPExcel, $condition, $region) {
-        $objPHPExcel->createSheet(16);
-        $objPHPExcel->setActiveSheetIndex(16);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
 
         $data = CowGroupController::getMonthDataList($condition, $region);
         $objPHPExcel->getActiveSheet()->setTitle("3.2 โค");
@@ -3196,11 +3226,12 @@ class MonthReportController extends Controller {
     }
 
     private function generateCowgroup2Excel($objPHPExcel, $condition, $region) {
-        $objPHPExcel->createSheet(17);
-        $objPHPExcel->setActiveSheetIndex(17);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
 
         $data = CowGroupController::getMonthDataList($condition, $region);
-        $objPHPExcel->getActiveSheet()->setTitle("3.2 โค (2)");
+        $objPHPExcel->getActiveSheet()->setTitle("3.2 โค");
         $objPHPExcel->getActiveSheet()->setCellValue('A3', '3. การดำเนินงานด้านกิจการโคนมของ อ.ส.ค.');
         $objPHPExcel->getActiveSheet()->setCellValue('A4', ' 3.2 ฝูงโค อ.ส.ค.');
 
@@ -3289,8 +3320,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateCowgroup3Excel($objPHPExcel, $condition, $region) {
-        $objPHPExcel->createSheet(18);
-        $objPHPExcel->setActiveSheetIndex(18);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
 
         $data = CowGroupController::getMonthDataList($condition, $region);
         $objPHPExcel->getActiveSheet()->setTitle("3.2 โค (3)");
@@ -3298,8 +3330,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateCowgroup4Excel($objPHPExcel, $condition, $region) {
-        $objPHPExcel->createSheet(19);
-        $objPHPExcel->setActiveSheetIndex(19);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
         $showm = 0;
         $showy = $condition['YearFrom'];
         $start = $condition['MonthTo'];
@@ -3309,7 +3342,7 @@ class MonthReportController extends Controller {
             $showm = $condition['YearFrom'];
         }
         $data = CowGroupController::getMonthDataList($condition, $region);
-        $objPHPExcel->getActiveSheet()->setTitle("3.2 โค (4)");
+        $objPHPExcel->getActiveSheet()->setTitle("3.2 โค");
         $objPHPExcel->getActiveSheet()->setCellValue('A3', '3. การดำเนินงานด้านกิจการโคนมของ อ.ส.ค.');
         $objPHPExcel->getActiveSheet()->setCellValue('A4', ' 3.2 ฝูงโค อ.ส.ค.');
         $objPHPExcel->getActiveSheet()->setCellValue('A5', '  ฝูงโค อ.ส.ค. ต.ค.60-ม.ค.61  มีการจำหน่ายโคทั้งสิ้น จำนวน 0  ตัว มูลค่า 0  บาท แบ่งเป็น');
@@ -3429,8 +3462,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateCowgroup5Excel($objPHPExcel, $condition, $region) {
-        $objPHPExcel->createSheet(20);
-        $objPHPExcel->setActiveSheetIndex(20);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
         $showm = 0;
         $showy = $condition['YearFrom'];
         $start = $condition['MonthTo'];
@@ -3440,7 +3474,7 @@ class MonthReportController extends Controller {
             $showm = $condition['YearFrom'];
         }
         $data = CowGroupController::getMonthDataList($condition, $region);
-        $objPHPExcel->getActiveSheet()->setTitle("3.2 โค (5)");
+        $objPHPExcel->getActiveSheet()->setTitle("3.2 โค");
         $objPHPExcel->getActiveSheet()->setCellValue('A3', '3. การดำเนินงานด้านกิจการโคนมของ อ.ส.ค.');
         $objPHPExcel->getActiveSheet()->setCellValue('A4', ' 3.2 ฝูงโค อ.ส.ค.');
 //        $objPHPExcel->getActiveSheet()->setCellValue('A5', '  ฝูงโค อ.ส.ค. ต.ค.60-ม.ค.61  มีการจำหน่ายโคทั้งสิ้น จำนวน 0  ตัว มูลค่า 0  บาท แบ่งเป็น');
@@ -3558,8 +3592,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateCowgroup6Excel($objPHPExcel, $condition, $region) {
-        $objPHPExcel->createSheet(21);
-        $objPHPExcel->setActiveSheetIndex(21);
+        $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
 
         $data = CowGroupController::getMonthDataList($condition, $region);
         $objPHPExcel->getActiveSheet()->setTitle("3.2 โค (6)");
@@ -3567,11 +3602,12 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilkExcel($objPHPExcel, $condition, $region) {
-        $objPHPExcel->createSheet(22);
-        $objPHPExcel->setActiveSheetIndex(22);
+        $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
         $data = MBIController::getListMBIMonthdata($condition, $region);
         $data2 = MBIController::getListMBIMonthdataOther($condition, $region);
-        print_r($data2);
+        //  print_r($data2);
         $showm = 0;
         $showy = $condition['YearFrom'];
         $start = $condition['MonthTo'];
@@ -3707,8 +3743,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk2Excel($objPHPExcel, $condition, $data) {
-        $objPHPExcel->createSheet(23);
-        $objPHPExcel->setActiveSheetIndex(23);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
 
 
 
@@ -3823,8 +3860,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk3Excel($objPHPExcel, $condition, $data) {
-        $objPHPExcel->createSheet(24);
-        $objPHPExcel->setActiveSheetIndex(24);
+       $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
         $size = sizeof($data['data']);
 //print_r($data['data'][$size - 1]['CurrentAmount']);
         $showm = 0;
@@ -3888,8 +3926,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk4Excel($objPHPExcel, $condition, $region) {
-        $objPHPExcel->createSheet(25);
-        $objPHPExcel->setActiveSheetIndex(25);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
 
         $showm = 0;
         $showy = $condition['YearFrom'];
@@ -3950,8 +3989,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk5Excel($objPHPExcel, $condition, $data) {
-        $objPHPExcel->createSheet(26);
-        $objPHPExcel->setActiveSheetIndex(26);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
 
 
 
@@ -4070,8 +4110,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk6Excel($objPHPExcel, $condition, $data) {
-        $objPHPExcel->createSheet(27);
-        $objPHPExcel->setActiveSheetIndex(27);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
         $size = sizeof($data['data']);
         $showm = 0;
         $showy = $condition['YearFrom'];
@@ -4129,8 +4170,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk7Excel($objPHPExcel, $condition, $data) {
-        $objPHPExcel->createSheet(28);
-        $objPHPExcel->setActiveSheetIndex(28);
+       $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
 
         $showm = 0;
         $showy = $condition['YearFrom'];
@@ -4191,8 +4233,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk8Excel($objPHPExcel, $condition, $data) {
-        $objPHPExcel->createSheet(29);
-        $objPHPExcel->setActiveSheetIndex(29);
+        $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
 
 
 
@@ -4310,8 +4353,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk9Excel($objPHPExcel, $condition, $data) {
-        $objPHPExcel->createSheet(30);
-        $objPHPExcel->setActiveSheetIndex(30);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
         $size = sizeof($data['data']);
         $showm = 0;
         $showy = $condition['YearFrom'];
@@ -4370,8 +4414,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk10Excel($objPHPExcel, $condition, $data) {
-        $objPHPExcel->createSheet(31);
-        $objPHPExcel->setActiveSheetIndex(31);
+        $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
 
         $showm = 0;
         $showy = $condition['YearFrom'];
@@ -4432,8 +4477,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk11Excel($objPHPExcel, $condition, $data) {
-        $objPHPExcel->createSheet(32);
-        $objPHPExcel->setActiveSheetIndex(32);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
 
 
 
@@ -4552,8 +4598,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk12Excel($objPHPExcel, $condition, $data) {
-        $objPHPExcel->createSheet(33);
-        $objPHPExcel->setActiveSheetIndex(33);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
         $size = sizeof($data['data']);
         $showm = 0;
         $showy = $condition['YearFrom'];
@@ -4611,8 +4658,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk13Excel($objPHPExcel, $condition, $data) {
-        $objPHPExcel->createSheet(34);
-        $objPHPExcel->setActiveSheetIndex(34);
+        $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
 
         $showm = 0;
         $showy = $condition['YearFrom'];
@@ -4672,8 +4720,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk14Excel($objPHPExcel, $condition, $data) {
-        $objPHPExcel->createSheet(35);
-        $objPHPExcel->setActiveSheetIndex(35);
+        $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
 
 
 
@@ -4790,8 +4839,9 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk15Excel($objPHPExcel, $condition, $data) {
-        $objPHPExcel->createSheet(36);
-        $objPHPExcel->setActiveSheetIndex(36);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
         $size = sizeof($data['data']);
         $showm = 0;
         $showy = $condition['YearFrom'];
@@ -4858,8 +4908,9 @@ class MonthReportController extends Controller {
     }
 
     private function generatesaleMilkExcel($objPHPExcel, $condition, $region) {
-        $objPHPExcel->createSheet(37);
-        $objPHPExcel->setActiveSheetIndex(37);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
         $data = MSIController::getListMSIMonthdata($condition, $region);
         $data2 = MSIController::getListMSIMonthdataOther($condition, $region);
 
@@ -4987,8 +5038,9 @@ class MonthReportController extends Controller {
     }
 
     private function generatesaleMilk2Excel($objPHPExcel, $condition, $data) {
-        $objPHPExcel->createSheet(38);
-        $objPHPExcel->setActiveSheetIndex(38);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
 
         $size = sizeof($data['data']);
         $showm = 0;
@@ -5113,8 +5165,9 @@ class MonthReportController extends Controller {
     }
 
     private function generatesaleMilk3Excel($objPHPExcel, $condition, $data) {
-        $objPHPExcel->createSheet(39);
-        $objPHPExcel->setActiveSheetIndex(39);
+        $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
 
         $size = sizeof($data['data']);
         $showm = 0;
@@ -5239,8 +5292,9 @@ class MonthReportController extends Controller {
     }
 
     private function generatesaleMilk4Excel($objPHPExcel, $condition, $data) {
-        $objPHPExcel->createSheet(40);
-        $objPHPExcel->setActiveSheetIndex(40);
+         $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
 
         $size = sizeof($data['data']);
         $showm = 0;
@@ -7303,7 +7357,7 @@ class MonthReportController extends Controller {
         //   $data = ProductionInfoController::getMonthDataListreport($condition, $FactoryList[2]['id']);
 //         
         $objPHPExcel->getActiveSheet()->setTitle("5.2 จำหน่ายผลิตภัณฑ์นม");
-       
+
         $objPHPExcel->getActiveSheet()->setCellValue('A4', '5.2 การจำหน่ายผลิตภัณฑ์นม อ.ส.ค.');
 
         $objPHPExcel->getActiveSheet()->setCellValue('B6', '                   แบ่งเป็น ' . sizeof($FactoryList) . ' โรงงาน ดังนี้');
@@ -9184,33 +9238,186 @@ class MonthReportController extends Controller {
         } else {
             $showm = $condition['YearFrom'];
         }
+        $FactoryList = FactoryService::getList();
+        $size = sizeof($FactoryList);
+        $detail = [];
+        $detailIN = [];
+        $detailOUT = [];
+        $detailWAIT = [];
+        $tcurrent = 0;
+        $tbaht = 0;
+        $tbcurrent = 0;
+        $tbbaht = 0;
+        $tdiffc = 0;
+        $tdiffb = 0;
+        $tpc = 0;
+        $tpb = 0;
+        $byfactory = [];
+        foreach ($FactoryList as $item) {
+            $condition['Factory'] = $item['id'];
+            $dataIN = LostInProcessController::getMonthDataList($condition);
+            $detailIN['name'] = ' ในกระบวนการผลิต';
+            $detailIN['current'] += $dataIN['Summary']['SummaryAmount'];
+            $detailIN['before'] += $dataIN['Summary']['SummaryBeforeAmount'];
+            $detailIN['currentbaht'] += $dataIN['Summary']['SummaryBaht'];
+            $detailIN['beforebaht'] += $dataIN['Summary']['SummaryBeforeBaht'];
 
+            $dataOUT = LostOutProcessController::getMonthDataList($condition);
+            $detailOUT['name'] = ' หลังกระบวนการผลิต';
+            $detailOUT['current'] += $dataOUT['Summary']['SummaryAmount'];
+            $detailOUT['before'] += $dataOUT['Summary']['SummaryBeforeAmount'];
+            $detailOUT['currentbaht'] += $dataOUT['Summary']['SummaryBaht'];
+            $detailOUT['beforebaht'] += $dataOUT['Summary']['SummaryBeforeBaht'];
+
+            $dataWAIT = LostWaitSaleController::getMonthDataList($condition);
+            $detailWAIT['name'] = ' ระหว่างรอจำหน่าย';
+            $detailWAIT['current'] += $dataWAIT['Summary']['SummaryAmount'];
+            $detailWAIT['before'] += $dataWAIT['Summary']['SummaryBeforeAmount'];
+            $detailWAIT['currentbaht'] += $dataWAIT['Summary']['SummaryBaht'];
+            $detailWAIT['beforebaht'] += $dataWAIT['Summary']['SummaryBeforeBaht'];
+            $_data['name'] = $item['factory_name'];
+            $_data['amount'] = $dataIN['Summary']['SummaryAmount'] + $dataOUT['Summary']['SummaryAmount'] + $dataWAIT['Summary']['SummaryAmount'];
+            $_data['baht'] = $dataIN['Summary']['SummaryBaht'] + $dataOUT['Summary']['SummaryBaht'] + $dataWAIT['Summary']['SummaryBaht'];
+            array_push($byfactory, $_data);
+        }
+        //////
+        $detailIN['diffamount'] = $detailIN['current'] - $detailIN['before'];
+        $detailIN['diffbaht'] = $detailIN['currentbaht'] - $detailIN['beforebaht'];
+        if ($detailIN['before'] != 0) {
+            $detailIN['peramount'] = (($detailIN['diffamount']) / $detailIN['before']) * 100;
+        } else {
+            $detailIN['peramount'] = 0;
+        }
+        if ($detailIN['beforebaht'] != 0) {
+            $detailIN['perbaht'] = (($detailIN['diffbaht']) / $detailIN['beforebaht']) * 100;
+        } else {
+            $detailIN['perbaht'] = 0;
+        }
+        ///////
+        $detailWAIT['diffamount'] = $detailWAIT['current'] - $detailWAIT['before'];
+        $detailWAIT['diffbaht'] = $detailWAIT['currentbaht'] - $detailWAIT['beforebaht'];
+        if ($detailWAIT['before'] != 0) {
+            $detailWAIT['peramount'] = (($detailWAIT['diffamount']) / $detailWAIT['before']) * 100;
+        } else {
+            $detailWAIT['peramount'] = 0;
+        }
+        if ($detailWAIT['beforebaht'] != 0) {
+            $detailWAIT['perbaht'] = (($detailWAIT['diffbaht']) / $detailWAIT['beforebaht']) * 100;
+        } else {
+            $detailWAIT['perbaht'] = 0;
+        }
+        ///////
+        $detailOUT['diffamount'] = $detailOUT['current'] - $detailOUT['before'];
+        $detailOUT['diffbaht'] = $detailOUT['currentbaht'] - $detailOUT['beforebaht'];
+        if ($detailOUT['before'] != 0) {
+            $detailOUT['peramount'] = (($detailOUT['diffamount']) / $detailOUT['before']) * 100;
+        } else {
+            $detailOUT['peramount'] = 0;
+        }
+        if ($detailOUT['beforebaht'] != 0) {
+            $detailOUT['perbaht'] = (($detailOUT['diffbaht']) / $detailOUT['beforebaht']) * 100;
+        } else {
+            $detailOUT['perbaht'] = 0;
+        }
+        array_push($detail, $detailIN);
+        array_push($detail, $detailOUT);
+        array_push($detail, $detailWAIT);
+        ///////
         $objPHPExcel->getActiveSheet()->setTitle(" 5.3 การสูญเสียทั้งกระบวนการ");
         $objPHPExcel->getActiveSheet()->setCellValue('A3', '  5.3 การสูญเสียทั้งกระบวนการผลิต');
 
 
-        $objPHPExcel->getActiveSheet()->setCellValue('A5', '                        เดือน ' . $this->getMonthName($condition['MonthFrom']) . ' ' . ($condition['YearFrom'] + 543) . ' อ.ส.ค.จำหน่ายผลิตภัณฑ์นมชนิดต่าง ๆ ได้รวมกันทั้งสิ้น ปริมาณ  ' . number_format($data['Summary']['SummaryCurrentTravelAmount'], 2, '.', ',') . '  ลิตร ');
-        $objPHPExcel->getActiveSheet()->setCellValue('A6', '                  เมื่อเปรียบเทียบกับเดือนเดียวกันของปีที่ผ่านมา ปรากฏว่าปริมาณ คิดเป็นร้อยละ ' . number_format($data['Summary']['SummaryTravelAmountPercentage'], 2, '.', ',') . ' และ ' . number_format($data['Summary']['SummaryTravelIncomePercentage'], 2, '.', ',') . ' ตามลำดับ');
 
 
 
 //tb header
-        $objPHPExcel->getActiveSheet()->setCellValue('A10', 'เดือน');
-        $objPHPExcel->getActiveSheet()->mergeCells('A10:A11');
-        $objPHPExcel->getActiveSheet()->setCellValue('B10', 'ปีงบประมาณ ' . $this->getMonthName($condition['MonthFrom']) . ' ' . ($condition['YearFrom'] + 543));
-        $objPHPExcel->getActiveSheet()->mergeCells('B10:C10');
-        $objPHPExcel->getActiveSheet()->setCellValue('D10', 'ปีงบประมาณ ' . $this->getMonthName($condition['MonthFrom']) . ' ' . ($condition['YearFrom'] + 542));
-        $objPHPExcel->getActiveSheet()->mergeCells('D10:E10');
-        $objPHPExcel->getActiveSheet()->setCellValue('F10', 'ผลต่าง');
-        $objPHPExcel->getActiveSheet()->mergeCells('F10:I10');
-        $objPHPExcel->getActiveSheet()->setCellValue('B11', 'ลิตร');
-        $objPHPExcel->getActiveSheet()->setCellValue('C11', 'บาท');
-        $objPHPExcel->getActiveSheet()->setCellValue('D11', 'ลิตร');
-        $objPHPExcel->getActiveSheet()->setCellValue('E11', 'บาท');
-        $objPHPExcel->getActiveSheet()->setCellValue('F11', 'ลิตร');
-        $objPHPExcel->getActiveSheet()->setCellValue('G11', '% เพิ่ม,ลด');
-        $objPHPExcel->getActiveSheet()->setCellValue('H11', 'บาท');
-        $objPHPExcel->getActiveSheet()->setCellValue('I11', '% เพิ่ม,ลด');
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . (7 + $size), 'รายการ');
+        $objPHPExcel->getActiveSheet()->mergeCells('A' . (7 + $size) . ':A' . (7 + $size + 1));
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . (7 + $size), ' ' . $this->getMonthName($condition['MonthFrom']) . ' ' . ($condition['YearFrom'] + 543));
+        $objPHPExcel->getActiveSheet()->mergeCells('B' . (7 + $size) . ':C' . (7 + $size));
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . (7 + $size), ' ' . $this->getMonthName($condition['MonthFrom']) . ' ' . ($condition['YearFrom'] + 542));
+        $objPHPExcel->getActiveSheet()->mergeCells('D' . (7 + $size) . ':E' . (7 + $size));
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . (7 + $size), 'ผลต่าง');
+        $objPHPExcel->getActiveSheet()->mergeCells('F' . (7 + $size) . ':I' . (7 + $size));
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . (7 + $size + 1), 'ลิตร');
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . (7 + $size + 1), 'บาท');
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . (7 + $size + 1), 'ลิตร');
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . (7 + $size + 1), 'บาท');
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . (7 + $size + 1), 'ลิตร');
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . (7 + $size + 1), '% เพิ่ม,ลด');
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . (7 + $size + 1), 'บาท');
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . (7 + $size + 1), '% เพิ่ม,ลด');
+
+        $objPHPExcel->getActiveSheet()->getStyle('A' . (7 + $size) . ':I' . (7 + $size + 1))->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()
+                ->getStyle('A' . (7 + $size) . ':I' . (7 + $size + 1))
+                ->applyFromArray(array(
+                    'alignment' => array(
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    )
+                        )
+        );
+        $row = 7 + $size + 2;
+
+        foreach ($detail as $ditem) {
+            $tcurrent += $ditem['current'];
+            $tbaht += $ditem['currentbaht'];
+            $tbcurrent += $ditem['before'];
+            $tbbaht += $ditem['beforebaht'];
+            $tdiffc += $ditem['diffamount'];
+            $tdiffb += $ditem['diffbaht'];
+
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), $ditem['name']);
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), $ditem['current']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), $ditem['currentbaht']);
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . ($row), $ditem['before']);
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . ($row), $ditem['beforebaht']);
+            $objPHPExcel->getActiveSheet()->setCellValue('F' . ($row), $ditem['diffamount']);
+            $objPHPExcel->getActiveSheet()->setCellValue('G' . ($row), $ditem['peramount']);
+            $objPHPExcel->getActiveSheet()->setCellValue('H' . ($row), $ditem['diffbaht']);
+            $objPHPExcel->getActiveSheet()->setCellValue('I' . ($row), $ditem['perbaht']);
+            $row++;
+        }
+        if ($tbcurrent != 0) {
+            $tpc = (($tdiffc) / $tbcurrent) * 100;
+        } else {
+            $tpc = 0;
+        }
+        if ($tbbaht != 0) {
+            $tpb = (($tdiffb) / $tbbaht) * 100;
+        } else {
+            $tpb = 0;
+        }
+
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), 'รวมทั้งสิ้น');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), $tcurrent);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), $tbaht);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . ($row), $tbcurrent);
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . ($row), $tbbaht);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . ($row), $tdiffc);
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . ($row), $tpc);
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . ($row), $tdiffb);
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . ($row), $tpb);
+        $row++;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ( $row), '% สูญเสีย');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . ( $row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . ($row), '');
+        $row++;
+
+        $objPHPExcel->getActiveSheet()->setCellValue('B4', '                        เดือน ' . $this->getMonthName($condition['MonthFrom']) . ' ' . ($condition['YearFrom'] + 543) . ' อ.ส.ค.มีการสูญเสียทั้งกระบวนการผลิตทั้งสิ้น ปริมาณ  ' . number_format($tcurrent, 2, '.', ',') . '  ลิตร ');
+        $objPHPExcel->getActiveSheet()->setCellValue('B5', '                  มูลค่า ' . number_format($tbaht, 2, '.', ',') . ' คิดเป็นร้อยละ  ' . number_format($data['Summary']['SummaryTravelIncomePercentage'], 2, '.', ',') . ' แบ่งเป็น ' . sizeof($FactoryList) . ' โรงงาน ดังนี้');
+        $st = 6;
+        foreach ($byfactory as $key => $title) {
+            $objPHPExcel->getActiveSheet()->setCellValue('C' . $st, '             ' . ($key + 1) . '.' . $title['name'] . ' ปริมาณ ' . number_format($title['amount'], 2, '.', ',') . ' ลิตร มูลค่า  ' . number_format($title['baht'], 2, '.', ',') . ' บาท ');
+            $st++;
+        }
 // // header style
         $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setSize(22);
         $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setBold(true);
@@ -9226,11 +9433,49 @@ class MonthReportController extends Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
+        $highestRow = $objPHPExcel->getActiveSheet()->getHighestRow();
+        $objPHPExcel->getActiveSheet()->getStyle('B' . (7 + $size) . ':I' . ($highestRow))
+                ->getNumberFormat()
+                ->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
 
-        $objPHPExcel->getActiveSheet()->getStyle('A5:I11')->getFont()->setSize(16);
-        $objPHPExcel->getActiveSheet()->getStyle('A10:I11')->getFont()->setBold(true);
+
+
+        $objPHPExcel->getActiveSheet()->getStyle('A' . (7 + $size) . ':I' . $highestRow)->applyFromArray(
+                array(
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => (\PHPExcel_Style_Border::BORDER_THIN)
+                        )
+                    ),
+                    'font' => array(
+                        'name' => 'AngsanaUPC'
+                    )
+                )
+        );
+        $tb2row = $highestRow + 2;
+        //////////table 2
+//tb2 header
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($tb2row + 3 + $size), 'รายการ');
+        $objPHPExcel->getActiveSheet()->mergeCells('A' . ($tb2row + 3 + $size) . ':A' . ($tb2row + 3 + $size + 1));
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($tb2row + 3 + $size), ' ' . $this->getMonthName(10) . ' - ' . $this->getMonthName($condition['MonthTo']) . ' ' . ($condition['YearFrom'] + 543));
+        $objPHPExcel->getActiveSheet()->mergeCells('B' . ($tb2row + 3 + $size) . ':C' . ($tb2row + 3 + $size));
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . ($tb2row + 3 + $size), ' ' . $this->getMonthName(10) . ' - ' . $this->getMonthName($condition['MonthTo']) . ' ' . ($condition['YearFrom'] + 542));
+        $objPHPExcel->getActiveSheet()->mergeCells('D' . ($tb2row + 3 + $size) . ':E' . ($tb2row + 3 + $size));
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . ($tb2row + 3 + $size), 'ผลต่าง');
+        $objPHPExcel->getActiveSheet()->mergeCells('F' . ($tb2row + 3 + $size) . ':I' . ($tb2row + 3 + $size));
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($tb2row + 3 + $size + 1), 'ลิตร');
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . ($tb2row + 3 + $size + 1), 'บาท');
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . ($tb2row + 3 + $size + 1), 'ลิตร');
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . ($tb2row + 3 + $size + 1), 'บาท');
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . ($tb2row + 3 + $size + 1), 'ลิตร');
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . ($tb2row + 3 + $size + 1), '% เพิ่ม,ลด');
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . ($tb2row + 3 + $size + 1), 'บาท');
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . ($tb2row + 3 + $size + 1), '% เพิ่ม,ลด');
+        $objPHPExcel->getActiveSheet()->getStyle('A' . ($tb2row + 3 + $size) . ':I' . ($tb2row + 3 + $size + 1))->getFont()->setSize(16);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A' . ($tb2row + 3 + $size) . ':I' . ($tb2row + 3 + $size + 1))->getFont()->setBold(true);
         $objPHPExcel->getActiveSheet()
-                ->getStyle('A10:I11')
+                ->getStyle('A' . ($tb2row + 3 + $size) . ':I' . ($tb2row + 3 + $size + 1))
                 ->applyFromArray(array(
                     'alignment' => array(
                         'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
@@ -9238,8 +9483,391 @@ class MonthReportController extends Controller {
                     )
                         )
         );
-        $highestRow = $objPHPExcel->getActiveSheet()->getHighestRow();
-        $objPHPExcel->getActiveSheet()->getStyle('A10:I' . $highestRow)->applyFromArray(
+
+
+
+        $tcurrent = 0;
+        $tbaht = 0;
+        $tbcurrent = 0;
+        $tbbaht = 0;
+        $tdiffc = 0;
+        $tdiffb = 0;
+        $tpc = 0;
+        $tpb = 0;
+        $detailIN = [];
+        $detailOUT = [];
+        $detailWAIT = [];
+        $detail = [];
+        $Mlist = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+        $Ylist = [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $exit = $condition['MonthTo'];
+
+        $byfactory = [];
+
+
+        foreach ($FactoryList as $itemtb2) {
+            $collect['MonthFrom'] = $condition['MonthTo'];
+            $collect['YearTo'] = $condition['YearFrom'];
+            foreach ($Mlist as $k => $m) {
+                $collect['MonthFrom'] = $m;
+                $collect['YearTo'] = $condition['YearFrom'] - $Ylist[$k];
+
+                $collect['Factory'] = $itemtb2['id'];
+                $dataIN = LostInProcessController::getMonthDataList($collect);
+                //  print_r($dataIN);
+                $detailIN['name'] = ' ในกระบวนการผลิต';
+                $detailIN['current'] += $dataIN['Summary']['SummaryAmount'];
+                $detailIN['before'] += $dataIN['Summary']['SummaryBeforeAmount'];
+                $detailIN['currentbaht'] += $dataIN['Summary']['SummaryBaht'];
+                $detailIN['beforebaht'] += $dataIN['Summary']['SummaryBeforeBaht'];
+
+                $dataOUT = LostOutProcessController::getMonthDataList($collect);
+                $detailOUT['name'] = ' หลังกระบวนการผลิต';
+                $detailOUT['current'] += $dataOUT['Summary']['SummaryAmount'];
+                $detailOUT['before'] += $dataOUT['Summary']['SummaryBeforeAmount'];
+                $detailOUT['currentbaht'] += $dataOUT['Summary']['SummaryBaht'];
+                $detailOUT['beforebaht'] += $dataOUT['Summary']['SummaryBeforeBaht'];
+
+                $dataWAIT = LostWaitSaleController::getMonthDataList($collect);
+                $detailWAIT['name'] = ' ระหว่างรอจำหน่าย';
+                $detailWAIT['current'] += $dataWAIT['Summary']['SummaryAmount'];
+                $detailWAIT['before'] += $dataWAIT['Summary']['SummaryBeforeAmount'];
+                $detailWAIT['currentbaht'] += $dataWAIT['Summary']['SummaryBaht'];
+                $detailWAIT['beforebaht'] += $dataWAIT['Summary']['SummaryBeforeBaht'];
+
+                if ($exit == $m) {
+                    break;
+                }
+            }
+            $_data['name'] = $itemtb2['factory_name'];
+            $_data['amount'] = $dataIN['Summary']['SummaryAmount'] + $dataOUT['Summary']['SummaryAmount'] + $dataWAIT['Summary']['SummaryAmount'];
+            $_data['baht'] = $dataIN['Summary']['SummaryBaht'] + $dataOUT['Summary']['SummaryBaht'] + $dataWAIT['Summary']['SummaryBaht'];
+            array_push($byfactory, $_data);
+        }
+
+        $detailIN['diffamount'] = $detailIN['current'] - $detailIN['before'];
+        $detailIN['diffbaht'] = $detailIN['currentbaht'] - $detailIN['beforebaht'];
+        if ($detailIN['before'] != 0) {
+            $detailIN['peramount'] = (($detailIN['diffamount']) / $detailIN['before']) * 100;
+        } else {
+            $detailIN['peramount'] = 0;
+        }
+        if ($detailIN['beforebaht'] != 0) {
+            $detailIN['perbaht'] = (($detailIN['diffbaht']) / $detailIN['beforebaht']) * 100;
+        } else {
+            $detailIN['perbaht'] = 0;
+        }
+        ///////
+        $detailWAIT['diffamount'] = $detailWAIT['current'] - $detailWAIT['before'];
+        $detailWAIT['diffbaht'] = $detailWAIT['currentbaht'] - $detailWAIT['beforebaht'];
+        if ($detailWAIT['before'] != 0) {
+            $detailWAIT['peramount'] = (($detailWAIT['diffamount']) / $detailWAIT['before']) * 100;
+        } else {
+            $detailWAIT['peramount'] = 0;
+        }
+        if ($detailWAIT['beforebaht'] != 0) {
+            $detailWAIT['perbaht'] = (($detailWAIT['diffbaht']) / $detailWAIT['beforebaht']) * 100;
+        } else {
+            $detailWAIT['perbaht'] = 0;
+        }
+        ///////
+        $detailOUT['diffamount'] = $detailOUT['current'] - $detailOUT['before'];
+        $detailOUT['diffbaht'] = $detailOUT['currentbaht'] - $detailOUT['beforebaht'];
+        if ($detailOUT['before'] != 0) {
+            $detailOUT['peramount'] = (($detailOUT['diffamount']) / $detailOUT['before']) * 100;
+        } else {
+            $detailOUT['peramount'] = 0;
+        }
+        if ($detailOUT['beforebaht'] != 0) {
+            $detailOUT['perbaht'] = (($detailOUT['diffbaht']) / $detailOUT['beforebaht']) * 100;
+        } else {
+            $detailOUT['perbaht'] = 0;
+        }
+        array_push($detail, $detailIN);
+        array_push($detail, $detailOUT);
+        array_push($detail, $detailWAIT);
+
+        $row = $tb2row + $size + 5;
+        foreach ($detail as $ditem) {
+            $tcurrent += $ditem['current'];
+            $tbaht += $ditem['currentbaht'];
+            $tbcurrent += $ditem['before'];
+            $tbbaht += $ditem['beforebaht'];
+            $tdiffc += $ditem['diffamount'];
+            $tdiffb += $ditem['diffbaht'];
+
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), $ditem['name']);
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), $ditem['current']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), $ditem['currentbaht']);
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . ($row), $ditem['before']);
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . ($row), $ditem['beforebaht']);
+            $objPHPExcel->getActiveSheet()->setCellValue('F' . ($row), $ditem['diffamount']);
+            $objPHPExcel->getActiveSheet()->setCellValue('G' . ($row), $ditem['peramount']);
+            $objPHPExcel->getActiveSheet()->setCellValue('H' . ($row), $ditem['diffbaht']);
+            $objPHPExcel->getActiveSheet()->setCellValue('I' . ($row), $ditem['perbaht']);
+            $row++;
+        }
+        if ($tbcurrent != 0) {
+            $tpc = (($tdiffc) / $tbcurrent) * 100;
+        } else {
+            $tpc = 0;
+        }
+        if ($tbbaht != 0) {
+            $tpb = (($tdiffb) / $tbbaht) * 100;
+        } else {
+            $tpb = 0;
+        }
+
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), 'รวมทั้งสิ้น');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), $tcurrent);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), $tbaht);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . ($row), $tbcurrent);
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . ($row), $tbbaht);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . ($row), $tdiffc);
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . ($row), $tpc);
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . ($row), $tdiffb);
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . ($row), $tpb);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':I' . $row)->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()
+                ->getStyle('A' . $row . ':I' . $row)
+                ->applyFromArray(array(
+                    'alignment' => array(
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    )
+                        )
+        );
+        $row++;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ( $row), '% สูญเสีย');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . ($row), '');
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':I' . $row)->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()
+                ->getStyle('A' . $row . ':I' . $row)
+                ->applyFromArray(array(
+                    'alignment' => array(
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    )
+                        )
+        );
+        $row++;
+
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($tb2row), '                        เดือน ' . $this->getMonthName(10) . ' - ' . $this->getMonthName($condition['MonthTo']) . ' ' . ($condition['YearFrom'] + 543) . ' อ.ส.ค.มีการสูญเสียทั้งกระบวนการผลิตทั้งสิ้น ปริมาณ  ' . number_format($tcurrent, 2, '.', ',') . '  ลิตร ');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($tb2row + 1), '                  มูลค่า ' . number_format($tbaht, 2, '.', ',') . ' คิดเป็นร้อยละ  ' . number_format($data['Summary']['SummaryTravelIncomePercentage'], 2, '.', ',') . ' แบ่งเป็น ' . sizeof($FactoryList) . ' โรงงาน ดังนี้');
+        $st = $tb2row + 2;
+        foreach ($byfactory as $key => $title) {
+            $objPHPExcel->getActiveSheet()->setCellValue('C' . $st, '             ' . ($key + 1) . '.' . $title['name'] . ' ปริมาณ ' . number_format($title['amount'], 2, '.', ',') . ' ลิตร มูลค่า  ' . number_format($title['baht'], 2, '.', ',') . ' บาท ');
+            $st++;
+        }
+        $highestRow2 = $objPHPExcel->getActiveSheet()->getHighestRow();
+        $objPHPExcel->getActiveSheet()->getStyle('B' . ($tb2row + $size + 4) . ':I' . ($highestRow2))
+                ->getNumberFormat()
+                ->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+
+
+
+        $objPHPExcel->getActiveSheet()->getStyle('A' . ($tb2row + $size + 3) . ':I' . $highestRow2)->applyFromArray(
+                array(
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => (\PHPExcel_Style_Border::BORDER_THIN)
+                        )
+                    ),
+                    'font' => array(
+                        'name' => 'AngsanaUPC'
+                    )
+                )
+        );
+///////////////////////
+        $objPHPExcel->getActiveSheet()->getStyle('A1:I' . $highestRow2)->applyFromArray(
+                array(
+                    'font' => array(
+                        'name' => 'AngsanaUPC',
+                    )
+                )
+        );
+
+        return $objPHPExcel;
+    }
+
+    private function generatelostINproductionExcel($objPHPExcel, $condition, $region) {
+        $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
+        $objPHPExcel->getActiveSheet()->setTitle('สูญเสียใน (1)');
+        $FactoryList = FactoryService::getList();
+        $data = [];
+        $datacollect = [];
+        foreach ($FactoryList as $key => $fac) {
+            $condition['Factory'] = $fac['id'];
+            $dataIN = LostInProcessController::getMonthDataList($condition);
+            $dataIN['name'] = $fac['factory_name'];
+            array_push($data, $dataIN);
+            $datacollectIN = LostInProcessController::getMonthDataListreport($condition);
+            array_push($datacollect, $datacollectIN);
+        }
+
+        $objPHPExcel->getActiveSheet()->setCellValue('A3', '  5.3.1 สูญเสียในกระบวนการผลิต');
+        $objPHPExcel->getActiveSheet()->setCellValue('A4', $data[0]['name']);
+        $objPHPExcel->getActiveSheet()->setCellValue('C4', 'หน่วย : ลิตร');
+        $objPHPExcel->getActiveSheet()->setCellValue('A5', 'รายการ');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('B5', ' ' . $this->getMonthName($condition['MonthTo']) . ' ' . ($condition['YearFrom'] + 543));
+
+        $objPHPExcel->getActiveSheet()->setCellValue('C5', ' ' . $this->getMonthName(10) . ' - ' . $this->getMonthName($condition['MonthTo']) . ' ' . ($condition['YearFrom'] + 543));
+//        print_r($data[0]['DataList']);
+
+        $row = 6;
+        $sum = 0;
+        $size = sizeof($data[0]['DataList']);
+        foreach ($datacollect[0]['DataList'] as $key => $item) {
+            $sum += $item['CurrentAmount'];
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, $item['LostInProcessName']);
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . $row, $data[0]['DataList'][$key]['CurrentAmount']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $item['CurrentAmount']);
+            $row++;
+        }
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, 'รวม');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . $row, $data[0]['DataList'][$size - 1]['CurrentAmount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $item['CurrentAmount']);
+        $objPHPExcel->getActiveSheet()
+                ->getStyle('A' . $row)
+                ->applyFromArray(array(
+                    'alignment' => array(
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    )
+                        )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row)->getFont()->setSize(14);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row)->getFont()->setBold(true);
+        $row++;
+
+        $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setSize(18);
+        $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A4')->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A4')->getFont()->setBold(true);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A4:C5')->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A4:C5')->getFont()->setBold(true);
+
+
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getStyle('B6:C' . ($row))
+                ->getNumberFormat()
+                ->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+
+        $objPHPExcel->getActiveSheet()
+                ->getStyle('A5:C5')
+                ->applyFromArray(array(
+                    'alignment' => array(
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    )
+                        )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A5:C' . $row)->applyFromArray(
+                array(
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => (\PHPExcel_Style_Border::BORDER_THIN)
+                        )
+                    ),
+                    'font' => array(
+                        'name' => 'AngsanaUPC'
+                    )
+                )
+        );
+///////////////////////
+        $objPHPExcel->getActiveSheet()->getStyle('A1:C' . $row)->applyFromArray(
+                array(
+                    'font' => array(
+                        'name' => 'AngsanaUPC',
+                    )
+                )
+        );
+        $objPHPExcel = $this->generatelostINproductionExcel2($objPHPExcel, $condition, $data, $datacollect);
+        $objPHPExcel = $this->generatelostINproductionExcel3($objPHPExcel, $condition, $data, $datacollect);
+        return $objPHPExcel;
+    }
+
+    private function generatelostINproductionExcel2($objPHPExcel, $condition, $data1, $data2) {
+        $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
+        $objPHPExcel->getActiveSheet()->setTitle('สูญเสียใน (2)');
+//    
+
+
+        $objPHPExcel->getActiveSheet()->setCellValue('A3', '  5.3.1 สูญเสียในกระบวนการผลิต');
+        $objPHPExcel->getActiveSheet()->setCellValue('A4', $data1[1]['name']);
+        $objPHPExcel->getActiveSheet()->setCellValue('C4', 'หน่วย : ลิตร');
+        $objPHPExcel->getActiveSheet()->setCellValue('A5', 'รายการ');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('B5', ' ' . $this->getMonthName($condition['MonthTo']) . ' ' . ($condition['YearFrom'] + 543));
+
+        $objPHPExcel->getActiveSheet()->setCellValue('C5', ' ' . $this->getMonthName(10) . ' - ' . $this->getMonthName($condition['MonthTo']) . ' ' . ($condition['YearFrom'] + 543));
+
+
+        $row = 6;
+        $sum = 0;
+        $size = sizeof($data1);
+        foreach ($data2[1]['DataList'] as $key => $item) {
+            $sum += $item['CurrentAmount'];
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, $item['LostInProcessName']);
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . $row, $data1[1]['DataList'][$key]['CurrentAmount']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $item['CurrentAmount']);
+            $row++;
+        }
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, 'รวม');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . $row, $data1[1]['DataList'][$size - 1]['CurrentAmount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $item['CurrentAmount']);
+        $objPHPExcel->getActiveSheet()
+                ->getStyle('A' . $row)
+                ->applyFromArray(array(
+                    'alignment' => array(
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    )
+                        )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row)->getFont()->setSize(14);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row)->getFont()->setBold(true);
+        $row++;
+
+        $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setSize(18);
+        $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A4')->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A4')->getFont()->setBold(true);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A4:C5')->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A4:C5')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('B6:C' . ($row))
+                ->getNumberFormat()
+                ->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+
+        $objPHPExcel->getActiveSheet()
+                ->getStyle('A5:C5')
+                ->applyFromArray(array(
+                    'alignment' => array(
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    )
+                        )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A5:C' . ($row - 1))->applyFromArray(
                 array(
                     'borders' => array(
                         'allborders' => array(
@@ -9252,6 +9880,455 @@ class MonthReportController extends Controller {
                 )
         );
 
+        /////table2
+        $row++;
+
+
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), $data1[2]['name']);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), 'หน่วย : ลิตร');
+        $objPHPExcel->getActiveSheet()->getStyle('A' . ($row) . ':C' . ($row))->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . ($row) . ':C' . ($row))->getFont()->setBold(true);
+        $row++;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), 'รายการ');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), ' ' . $this->getMonthName($condition['MonthTo']) . ' ' . ($condition['YearFrom'] + 543));
+
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), ' ' . $this->getMonthName(10) . ' - ' . $this->getMonthName($condition['MonthTo']) . ' ' . ($condition['YearFrom'] + 543));
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':C' . $row)->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':C' . $row)->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()
+                ->getStyle('A' . $row . ':C' . $row)
+                ->applyFromArray(array(
+                    'alignment' => array(
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    )
+                        )
+        );
+        $st = $row;
+        $row++;
+
+
+        $sum = 0;
+
+        foreach ($data2[2]['DataList'] as $key => $item) {
+            $sum += $item['CurrentAmount'];
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, $item['LostInProcessName']);
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . $row, $data1[2]['DataList'][$key]['CurrentAmount']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $item['CurrentAmount']);
+            $row++;
+        }
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, 'รวม');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . $row, $data1[2]['DataList'][$size - 1]['CurrentAmount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $item['CurrentAmount']);
+        $objPHPExcel->getActiveSheet()
+                ->getStyle('A' . $row)
+                ->applyFromArray(array(
+                    'alignment' => array(
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    )
+                        )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row)->getFont()->setSize(14);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row)->getFont()->setBold(true);
+        $row++;
+
+
+
+
+        $objPHPExcel->getActiveSheet()->getStyle('A4:C5')->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A4:C5')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('B' . $st . ':C' . ($row))
+                ->getNumberFormat()
+                ->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+
+
+
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $st . ':C' . ($row - 1))->applyFromArray(
+                array(
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => (\PHPExcel_Style_Border::BORDER_THIN)
+                        )
+                    ),
+                    'font' => array(
+                        'name' => 'AngsanaUPC'
+                    )
+                )
+        );
+
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(25);
+
+///////////////////////
+        $objPHPExcel->getActiveSheet()->getStyle('A1:C' . $row)->applyFromArray(
+                array(
+                    'font' => array(
+                        'name' => 'AngsanaUPC',
+                    )
+                )
+        );
+        return $objPHPExcel;
+    }
+
+    private function generatelostINproductionExcel3($objPHPExcel, $condition, $data1, $data2) {
+        $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
+        $objPHPExcel->getActiveSheet()->setTitle('สูญเสียใน (3)');
+//    
+
+
+        $objPHPExcel->getActiveSheet()->setCellValue('A3', '  5.3.1 สูญเสียในกระบวนการผลิต');
+        $objPHPExcel->getActiveSheet()->setCellValue('A4', $data1[3]['name']);
+        $objPHPExcel->getActiveSheet()->setCellValue('C4', 'หน่วย : ลิตร');
+        $objPHPExcel->getActiveSheet()->setCellValue('A5', 'รายการ');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('B5', ' ' . $this->getMonthName($condition['MonthTo']) . ' ' . ($condition['YearFrom'] + 543));
+
+        $objPHPExcel->getActiveSheet()->setCellValue('C5', ' ' . $this->getMonthName(10) . ' - ' . $this->getMonthName($condition['MonthTo']) . ' ' . ($condition['YearFrom'] + 543));
+
+
+        $row = 6;
+        $sum = 0;
+        $size = sizeof($data1);
+        foreach ($data2[3]['DataList'] as $key => $item) {
+            $sum += $item['CurrentAmount'];
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, $item['LostInProcessName']);
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . $row, $data1[3]['DataList'][$key]['CurrentAmount']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $item['CurrentAmount']);
+            $row++;
+        }
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, 'รวม');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . $row, $data1[3]['DataList'][$size - 1]['CurrentAmount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $item['CurrentAmount']);
+        $objPHPExcel->getActiveSheet()
+                ->getStyle('A' . $row)
+                ->applyFromArray(array(
+                    'alignment' => array(
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    )
+                        )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row)->getFont()->setSize(14);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row)->getFont()->setBold(true);
+        $row++;
+
+        $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setSize(18);
+        $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A4')->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A4')->getFont()->setBold(true);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A4:C5')->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A4:C5')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('B6:C' . ($row))
+                ->getNumberFormat()
+                ->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+
+        $objPHPExcel->getActiveSheet()
+                ->getStyle('A5:C5')
+                ->applyFromArray(array(
+                    'alignment' => array(
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    )
+                        )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A5:C' . ($row - 1))->applyFromArray(
+                array(
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => (\PHPExcel_Style_Border::BORDER_THIN)
+                        )
+                    ),
+                    'font' => array(
+                        'name' => 'AngsanaUPC'
+                    )
+                )
+        );
+
+        /////table2
+        $row++;
+
+
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), $data1[4]['name']);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), 'หน่วย : ลิตร');
+        $objPHPExcel->getActiveSheet()->getStyle('A' . ($row) . ':C' . ($row))->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . ($row) . ':C' . ($row))->getFont()->setBold(true);
+        $row++;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), 'รายการ');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), ' ' . $this->getMonthName($condition['MonthTo']) . ' ' . ($condition['YearFrom'] + 543));
+
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), ' ' . $this->getMonthName(10) . ' - ' . $this->getMonthName($condition['MonthTo']) . ' ' . ($condition['YearFrom'] + 543));
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':C' . $row)->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':C' . $row)->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()
+                ->getStyle('A' . $row . ':C' . $row)
+                ->applyFromArray(array(
+                    'alignment' => array(
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    )
+                        )
+        );
+        $st = $row;
+        $row++;
+
+
+        $sum = 0;
+
+        foreach ($data2[4]['DataList'] as $key => $item) {
+            $sum += $item['CurrentAmount'];
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, $item['LostInProcessName']);
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . $row, $data1[4]['DataList'][$key]['CurrentAmount']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $item['CurrentAmount']);
+            $row++;
+        }
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, 'รวม');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . $row, $data1[4]['DataList'][$size - 1]['CurrentAmount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $item['CurrentAmount']);
+        $objPHPExcel->getActiveSheet()
+                ->getStyle('A' . $row)
+                ->applyFromArray(array(
+                    'alignment' => array(
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    )
+                        )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row)->getFont()->setSize(14);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row)->getFont()->setBold(true);
+        $row++;
+
+
+
+
+        $objPHPExcel->getActiveSheet()->getStyle('A4:C5')->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A4:C5')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('B' . $st . ':C' . ($row))
+                ->getNumberFormat()
+                ->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+
+
+
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $st . ':C' . ($row - 1))->applyFromArray(
+                array(
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => (\PHPExcel_Style_Border::BORDER_THIN)
+                        )
+                    ),
+                    'font' => array(
+                        'name' => 'AngsanaUPC'
+                    )
+                )
+        );
+
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(25);
+
+///////////////////////
+        $objPHPExcel->getActiveSheet()->getStyle('A1:C' . $row)->applyFromArray(
+                array(
+                    'font' => array(
+                        'name' => 'AngsanaUPC',
+                    )
+                )
+        );
+        return $objPHPExcel;
+    }
+
+    private function generatelostOUTproductionExcel($objPHPExcel, $condition, $region) {
+        $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
+
+        $FactoryList = FactoryService::getList();
+        $data = [];
+
+        foreach ($FactoryList as $key => $fac) {
+            $condition['Factory'] = $fac['id'];
+            $dataOUT = LostOutProcessController::getMonthDataList($condition);
+            $dataOUT['name'] = $fac['factory_name'];
+            array_push($data, $dataOUT);
+//            $datacollectIN = LostInProcessController::getMonthDataListreport($condition);
+//            array_push($datacollect, $datacollectIN);
+        }
+        $tcurrent = 0;
+        $tbaht = 0;
+        $tbcurrent = 0;
+        $tbbaht = 0;
+        $tdiffc = 0;
+        $tdiffb = 0;
+        $tpc = 0;
+        $tpb = 0;
+
+
+
+        $objPHPExcel->getActiveSheet()->setTitle('สูญเสียหลัง (1)');
+        $objPHPExcel->getActiveSheet()->setCellValue('A3', '  5.3.2 สูญเสียหลังกระบวนการผลิต');
+        $objPHPExcel->getActiveSheet()->setCellValue('A4', 'รายการ');
+        $objPHPExcel->getActiveSheet()->mergeCells('A4:A5');
+        $objPHPExcel->getActiveSheet()->setCellValue('B4', ' ' . $this->getMonthName($condition['MonthTo']) . ' ' . ($condition['YearFrom'] + 543));
+        $objPHPExcel->getActiveSheet()->mergeCells('B4:C4');
+        $objPHPExcel->getActiveSheet()->setCellValue('D4', ' ' . $this->getMonthName($condition['MonthTo']) . ' ' . ($condition['YearFrom'] + 542));
+        $objPHPExcel->getActiveSheet()->mergeCells('D4:E4');
+        $objPHPExcel->getActiveSheet()->setCellValue('F4', 'ผลต่าง');
+        $objPHPExcel->getActiveSheet()->mergeCells('F4:I4');
+        $objPHPExcel->getActiveSheet()->setCellValue('B5', 'ลิตร');
+        $objPHPExcel->getActiveSheet()->setCellValue('C5', 'บาท');
+        $objPHPExcel->getActiveSheet()->setCellValue('D5', 'ลิตร');
+        $objPHPExcel->getActiveSheet()->setCellValue('E5', 'บาท');
+        $objPHPExcel->getActiveSheet()->setCellValue('F5', 'ลิตร');
+        $objPHPExcel->getActiveSheet()->setCellValue('G5', '% เพิ่ม,ลด');
+        $objPHPExcel->getActiveSheet()->setCellValue('H5', 'บาท');
+        $objPHPExcel->getActiveSheet()->setCellValue('I5', '% เพิ่ม,ลด');
+        $row = 6;
+        foreach ($data as $item) {
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, $item['name']);
+            $objPHPExcel->getActiveSheet()->getStyle('A' . $row)->getFont()->setSize(16);
+            $objPHPExcel->getActiveSheet()->getStyle('A' . $row)->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()
+                    ->getStyle('A' . $row)
+                    ->applyFromArray(array(
+                        'alignment' => array(
+                            'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                            'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                        )
+                            )
+            );
+            $row++;
+            foreach ($item['DataList'] as $value) {
+                $pera = 0;
+                $perb = 0;
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, $value['LostOutProcessName']);
+
+                if ($value['Month'] == 'รวม') {
+                    $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, 'รวม');
+                    $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':I' . $row)->getFont()->setSize(14);
+                    $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':I' . $row)->getFont()->setBold(true);
+                    $objPHPExcel->getActiveSheet()
+                            ->getStyle('A' . $row)
+                            ->applyFromArray(array(
+                                'alignment' => array(
+                                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                                    'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                                )
+                                    )
+                    );
+                    $tcurrent += $value['CurrentAmount'];
+                    $tbaht += $value['CurrentBaht'];
+                    $tbcurrent += $value['BeforeAmount'];
+                    $tbbaht += $value['BeforeBaht'];
+                    $tdiffc += $tcurrent - $tbcurrent;
+                    $tdiffb += $tbaht - $tbbaht;
+                }
+
+                if ($value['BeforeAmount'] != 0) {
+                    $pera = (($value['DiffAmount']) / $value['BeforeAmount']) * 100;
+                } else {
+                    $pera = 0;
+                }
+                if ($value['BeforeBaht'] != 0) {
+                    $perb = (($value['DiffBaht']) / $value['BeforeBaht']) * 100;
+                } else {
+                    $perb = 0;
+                }
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . $row, $value['CurrentAmount']);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $value['CurrentBaht']);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $value['BeforeAmount']);
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . $row, $value['BeforeBaht']);
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $value['DiffAmount']);
+                $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $pera);
+                $objPHPExcel->getActiveSheet()->setCellValue('H' . $row, $value['DiffBaht']);
+                $objPHPExcel->getActiveSheet()->setCellValue('I' . $row, $perb);
+                $row++;
+            }
+        }
+        if ($tbcurrent != 0) {
+            $tpc = (($tdiffc) / $tbcurrent) * 100;
+        } else {
+            $tpc = 0;
+        }
+        if ($tbbaht != 0) {
+            $tpb = (($tdiffb) / $tbbaht) * 100;
+        } else {
+            $tpb = 0;
+        }
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, 'รวมทั้งสิ้น');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . $row, $tcurrent);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $tbaht);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $tbcurrent);
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . $row, $tbbaht);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $tdiffc);
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $pera);
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . $row, $tdiffb);
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . $row, $perb);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':I' . $row)->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':I' . $row)->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()
+                ->getStyle('A' . $row)
+                ->applyFromArray(array(
+                    'alignment' => array(
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    )
+                        )
+        );
+
+        // header style
+        $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setSize(20);
+        $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setBold(true);
+
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
+        $highestRow = $objPHPExcel->getActiveSheet()->getHighestRow();
+        $objPHPExcel->getActiveSheet()
+                ->getStyle('A4:I5')
+                ->applyFromArray(array(
+                    'alignment' => array(
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    )
+                        )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A4:I5')->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A4:I5')->getFont()->setBold(true);
+
+        $objPHPExcel->getActiveSheet()->getStyle('B6:I' . $highestRow)
+                ->getNumberFormat()
+                ->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+
+
+
+        $objPHPExcel->getActiveSheet()->getStyle('A4:I' . $highestRow)->applyFromArray(
+                array(
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => (\PHPExcel_Style_Border::BORDER_THIN)
+                        )
+                    ),
+                    'font' => array(
+                        'name' => 'AngsanaUPC'
+                    )
+                )
+        );
         $objPHPExcel->getActiveSheet()->getStyle('A1:I' . $highestRow)->applyFromArray(
                 array(
                     'font' => array(
@@ -9260,28 +10337,592 @@ class MonthReportController extends Controller {
                 )
         );
 
+
         return $objPHPExcel;
     }
 
-    private function generatesheet($objPHPExcel) {
-        $start = 37;
+    private function generatelostOUTproductionExcel2($objPHPExcel, $condition, $region) {
+        $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
 
-        $sheetname = [
-            //  '4.1 รับน้ำนม', '4.1 รับน้ำนม(2)', '4.1 รับน้ำนม(3)', '4.1 รับน้ำนม(4)', '4.1 รับน้ำนม(5)', '4.1 รับน้ำนม(6)', '4.1 รับน้ำนม(7)', '4.1 รับน้ำนม(8)', '4.1 รับน้ำนม(9)', '4.1 รับน้ำนม(10)', '4.1 รับน้ำนม(11)', '4.1 รับน้ำนม(12)', '4.1 รับน้ำนม(13)', '4.1 รับน้ำนม(14)', '4.1 รับน้ำนม(15)',
-            '4.2 จำหน่ายน้ำนม(1)', '4.2 จำหน่ายน้ำนม(2)', '4.2 จำหน่ายน้ำนม(3)', '4.2 จำหน่ายน้ำนม(4)',
-            '5.1 ผลิตภัณฑ์นม(1)', '5.1 ผลิตภัณฑ์นม(2)', '5.1 ผลิตภัณฑ์นม(3)', '5.1 ผลิตภัณฑ์นม(4)', '5.1 ผลิตภัณฑ์นม(5)', '5.1 ผลิตภัณฑ์นม(6)', '5.1 ผลิตภัณฑ์นม(7)', '5.1 ผลิตภัณฑ์นม(8)',
-            '5.2 จำหน่ายผลิตภัณฑ์นม(1)', '5.2 จำหน่ายผลิตภัณฑ์นม(2)', '5.2 จำหน่ายผลิตภัณฑ์นม(3)', '5.2 จำหน่ายผลิตภัณฑ์นม(4)', '5.2 จำหน่ายผลิตภัณฑ์นม(5)', '5.2 จำหน่ายผลิตภัณฑ์นม(6)',
-            '5.3 สูญเสียทั้งกระบวนการ', '5.3 สูญเสียทั้งกระบวนการ(1)',
-            'สูญเสียใน (1)', 'สูญเสียใน (2)', 'สูญเสียใน (3)', 'สูญเสียใน (4)',
-            'สูญเสียหลัง (1)', 'สูญเสียหลัง (2)',
-            'สูญเสียรอ (1)', 'สูญเสียรอ (2)'];
+        $FactoryList = FactoryService::getList();
+        $data = [];
 
-        foreach ($sheetname as $item) {
-            $objPHPExcel->createSheet($start);
-            $objPHPExcel->setActiveSheetIndex($start);
-            $objPHPExcel->getActiveSheet()->setTitle($item);
-            $start++;
+        foreach ($FactoryList as $key => $fac) {
+            $condition['Factory'] = $fac['id'];
+            $dataOUT = LostOutProcessController::getMonthDataListreport($condition);
+            $dataOUT['name'] = $fac['factory_name'];
+            array_push($data, $dataOUT);
+//            $datacollectIN = LostInProcessController::getMonthDataListreport($condition);
+//            array_push($datacollect, $datacollectIN);
         }
+        $tcurrent = 0;
+        $tbaht = 0;
+        $tbcurrent = 0;
+        $tbbaht = 0;
+        $tdiffc = 0;
+        $tdiffb = 0;
+        $tpc = 0;
+        $tpb = 0;
+
+
+
+        $objPHPExcel->getActiveSheet()->setTitle('สูญเสียหลัง (2)');
+        $objPHPExcel->getActiveSheet()->setCellValue('A3', '  5.3.2 สูญเสียหลังกระบวนการผลิต');
+        $objPHPExcel->getActiveSheet()->setCellValue('A4', 'รายการ');
+        $objPHPExcel->getActiveSheet()->mergeCells('A4:A5');
+        $objPHPExcel->getActiveSheet()->setCellValue('B4', ' ' . $this->getMonthName(10) . ' - ' . $this->getMonthName($condition['MonthTo']) . ' ' . ($condition['YearFrom'] + 543));
+        $objPHPExcel->getActiveSheet()->mergeCells('B4:C4');
+        $objPHPExcel->getActiveSheet()->setCellValue('D4', ' ' . $this->getMonthName(10) . ' - ' . $this->getMonthName($condition['MonthTo']) . ' ' . ($condition['YearFrom'] + 542));
+        $objPHPExcel->getActiveSheet()->mergeCells('D4:E4');
+        $objPHPExcel->getActiveSheet()->setCellValue('F4', 'ผลต่าง');
+        $objPHPExcel->getActiveSheet()->mergeCells('F4:I4');
+        $objPHPExcel->getActiveSheet()->setCellValue('B5', 'ลิตร');
+        $objPHPExcel->getActiveSheet()->setCellValue('C5', 'บาท');
+        $objPHPExcel->getActiveSheet()->setCellValue('D5', 'ลิตร');
+        $objPHPExcel->getActiveSheet()->setCellValue('E5', 'บาท');
+        $objPHPExcel->getActiveSheet()->setCellValue('F5', 'ลิตร');
+        $objPHPExcel->getActiveSheet()->setCellValue('G5', '% เพิ่ม,ลด');
+        $objPHPExcel->getActiveSheet()->setCellValue('H5', 'บาท');
+        $objPHPExcel->getActiveSheet()->setCellValue('I5', '% เพิ่ม,ลด');
+        $row = 6;
+        foreach ($data as $item) {
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, $item['name']);
+            $objPHPExcel->getActiveSheet()->getStyle('A' . $row)->getFont()->setSize(16);
+            $objPHPExcel->getActiveSheet()->getStyle('A' . $row)->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()
+                    ->getStyle('A' . $row)
+                    ->applyFromArray(array(
+                        'alignment' => array(
+                            'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                            'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                        )
+                            )
+            );
+            $row++;
+            foreach ($item['DataList'] as $value) {
+                $pera = 0;
+                $perb = 0;
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, $value['LostOutProcessName']);
+
+                if ($value['Month'] == 'รวม') {
+                    $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, 'รวม');
+                    $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':I' . $row)->getFont()->setSize(14);
+                    $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':I' . $row)->getFont()->setBold(true);
+                    $objPHPExcel->getActiveSheet()
+                            ->getStyle('A' . $row)
+                            ->applyFromArray(array(
+                                'alignment' => array(
+                                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                                    'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                                )
+                                    )
+                    );
+                    $tcurrent += $value['CurrentAmount'];
+                    $tbaht += $value['CurrentBaht'];
+                    $tbcurrent += $value['BeforeAmount'];
+                    $tbbaht += $value['BeforeBaht'];
+                }
+
+                if ($value['BeforeAmount'] != 0) {
+                    $pera = (($value['DiffAmount']) / $value['BeforeAmount']) * 100;
+                } else {
+                    $pera = 0;
+                }
+                if ($value['BeforeBaht'] != 0) {
+                    $perb = (($value['DiffBaht']) / $value['BeforeBaht']) * 100;
+                } else {
+                    $perb = 0;
+                }
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . $row, $value['CurrentAmount']);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $value['CurrentBaht']);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $value['BeforeAmount']);
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . $row, $value['BeforeBaht']);
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $value['DiffAmount']);
+                $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $pera);
+                $objPHPExcel->getActiveSheet()->setCellValue('H' . $row, $value['DiffBaht']);
+                $objPHPExcel->getActiveSheet()->setCellValue('I' . $row, $perb);
+                $row++;
+            }
+        }
+        $tdiffc = $tcurrent - $tbcurrent;
+        $tdiffb = $tbaht - $tbbaht;
+        if ($tbcurrent != 0) {
+            $tpc = (($tdiffc) / $tbcurrent) * 100;
+        } else {
+            $tpc = 0;
+        }
+        if ($tbbaht != 0) {
+            $tpb = (($tdiffb) / $tbbaht) * 100;
+        } else {
+            $tpb = 0;
+        }
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, 'รวมทั้งสิ้น');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . $row, $tcurrent);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $tbaht);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $tbcurrent);
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . $row, $tbbaht);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $tdiffc);
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $pera);
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . $row, $tdiffb);
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . $row, $perb);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':I' . $row)->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':I' . $row)->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()
+                ->getStyle('A' . $row)
+                ->applyFromArray(array(
+                    'alignment' => array(
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    )
+                        )
+        );
+
+        // header style
+        $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setSize(20);
+        $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setBold(true);
+
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
+        $highestRow = $objPHPExcel->getActiveSheet()->getHighestRow();
+        $objPHPExcel->getActiveSheet()
+                ->getStyle('A4:I5')
+                ->applyFromArray(array(
+                    'alignment' => array(
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    )
+                        )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A4:I5')->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A4:I5')->getFont()->setBold(true);
+
+        $objPHPExcel->getActiveSheet()->getStyle('B6:I' . $highestRow)
+                ->getNumberFormat()
+                ->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+
+
+
+        $objPHPExcel->getActiveSheet()->getStyle('A4:I' . $highestRow)->applyFromArray(
+                array(
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => (\PHPExcel_Style_Border::BORDER_THIN)
+                        )
+                    ),
+                    'font' => array(
+                        'name' => 'AngsanaUPC'
+                    )
+                )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A1:I' . $highestRow)->applyFromArray(
+                array(
+                    'font' => array(
+                        'name' => 'AngsanaUPC',
+                    )
+                )
+        );
+
+
+        return $objPHPExcel;
+    }
+
+    private function generatelostWAITproductionExcel($objPHPExcel, $condition, $region) {
+        $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
+
+        $FactoryList = FactoryService::getList();
+        $data = [];
+
+        foreach ($FactoryList as $key => $fac) {
+            $condition['Factory'] = $fac['id'];
+            $dataOUT = LostWaitSaleController::getMonthDataList($condition);
+            $dataOUT['name'] = $fac['factory_name'];
+            array_push($data, $dataOUT);
+//            $datacollectIN = LostInProcessController::getMonthDataListreport($condition);
+//            array_push($datacollect, $datacollectIN);
+        }
+        $tcurrent = 0;
+        $tbaht = 0;
+        $tbcurrent = 0;
+        $tbbaht = 0;
+        $tdiffc = 0;
+        $tdiffb = 0;
+        $tpc = 0;
+        $tpb = 0;
+
+
+
+        $objPHPExcel->getActiveSheet()->setTitle('สูญเสียรอ (1)');
+        $objPHPExcel->getActiveSheet()->setCellValue('A3', '   5.3.3 สูญเสียระหว่างรอจำหน่าย');
+        $objPHPExcel->getActiveSheet()->setCellValue('A4', 'รายการ');
+        $objPHPExcel->getActiveSheet()->mergeCells('A4:A5');
+        $objPHPExcel->getActiveSheet()->setCellValue('B4', ' ' . $this->getMonthName($condition['MonthTo']) . ' ' . ($condition['YearFrom'] + 543));
+        $objPHPExcel->getActiveSheet()->mergeCells('B4:C4');
+        $objPHPExcel->getActiveSheet()->setCellValue('D4', ' ' . $this->getMonthName($condition['MonthTo']) . ' ' . ($condition['YearFrom'] + 542));
+        $objPHPExcel->getActiveSheet()->mergeCells('D4:E4');
+        $objPHPExcel->getActiveSheet()->setCellValue('F4', 'ผลต่าง');
+        $objPHPExcel->getActiveSheet()->mergeCells('F4:I4');
+        $objPHPExcel->getActiveSheet()->setCellValue('B5', 'ลิตร');
+        $objPHPExcel->getActiveSheet()->setCellValue('C5', 'บาท');
+        $objPHPExcel->getActiveSheet()->setCellValue('D5', 'ลิตร');
+        $objPHPExcel->getActiveSheet()->setCellValue('E5', 'บาท');
+        $objPHPExcel->getActiveSheet()->setCellValue('F5', 'ลิตร');
+        $objPHPExcel->getActiveSheet()->setCellValue('G5', '% เพิ่ม,ลด');
+        $objPHPExcel->getActiveSheet()->setCellValue('H5', 'บาท');
+        $objPHPExcel->getActiveSheet()->setCellValue('I5', '% เพิ่ม,ลด');
+        $row = 6;
+        foreach ($data as $item) {
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, $item['name']);
+            $objPHPExcel->getActiveSheet()->getStyle('A' . $row)->getFont()->setSize(16);
+            $objPHPExcel->getActiveSheet()->getStyle('A' . $row)->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()
+                    ->getStyle('A' . $row)
+                    ->applyFromArray(array(
+                        'alignment' => array(
+                            'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                            'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                        )
+                            )
+            );
+            $row++;
+            foreach ($item['DataList'] as $value) {
+                $pera = 0;
+                $perb = 0;
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, $value['LostOutProcessName']);
+
+                if ($value['Month'] == 'รวม') {
+                    $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, 'รวม');
+                    $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':I' . $row)->getFont()->setSize(14);
+                    $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':I' . $row)->getFont()->setBold(true);
+                    $objPHPExcel->getActiveSheet()
+                            ->getStyle('A' . $row)
+                            ->applyFromArray(array(
+                                'alignment' => array(
+                                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                                    'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                                )
+                                    )
+                    );
+                    $tcurrent += $value['CurrentAmount'];
+                    $tbaht += $value['CurrentBaht'];
+                    $tbcurrent += $value['BeforeAmount'];
+                    $tbbaht += $value['BeforeBaht'];
+                    $tdiffc += $tcurrent - $tbcurrent;
+                    $tdiffb += $tbaht - $tbbaht;
+                }
+
+                if ($value['BeforeAmount'] != 0) {
+                    $pera = (($value['DiffAmount']) / $value['BeforeAmount']) * 100;
+                } else {
+                    $pera = 0;
+                }
+                if ($value['BeforeBaht'] != 0) {
+                    $perb = (($value['DiffBaht']) / $value['BeforeBaht']) * 100;
+                } else {
+                    $perb = 0;
+                }
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . $row, $value['CurrentAmount']);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $value['CurrentBaht']);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $value['BeforeAmount']);
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . $row, $value['BeforeBaht']);
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $value['DiffAmount']);
+                $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $pera);
+                $objPHPExcel->getActiveSheet()->setCellValue('H' . $row, $value['DiffBaht']);
+                $objPHPExcel->getActiveSheet()->setCellValue('I' . $row, $perb);
+                $row++;
+            }
+        }
+        if ($tbcurrent != 0) {
+            $tpc = (($tdiffc) / $tbcurrent) * 100;
+        } else {
+            $tpc = 0;
+        }
+        if ($tbbaht != 0) {
+            $tpb = (($tdiffb) / $tbbaht) * 100;
+        } else {
+            $tpb = 0;
+        }
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, 'รวมทั้งสิ้น');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . $row, $tcurrent);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $tbaht);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $tbcurrent);
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . $row, $tbbaht);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $tdiffc);
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $pera);
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . $row, $tdiffb);
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . $row, $perb);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':I' . $row)->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':I' . $row)->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()
+                ->getStyle('A' . $row)
+                ->applyFromArray(array(
+                    'alignment' => array(
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    )
+                        )
+        );
+
+        // header style
+        $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setSize(20);
+        $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setBold(true);
+
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
+        $highestRow = $objPHPExcel->getActiveSheet()->getHighestRow();
+        $objPHPExcel->getActiveSheet()
+                ->getStyle('A4:I5')
+                ->applyFromArray(array(
+                    'alignment' => array(
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    )
+                        )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A4:I5')->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A4:I5')->getFont()->setBold(true);
+
+        $objPHPExcel->getActiveSheet()->getStyle('B6:I' . $highestRow)
+                ->getNumberFormat()
+                ->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+
+
+
+        $objPHPExcel->getActiveSheet()->getStyle('A4:I' . $highestRow)->applyFromArray(
+                array(
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => (\PHPExcel_Style_Border::BORDER_THIN)
+                        )
+                    ),
+                    'font' => array(
+                        'name' => 'AngsanaUPC'
+                    )
+                )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A1:I' . $highestRow)->applyFromArray(
+                array(
+                    'font' => array(
+                        'name' => 'AngsanaUPC',
+                    )
+                )
+        );
+
+
+        return $objPHPExcel;
+    }
+
+    private function generatelostWAITproductionExcel2($objPHPExcel, $condition, $region) {
+        $sheet = $objPHPExcel->getSheetCount();
+        $objPHPExcel->createSheet($sheet);
+        $objPHPExcel->setActiveSheetIndex($sheet);
+
+        $FactoryList = FactoryService::getList();
+        $data = [];
+
+        foreach ($FactoryList as $key => $fac) {
+            $condition['Factory'] = $fac['id'];
+            $dataOUT = LostWaitSaleController::getMonthDataListreport($condition);
+            $dataOUT['name'] = $fac['factory_name'];
+            array_push($data, $dataOUT);
+//            $datacollectIN = LostInProcessController::getMonthDataListreport($condition);
+//            array_push($datacollect, $datacollectIN);
+        }
+        $tcurrent = 0;
+        $tbaht = 0;
+        $tbcurrent = 0;
+        $tbbaht = 0;
+        $tdiffc = 0;
+        $tdiffb = 0;
+        $tpc = 0;
+        $tpb = 0;
+
+
+
+        $objPHPExcel->getActiveSheet()->setTitle('สูญเสียรอ (2)');
+        $objPHPExcel->getActiveSheet()->setCellValue('A3', '   5.3.3 สูญเสียระหว่างรอจำหน่าย');
+        $objPHPExcel->getActiveSheet()->setCellValue('A4', 'รายการ');
+        $objPHPExcel->getActiveSheet()->mergeCells('A4:A5');
+        $objPHPExcel->getActiveSheet()->setCellValue('B4', ' ' . $this->getMonthName(10) . ' - ' . $this->getMonthName($condition['MonthTo']) . ' ' . ($condition['YearFrom'] + 543));
+        $objPHPExcel->getActiveSheet()->mergeCells('B4:C4');
+        $objPHPExcel->getActiveSheet()->setCellValue('D4', ' ' . $this->getMonthName(10) . ' - ' . $this->getMonthName($condition['MonthTo']) . ' ' . ($condition['YearFrom'] + 542));
+        $objPHPExcel->getActiveSheet()->mergeCells('D4:E4');
+        $objPHPExcel->getActiveSheet()->setCellValue('F4', 'ผลต่าง');
+        $objPHPExcel->getActiveSheet()->mergeCells('F4:I4');
+        $objPHPExcel->getActiveSheet()->setCellValue('B5', 'ลิตร');
+        $objPHPExcel->getActiveSheet()->setCellValue('C5', 'บาท');
+        $objPHPExcel->getActiveSheet()->setCellValue('D5', 'ลิตร');
+        $objPHPExcel->getActiveSheet()->setCellValue('E5', 'บาท');
+        $objPHPExcel->getActiveSheet()->setCellValue('F5', 'ลิตร');
+        $objPHPExcel->getActiveSheet()->setCellValue('G5', '% เพิ่ม,ลด');
+        $objPHPExcel->getActiveSheet()->setCellValue('H5', 'บาท');
+        $objPHPExcel->getActiveSheet()->setCellValue('I5', '% เพิ่ม,ลด');
+        $row = 6;
+        foreach ($data as $item) {
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, $item['name']);
+            $objPHPExcel->getActiveSheet()->getStyle('A' . $row)->getFont()->setSize(16);
+            $objPHPExcel->getActiveSheet()->getStyle('A' . $row)->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()
+                    ->getStyle('A' . $row)
+                    ->applyFromArray(array(
+                        'alignment' => array(
+                            'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                            'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                        )
+                            )
+            );
+            $row++;
+            foreach ($item['DataList'] as $value) {
+                $pera = 0;
+                $perb = 0;
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, $value['LostOutProcessName']);
+
+                if ($value['Month'] == 'รวม') {
+                    $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, 'รวม');
+                    $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':I' . $row)->getFont()->setSize(14);
+                    $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':I' . $row)->getFont()->setBold(true);
+                    $objPHPExcel->getActiveSheet()
+                            ->getStyle('A' . $row)
+                            ->applyFromArray(array(
+                                'alignment' => array(
+                                    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                                    'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                                )
+                                    )
+                    );
+                    $tcurrent += $value['CurrentAmount'];
+                    $tbaht += $value['CurrentBaht'];
+                    $tbcurrent += $value['BeforeAmount'];
+                    $tbbaht += $value['BeforeBaht'];
+                }
+
+                if ($value['BeforeAmount'] != 0) {
+                    $pera = (($value['DiffAmount']) / $value['BeforeAmount']) * 100;
+                } else {
+                    $pera = 0;
+                }
+                if ($value['BeforeBaht'] != 0) {
+                    $perb = (($value['DiffBaht']) / $value['BeforeBaht']) * 100;
+                } else {
+                    $perb = 0;
+                }
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . $row, $value['CurrentAmount']);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $value['CurrentBaht']);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $value['BeforeAmount']);
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . $row, $value['BeforeBaht']);
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $value['DiffAmount']);
+                $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $pera);
+                $objPHPExcel->getActiveSheet()->setCellValue('H' . $row, $value['DiffBaht']);
+                $objPHPExcel->getActiveSheet()->setCellValue('I' . $row, $perb);
+                $row++;
+            }
+        }
+        $tdiffc = $tcurrent - $tbcurrent;
+        $tdiffb = $tbaht - $tbbaht;
+        if ($tbcurrent != 0) {
+            $tpc = (($tdiffc) / $tbcurrent) * 100;
+        } else {
+            $tpc = 0;
+        }
+        if ($tbbaht != 0) {
+            $tpb = (($tdiffb) / $tbbaht) * 100;
+        } else {
+            $tpb = 0;
+        }
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, 'รวมทั้งสิ้น');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . $row, $tcurrent);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $tbaht);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $tbcurrent);
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . $row, $tbbaht);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $tdiffc);
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $pera);
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . $row, $tdiffb);
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . $row, $perb);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':I' . $row)->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':I' . $row)->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()
+                ->getStyle('A' . $row)
+                ->applyFromArray(array(
+                    'alignment' => array(
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    )
+                        )
+        );
+
+        // header style
+        $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setSize(20);
+        $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setBold(true);
+
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
+        $highestRow = $objPHPExcel->getActiveSheet()->getHighestRow();
+        $objPHPExcel->getActiveSheet()
+                ->getStyle('A4:I5')
+                ->applyFromArray(array(
+                    'alignment' => array(
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    )
+                        )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A4:I5')->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A4:I5')->getFont()->setBold(true);
+
+        $objPHPExcel->getActiveSheet()->getStyle('B6:I' . $highestRow)
+                ->getNumberFormat()
+                ->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+
+
+
+        $objPHPExcel->getActiveSheet()->getStyle('A4:I' . $highestRow)->applyFromArray(
+                array(
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => (\PHPExcel_Style_Border::BORDER_THIN)
+                        )
+                    ),
+                    'font' => array(
+                        'name' => 'AngsanaUPC'
+                    )
+                )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A1:I' . $highestRow)->applyFromArray(
+                array(
+                    'font' => array(
+                        'name' => 'AngsanaUPC',
+                    )
+                )
+        );
+
+
         return $objPHPExcel;
     }
 
