@@ -200,7 +200,7 @@ class MBIController extends Controller {
         $ymFrom = ($yearst) . '-' . str_pad(10, 2, "0", STR_PAD_LEFT);
         $fromTime = ($yearst) . '-' . str_pad(10, 2, "0", STR_PAD_LEFT) . '-01';
         $ymTo = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT);
-        $toTime = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT) . '-' . MBIController::getLastDayOfMonth($ymTo); // .CowGroupController::getLastDayOfMonth($ym);
+        $toTime = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT) . '-28' ; // .CowGroupController::getLastDayOfMonth($ym);
         $years = $condition['YearTo'];
 
 
@@ -343,9 +343,10 @@ class MBIController extends Controller {
 //        print_r($test);
         if ($diffMonth == 0) {
             $diffMonth = 1;
-        }else{
-             $diffMonth += 1;
+        } else{
+            $diffMonth += 1;
         }
+        
         // print_r(MBIController::getLastDayOfMonth($ymTo));
 
 

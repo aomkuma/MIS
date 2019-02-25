@@ -116,11 +116,12 @@ class MonthReportController extends Controller {
             $objPHPExcel = $this->generateCooperativeMilkExcel($objPHPExcel, $condition, $region);
             $objPHPExcel = $this->generateCowgroupExcel($objPHPExcel, $condition, $region);
             $objPHPExcel = $this->generateCowgroup2Excel($objPHPExcel, $condition, $region);
-         //   $objPHPExcel = $this->generateCowgroup3Excel($objPHPExcel, $condition, $region);
+            //   $objPHPExcel = $this->generateCowgroup3Excel($objPHPExcel, $condition, $region);
             $objPHPExcel = $this->generateCowgroup4Excel($objPHPExcel, $condition, $region);
             $objPHPExcel = $this->generateCowgroup5Excel($objPHPExcel, $condition, $region);
-           // $objPHPExcel = $this->generateCowgroup6Excel($objPHPExcel, $condition, $region);
+            // $objPHPExcel = $this->generateCowgroup6Excel($objPHPExcel, $condition, $region);
             $objPHPExcel = $this->generateMilkExcel($objPHPExcel, $condition, $region);
+//            die();
             $objPHPExcel = $this->generatesaleMilkExcel($objPHPExcel, $condition, $region);
             $objPHPExcel = $this->generateproductMilkExcel($objPHPExcel, $condition, $region);
 //            die();
@@ -1049,7 +1050,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateMineralExcel($objPHPExcel, $condition, $region) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
         $data = MineralController::getMonthDataListByMaster($condition, $region);
@@ -1061,7 +1062,7 @@ class MonthReportController extends Controller {
         } else {
             $showm = $condition['YearFrom'];
         }
-      
+
         $objPHPExcel->getActiveSheet()->setTitle("2.2 อาหารสัตว์");
         $objPHPExcel->getActiveSheet()->setCellValue('A3', '2. การดำเนินงานด้านการให้บริการของ อ.ส.ค.');
         $objPHPExcel->getActiveSheet()->setCellValue('A4', '  2.2 อาหารสัตว์');
@@ -1611,7 +1612,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateTravelExcel($objPHPExcel, $condition, $region) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
 
@@ -1891,7 +1892,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateSpermSaleExcel($objPHPExcel, $condition, $region) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
         $data = SpermSaleController::getMonthDataListreport($condition, $region);
@@ -2003,7 +2004,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateSpermSale2Excel($objPHPExcel, $condition, $region) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
         $objPHPExcel->getActiveSheet()->setTitle("2.5 ปัจจัยการผลิต (2)");
@@ -2156,7 +2157,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateCooperativeMilkExcel($objPHPExcel, $condition) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
         $region = [0 => ['RegionID' => 1, 'RegionName' => 'อ.ส.ค. สำนักงานใหญ่ มวกเหล็ก'], 1 => ['RegionID' => 2, 'RegionName' => 'อ.ส.ค. สำนักงานกรุงเทพฯ Office'],
@@ -2603,7 +2604,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateCooperativeMilk4Excel($objPHPExcel, $condition, $region) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
         $objPHPExcel->getActiveSheet()->setTitle("3.1 จำนวนสมาชิก (4)");
@@ -2734,7 +2735,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateCooperativeMilk5Excel($objPHPExcel, $condition, $region) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
         $objPHPExcel->getActiveSheet()->setTitle("3.1 จำนวนสมาชิก (5)");
@@ -2865,7 +2866,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateCooperativeMilk6Excel($objPHPExcel, $condition, $region) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
         $objPHPExcel->getActiveSheet()->setTitle("3.1 จำนวนสมาชิก (6)");
@@ -2996,7 +2997,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateCooperativeMilk7Excel($objPHPExcel, $condition, $region) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
         $objPHPExcel->getActiveSheet()->setTitle("3.1 จำนวนสมาชิก (7)");
@@ -3127,7 +3128,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateCowgroupExcel($objPHPExcel, $condition, $region) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
 
@@ -3226,7 +3227,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateCowgroup2Excel($objPHPExcel, $condition, $region) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
 
@@ -3320,7 +3321,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateCowgroup3Excel($objPHPExcel, $condition, $region) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
 
@@ -3330,7 +3331,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateCowgroup4Excel($objPHPExcel, $condition, $region) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
         $showm = 0;
@@ -3462,7 +3463,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateCowgroup5Excel($objPHPExcel, $condition, $region) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
         $showm = 0;
@@ -3635,9 +3636,9 @@ class MonthReportController extends Controller {
 //tb header
         $objPHPExcel->getActiveSheet()->setCellValue('A10', 'เดือน');
         $objPHPExcel->getActiveSheet()->mergeCells('A10:A11');
-        $objPHPExcel->getActiveSheet()->setCellValue('B10', 'ปีงบประมาณ ' . $this->getMonthName($condition['MonthFrom']) . ' ' . ($condition['YearFrom'] + 543));
+        $objPHPExcel->getActiveSheet()->setCellValue('B10', 'ปีงบประมาณ ' . ($condition['YearFrom'] + 543));
         $objPHPExcel->getActiveSheet()->mergeCells('B10:C10');
-        $objPHPExcel->getActiveSheet()->setCellValue('D10', 'ปีงบประมาณ ' . $this->getMonthName($condition['MonthFrom']) . ' ' . ($condition['YearFrom'] + 542));
+        $objPHPExcel->getActiveSheet()->setCellValue('D10', 'ปีงบประมาณ ' . ($condition['YearFrom'] + 542));
         $objPHPExcel->getActiveSheet()->mergeCells('D10:E10');
         $objPHPExcel->getActiveSheet()->setCellValue('F10', 'ผลต่าง');
         $objPHPExcel->getActiveSheet()->mergeCells('F10:I10');
@@ -3673,7 +3674,8 @@ class MonthReportController extends Controller {
         $objPHPExcel->getActiveSheet()->setCellValue('G' . (12 + $row), $data['Summary']['DiffAmountPercentage']);
         $objPHPExcel->getActiveSheet()->setCellValue('H' . (12 + $row), $data['Summary']['SummaryDiffBaht']);
         $objPHPExcel->getActiveSheet()->setCellValue('I' . (12 + $row), $data['Summary']['DiffBahtPercentage']);
-
+        $objPHPExcel->getActiveSheet()->getStyle('A' . (12 + $row) . ':I' . (12 + $row))->getFont()->setSize(14);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . (12 + $row) . ':I' . (12 + $row))->getFont()->setBold(true);
         $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setSize(22);
         $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setBold(true);
         $objPHPExcel->getActiveSheet()->getStyle('A4')->getFont()->setSize(20);
@@ -3743,7 +3745,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk2Excel($objPHPExcel, $condition, $data) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
 
@@ -3860,7 +3862,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk3Excel($objPHPExcel, $condition, $data) {
-       $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
         $size = sizeof($data['data']);
@@ -3926,7 +3928,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk4Excel($objPHPExcel, $condition, $region) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
 
@@ -3989,7 +3991,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk5Excel($objPHPExcel, $condition, $data) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
 
@@ -4110,7 +4112,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk6Excel($objPHPExcel, $condition, $data) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
         $size = sizeof($data['data']);
@@ -4170,7 +4172,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk7Excel($objPHPExcel, $condition, $data) {
-       $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
 
@@ -4353,7 +4355,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk9Excel($objPHPExcel, $condition, $data) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
         $size = sizeof($data['data']);
@@ -4477,7 +4479,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk11Excel($objPHPExcel, $condition, $data) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
 
@@ -4598,7 +4600,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk12Excel($objPHPExcel, $condition, $data) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
         $size = sizeof($data['data']);
@@ -4839,7 +4841,7 @@ class MonthReportController extends Controller {
     }
 
     private function generateMilk15Excel($objPHPExcel, $condition, $data) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
         $size = sizeof($data['data']);
@@ -4908,7 +4910,7 @@ class MonthReportController extends Controller {
     }
 
     private function generatesaleMilkExcel($objPHPExcel, $condition, $region) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
         $data = MSIController::getListMSIMonthdata($condition, $region);
@@ -5038,7 +5040,7 @@ class MonthReportController extends Controller {
     }
 
     private function generatesaleMilk2Excel($objPHPExcel, $condition, $data) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
 
@@ -5292,7 +5294,7 @@ class MonthReportController extends Controller {
     }
 
     private function generatesaleMilk4Excel($objPHPExcel, $condition, $data) {
-         $sheet = $objPHPExcel->getSheetCount();
+        $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
 
@@ -5577,7 +5579,8 @@ class MonthReportController extends Controller {
         $objPHPExcel->getActiveSheet()->getStyle('A' . (7 + $row) . ':G' . (7 + $row))->getFont()->setBold(true);
         $row++;
         $objPHPExcel->getActiveSheet()->setCellValue('B' . ($ckrow), '                        เมื่อเปรียบเทียบกับเดือนเดียวกันกับปีก่อนซึ่งผลิตได้ ปริมาณ ' . number_format($totalb, 2, '.', ',') . '  ลิตร ปรากฏว่าการผลิต');
-
+        $_SESSION["totalc"] = $totalc;
+        $_SESSION["totalb"] = $totalb;
         if ($totalc - $totalb > 0) {
             $objPHPExcel->getActiveSheet()->setCellValue('B' . ($ckrow + 1), '                     เพิ่มขึ้น ปริมาณ ' . number_format($totalc - $totalb, 2, '.', ',') . '  ลิตร คิดเป็นร้อยละ ' . number_format($totalper));
         } else {
@@ -6544,7 +6547,8 @@ class MonthReportController extends Controller {
         );
         $row++;
         $objPHPExcel->getActiveSheet()->setCellValue('B' . ($ckrow), '                        เมื่อเปรียบเทียบกับเดือนเดียวกันกับปีก่อนซึ่งผลิตได้ ปริมาณ ' . number_format($totalb, 2, '.', ',') . '  ลิตร ปรากฏว่าการผลิต');
-
+        $_SESSION["totalc2"] = $totalc;
+        $_SESSION["totalb2"] = $totalb;
         if ($totalc - $totalb > 0) {
             $objPHPExcel->getActiveSheet()->setCellValue('B' . ($ckrow + 1), '                     เพิ่มขึ้น ปริมาณ ' . number_format($totalc - $totalb, 2, '.', ',') . '  ลิตร คิดเป็นร้อยละ ' . number_format($totalper));
         } else {
@@ -8444,6 +8448,7 @@ class MonthReportController extends Controller {
                     )
                         )
         );
+      
         $row++;
         $objPHPExcel->getActiveSheet()->setCellValue('B' . ($ckrow), '                        เมื่อเปรียบเทียบกับเดือนเดียวกันกับปีก่อนซึ่งผลิตได้ ปริมาณ ' . number_format($totalb, 2, '.', ',') . '  ลิตร ปรากฏว่าการผลิต');
 
@@ -9227,8 +9232,11 @@ class MonthReportController extends Controller {
         $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
-
-
+        $totalc = $_SESSION["totalc"];
+        $totalb = $_SESSION["totalb"];
+        $totalc2 = $_SESSION["totalc2"];
+        $totalb2 = $_SESSION["totalb2"];
+        session_destroy();
 
         $showm = 0;
         $showy = $condition['YearFrom'];
@@ -9401,9 +9409,17 @@ class MonthReportController extends Controller {
         $objPHPExcel->getActiveSheet()->setCellValue('I' . ($row), $tpb);
         $row++;
         $objPHPExcel->getActiveSheet()->setCellValue('A' . ( $row), '% สูญเสีย');
-        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), '');
+        if ($totalc != 0) {
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), $tcurrent * 100 / $totalc);
+        } else {
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), 0);
+        }
         $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), '');
-        $objPHPExcel->getActiveSheet()->setCellValue('D' . ( $row), '');
+        if ($totalb != 0) {
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . ($row), $tbcurrent * 100 / $totalb);
+        } else {
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . ($row), 0);
+        }
         $objPHPExcel->getActiveSheet()->setCellValue('E' . ($row), '');
         $objPHPExcel->getActiveSheet()->setCellValue('F' . ($row), '');
         $objPHPExcel->getActiveSheet()->setCellValue('G' . ($row), '');
@@ -9639,9 +9655,17 @@ class MonthReportController extends Controller {
         );
         $row++;
         $objPHPExcel->getActiveSheet()->setCellValue('A' . ( $row), '% สูญเสีย');
-        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), '');
+        if ($totalc2 != 0) {
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), $tcurrent * 100 / $totalc2);
+        } else {
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), 0);
+        }
         $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), '');
-        $objPHPExcel->getActiveSheet()->setCellValue('D' . ($row), '');
+        if ($totalb2 != 0) {
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . ($row), $tcurrent * 100 / $totalb2);
+        } else {
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . ($row), 0);
+        }
         $objPHPExcel->getActiveSheet()->setCellValue('E' . ($row), '');
         $objPHPExcel->getActiveSheet()->setCellValue('F' . ($row), '');
         $objPHPExcel->getActiveSheet()->setCellValue('G' . ($row), '');

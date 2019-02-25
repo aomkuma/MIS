@@ -210,9 +210,7 @@ class MSIController extends Controller {
         $diffMonth = (($diff->format('%y') * 12) + $diff->format('%m'));
         if ($diffMonth == 0) {
             $diffMonth = 1;
-        } else{
-            $diffMonth += 1;
-        }
+        } 
             $DataList = [];
         $DataSummary = [];
         $DataOthersheet = [];
