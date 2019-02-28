@@ -17,6 +17,12 @@ use App\Service\SpermSaleService;
 use App\Service\MouService;
 use App\Service\MBIService;
 use App\Service\MSIService;
+use App\Service\ProductionInfoService;
+use App\Service\ProductionSaleInfoService;
+use App\Service\LostInProcessService;
+use App\Service\LostOutProcessService;
+use App\Service\LostWaitSaleService;
+use App\Service\FactoryService;
 use PHPExcel;
 
 class SubcommitteeReportController extends Controller {
@@ -102,21 +108,24 @@ class SubcommitteeReportController extends Controller {
                     $objPHPExcel = $this->generatesheet1($objPHPExcel, $condition, $header);
                     $objPHPExcel = $this->generatesheet2($objPHPExcel, $condition, $header);
                     $objPHPExcel = $this->generatesheet3($objPHPExcel, $condition, $header);
+                    $objPHPExcel = $this->generatesheet4($objPHPExcel, $condition, $header);
                     break;
                 case 'monthly' :$header = 'สรุปรายงานผลการดำเนินงานประจำเดือน ' . $this->getMonthName($condition['MonthFrom']) . ' ปี ' . ($condition['YearTo'] + 543);
                     $objPHPExcel = $this->generatesheet1($objPHPExcel, $condition, $header);
                     $objPHPExcel = $this->generatesheet2($objPHPExcel, $condition, $header);
                     $objPHPExcel = $this->generatesheet3($objPHPExcel, $condition, $header);
+                    $objPHPExcel = $this->generatesheet4($objPHPExcel, $condition, $header);
                     break;
                 case 'quarter' :$header = 'สรุปรายงานผลการดำเนินงานประจำ ไตรมาสที่ ' . $condition['QuarterFrom'] . ' ปี ' . ($condition['YearFrom'] + 543);
                     $objPHPExcel = $this->generatesheet1($objPHPExcel, $condition, $header);
                     $objPHPExcel = $this->generatesheet2($objPHPExcel, $condition, $header);
                     $objPHPExcel = $this->generatesheet3($objPHPExcel, $condition, $header);
+                    $objPHPExcel = $this->generatesheet4($objPHPExcel, $condition, $header);
                     break;
 
                 default : $result = null;
             }
-
+//            die();
             // $filename = 'MIS_Report-รายงานรายเดือน' . '_' . date('YmdHis') . '.xlsx';
             $filename = 'MIS_Report-Subcommittee_' . '_' . date('YmdHis') . '.xlsx';
             $filepath = '../../files/files/download/' . $filename;
@@ -139,7 +148,7 @@ class SubcommitteeReportController extends Controller {
     private function generatesheet1($objPHPExcel, $condition, $header) {
         $objPHPExcel->getActiveSheet()->setTitle("สรุป");
 
-        $mastername = ['สัตวแพท', 'ผสมเทียม', 'ผลิตน้ำนม', 'ผลิตน้ำเชื้อแช่แข็ง', 'แร่ธาตุ พรีมิกซ์ และอาหาร', 'ปัจจัยการเลี้ยงโค', 'ฝึกอบรม', 'จำหน่ายน้ำเชื้อแช่แข็ง'];
+        $mastername = ['สัตวแพท', 'ผสมเทียม', 'ผลิตน้ำนม', 'ผลิตน้ำเชื้อแช่แข็ง', 'แร่ธาตุ พรีมิกซ์ และอาหาร', 'ปัจจัยการเลี้ยงโค', 'ฝึกอบรม', 'จำหน่ายน้ำเชื้อแช่แข็ง', 'ข้อมูลการผลิต', 'ข้อมูลการขาย', 'ข้อมูลรับซื้อน้ำนม', 'ข้อมูลจำหน่ายน้ำนม'];
 
 
 
@@ -156,7 +165,7 @@ class SubcommitteeReportController extends Controller {
             $objPHPExcel->getActiveSheet()->setCellValue('B4', 'หน่วย');
             $objPHPExcel->getActiveSheet()->mergeCells('B4:B5');
             $objPHPExcel->getActiveSheet()->setCellValue('C4', 'เป้าหมาย');
-            $objPHPExcel->getActiveSheet()->setCellValue('C5', ($condition['YearFrom'] - 1957));
+            $objPHPExcel->getActiveSheet()->setCellValue('C5', 'ปี ' . ($condition['YearFrom'] - 1957));
             $objPHPExcel->getActiveSheet()->setCellValue('D4', 'ผลการดำเนินงานปี ' . ($condition['YearFrom'] + 543));
             $objPHPExcel->getActiveSheet()->mergeCells('D4:E4');
             $objPHPExcel->getActiveSheet()->setCellValue('D5', 'ปี ' . ($condition['YearFrom'] - 1957));
@@ -208,6 +217,18 @@ class SubcommitteeReportController extends Controller {
                                 break;
                             case 'จำหน่ายน้ำเชื้อแช่แข็ง' :
                                 $actually = SpermSaleService::getDetailmonth($year - $yearlist[$i], $monthloop, $itemmaster['id'], 3);
+                                break;
+                            case 'ข้อมูลการผลิต' :
+                                $actually = ProductionInfoService::getDetailList2($year - $yearlist[$i], $monthloop);
+                                break;
+                            case 'ข้อมูลการขาย' :
+                                $actually = ProductionSaleInfoService::getDetailList2($year - $yearlist[$i], $monthloop);
+                                break;
+                            case 'ข้อมูลรับซื้อน้ำนม' :
+                                $actually = MBIService::getListMBIreoprt2($year - $yearlist[$i], $monthloop);
+                                break;
+                            case 'ข้อมูลจำหน่ายน้ำนม' :
+                                $actually = MSIService::getListMSIreoprt2($year - $yearlist[$i], $monthloop);
                                 break;
 
                             default : $result = null;
@@ -289,6 +310,18 @@ class SubcommitteeReportController extends Controller {
                             break;
                         case 'จำหน่ายน้ำเชื้อแช่แข็ง' :
                             $actually = SpermSaleService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
+                            break;
+                        case 'ข้อมูลการผลิต' :
+                            $actually = ProductionInfoService::getDetailList2($condition['YearTo'], $condition['MonthFrom']);
+                            break;
+                        case 'ข้อมูลการขาย' :
+                            $actually = ProductionSaleInfoService::getDetailList2($condition['YearTo'], $condition['MonthFrom']);
+                            break;
+                        case 'ข้อมูลรับซื้อน้ำนม' :
+                            $actually = MBIService::getListMBIreoprt2($condition['YearTo'], $condition['MonthFrom']);
+                            break;
+                        case 'ข้อมูลจำหน่ายน้ำนม' :
+                            $actually = MSIService::getListMSIreoprt2($condition['YearTo'], $condition['MonthFrom']);
                             break;
 
                         default : $result = null;
@@ -394,6 +427,18 @@ class SubcommitteeReportController extends Controller {
                             case 'จำหน่ายน้ำเชื้อแช่แข็ง' :
                                 $actually = SpermSaleService::getDetailmonth($year, $monthloop, $itemmaster['id'], 3);
                                 break;
+                            case 'ข้อมูลการผลิต' :
+                                $actually = ProductionInfoService::getDetailList2($year, $monthloop);
+                                break;
+                            case 'ข้อมูลการขาย' :
+                                $actually = ProductionSaleInfoService::getDetailList2($year, $monthloop);
+                                break;
+                            case 'ข้อมูลรับซื้อน้ำนม' :
+                                $actually = MBIService::getListMBIreoprt2($year, $monthloop);
+                                break;
+                            case 'ข้อมูลจำหน่ายน้ำนม' :
+                                $actually = MSIService::getListMSIreoprt2($year, $monthloop);
+                                break;
 
                             default : $result = null;
                         }
@@ -414,9 +459,10 @@ class SubcommitteeReportController extends Controller {
                 array_push($data, $detail);
             }
         }
-
+        session_start();
 
         foreach ($data as $key => $itemdata) {
+            $_SESSION["postion"] = ($position + $key);
             $objPHPExcel->getActiveSheet()->setCellValue('A' . (6 + $row), ($position + $key) . '.' . $itemdata['name']);
             $objPHPExcel->getActiveSheet()->getStyle('A' . (6 + $row))->getFont()->setSize(14);
             $objPHPExcel->getActiveSheet()->getStyle('A' . (6 + $row))->getFont()->setBold(true);
@@ -456,7 +502,7 @@ class SubcommitteeReportController extends Controller {
                         )
         );
 
-
+        $_SESSION["row"] = 6 + $row;
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(25);
@@ -467,7 +513,7 @@ class SubcommitteeReportController extends Controller {
         $objPHPExcel->getActiveSheet()->getStyle('C6:E' . (6 + $row))
                 ->getNumberFormat()
                 ->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-        $objPHPExcel->getActiveSheet()->getStyle('A4:E' . (6 + $row - 1))->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('A4:E' . (6 + $row + 1))->applyFromArray(
                 array(
                     'borders' => array(
                         'allborders' => array(
@@ -1356,6 +1402,125 @@ class SubcommitteeReportController extends Controller {
             }
             array_push($data, $detail);
             /////
+            /////ข้อมูลการผลิต
+            $type['goal_type'] = 'II';
+            $type['keyword'] = 'การรับซื้อน้ำนมเข้ากระบวนการ';
+            $mastes = MasterGoalService::getList('Y', 'ข้อมูลการผลิต', $type);
+            $mission = GoalMissionService::getMission($mastes[0]['id'], 3, $condition['YearTo']);
+            //   $beforeavg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $beforemonth);
+            //  $avg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $condition['MonthFrom']);
+
+
+            $pro = ProductionInfoService::getDetailList2($condition['YearTo'], $condition['MonthFrom']);
+            $beforepro = ProductionInfoService::getDetailList2($year, $beforemonth);
+            $beforeyearpro = ProductionInfoService::getDetailList2($condition['YearTo'] - 1, $condition['MonthFrom']);
+
+            $data2 = [];
+            $detail['name'] = '2. การผลิต';
+            $detail['detailname'] = '2.1 น้ำนมดิบเข้ากระบวนการผลิต (ตัน)';
+            $detail['beforemonth'] = 0;
+            $detail['target'] = 0;
+            $detail['collectmonth'] = 0;
+            $detail['permonth'] = 0;
+            $detail['beforeyear'] = 0;
+            $detail['perbeforeyear'] = 0;
+            $detail['yeartarget'] = 0;
+            $detail['targetoct'] = 0;
+            $detail['collectoct'] = 0;
+            $detail['peroct'] = 0;
+
+            $detail['beforemonth'] = $beforeyearpro['amount'] / 1000;
+
+            $detail['target'] = $mission[0]['amount'];
+            $detail['collectmonth'] = $pro['amount'] / 1000;
+            $detail['permonth'] = 0;
+            $detail['beforeyear'] = $beforeyearpro['amount'] / 1000;
+            $detail['perbeforeyear'] = 0;
+            $detail['yeartarget'] = $mission[0]['amount'];
+            $detail['targetoct'] = 0;
+            $detail['collectoct'] = 0;
+            $detail['peroct'] = 0;
+
+
+            foreach ($monthList as $key => $ml) {
+                $beforepro = ProductionInfoService::getDetailList2($condition['YearFrom'] - $yearlist[$key] - 1, $ml);
+                $detail['beforemonth'] += $beforepro['amount'] / 1000;
+                $pro = ProductionInfoService::getDetailList2($condition['YearFrom'] - $yearlist[$key], $ml);
+                $detail['collectmonth'] += $pro['amount'] / 1000;
+                $prooct = ProductionInfoService::getDetailList2($condition['YearFrom'] - $yearlist[$key], $ml);
+                $octavg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearFrom'] - $yearlist[$key], $ml);
+                $detail['collectoct'] += $prooct['amount'] / 1000;
+                $detail['targetoct'] += $octavg['amount'] / 1000;
+            }
+
+            if ($detail['target'] > 0) {
+                $detail['permonth'] = ($detail['collectmonth'] * 100) / $detail['target'];
+            }
+            if ($detail['beforeyear'] > 0) {
+                $detail['perbeforeyear'] = (($detail['collectmonth'] - $detail['beforeyear']) * 100) / $detail['beforeyear'];
+            }
+            if ($detail['targetoct'] > 0) {
+                $detail['peroct'] = ($detail['collectoct'] * 100) / $detail['targetoct'];
+            }
+            array_push($data2, $detail);
+            /////ข้อมูลการขาย
+            $type['goal_type'] = 'II';
+            $type['keyword'] = 'การรับซื้อน้ำนมเข้ากระบวนการ';
+            $mastes = MasterGoalService::getList('Y', 'ข้อมูลการขาย', $type);
+            $mission = GoalMissionService::getMission($mastes[0]['id'], 3, $condition['YearTo']);
+//            $beforeavg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $beforemonth);
+//            $avg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $condition['MonthFrom']);
+
+
+            $pro = ProductionSaleInfoService::getDetailList2($condition['YearTo'], $condition['MonthFrom']);
+            $beforepro = ProductionSaleInfoService::getDetailList2($year, $beforemonth);
+            $beforeyearpro = ProductionSaleInfoService::getDetailList2($condition['YearTo'] - 1, $condition['MonthFrom']);
+
+            $data3 = [];
+            $detail['name'] = '3. การจำหน่าย';
+            $detail['detailname'] = '3.1  ผลิตภัณฑ์ที่ผลิตได้ (ตัน)';
+            $detail['beforemonth'] = 0;
+            $detail['target'] = 0;
+            $detail['collectmonth'] = 0;
+            $detail['permonth'] = 0;
+            $detail['beforeyear'] = 0;
+            $detail['perbeforeyear'] = 0;
+            $detail['yeartarget'] = 0;
+            $detail['targetoct'] = 0;
+            $detail['collectoct'] = 0;
+            $detail['peroct'] = 0;
+            $detail['beforemonth'] = $beforeyearpro['amount'] / 1000;
+
+            $detail['target'] = $mission[0]['amount'];
+            $detail['collectmonth'] = $pro['amount'] / 1000;
+            $detail['permonth'] = 0;
+            $detail['beforeyear'] = $beforeyearpro['amount'] / 1000;
+            $detail['perbeforeyear'] = 0;
+            $detail['yeartarget'] = $mission[0]['amount'];
+            $detail['targetoct'] = 0;
+            $detail['collectoct'] = 0;
+            $detail['peroct'] = 0;
+
+            foreach ($monthList as $key => $ml) {
+                $beforepro = ProductionSaleInfoService::getDetailList2($condition['YearFrom'] - $yearlist[$key] - 1, $ml);
+                $detail['beforemonth'] += $beforepro['amount'] / 1000;
+                $pro = ProductionSaleInfoService::getDetailList2($condition['YearFrom'] - $yearlist[$key], $ml);
+                $detail['collectmonth'] += $pro['amount'] / 1000;
+                $prooct = ProductionSaleInfoService::getDetailList2($condition['YearFrom'] - $yearlist[$key], $ml);
+                $octavg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearFrom'] - $yearlist[$key], $ml);
+                $detail['collectoct'] += $prooct['amount'] / 1000;
+                $detail['targetoct'] += $octavg['amount'] / 1000;
+            }
+            if ($detail['target'] > 0) {
+                $detail['permonth'] = ($detail['collectmonth'] * 100) / $detail['target'];
+            }
+            if ($detail['beforeyear'] > 0) {
+                $detail['perbeforeyear'] = (($detail['collectmonth'] - $detail['beforeyear']) * 100) / $detail['beforeyear'];
+            }
+            if ($detail['targetoct'] > 0) {
+                $detail['peroct'] = ($detail['collectoct'] * 100) / $detail['targetoct'];
+            }
+            array_push($data3, $detail);
         } else if ($condition['DisplayType'] == 'monthly') {
             $beforemonth = $condition['MonthFrom'];
             $year = $condition['YearTo'];
@@ -1497,7 +1662,126 @@ class SubcommitteeReportController extends Controller {
                 $detail['peroct'] = ($detail['collectoct'] * 100) / $detail['targetoct'];
             }
             array_push($data, $detail);
-            /////
+            /////ข้อมูลการผลิต
+            $type['goal_type'] = 'II';
+            $type['keyword'] = 'การรับซื้อน้ำนมเข้ากระบวนการ';
+            $mastes = MasterGoalService::getList('Y', 'ข้อมูลการผลิต', $type);
+            $mission = GoalMissionService::getMission($mastes[0]['id'], 3, $condition['YearTo']);
+            $beforeavg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $beforemonth);
+            $avg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $condition['MonthFrom']);
+
+
+            $pro = ProductionInfoService::getDetailList2($condition['YearTo'], $condition['MonthFrom']);
+            $beforepro = ProductionInfoService::getDetailList2($year, $beforemonth);
+            $beforeyearpro = ProductionInfoService::getDetailList2($condition['YearTo'] - 1, $condition['MonthFrom']);
+
+            $data2 = [];
+            $detail['name'] = '2. การผลิต';
+            $detail['detailname'] = '2.1 น้ำนมดิบเข้ากระบวนการผลิต (ตัน)';
+            $detail['beforemonth'] = 0;
+            $detail['target'] = 0;
+            $detail['collectmonth'] = 0;
+            $detail['permonth'] = 0;
+            $detail['beforeyear'] = 0;
+            $detail['perbeforeyear'] = 0;
+            $detail['yeartarget'] = 0;
+            $detail['targetoct'] = 0;
+            $detail['collectoct'] = 0;
+            $detail['peroct'] = 0;
+
+            $detail['beforemonth'] = $beforepro['amount'] / 1000;
+
+            $detail['target'] = $avg[0]['amount'];
+            $detail['collectmonth'] = $pro['amount'] / 1000;
+            $detail['permonth'] = 0;
+            $detail['beforeyear'] = $beforeyearpro['amount'] / 1000;
+            $detail['perbeforeyear'] = 0;
+            $detail['yeartarget'] = $mission[0]['amount'];
+            $detail['targetoct'] = 0;
+            $detail['collectoct'] = 0;
+            $detail['peroct'] = 0;
+            foreach ($monthList as $key => $ml) {
+                $octavg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'] - $yearlist[$key], $ml);
+
+                $prooct = ProductionInfoService::getDetailList2($condition['YearTo'] - $yearlist[$key], $ml);
+
+                $detail['collectoct'] += $prooct['amount'] / 1000;
+                $detail['targetoct'] += $octavg[0]['amount'];
+
+                if ($ml == $condition['MonthFrom']) {
+                    break;
+                }
+            }
+            if ($detail['target'] > 0) {
+                $detail['permonth'] = ($detail['collectmonth'] * 100) / $detail['target'];
+            }
+            if ($detail['beforeyear'] > 0) {
+                $detail['perbeforeyear'] = (($detail['collectmonth'] - $detail['beforeyear']) * 100) / $detail['beforeyear'];
+            }
+            if ($detail['targetoct'] > 0) {
+                $detail['peroct'] = ($detail['collectoct'] * 100) / $detail['targetoct'];
+            }
+            array_push($data2, $detail);
+            /////ข้อมูลการขาย
+            $type['goal_type'] = 'II';
+            $type['keyword'] = 'การรับซื้อน้ำนมเข้ากระบวนการ';
+            $mastes = MasterGoalService::getList('Y', 'ข้อมูลการขาย', $type);
+            $mission = GoalMissionService::getMission($mastes[0]['id'], 3, $condition['YearTo']);
+            $beforeavg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $beforemonth);
+            $avg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $condition['MonthFrom']);
+
+
+            $pro = ProductionSaleInfoService::getDetailList2($condition['YearTo'], $condition['MonthFrom']);
+            $beforepro = ProductionSaleInfoService::getDetailList2($year, $beforemonth);
+            $beforeyearpro = ProductionSaleInfoService::getDetailList2($condition['YearTo'] - 1, $condition['MonthFrom']);
+
+            $data3 = [];
+            $detail['name'] = '3. การจำหน่าย';
+            $detail['detailname'] = '3.1  ผลิตภัณฑ์ที่ผลิตได้ (ตัน)';
+            $detail['beforemonth'] = 0;
+            $detail['target'] = 0;
+            $detail['collectmonth'] = 0;
+            $detail['permonth'] = 0;
+            $detail['beforeyear'] = 0;
+            $detail['perbeforeyear'] = 0;
+            $detail['yeartarget'] = 0;
+            $detail['targetoct'] = 0;
+            $detail['collectoct'] = 0;
+            $detail['peroct'] = 0;
+
+            $detail['beforemonth'] = $beforepro['amount'] / 1000;
+
+            $detail['target'] = $avg[0]['amount'];
+            $detail['collectmonth'] = $pro['amount'] / 1000;
+            $detail['permonth'] = 0;
+            $detail['beforeyear'] = $beforeyearpro['amount'] / 1000;
+            $detail['perbeforeyear'] = 0;
+            $detail['yeartarget'] = $mission[0]['amount'];
+            $detail['targetoct'] = 0;
+            $detail['collectoct'] = 0;
+            $detail['peroct'] = 0;
+            foreach ($monthList as $key => $ml) {
+                $octavg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'] - $yearlist[$key], $ml);
+
+                $prooct = ProductionSaleInfoService::getDetailList2($condition['YearTo'] - $yearlist[$key], $ml);
+
+                $detail['collectoct'] += $prooct['amount'] / 1000;
+                $detail['targetoct'] += $octavg[0]['amount'];
+
+                if ($ml == $condition['MonthFrom']) {
+                    break;
+                }
+            }
+            if ($detail['target'] > 0) {
+                $detail['permonth'] = ($detail['collectmonth'] * 100) / $detail['target'];
+            }
+            if ($detail['beforeyear'] > 0) {
+                $detail['perbeforeyear'] = (($detail['collectmonth'] - $detail['beforeyear']) * 100) / $detail['beforeyear'];
+            }
+            if ($detail['targetoct'] > 0) {
+                $detail['peroct'] = ($detail['collectoct'] * 100) / $detail['targetoct'];
+            }
+            array_push($data3, $detail);
         } else {
             $beforeQuarter = $condition['QuarterFrom'];
             $year = $condition['YearFrom'];
@@ -1620,11 +1904,6 @@ class SubcommitteeReportController extends Controller {
             $beforeavg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $beforemonth);
 
 
-
-
-
-
-
             $detail['detailname'] = '2 การจำหน่ายน้ำนม (ตัน) ';
             $detail['beforemonth'] = 0;
             $detail['target'] = 0;
@@ -1660,9 +1939,9 @@ class SubcommitteeReportController extends Controller {
                 $detail['targetoct'] += $octavg[0]['amount'];
             }
 
-            
+
             $detail['yeartarget'] = $mission[0]['amount'];
-          
+
 
 
             if ($detail['target'] > 0) {
@@ -1675,6 +1954,126 @@ class SubcommitteeReportController extends Controller {
                 $detail['peroct'] = ($detail['collectoct'] * 100) / $detail['targetoct'];
             }
             array_push($data, $detail);
+            /////
+            /////ข้อมูลการผลิต
+            $type['goal_type'] = 'II';
+            $type['keyword'] = 'การรับซื้อน้ำนมเข้ากระบวนการ';
+            $mastes = MasterGoalService::getList('Y', 'ข้อมูลการผลิต', $type);
+            $mission = GoalMissionService::getMission($mastes[0]['id'], 3, $condition['YearFrom']);
+            $beforeavg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $beforemonth);
+            $data2 = [];
+            $detail['name'] = '2. การผลิต';
+            $detail['detailname'] = '2.1 น้ำนมดิบเข้ากระบวนการผลิต (ตัน)';
+            $detail['beforemonth'] = 0;
+            $detail['target'] = 0;
+            $detail['collectmonth'] = 0;
+            $detail['permonth'] = 0;
+            $detail['beforeyear'] = 0;
+            $detail['perbeforeyear'] = 0;
+            $detail['yeartarget'] = 0;
+            $detail['targetoct'] = 0;
+            $detail['collectoct'] = 0;
+            $detail['peroct'] = 0;
+
+            foreach ($beforemontharr as $bm) {
+                $beforepro = ProductionInfoService::getDetailList2($year, $bm);
+                $detail['beforemonth'] += $beforepro['amount'] / 1000;
+            }
+            foreach ($montharr as $ma) {
+
+                $avg = GoalMissionService::getMissionavg($mission[0]['id'], $year, $ma);
+                $detail['target'] = $avg[0]['amount'];
+
+                $pro = ProductionInfoService::getDetailList2($year, $ma);
+                $detail['collectmonth'] = $pro['amount'] / 1000;
+                $beforeyearpro = ProductionInfoService::getDetailList2($year - 1, $ma);
+                $detail['beforeyear'] = $beforeyearpro['amount'] / 1000;
+            }
+
+            foreach ($loop as $key => $ml) {
+                $octavg = GoalMissionService::getMissionavg($mission[0]['id'], $year - $yearlist[$key], $ml);
+
+                $prooct = ProductionInfoService::getDetailList2($year - $yearlist[$key], $ml);
+
+                $detail['collectoct'] += $prooct['amount'] / 1000;
+                $detail['targetoct'] += $octavg[0]['amount'];
+            }
+
+
+            $detail['yeartarget'] = $mission[0]['amount'];
+
+
+
+            if ($detail['target'] > 0) {
+                $detail['permonth'] = ($detail['collectmonth'] * 100) / $detail['target'];
+            }
+            if ($detail['beforeyear'] > 0) {
+                $detail['perbeforeyear'] = (($detail['collectmonth'] - $detail['beforeyear']) * 100) / $detail['beforeyear'];
+            }
+            if ($detail['targetoct'] > 0) {
+                $detail['peroct'] = ($detail['collectoct'] * 100) / $detail['targetoct'];
+            }
+            array_push($data2, $detail);
+            /////
+            /////ข้อมูลการขาย
+            $type['goal_type'] = 'II';
+            $type['keyword'] = 'การรับซื้อน้ำนมเข้ากระบวนการ';
+            $mastes = MasterGoalService::getList('Y', 'ข้อมูลการขาย', $type);
+            $mission = GoalMissionService::getMission($mastes[0]['id'], 3, $condition['YearFrom']);
+            $beforeavg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $beforemonth);
+            $data3 = [];
+            $detail['name'] = '3. การจำหน่าย';
+            $detail['detailname'] = '3.1 ผลิตภัณฑ์ที่ผลิตได้ (ตัน)';
+            $detail['beforemonth'] = 0;
+            $detail['target'] = 0;
+            $detail['collectmonth'] = 0;
+            $detail['permonth'] = 0;
+            $detail['beforeyear'] = 0;
+            $detail['perbeforeyear'] = 0;
+            $detail['yeartarget'] = 0;
+            $detail['targetoct'] = 0;
+            $detail['collectoct'] = 0;
+            $detail['peroct'] = 0;
+
+            foreach ($beforemontharr as $bm) {
+                $beforepro = ProductionSaleInfoService::getDetailList2($year, $bm);
+                $detail['beforemonth'] += $beforepro['amount'] / 1000;
+            }
+            foreach ($montharr as $ma) {
+
+                $avg = GoalMissionService::getMissionavg($mission[0]['id'], $year, $ma);
+                $detail['target'] = $avg[0]['amount'];
+
+                $pro = ProductionSaleInfoService::getDetailList2($year, $ma);
+                $detail['collectmonth'] = $pro['amount'] / 1000;
+                $beforeyearpro = ProductionSaleInfoService::getDetailList2($year - 1, $ma);
+                $detail['beforeyear'] = $beforeyearpro['amount'] / 1000;
+            }
+
+            foreach ($loop as $key => $ml) {
+                $octavg = GoalMissionService::getMissionavg($mission[0]['id'], $year - $yearlist[$key], $ml);
+
+                $prooct = ProductionSaleInfoService::getDetailList2($year - $yearlist[$key], $ml);
+
+                $detail['collectoct'] += $prooct['amount'] / 1000;
+                $detail['targetoct'] += $octavg[0]['amount'];
+            }
+
+
+            $detail['yeartarget'] = $mission[0]['amount'];
+
+
+
+            if ($detail['target'] > 0) {
+                $detail['permonth'] = ($detail['collectmonth'] * 100) / $detail['target'];
+            }
+            if ($detail['beforeyear'] > 0) {
+                $detail['perbeforeyear'] = (($detail['collectmonth'] - $detail['beforeyear']) * 100) / $detail['beforeyear'];
+            }
+            if ($detail['targetoct'] > 0) {
+                $detail['peroct'] = ($detail['collectoct'] * 100) / $detail['targetoct'];
+            }
+            array_push($data3, $detail);
             /////
         }
         $objPHPExcel->getActiveSheet()->setCellValue('G' . (6 + $row), $data[0]['name']);
@@ -1690,7 +2089,49 @@ class SubcommitteeReportController extends Controller {
             $objPHPExcel->getActiveSheet()->setCellValue('D' . (6 + $row), $itemdata['permonth']);
             $objPHPExcel->getActiveSheet()->setCellValue('E' . (6 + $row), $itemdata['beforeyear']);
             $objPHPExcel->getActiveSheet()->setCellValue('F' . (6 + $row), $itemdata['perbeforeyear']);
-            $objPHPExcel->getActiveSheet()->setCellValue('G' . (6 + $row), ('    1') . '.' . $itemdata['detailname']);
+            $objPHPExcel->getActiveSheet()->setCellValue('G' . (6 + $row), $itemdata['detailname']);
+
+            $objPHPExcel->getActiveSheet()->setCellValue('H' . (6 + $row), $itemdata['yeartarget']);
+            $objPHPExcel->getActiveSheet()->setCellValue('I' . (6 + $row), $itemdata['targetoct']);
+            $objPHPExcel->getActiveSheet()->setCellValue('J' . (6 + $row), $itemdata['collectoct']);
+            $objPHPExcel->getActiveSheet()->setCellValue('K' . (6 + $row), $itemdata['peroct']);
+            $row++;
+        }
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . (6 + $row), $data2[0]['name']);
+        $objPHPExcel->getActiveSheet()->getStyle('G' . (6 + $row))->getFont()->setSize(14);
+        $objPHPExcel->getActiveSheet()->getStyle('G' . (6 + $row))->getFont()->setBold(true);
+        $row++;
+        foreach ($data2 as $key => $itemdata) {
+
+
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . (6 + $row), $itemdata['beforemonth']);
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . (6 + $row), $itemdata['target']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C' . (6 + $row), $itemdata['collectmonth']);
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . (6 + $row), $itemdata['permonth']);
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . (6 + $row), $itemdata['beforeyear']);
+            $objPHPExcel->getActiveSheet()->setCellValue('F' . (6 + $row), $itemdata['perbeforeyear']);
+            $objPHPExcel->getActiveSheet()->setCellValue('G' . (6 + $row), $itemdata['detailname']);
+
+            $objPHPExcel->getActiveSheet()->setCellValue('H' . (6 + $row), $itemdata['yeartarget']);
+            $objPHPExcel->getActiveSheet()->setCellValue('I' . (6 + $row), $itemdata['targetoct']);
+            $objPHPExcel->getActiveSheet()->setCellValue('J' . (6 + $row), $itemdata['collectoct']);
+            $objPHPExcel->getActiveSheet()->setCellValue('K' . (6 + $row), $itemdata['peroct']);
+            $row++;
+        }
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . (6 + $row), $data3[0]['name']);
+        $objPHPExcel->getActiveSheet()->getStyle('G' . (6 + $row))->getFont()->setSize(14);
+        $objPHPExcel->getActiveSheet()->getStyle('G' . (6 + $row))->getFont()->setBold(true);
+        $row++;
+        foreach ($data3 as $key => $itemdata) {
+
+
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . (6 + $row), $itemdata['beforemonth']);
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . (6 + $row), $itemdata['target']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C' . (6 + $row), $itemdata['collectmonth']);
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . (6 + $row), $itemdata['permonth']);
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . (6 + $row), $itemdata['beforeyear']);
+            $objPHPExcel->getActiveSheet()->setCellValue('F' . (6 + $row), $itemdata['perbeforeyear']);
+            $objPHPExcel->getActiveSheet()->setCellValue('G' . (6 + $row), $itemdata['detailname']);
 
             $objPHPExcel->getActiveSheet()->setCellValue('H' . (6 + $row), $itemdata['yeartarget']);
             $objPHPExcel->getActiveSheet()->setCellValue('I' . (6 + $row), $itemdata['targetoct']);
@@ -1750,6 +2191,510 @@ class SubcommitteeReportController extends Controller {
                     )
                 )
         );
+        return $objPHPExcel;
+    }
+
+    private function generatesheet4($objPHPExcel, $condition, $header) {
+        $objPHPExcel->createSheet(3);
+        $objPHPExcel->setActiveSheetIndex(3);
+        $monthList = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+        $yearlist = [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $FactoryList = FactoryService::getList();
+        $objPHPExcel->getActiveSheet()->setTitle("หน้า 6");
+        $objPHPExcel->getActiveSheet()->setCellValue('A2', $header);
+        $objPHPExcel->getActiveSheet()->setCellValue('A3', '2.2 การสูญเสียน้ำนมสดและผลิตภัณฑ์นมของสำนักงานภาค');
+        $data = [];
+        $data2 = [];
+        $data3 = [];
+
+
+
+        if ($condition['DisplayType'] == 'annually') {
+            $objPHPExcel->getActiveSheet()->setCellValue('A4', 'ผลการดำเนินงาน ปี ' . ($condition['YearFrom'] + 543));
+            $objPHPExcel->getActiveSheet()->mergeCells('A4:F4');
+            $objPHPExcel->getActiveSheet()->setCellValue('I4', 'สะสม ' . $this->getMonthName(10) . ' - ' . $this->getMonthName(9) . ' ' . ($condition['YearFrom'] + 543));
+            $objPHPExcel->getActiveSheet()->mergeCells('I4:N4');
+            foreach ($FactoryList as $key => $fac) {
+
+                $detail = [];
+                $detail2 = [];
+                $detail3 = [];
+                foreach ($monthList as $key => $ml) {
+
+                    $dataIN = LostInProcessService::getMainListreport($condition['YearTo'] - $yearlist[$key], $ml, $fac['id']);
+                    $detail['sum_amount'] += $dataIN['sum_amount'];
+                    $detail['sum_baht'] += $dataIN['sum_baht'];
+                    $dataOUT = LostOutProcessService::getMainListreport($condition['YearTo'] - $yearlist[$key], $ml, $fac['id']);
+                    $detail2['sum_amount'] += $dataOUT['sum_amount'];
+                    $detail2['sum_baht'] += $dataOUT['sum_baht'];
+
+                    $dataWAIT = LostWaitSaleService::getMainListreport($condition['YearTo'] - $yearlist[$key], $ml, $fac['id']);
+                    $detail3['sum_amount'] += $dataWAIT['sum_amount'];
+                    $detail3['sum_baht'] += $dataWAIT['sum_baht'];
+                }
+                array_push($data, $detail);
+                array_push($data2, $detail2);
+                array_push($data3, $detail3);
+            }
+            foreach ($FactoryList as $key => $fac) {
+
+                $detail = [];
+                $detail2 = [];
+                $detail3 = [];
+                foreach ($monthList as $key => $ml) {
+
+                    $dataIN = LostInProcessService::getMainListreport($condition['YearTo'] - $yearlist[$key], $ml, $fac['id']);
+                    $detail['sum_amount'] += $dataIN['sum_amount'];
+                    $detail['sum_baht'] += $dataIN['sum_baht'];
+                    $dataOUT = LostOutProcessService::getMainListreport($condition['YearTo'] - $yearlist[$key], $ml, $fac['id']);
+                    $detail2['sum_amount'] += $dataOUT['sum_amount'];
+                    $detail2['sum_baht'] += $dataOUT['sum_baht'];
+
+                    $dataWAIT = LostWaitSaleService::getMainListreport($condition['YearTo'] - $yearlist[$key], $ml, $fac['id']);
+                    $detail3['sum_amount'] += $dataWAIT['sum_amount'];
+                    $detail3['sum_baht'] += $dataWAIT['sum_baht'];
+                }
+                array_push($data, $detail);
+                array_push($data2, $detail2);
+                array_push($data3, $detail3);
+            }
+        } else if ($condition['DisplayType'] == 'monthly') {
+            $objPHPExcel->getActiveSheet()->setCellValue('A4', 'ผลการดำเนินงาน เดือน ' . $this->getMonthName($condition['MonthFrom']) . ' ' . ($condition['YearFrom'] + 543));
+            $objPHPExcel->getActiveSheet()->mergeCells('A4:F4');
+            $objPHPExcel->getActiveSheet()->setCellValue('I4', 'สะสม ' . $this->getMonthName(10) . ' - ' . $this->getMonthName($condition['MonthFrom']) . ' ' . ($condition['YearFrom'] + 543));
+            $objPHPExcel->getActiveSheet()->mergeCells('I4:N4');
+            foreach ($FactoryList as $key => $fac) {
+
+                $dataIN = LostInProcessService::getMainListreport($condition['YearTo'], $condition['MonthFrom'], $fac['id']);
+                $dataOUT = LostOutProcessService::getMainListreport($condition['YearTo'], $condition['MonthFrom'], $fac['id']);
+                $dataWAIT = LostWaitSaleService::getMainListreport($condition['YearTo'], $condition['MonthFrom'], $fac['id']);
+
+                array_push($data, $dataIN);
+                array_push($data2, $dataOUT);
+                array_push($data3, $dataWAIT);
+            }
+            foreach ($FactoryList as $key => $fac) {
+                $detail = [];
+                $detail2 = [];
+                $detail3 = [];
+                foreach ($monthList as $key => $ml) {
+
+                    $dataIN = LostInProcessService::getMainListreport($condition['YearTo'] - $yearlist[$key], $ml, $fac['id']);
+                    $detail['sum_amount'] += $dataIN['sum_amount'];
+                    $detail['sum_baht'] += $dataIN['sum_baht'];
+                    $dataOUT = LostOutProcessService::getMainListreport($condition['YearTo'] - $yearlist[$key], $ml, $fac['id']);
+                    $detail2['sum_amount'] += $dataOUT['sum_amount'];
+                    $detail2['sum_baht'] += $dataOUT['sum_baht'];
+
+                    $dataWAIT = LostWaitSaleService::getMainListreport($condition['YearTo'] - $yearlist[$key], $ml, $fac['id']);
+                    $detail3['sum_amount'] += $dataWAIT['sum_amount'];
+                    $detail3['sum_baht'] += $dataWAIT['sum_baht'];
+
+
+                    if ($ml == $condition['MonthFrom']) {
+                        break;
+                    }
+                }
+                array_push($data, $detail);
+                array_push($data2, $detail2);
+                array_push($data3, $detail3);
+            }
+        } else {
+            $year = $condition['YearFrom'];
+
+
+            if ($condition['QuarterFrom'] == 1) {
+                $montharr = [10, 11, 12];
+                $year--;
+                $loop = [10, 11, 12];
+            } else if ($condition['QuarterFrom'] == 2) {
+                $montharr = [1, 2, 3];
+
+                $loop = [10, 11, 12, 1, 2, 3];
+            } else if ($condition['QuarterFrom'] == 3) {
+                $montharr = [4, 5, 6];
+
+                $loop = [10, 11, 12, 1, 2, 3, 4, 5, 6];
+            } else if ($condition['QuarterFrom'] == 4) {
+                $montharr = [7, 8, 9];
+
+                $loop = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+            }
+
+            $objPHPExcel->getActiveSheet()->setCellValue('A4', 'ผลการดำเนินงาน ไตรมาสที่ ' . $condition['QuarterFrom'] . ' ' . ($condition['YearFrom'] + 543));
+            $objPHPExcel->getActiveSheet()->mergeCells('A4:F4');
+            $objPHPExcel->getActiveSheet()->setCellValue('I4', 'สะสม ไตรมาสที่ 1 - ไตรมาสที่ ' . $condition['QuarterFrom'] . ' ' . ($condition['YearFrom'] + 543));
+            $objPHPExcel->getActiveSheet()->mergeCells('I4:N4');
+            foreach ($FactoryList as $key => $fac) {
+
+                $detail = [];
+                $detail2 = [];
+                $detail3 = [];
+                foreach ($montharr as $key => $ml) {
+
+                    $dataIN = LostInProcessService::getMainListreport($year, $ml, $fac['id']);
+                    $detail['sum_amount'] += $dataIN['sum_amount'];
+                    $detail['sum_baht'] += $dataIN['sum_baht'];
+                    $dataOUT = LostOutProcessService::getMainListreport($year, $ml, $fac['id']);
+                    $detail2['sum_amount'] += $dataOUT['sum_amount'];
+                    $detail2['sum_baht'] += $dataOUT['sum_baht'];
+
+                    $dataWAIT = LostWaitSaleService::getMainListreport($year, $ml, $fac['id']);
+                    $detail3['sum_amount'] += $dataWAIT['sum_amount'];
+                    $detail3['sum_baht'] += $dataWAIT['sum_baht'];
+                }
+                array_push($data, $detail);
+                array_push($data2, $detail2);
+                array_push($data3, $detail3);
+            }
+            foreach ($FactoryList as $key => $fac) {
+
+                $detail = [];
+                $detail2 = [];
+                $detail3 = [];
+                foreach ($loop as $key => $ml) {
+
+                    $dataIN = LostInProcessService::getMainListreport($condition['YearTo'] - $yearlist[$key], $ml, $fac['id']);
+                    $detail['sum_amount'] += $dataIN['sum_amount'];
+                    $detail['sum_baht'] += $dataIN['sum_baht'];
+                    $dataOUT = LostOutProcessService::getMainListreport($condition['YearTo'] - $yearlist[$key], $ml, $fac['id']);
+                    $detail2['sum_amount'] += $dataOUT['sum_amount'];
+                    $detail2['sum_baht'] += $dataOUT['sum_baht'];
+
+                    $dataWAIT = LostWaitSaleService::getMainListreport($condition['YearTo'] - $yearlist[$key], $ml, $fac['id']);
+                    $detail3['sum_amount'] += $dataWAIT['sum_amount'];
+                    $detail3['sum_baht'] += $dataWAIT['sum_baht'];
+                }
+                array_push($data, $detail);
+                array_push($data2, $detail2);
+                array_push($data3, $detail3);
+            }
+        }
+
+
+
+
+        $objPHPExcel->getActiveSheet()->setCellValue('G4', 'กิจกรรม ');
+        $objPHPExcel->getActiveSheet()->mergeCells('G4:G5');
+        $objPHPExcel->getActiveSheet()->setCellValue('H4', 'หน่วย ');
+        $objPHPExcel->getActiveSheet()->mergeCells('H4:H5');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('A5', 'สภก.');
+        $objPHPExcel->getActiveSheet()->setCellValue('B5', 'สภต.');
+        $objPHPExcel->getActiveSheet()->setCellValue('C5', 'สภอ.');
+        $objPHPExcel->getActiveSheet()->setCellValue('D5', 'สภน.');
+        $objPHPExcel->getActiveSheet()->setCellValue('E5', 'สภน.');
+        $objPHPExcel->getActiveSheet()->setCellValue('F5', 'รวม');
+        $objPHPExcel->getActiveSheet()->setCellValue('I5', 'สภก.');
+        $objPHPExcel->getActiveSheet()->setCellValue('J5', 'สภต.');
+        $objPHPExcel->getActiveSheet()->setCellValue('K5', 'สภอ.');
+        $objPHPExcel->getActiveSheet()->setCellValue('L5', 'สภน.');
+        $objPHPExcel->getActiveSheet()->setCellValue('M5', 'สภน.');
+        $objPHPExcel->getActiveSheet()->setCellValue('N5', 'รวม');
+
+
+        $row = 6;
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . ($row), '1.การสูญเสีย');
+        $objPHPExcel->getActiveSheet()->getStyle('G' . ($row))->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('G' . ($row))->getFont()->setBold(true);
+        $row++;
+
+        $sumam = $data[0]['sum_amount'] + $data[1]['sum_amount'] + $data[2]['sum_amount'] + $data[3]['sum_amount'] + $data[4]['sum_amount'];
+        $sumba = ($data[0]['sum_baht'] + $data[1]['sum_baht'] + $data[2]['sum_baht'] + $data[3]['sum_baht'] + $data[4]['sum_baht']) / 1000000;
+        $bsumam = $data[5]['sum_amount'] + $data[6]['sum_amount'] + $data[7]['sum_amount'] + $data[8]['sum_amount'] + $data[9]['sum_amount'];
+        $bsumba = ($data[5]['sum_baht'] + $data[6]['sum_baht'] + $data[7]['sum_baht'] + $data[8]['sum_baht'] + $data[9]['sum_baht']) / 1000000;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), $data[0]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), $data[1]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), $data[2]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . ($row), $data[3]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . ($row), $data[4]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . ($row), $sumam);
+
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . ($row), '   1.1 สูญเสียในกระบวนการผลิต ');
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . ($row), 'ตัน');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . ($row), $data[5]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('J' . ($row), $data[6]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('K' . ($row), $data[7]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('L' . ($row), $data[8]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('M' . ($row), $data[9]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('N' . ($row), $bsumam);
+        $row++;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), $data[0]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), $data[1]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), $data[2]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . ($row), $data[3]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . ($row), $data[4]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . ($row), $sumba);
+
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . ($row), '           มูลค่า ');
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . ($row), 'ล้านบาท');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . ($row), $data[5]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('J' . ($row), $data[6]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('K' . ($row), $data[7]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('L' . ($row), $data[8]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('M' . ($row), $data[9]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('N' . ($row), $bsumba);
+        $row++;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . ($row), '');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . ($row), '           %สูญเสีย ');
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . ($row), '');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('J' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('K' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('L' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('M' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('N' . ($row), '');
+        $row++;
+////
+        $sumam2 = $data2[0]['sum_amount'] + $data2[1]['sum_amount'] + $data2[2]['sum_amount'] + $data2[3]['sum_amount'] + $data2[4]['sum_amount'];
+        $sumba2 = ($data2[0]['sum_baht'] + $data2[1]['sum_baht'] + $data2[2]['sum_baht'] + $data2[3]['sum_baht'] + $data2[4]['sum_baht']) / 1000000;
+        $bsumam2 = $data2[5]['sum_amount'] + $data2[6]['sum_amount'] + $data2[7]['sum_amount'] + $data2[8]['sum_amount'] + $data2[9]['sum_amount'];
+        $bsumba2 = ($data2[5]['sum_baht'] + $data2[6]['sum_baht'] + $data2[7]['sum_baht'] + $data2[8]['sum_baht'] + $data2[9]['sum_baht']) / 1000000;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), $data2[0]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), $data2[1]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), $data2[2]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . ($row), $data2[3]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . ($row), $data2[4]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . ($row), $sumam2);
+
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . ($row), '    1.2 สูญเสียหลังกระบวนการผลิต  ');
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . ($row), 'ตัน');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . ($row), $data2[5]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('J' . ($row), $data2[6]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('K' . ($row), $data2[7]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('L' . ($row), $data2[8]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('M' . ($row), $data2[9]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('N' . ($row), $bsumam2);
+        $row++;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), $data2[0]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), $data2[1]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), $data2[2]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . ($row), $data2[3]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . ($row), $data2[4]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . ($row), $sumba2);
+
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . ($row), '           มูลค่า ');
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . ($row), 'ล้านบาท');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . ($row), $data2[5]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('J' . ($row), $data2[6]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('K' . ($row), $data2[7]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('L' . ($row), $data2[8]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('M' . ($row), $data2[9]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('N' . ($row), $bsumba2);
+        $row++;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . ($row), '');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . ($row), '           %สูญเสีย ');
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . ($row), '');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('J' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('K' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('L' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('M' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('N' . ($row), '');
+        $row++;
+////
+        $sumam3 = $data3[0]['sum_amount'] + $data3[1]['sum_amount'] + $data3[2]['sum_amount'] + $data3[3]['sum_amount'] + $data3[4]['sum_amount'];
+        $sumba3 = ($data3[0]['sum_baht'] + $data3[1]['sum_baht'] + $data3[2]['sum_baht'] + $data3[3]['sum_baht'] + $data3[4]['sum_baht']) / 1000000;
+        $bsumam3 = $data3[5]['sum_amount'] + $data3[6]['sum_amount'] + $data3[7]['sum_amount'] + $data3[8]['sum_amount'] + $data3[9]['sum_amount'];
+        $bsumba3 = ($data3[5]['sum_baht'] + $data3[6]['sum_baht'] + $data3[7]['sum_baht'] + $data3[8]['sum_baht'] + $data3[9]['sum_baht']) / 1000000;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), $data3[0]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), $data3[1]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), $data3[2]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . ($row), $data3[3]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . ($row), $data3[4]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . ($row), $sumam3);
+
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . ($row), '   1.3 สูญเสียระหว่างรอจำหน่าย ');
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . ($row), 'ตัน');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . ($row), $data3[5]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('J' . ($row), $data3[6]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('K' . ($row), $data3[7]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('L' . ($row), $data3[8]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('M' . ($row), $data3[9]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('N' . ($row), $bsumam3);
+        $row++;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), $data3[0]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), $data3[1]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), $data3[2]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . ($row), $data3[3]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . ($row), $data3[4]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . ($row), $sumba3);
+
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . ($row), '           มูลค่า ');
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . ($row), 'ล้านบาท');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . ($row), $data3[5]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('J' . ($row), $data3[6]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('K' . ($row), $data3[7]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('L' . ($row), $data3[8]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('M' . ($row), $data3[9]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('N' . ($row), $bsumba3);
+        $row++;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . ($row), '');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . ($row), '           %สูญเสีย ');
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . ($row), '');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('J' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('K' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('L' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('M' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('N' . ($row), '');
+        $row++;
+////
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), $data[0]['sum_amount'] + $data2[0]['sum_amount'] + $data3[0]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), $data[1]['sum_amount'] + $data2[1]['sum_amount'] + $data3[1]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), $data[2]['sum_amount'] + $data2[2]['sum_amount'] + $data3[2]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . ($row), $data[3]['sum_amount'] + $data2[3]['sum_amount'] + $data3[3]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . ($row), $data[4]['sum_amount'] + $data2[4]['sum_amount'] + $data3[4]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . ($row), $sumam + $sumam2 + $sumam3);
+
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . ($row), '   1.4 สูญเสียทั้งกระบวนการผลิต  ');
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . ($row), 'ตัน');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . ($row), $data[5]['sum_amount'] + $data2[5]['sum_amount'] + $data3[5]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('J' . ($row), $data[6]['sum_amount'] + $data2[6]['sum_amount'] + $data3[6]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('K' . ($row), $data[7]['sum_amount'] + $data2[7]['sum_amount'] + $data3[7]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('L' . ($row), $data[8]['sum_amount'] + $data2[8]['sum_amount'] + $data3[8]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('M' . ($row), $data[9]['sum_amount'] + $data2[9]['sum_amount'] + $data3[9]['sum_amount']);
+        $objPHPExcel->getActiveSheet()->setCellValue('N' . ($row), $bsumam + $bsumam2 + $bsumam3);
+        $row++;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), $data[0]['sum_baht'] + $data2[0]['sum_baht'] + $data3[0]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), $data[1]['sum_baht'] + $data2[1]['sum_baht'] + $data3[1]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), $data[2]['sum_baht'] + $data2[2]['sum_baht'] + $data3[2]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . ($row), $data[3]['sum_baht'] + $data2[3]['sum_baht'] + $data3[3]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . ($row), $data[4]['sum_baht'] + $data2[4]['sum_baht'] + $data3[4]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . ($row), $sumba + $sumba2 + $sumba3);
+
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . ($row), '           มูลค่า ');
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . ($row), 'ล้านบาท');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . ($row), $data[5]['sum_baht'] + $data2[5]['sum_baht'] + $data3[5]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('J' . ($row), $data[6]['sum_baht'] + $data2[6]['sum_baht'] + $data3[6]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('K' . ($row), $data[7]['sum_baht'] + $data2[7]['sum_baht'] + $data3[7]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('L' . ($row), $data[8]['sum_baht'] + $data2[8]['sum_baht'] + $data3[8]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('M' . ($row), $data[9]['sum_baht'] + $data2[9]['sum_baht'] + $data3[9]['sum_baht'] / 1000000);
+        $objPHPExcel->getActiveSheet()->setCellValue('N' . ($row), $bsumba + $bsumba2 + $bsumba3);
+        $row++;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . ($row), '');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . ($row), '           %สูญเสีย ');
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . ($row), '');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('J' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('K' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('L' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('M' . ($row), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('N' . ($row), '');
+        $row++;
+////
+        // header style
+
+        $objPHPExcel->getActiveSheet()->getStyle('A2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A2')->getFont()->setSize(18);
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:L2');
+        $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setSize(16);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A4:N5')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A4:N5')->getFont()->setSize(14);
+
+
+        $objPHPExcel->getActiveSheet()
+                ->getStyle('A4:N5')
+                ->applyFromArray(array(
+                    'alignment' => array(
+                        'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER
+                    ),
+                        )
+        );
+
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(10);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A4:N' . ($row ))->getAlignment()->setWrapText(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A6:N' . ($row))
+                ->getNumberFormat()
+                ->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+        $objPHPExcel->getActiveSheet()->getStyle('A4:N' . ($row - 1 ))->applyFromArray(
+                array(
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => (\PHPExcel_Style_Border::BORDER_THIN)
+                        )
+                    ),
+                    'font' => array(
+                        'name' => 'AngsanaUPC'
+                    )
+                )
+        );
+
+////
+        //  $postion = $_SESSION["postion"];
+        $hrow = $_SESSION["row"];
+        session_destroy();
+        $objPHPExcel->setActiveSheetIndex(0);
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($hrow), '  ' . 'ปริมาณสูญเสียทั้งกระบวนการ');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($hrow), 'ตัน');
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . ($hrow), '-');
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . ($hrow), $bsumam + $bsumam2 + $bsumam3);
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . ($hrow), '-');
+
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($hrow + 1), '  ' . '% ของการสูญเสียของทั้ง 3 กระบวนการ');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($hrow + 1), '%');
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . ($hrow + 1), '-');
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . ($hrow + 1), '');
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . ($hrow + 1), '-');
+
+        $objPHPExcel->getActiveSheet()->getStyle('A' . ($hrow) . ':E' . ($hrow + 1))->getFont()->setSize(14);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . ($hrow) . ':E' . ($hrow + 1))->getFont()->setBold(true);
+////
+
         return $objPHPExcel;
     }
 

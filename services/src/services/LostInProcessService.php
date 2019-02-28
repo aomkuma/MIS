@@ -45,6 +45,24 @@
                             ->first()
                             ->toArray();
         }
+        public static function getMainListreport($years, $months, $factory_id){
+            return LostInProcess::select(DB::raw("SUM(mis_lost_in_process_detail.amount) AS sum_amount")
+                                        ,DB::raw("SUM(mis_lost_in_process_detail.price_value) AS sum_baht")
+                                    
+                                    ,"lost_in_process.update_date"
+                                    ,"office_approve_id"
+                                    ,"office_approve_date"
+                                    ,"office_approve_comment"
+                                )
+                            ->join("lost_in_process_detail", 'lost_in_process_detail.lost_in_process_id', '=', 'lost_in_process.id')
+                            ->where("years", $years)
+                            ->where("months", $months)
+                            ->where("factory_id", $factory_id)
+                            
+                            ->orderBy('update_date', 'DESC')
+                            ->first()
+                            ->toArray();
+        }
 
         public static function getDataByID($id){
             return LostInProcess::where('id', $id)

@@ -57,21 +57,33 @@ class ProductionInfoService {
                         ->first()
                         ->toArray();
     }
- public static function getDetailListsub($years, $months, $master_type_id) {
-     
-        return ProductionInfo::select(DB::raw("SUM(mis_production_info_detail.amount) AS sum_amount")
+
+    public static function getDetailList2($years, $months) {
+        return ProductionInfo::select(DB::raw("SUM(mis_production_info_detail.amount) AS amount")
                                 , DB::raw("SUM(mis_production_info_detail.price_value) AS sum_baht")
                         )
                         ->join("production_info_detail", 'production_info_detail.production_info_id', '=', 'production_info.id')
                         ->where("years", $years)
                         ->where("months", $months)
                         
+                        ->orderBy('production_info.update_date', 'DESC')
+                        ->first()
+                        ->toArray();
+    }
+
+    public static function getDetailListsub($years, $months, $master_type_id) {
+
+        return ProductionInfo::select(DB::raw("SUM(mis_production_info_detail.amount) AS sum_amount")
+                                , DB::raw("SUM(mis_production_info_detail.price_value) AS sum_baht")
+                        )
+                        ->join("production_info_detail", 'production_info_detail.production_info_id', '=', 'production_info.id')
+                        ->where("years", $years)
+                        ->where("months", $months)
                         ->where("production_info_type3", $master_type_id)
                         ->orderBy('production_info.update_date', 'DESC')
                         ->first()
                         ->toArray();
     }
-  
 
     public static function getDataByID($id) {
         return ProductionInfo::where('id', $id)

@@ -45,6 +45,24 @@
                             ->first()
                             ->toArray();
         }
+        public static function getMainListreport($years, $months, $factory_id){
+            return LostWaitSale::select(DB::raw("SUM(mis_lost_wait_sale_detail.amount) AS sum_amount")
+                                        ,DB::raw("SUM(mis_lost_wait_sale_detail.price_value) AS sum_baht")
+                                    
+                                    ,"lost_wait_sale.update_date"
+                                    ,"office_approve_id"
+                                    ,"office_approve_date"
+                                    ,"office_approve_comment"
+                                )
+                            ->join("lost_wait_sale_detail", 'lost_wait_sale_detail.lost_wait_sale_id', '=', 'lost_wait_sale.id')
+                            ->where("years", $years)
+                            ->where("months", $months)
+                            ->where("factory_id", $factory_id)
+                           
+                            ->orderBy('update_date', 'DESC')
+                            ->first()
+                            ->toArray();
+        }
 
         public static function getDataByID($id){
             return LostWaitSale::where('id', $id)

@@ -60,6 +60,19 @@
                             ->first()
                             ->toArray();
         }
+        public static function getDetailList2($years, $months){
+            return ProductionSaleInfo::select(DB::raw("SUM(mis_production_sale_info_detail.amount) AS amount")
+                                        ,DB::raw("SUM(mis_production_sale_info_detail.price_value) AS sum_baht")
+                                    
+                                )
+                            ->join("production_sale_info_detail", 'production_sale_info_detail.production_sale_info_id', '=', 'production_sale_info.id')
+                            ->where("years", $years)
+                            ->where("months", $months)
+                            
+                            ->orderBy('production_sale_info.update_date', 'DESC')
+                            ->first()
+                            ->toArray();
+        }
         public static function getDetailListsub($years, $months, $master_type_id) {
      
         return ProductionSaleInfo::select(DB::raw("SUM(mis_production_sale_info_detail.amount) AS sum_amount")
