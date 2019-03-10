@@ -110,6 +110,7 @@ class PersonalController extends Controller {
             $beforeYear = $condition['YearTo'] - 1;
             $datatotal = [];
             $datatotal['text'] = 'รวมทั้งสิ้น';
+            $datatotal['color'] = '#87ceeb';
             $datatotal['SummaryCurrentsum'] = 0;
             $datatotal['SummaryBeforesum'] = 0;
             $datatotal['SummaryCurrentdirector'] = 0;
@@ -126,6 +127,7 @@ class PersonalController extends Controller {
 
                 $data = [];
                 $data['text'] = 'รวม';
+                $data['color'] = '#B2BABB';
                 $data['textdate'] = $mf . ' - ' . $mt . ' ' . $condition['YearTo'];
                 $data['Month'] = $monthName;
                 $data['Position'] = $value['positiontype'];
@@ -198,6 +200,8 @@ class PersonalController extends Controller {
                     }
                     if ($data['SummaryBefore'] != 0) {
                         $data['SummarysumPercentage'] = (($data['SummaryCurrent'] - $data['SummaryBefore']) * 100) / $data['SummaryBefore'];
+                    }else{
+                        $data['SummarysumPercentage'] =100;
                     }
                 }
 
@@ -225,6 +229,7 @@ class PersonalController extends Controller {
             $data['Position'] = 'นักวิชาการ 8';
             $data['Month'] = $monthName;
             $data['text'] = 'รวม';
+            $data['color'] = '#B2BABB';
 //            $data['Quarter'] = ($i + 1);
 //            $data['Year'] = ($curYear);
             $data['SummaryCurrentsum'] = 0;
@@ -259,12 +264,16 @@ class PersonalController extends Controller {
                 $data['SummaryBefore'] += $sumbefore;
                 if ($sumbefore != 0) {
                     $data['CurrentEmployee'][0]['percent'] = (($sumcurrent - $sumbefore) * 100) / $sumbefore;
+                }else{
+                    $data['CurrentEmployee'][0]['percent'] =100;
                 }
 
                 $data['SummaryPercentage'] += ($sumcurrent + $sumbefore);
             }
             if ($data['SummaryBefore'] != 0) {
                 $data['SummarysumPercentage'] = (($data['SummaryCurrent'] - $data['SummaryBefore']) * 100) / $data['SummaryBefore'];
+            }else{
+                $data['SummarysumPercentage'] =100;
             }
             $datatotal['SummaryCurrentsum'] += $data['SummaryCurrentsum'];
             $datatotal['SummaryBeforesum'] += $data['SummaryBeforesum'];
@@ -275,6 +284,8 @@ class PersonalController extends Controller {
             $datatotal['SummaryPercentage'] += $data['SummaryPercentage'];
             if ($datatotal['SummaryBefore'] != 0) {
                 $datatotal['SummarysumPercentage'] = (($datatotal['SummaryCurrent'] - $datatotal['SummaryBefore']) * 100) / $datatotal['SummaryBefore'];
+            }else{
+                $datatotal['SummarysumPercentage'] =100;
             }
             array_push($DataList, $data);
             array_push($DataList, $datatotal);
@@ -317,7 +328,7 @@ class PersonalController extends Controller {
                 if ($DataSummary2['before'][$key]['summary'] != 0 && $DataSummary2['before'][$key]['summary'] != '') {
                     $DataSummary2['current'][$key]['percent'] = (($t['summary'] - $DataSummary2['before'][$key]['summary']) * 100) / $DataSummary2['before'][$key]['summary'];
                 } else {
-                    $DataSummary2['current'][$key]['percent'] = 0;
+                    $DataSummary2['current'][$key]['percent'] = 100;
                 }
             }
             $DataSummary2['Monthname'] = $monthName;
@@ -819,7 +830,7 @@ class PersonalController extends Controller {
                 if ($DataSummary['before'][$key]['summary'] != 0 && $DataSummary['before'][$key]['summary'] != '') {
                     $DataSummary['current'][$key]['percent'] = (($t['summary'] - $DataSummary['before'][$key]['summary']) * 100) / $DataSummary['before'][$key]['summary'];
                 } else {
-                    $DataSummary['current'][$key]['percent'] = 0;
+                    $DataSummary['current'][$key]['percent'] = 100;
                 }
             }
             $DataSummary['Monthname'] = ($curYear + 543);
@@ -940,12 +951,16 @@ class PersonalController extends Controller {
                         $data['SummaryBefore'] += $sumbefore;
                         if ($sumbefore != 0) {
                             $data['CurrentEmployee'][$keyitem]['percent'] = (($sumcurrent - $sumbefore) * 100) / $sumbefore;
+                        }else{
+                             $data['CurrentEmployee'][$keyitem]['percent'] =100;
                         }
 
                         $data['SummaryPercentage'] += ($sumcurrent + $sumbefore);
                     }
                     if ($data['SummaryBefore'] != 0) {
                         $data['SummarysumPercentage'] = (($data['SummaryCurrent'] - $data['SummaryBefore']) * 100) / $data['SummaryBefore'];
+                    }else{
+                        $data['SummarysumPercentage'] =100;
                     }
                 }
 
@@ -1001,12 +1016,16 @@ class PersonalController extends Controller {
                 $data['SummaryBefore'] += $sumbefore;
                 if ($sumbefore != 0) {
                     $data['CurrentEmployee'][0]['percent'] = (($sumcurrent - $sumbefore) * 100) / $sumbefore;
+                }else{
+                    $data['CurrentEmployee'][0]['percent'] =100;
                 }
 
                 $data['SummaryPercentage'] += ($sumcurrent + $sumbefore);
             }
             if ($data['SummaryBefore'] != 0) {
                 $data['SummarysumPercentage'] = (($data['SummaryCurrent'] - $data['SummaryBefore']) * 100) / $data['SummaryBefore'];
+            }else{
+                $data['SummarysumPercentage'] =100;
             }
            
             array_push($DataList, $data);
@@ -1040,7 +1059,7 @@ class PersonalController extends Controller {
                 if ($DataSummary2['before'][$key]['summary'] != 0 && $DataSummary2['before'][$key]['summary'] != '') {
                     $DataSummary2['current'][$key]['percent'] = (($t['summary'] - $DataSummary2['before'][$key]['summary']) * 100) / $DataSummary2['before'][$key]['summary'];
                 } else {
-                    $DataSummary2['current'][$key]['percent'] = 0;
+                    $DataSummary2['current'][$key]['percent'] = 100;
                 }
             }
             $DataSummary2['Monthname'] = $monthName;
