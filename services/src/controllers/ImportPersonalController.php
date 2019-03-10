@@ -17,9 +17,9 @@ class ImportPersonalController extends Controller {
     }
 
     public function import($request, $response) {
-                error_reporting(E_ERROR);
-    error_reporting(E_ALL);
-    ini_set('display_errors','On');
+        error_reporting(E_ERROR);
+        error_reporting(E_ALL);
+        ini_set('display_errors', 'On');
         $_WEB_FILE_PATH = 'files/files';
         try {
             $params = $request->getParsedBody();
@@ -39,6 +39,7 @@ class ImportPersonalController extends Controller {
 
                 $files['obj']['AttachFile']->moveTo('../../' . $FilePath);
                 $this->readExcelFile('../../' . $FilePath, $attid, $Data);
+                return 'OK';
             }
         } catch (\Exception $e) {
             return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
@@ -48,17 +49,17 @@ class ImportPersonalController extends Controller {
     private function readExcelFile($file, $id, $Data) {
 
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file);
-
+       // print_r($spreadsheet);
         ///sheet 1
 
         $spreadsheet->setActiveSheetIndex(0);
         $sheet1 = $spreadsheet->getActiveSheet()->toArray();
 //        $highestRow1 = $spreadsheet->getActiveSheet()->getHighestRow();
         $sheetid1 = AttachFileService::savesheet($id, 'รายละเอียด', 1);
-        $size = sizeof($sheet1) - 2;       
-       
+        $size = sizeof($sheet1) - 2;
+
         for ($i = 5; $i < $size; $i++) {
-            AttachFileService::saverow($sheetid1, $sheet1[$i], $Data,1);
+            AttachFileService::saverow($sheetid1, $sheet1[$i], $Data, 1);
         }
 
         //sheet2
@@ -67,7 +68,7 @@ class ImportPersonalController extends Controller {
         $size2 = sizeof($sheet2) - 1;
 
         for ($i = 2; $i < $size2; $i++) {
-            AttachFileService::saverow2($sheetid2, $sheet2[$i], $Data,2);
+            AttachFileService::saverow2($sheetid2, $sheet2[$i], $Data, 2);
         }
         //sheet3
         $sheet3 = $spreadsheet->getSheet(2)->toArray();
@@ -77,8 +78,6 @@ class ImportPersonalController extends Controller {
         for ($i = 4; $i < $size3; $i++) {
             AttachFileService::saverow3($sheetid3, $sheet3[$i], $Data);
         }
-
-
     }
 
     public function getMainList($request, $response, $args) {

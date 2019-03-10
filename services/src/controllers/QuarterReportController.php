@@ -158,7 +158,23 @@ class QuarterReportController extends Controller {
         } else {
             $showm = $condition['YearFrom'];
         }
-        $data = PersonalController::getQuarterDataList($condition);
+        if ($condition['QuarterFrom'] == 1) {
+            $condition['MonthFrom'] = 12;
+            $condition['MonthTo'] = 12;
+            $condition['YearTo']--;
+        } else if ($condition['QuarterFrom'] == 2) {
+            $condition['MonthFrom'] = 3;
+            $condition['MonthTo'] = 3;
+        } else if ($condition['QuarterFrom'] == 3) {
+            $condition['MonthFrom'] = 6;
+            $condition['MonthTo'] = 6;
+        } else if ($condition['QuarterFrom'] == 4) {
+            $condition['MonthFrom'] = 9;
+            $condition['MonthTo'] = 9;
+        }
+
+        $data = PersonalController::getMonthList($condition);
+
         $objPHPExcel->getActiveSheet()->setTitle("1. อัตรากำลัง");
         $objPHPExcel->getActiveSheet()->setCellValue('A2', '1. อัตรากำลังทั้งหมดของ อ.ส.ค.');
 
@@ -11572,8 +11588,8 @@ class QuarterReportController extends Controller {
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
         $objPHPExcel->getActiveSheet()->setTitle('สูญเสียใน (3)');
-    if ($condition['QuarterFrom'] == 1) {
-             $condition['MonthFrom'] = 10;
+        if ($condition['QuarterFrom'] == 1) {
+            $condition['MonthFrom'] = 10;
             $condition['MonthTo'] = 12;
         } else if ($condition['QuarterFrom'] == 2) {
             $condition['MonthFrom'] = 1;
@@ -11755,8 +11771,8 @@ class QuarterReportController extends Controller {
         $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
-if ($condition['QuarterFrom'] == 1) {
-             $condition['MonthFrom'] = 10;
+        if ($condition['QuarterFrom'] == 1) {
+            $condition['MonthFrom'] = 10;
             $condition['MonthTo'] = 12;
         } else if ($condition['QuarterFrom'] == 2) {
             $condition['MonthFrom'] = 1;
@@ -11962,8 +11978,8 @@ if ($condition['QuarterFrom'] == 1) {
         $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
-if ($condition['QuarterFrom'] == 1) {
-             $condition['MonthFrom'] = 10;
+        if ($condition['QuarterFrom'] == 1) {
+            $condition['MonthFrom'] = 10;
             $condition['MonthTo'] = 12;
         } else if ($condition['QuarterFrom'] == 2) {
             $condition['MonthFrom'] = 1;
@@ -12169,8 +12185,8 @@ if ($condition['QuarterFrom'] == 1) {
         $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
-if ($condition['QuarterFrom'] == 1) {
-             $condition['MonthFrom'] = 10;
+        if ($condition['QuarterFrom'] == 1) {
+            $condition['MonthFrom'] = 10;
             $condition['MonthTo'] = 12;
         } else if ($condition['QuarterFrom'] == 2) {
             $condition['MonthFrom'] = 1;
@@ -12379,8 +12395,8 @@ if ($condition['QuarterFrom'] == 1) {
 
         $FactoryList = FactoryService::getList();
         $data = [];
-if ($condition['QuarterFrom'] == 1) {
-             $condition['MonthFrom'] = 10;
+        if ($condition['QuarterFrom'] == 1) {
+            $condition['MonthFrom'] = 10;
             $condition['MonthTo'] = 12;
         } else if ($condition['QuarterFrom'] == 2) {
             $condition['MonthFrom'] = 1;

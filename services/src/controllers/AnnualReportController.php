@@ -173,7 +173,9 @@ class AnnualReportController extends Controller {
         } else {
             $showm = $condition['YearFrom'];
         }
-        $data = PersonalController::getAnnuallyDataList($condition);
+        $condition['MonthFrom'] = 9;
+        $condition['MonthTo'] = 9;
+        $data = PersonalController::getMonthList($condition);
         $objPHPExcel->getActiveSheet()->setTitle("1. อัตรากำลัง");
         $objPHPExcel->getActiveSheet()->setCellValue('A2', '1. อัตรากำลังทั้งหมดของ อ.ส.ค.');
 

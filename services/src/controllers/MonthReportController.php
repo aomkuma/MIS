@@ -164,7 +164,8 @@ class MonthReportController extends Controller {
         } else {
             $showm = $condition['YearFrom'];
         }
-        $data = PersonalController::getMonthDataList($condition);
+       
+        $data = PersonalController::getMonthList($condition);
         $objPHPExcel->getActiveSheet()->setTitle("1. อัตรากำลัง");
         $objPHPExcel->getActiveSheet()->setCellValue('A2', '1. อัตรากำลังทั้งหมดของ อ.ส.ค.');
         $objPHPExcel->getActiveSheet()->setCellValue('H2', 'หน่วย : คน');
@@ -197,8 +198,6 @@ class MonthReportController extends Controller {
         $SummaryPercentage = 0;
         $SummarysumPercentage = 0;
         foreach ($data['DataList'] as $item) {
-
-
 
             $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), $item['Position']);
             $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), $item['Month']);
@@ -233,7 +232,8 @@ class MonthReportController extends Controller {
             $objPHPExcel->getActiveSheet()->setCellValue('I' . (5 + $row), $item['SummarysumPercentage']);
             $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row) . ':I' . (5 + $row))->getFont()->setBold(true);
             $row++;
-            $SummaryCurrentsum += item['SummaryCurrentsum'];
+            $SummaryCurrentsum += $item['SummaryCurrentsum'];
+         
             $SummaryCurrentdirector += $item['SummaryCurrentdirector'];
             $SummaryCurrent += $item['SummaryCurrent'];
             $SummaryBeforesum += $item['SummaryBeforesum'];
@@ -250,7 +250,8 @@ class MonthReportController extends Controller {
         $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $SummaryBeforesum);
         $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $SummaryBeforedirector);
         $objPHPExcel->getActiveSheet()->setCellValue('G' . (5 + $row), $SummaryBefore);
-
+        
+ 
 
         $objPHPExcel->getActiveSheet()->setCellValue('H' . (5 + $row), $SummaryPercentage);
         $objPHPExcel->getActiveSheet()->setCellValue('I' . (5 + $row), $SummarysumPercentage);
