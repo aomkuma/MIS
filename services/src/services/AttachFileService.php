@@ -107,16 +107,17 @@ class AttachFileService {
         $row->positiontype = $data[0];
         $row->department = $data[1];
         $row->director = $data[3];
-        $row->lv1 = $data[4];
-        $row->lv2 = $data[5];
-        $row->lv3 = $data[6];
-        $row->lv4 = $data[7];
-        $row->lv5 = $data[8];
-        $row->lv6 = $data[9];
-        $row->lv7 = $data[10];
-        $row->lv8 = $data[11];
-        $row->lv9 = $data[12];
-        $row->lv10 = $data[13];
+        $row->lv1 = $data[13];
+        $row->lv2 = $data[12];
+        $row->lv3 = $data[11];
+        $row->lv4 = $data[10];
+        $row->lv5 = $data[9];
+        $row->lv6 = $data[8];
+        $row->lv7 = $data[7];
+        $row->lv8 = $data[6];
+        $row->lv9 = $data[5];
+        $row->lv10 = $data[4];
+        $row->outsource = $data[14];
         $row->summary = $data[4] + $data[5] + $data[6] + $data[7] + $data[8] + $data[9] + $data[10] + $data[11] + $data[12] + $data[13];
 
 //        $row->summary = $data[14];

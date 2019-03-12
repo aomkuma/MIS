@@ -181,27 +181,29 @@ class AnnualReportController extends Controller {
 
 
 //tb header
-        $objPHPExcel->getActiveSheet()->setCellValue('H2', 'หน่วย : คน');
-        $objPHPExcel->getActiveSheet()->getStyle('H2')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
-        $objPHPExcel->getActiveSheet()->mergeCells('H2:I2');
+       $objPHPExcel->getActiveSheet()->setCellValue('J2', 'หน่วย : คน');
+        $objPHPExcel->getActiveSheet()->getStyle('J2')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        $objPHPExcel->getActiveSheet()->mergeCells('J2:K2');
         $objPHPExcel->getActiveSheet()->setCellValue('A3', 'หน่วยงาน');
         $objPHPExcel->getActiveSheet()->mergeCells('A3:A4');
-        $objPHPExcel->getActiveSheet()->setCellValue('B3', ($condition['YearFrom'] + 543));
-        $objPHPExcel->getActiveSheet()->mergeCells('B3:D3');
-        $objPHPExcel->getActiveSheet()->setCellValue('E3', ($condition['YearFrom'] + 542));
-        $objPHPExcel->getActiveSheet()->mergeCells('E3:G3');
-        $objPHPExcel->getActiveSheet()->setCellValue('H3', 'ผลต่าง');
-        $objPHPExcel->getActiveSheet()->mergeCells('H3:I3');
+        $objPHPExcel->getActiveSheet()->setCellValue('B3',  ($condition['YearFrom'] + 543));
+        $objPHPExcel->getActiveSheet()->mergeCells('B3:E3');
+        $objPHPExcel->getActiveSheet()->setCellValue('F3',  ($condition['YearFrom'] + 542));
+        $objPHPExcel->getActiveSheet()->mergeCells('F3:I3');
+        $objPHPExcel->getActiveSheet()->setCellValue('J3', 'ผลต่าง');
+        $objPHPExcel->getActiveSheet()->mergeCells('J3:K3');
         $objPHPExcel->getActiveSheet()->setCellValue('B4', 'พนักงาน');
         $objPHPExcel->getActiveSheet()->setCellValue('C4', 'ลูกจ้าง');
-        $objPHPExcel->getActiveSheet()->setCellValue('D4', 'รวม');
-        $objPHPExcel->getActiveSheet()->setCellValue('E4', 'พนักงาน');
-        $objPHPExcel->getActiveSheet()->setCellValue('F4', 'ลูกจ้าง');
-        $objPHPExcel->getActiveSheet()->setCellValue('G4', 'รวม');
-        $objPHPExcel->getActiveSheet()->setCellValue('H4', 'ราย');
-        $objPHPExcel->getActiveSheet()->setCellValue('I4', '% เพิ่ม,ลด');
+        $objPHPExcel->getActiveSheet()->setCellValue('D4', 'Outsource');
+        $objPHPExcel->getActiveSheet()->setCellValue('E4', 'รวม');
+        $objPHPExcel->getActiveSheet()->setCellValue('F4', 'พนักงาน');
+        $objPHPExcel->getActiveSheet()->setCellValue('G4', 'ลูกจ้าง');
+        $objPHPExcel->getActiveSheet()->setCellValue('H4', 'Outsource');
+        $objPHPExcel->getActiveSheet()->setCellValue('I4', 'รวม');
+        $objPHPExcel->getActiveSheet()->setCellValue('J4', 'ราย');
+        $objPHPExcel->getActiveSheet()->setCellValue('K4', '% เพิ่ม,ลด');
 
-        $row = 0;
+         $row = 0;
         $SummaryCurrentsum = 0;
         $SummaryCurrentdirector = 0;
         $SummaryCurrent = 0;
@@ -210,49 +212,55 @@ class AnnualReportController extends Controller {
         $SummaryBefore = 0;
         $SummaryPercentage = 0;
         $SummarysumPercentage = 0;
+        $SummaryCurrentout = 0;
+        $SummaryBeforeout = 0;
         foreach ($data['DataList'] as $item) {
 
-
-
             $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), $item['Position']);
-            $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), $item['Month']);
+          //  $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), $item['Month']);
             $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row) . ':I' . (5 + $row))->getFont()->setBold(true);
             $row++;
             foreach ($item['CurrentEmployee'] as $key => $itemcurrent) {
-                $sumcurrent = $itemcurrent['director'] + $itemcurrent['summary'];
-                $sumbefore = $item['BeforeEmployee'][$key]['director'] + $item['BeforeEmployee'][$key]['summary'];
+                $sumcurrent = $itemcurrent['director'] + $itemcurrent['summary'] + $itemcurrent['outsource'];
+                $sumbefore = $item['BeforeEmployee'][$key]['director'] + $item['BeforeEmployee'][$key]['summary'] + $item['BeforeEmployee'][$key]['outsource'];
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), $itemcurrent['department']);
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), $itemcurrent['summary']);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $itemcurrent['director']);
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $sumcurrent);
-                $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $item['BeforeEmployee'][$key]['summary']);
-                $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $item['BeforeEmployee'][$key]['director']);
-                $objPHPExcel->getActiveSheet()->setCellValue('G' . (5 + $row), $sumbefore);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $itemcurrent['outsource']);
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $sumcurrent);
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $item['BeforeEmployee'][$key]['summary']);
+                $objPHPExcel->getActiveSheet()->setCellValue('G' . (5 + $row), $item['BeforeEmployee'][$key]['director']);
+                $objPHPExcel->getActiveSheet()->setCellValue('H' . (5 + $row), $item['BeforeEmployee'][$key]['outsource']);
+                $objPHPExcel->getActiveSheet()->setCellValue('I' . (5 + $row), $sumbefore);
 
-                $objPHPExcel->getActiveSheet()->setCellValue('H' . (5 + $row), $sumcurrent + $sumbefore);
-                $objPHPExcel->getActiveSheet()->setCellValue('I' . (5 + $row), $itemcurrent['percent']);
+                $objPHPExcel->getActiveSheet()->setCellValue('J' . (5 + $row), $sumcurrent + $sumbefore);
+                $objPHPExcel->getActiveSheet()->setCellValue('K' . (5 + $row), $itemcurrent['percent']);
 
                 $row++;
             }
             $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), 'รวม');
             $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), $item['SummaryCurrentsum']);
             $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $item['SummaryCurrentdirector']);
-            $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $item['SummaryCurrent']);
-            $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $item['SummaryBeforesum']);
-            $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $item['SummaryBeforedirector']);
-            $objPHPExcel->getActiveSheet()->setCellValue('G' . (5 + $row), $item['SummaryBefore']);
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $item['SummaryCurrentout']);
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $item['SummaryCurrent']);
+            $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $item['SummaryBeforesum']);
+            $objPHPExcel->getActiveSheet()->setCellValue('G' . (5 + $row), $item['SummaryBeforedirector']);
+            $objPHPExcel->getActiveSheet()->setCellValue('H' . (5 + $row), $item['SummaryBeforeout']);
+            $objPHPExcel->getActiveSheet()->setCellValue('I' . (5 + $row), $item['SummaryBefore']);
 
-
-            $objPHPExcel->getActiveSheet()->setCellValue('H' . (5 + $row), $item ['SummaryPercentage']);
-            $objPHPExcel->getActiveSheet()->setCellValue('I' . (5 + $row), $item['SummarysumPercentage']);
+            $objPHPExcel->getActiveSheet()->setCellValue('J' . (5 + $row), $item ['SummaryPercentage']);
+            $objPHPExcel->getActiveSheet()->setCellValue('K' . (5 + $row), $item['SummarysumPercentage']);
             $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row) . ':I' . (5 + $row))->getFont()->setBold(true);
             $row++;
             $SummaryCurrentsum += $item['SummaryCurrentsum'];
+
             $SummaryCurrentdirector += $item['SummaryCurrentdirector'];
             $SummaryCurrent += $item['SummaryCurrent'];
+            $SummaryCurrentout += $item['SummaryCurrentout'];
             $SummaryBeforesum += $item['SummaryBeforesum'];
             $SummaryBeforedirector += $item['SummaryBeforedirector'];
             $SummaryBefore += $item['SummaryBefore'];
+            $SummaryBeforeout += $item['SummaryBeforeout'];
             $SummaryPercentage += $item ['SummaryPercentage'];
             $SummarysumPercentage += $item['SummarysumPercentage'];
         }
@@ -260,27 +268,29 @@ class AnnualReportController extends Controller {
         $objPHPExcel->getActiveSheet()->setCellValue('A' . (5 + $row), 'รวมทั้งสิ้น');
         $objPHPExcel->getActiveSheet()->setCellValue('B' . (5 + $row), $SummaryCurrentsum);
         $objPHPExcel->getActiveSheet()->setCellValue('C' . (5 + $row), $SummaryCurrentdirector);
-        $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $SummaryCurrent);
-        $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $SummaryBeforesum);
-        $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $SummaryBeforedirector);
-        $objPHPExcel->getActiveSheet()->setCellValue('G' . (5 + $row), $SummaryBefore);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . (5 + $row), $SummaryCurrentout);
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . (5 + $row), $SummaryCurrent);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . (5 + $row), $SummaryBeforesum);
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . (5 + $row), $SummaryBeforedirector);
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . (5 + $row), $SummaryBefore);
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . (5 + $row), $SummaryBeforeout);
 
 
-        $objPHPExcel->getActiveSheet()->setCellValue('H' . (5 + $row), $SummaryPercentage);
-        $objPHPExcel->getActiveSheet()->setCellValue('I' . (5 + $row), $SummarysumPercentage);
-        $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row) . ':I' . (5 + $row))->getFont()->setSize(16);
-        $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row) . ':I' . (5 + $row))->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->setCellValue('J' . (5 + $row), $SummaryPercentage);
+        $objPHPExcel->getActiveSheet()->setCellValue('K' . (5 + $row), $SummarysumPercentage);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row) . ':K' . (5 + $row))->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . (5 + $row) . ':K' . (5 + $row))->getFont()->setBold(true);
 //        
         // header style
         $objPHPExcel->getActiveSheet()->getStyle('A2')->getFont()->setSize(18);
         $objPHPExcel->getActiveSheet()->getStyle('A3')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle('I2')->getFont()->setSize(18);
+        $objPHPExcel->getActiveSheet()->getStyle('K2')->getFont()->setSize(18);
 
-        $objPHPExcel->getActiveSheet()->getStyle('A3:I4')->getFont()->setSize(16);
-        $objPHPExcel->getActiveSheet()->getStyle('A3:I4')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:K4')->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:K4')->getFont()->setBold(true);
 
         $objPHPExcel->getActiveSheet()
-                ->getStyle("A3:I4")
+                ->getStyle("A3:K4")
                 ->applyFromArray(array(
                     'alignment' => array(
                         'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
@@ -298,11 +308,13 @@ class AnnualReportController extends Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
+         $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(15);
         $highestRow = $objPHPExcel->getActiveSheet()->getHighestRow();
-        $objPHPExcel->getActiveSheet()->getStyle('A6:I' . $highestRow)
+        $objPHPExcel->getActiveSheet()->getStyle('A6:K' . $highestRow)
                 ->getNumberFormat()
                 ->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-        $objPHPExcel->getActiveSheet()->getStyle('A3:I' . $highestRow)->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('A3:K' . $highestRow)->applyFromArray(
                 array(
                     'borders' => array(
                         'allborders' => array(

@@ -24,9 +24,11 @@ angular.module('e-homework').controller('ImportController', function ($scope, $c
     $scope.YearList = getYearListst(10, 2019);
     // $scope.MonthList = getMonthList();
     $scope.updateData = function (Data, AttachFile) {
+       
         var params = {'Data': Data, 'AttachFile': AttachFile};
+         console.log(params);
         HTTPService.uploadRequest('import-personal', params).then(function (result) {
-            console.log(result);
+            
             $scope.loadList('import-personal/list/main');
                 if(result == 'OK'){
                     alert('นำเข้าข้อมูลบุคลากรเรียบร้อย');
