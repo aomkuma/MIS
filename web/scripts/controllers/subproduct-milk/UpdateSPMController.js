@@ -12,11 +12,12 @@ angular.module('e-homework').controller('UpdateSPMController', function ($scope,
     $scope.ID = $routeParams.id;
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));
     //  console.log($scope.$parent.Menu);
-
+    $scope.proid = '';
     $scope.loadList = function (action, id) {
         var params = {
             'id': id
         };
+
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest(action, params).then(function (result) {
             if (result.data.STATUS == 'OK') {
@@ -30,6 +31,7 @@ angular.module('e-homework').controller('UpdateSPMController', function ($scope,
         var params = {
             'id': id
         };
+
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest(action, params).then(function (result) {
             if (result.data.STATUS == 'OK') {
@@ -47,19 +49,24 @@ angular.module('e-homework').controller('UpdateSPMController', function ($scope,
         HTTPService.clientRequest(action, params).then(function (result) {
             if (result.data.STATUS == 'OK') {
                 $scope.Data = result.data.DATA.Data;
-                console.log();
+                console.log(result);
+                $scope.Data.name = result.data.DATA.Data.proname;
                 $scope.Subdata = {
-                    'id': ''
-                    , 'name': ''
-                    , 'product_milk_id': $scope.ID
+                    'id': result.data.DATA.Data.subid
+                    , 'name': result.data.DATA.Data.subname
+                    , 'product_milk_id': result.data.DATA.Data.proid
 
                     , 'actives': 'Y'
                     , 'create_date': ''
                     , 'update_date': ''
                 };
+                   console.log($scope.Subdata.product_milk_id);
+                $scope.loadList('subproduct-milk/list/byparent', $scope.Subdata.product_milk_id);
             }
             IndexOverlayFactory.overlayHide();
         });
+
+
     }
 
     $scope.save = function (Subdata) {
@@ -102,7 +109,7 @@ angular.module('e-homework').controller('UpdateSPMController', function ($scope,
     var size = $scope.ID;
 
     var cksize = size.split('-');
-    console.log(cksize.length);
+    // console.log(cksize.length);
     // if ($scope.ID !== undefined && $scope.ID !== null) {
     if (cksize.length === 1) {
         console.log('if');
@@ -110,7 +117,8 @@ angular.module('e-homework').controller('UpdateSPMController', function ($scope,
     } else {
         console.log('else');
         $scope.loadDatasub('subproduct-milk/get', cksize[0]);
-
+        // $scope.loadList('subproduct-milk/list/byparent',  $scope.proid);
+        //  console.log($scope.proid);
     }
 
     $scope.loadList('subproduct-milk/list/byparent', $scope.ID);

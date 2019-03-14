@@ -20,7 +20,7 @@ angular.module('e-homework').controller('UpdatePMDController', function ($scope,
         };
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest(action, params).then(function (result) {
-            console.log(result.data.DATA.Data.subid);
+           // console.log(result.data.DATA.Data.subid);
             if (result.data.STATUS == 'OK') {
                 $scope.Data = result.data.DATA.Data;
                 $scope.Subdata = {
@@ -28,14 +28,31 @@ angular.module('e-homework').controller('UpdatePMDController', function ($scope,
                     , 'name': result.data.DATA.Data.name
                     , 'sub_product_milk_id': result.data.DATA.Data.subid
 
-                    , 'actives': result.data.DATA.Data.actices
-                   
+                    , 'actives': 'Y'
+
                 };
+                $scope.loadList('product-milk-detail/list/byparent2',  $scope.Subdata.sub_product_milk_id);
             }
             IndexOverlayFactory.overlayHide();
         });
     }
+     $scope.goUpdate = function (detailid) {
+        window.location.href = '#/product-milk-detail/update/' + detailid + '-xx';
+    }
+    $scope.loadList = function (action, id) {
+        var params = {
+            'id': id
+        };
 
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest(action, params).then(function (result) {
+            if (result.data.STATUS == 'OK') {
+                $scope.List2 = result.data.DATA.List;
+                // console.log($scope.UserList);
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+    }
     $scope.save = function (Subdata) {
         var params = {'Subdata': Subdata};
         console.log(params);
@@ -65,9 +82,9 @@ angular.module('e-homework').controller('UpdatePMDController', function ($scope,
     var size = $scope.ID;
 
     var cksize = size.split('-');
- 
+
     if ($scope.ID !== undefined && $scope.ID !== null && cksize.length === 1) {
-      
+
         $scope.loadData('subproduct-milk/get', $scope.ID);
         $scope.Subdata = {
             'id': ''
@@ -79,9 +96,10 @@ angular.module('e-homework').controller('UpdatePMDController', function ($scope,
             , 'update_date': ''
         };
     } else {
-      
-        $scope.loadData('product-milk-detail/get', $scope.ID);
-    }
 
+        $scope.loadData('product-milk-detail/get', $scope.ID);
+
+    }
+    $scope.loadList('product-milk-detail/list/byparent2', $scope.ID);
 
 });

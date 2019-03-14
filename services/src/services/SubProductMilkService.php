@@ -31,7 +31,7 @@ class SubProductMilkService {
     }
 
     public static function getData($id) {
-        return SubProductMilk::select("subproduct_milk.id as subid", 'product_milk.name as proname', 'subproduct_milk.name as subname','product_milk.id as proid ')
+        return SubProductMilk::select("subproduct_milk.id as subid", 'product_milk.name as proname', 'subproduct_milk.name as subname','product_milk.id as proid')
                         ->join('product_milk', 'product_milk.id', '=', 'subproduct_milk.product_milk_id')
                         ->where('subproduct_milk.id', $id)
                         ->first();

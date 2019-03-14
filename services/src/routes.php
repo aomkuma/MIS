@@ -197,6 +197,7 @@ $app->post('/subproduct-milk/update/', 'SubProductMilkController:updateData');
 
 $app->post('/product-milk-detail/list/', 'ProductMilkDetailController:getList');
 $app->post('/product-milk-detail/list/byparent/', 'ProductMilkDetailController:getListByParent');
+$app->post('/product-milk-detail/list/byparent2/', 'ProductMilkDetailController:getListByParent2');
 $app->post('/product-milk-detail/get/', 'ProductMilkDetailController:getData');
 $app->post('/product-milk-detail/update/', 'ProductMilkDetailController:updateData');
 

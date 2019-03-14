@@ -56,8 +56,8 @@ class SubProductMilkController extends Controller {
             $id = $params['obj']['id'];
 
             $_Data = SubProductMilkService::getData($id);
-            print_r($_Data);
-            die();
+//            print_r($_Data);
+//            die();
             $this->data_result['DATA']['Data'] = $_Data;
 
             return $this->returnResponse(200, $this->data_result, $response, false);
