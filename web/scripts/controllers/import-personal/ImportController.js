@@ -41,7 +41,7 @@ angular.module('e-homework').controller('ImportController', function ($scope, $c
                 $scope.Data = null;
                 $scope.AttachFile = null;
             } else {
-                alert(result.data.DATA);
+                alert('นำเข้าข้อมูลบุคลากรไม่เรียบร้อย');
             }
             IndexOverlayFactory.overlayHide();
         });
