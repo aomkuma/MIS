@@ -21,21 +21,27 @@ angular.module('e-homework').controller('ImportController', function ($scope, $c
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));
     $scope.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));
     $scope.MonthList = getMonthList();
-    $scope.YearList = getYearListst(10, 2019);
+    $scope.YearList = getYearListst(10, 2018);
     // $scope.MonthList = getMonthList();
     $scope.updateData = function (Data, AttachFile) {
-       
-        var params = {'Data': Data, 'AttachFile': AttachFile};
-         console.log(params);
+        
+        
+        var Update = angular.copy(Data);
+        if (Update.date !== null && Update.date !== '') {
+            Update.date = makeSQLDate(Update.date);
+        }
+
+        var params = {'Data': Update, 'AttachFile': AttachFile};
+        // console.log(Data.date);
         HTTPService.uploadRequest('import-personal', params).then(function (result) {
-            
+
             $scope.loadList('import-personal/list/main');
-                if(result == 'OK'){
-                    alert('นำเข้าข้อมูลบุคลากรเรียบร้อย');
-                    
-                }else{
-                    alert(result.data.DATA);
-                }
+            if (result == 'OK') {
+                alert('นำเข้าข้อมูลบุคลากรเรียบร้อย');
+
+            } else {
+                alert(result.data.DATA);
+            }
             IndexOverlayFactory.overlayHide();
         });
 
@@ -44,7 +50,7 @@ angular.module('e-homework').controller('ImportController', function ($scope, $c
 
         //  IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest(action).then(function (result) {
-          //  console.log(result);
+            //  console.log(result);
             // if(result.data.STATUS == 'OK'){
             $scope.List = result.data;
 

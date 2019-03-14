@@ -106,7 +106,7 @@ class AttachFileService {
         $row->seq = $seq;
         $row->positiontype = $data[0];
         $row->department = $data[1];
-        $row->director = $data[3];
+        $row->director = $data[16];
         $row->lv1 = $data[13];
         $row->lv2 = $data[12];
         $row->lv3 = $data[11];

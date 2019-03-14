@@ -24,8 +24,8 @@ class ImportPersonalController extends Controller {
         try {
             $params = $request->getParsedBody();
             $Data = $params['obj']['Data'];
-            print_r($Data);
-            die();
+//            print_r($Data);
+//            die();
             $files = $request->getUploadedFiles();
 
             if ($files != null) {
@@ -50,15 +50,14 @@ class ImportPersonalController extends Controller {
     private function readExcelFile($file, $id, $Data) {
 
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file);
-       // print_r($spreadsheet);
-        ///sheet 1
+    
 
         $spreadsheet->setActiveSheetIndex(0);
         $sheet1 = $spreadsheet->getActiveSheet()->toArray();
 //        $highestRow1 = $spreadsheet->getActiveSheet()->getHighestRow();
         $sheetid1 = AttachFileService::savesheet($id, 'รายละเอียด', 1);
         $size = sizeof($sheet1) - 2;
-
+//
         for ($i = 5; $i < $size; $i++) {
             AttachFileService::saverow($sheetid1, $sheet1[$i], $Data, 1);
         }
