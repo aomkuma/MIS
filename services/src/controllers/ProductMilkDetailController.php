@@ -77,9 +77,9 @@
                 // ini_set('display_errors','On');
                 $params = $request->getParsedBody();
                 $_Data = $params['obj']['Subdata'];
-//                 print_r($_Data);exit;
+               //  print_r($_Data);die();
                 // // Update to none role
-                $result = ProductMilkDetailService::checkDuplicate($_Data['id'], $_Data['name']);
+                $result = ProductMilkDetailService::checkDuplicate($_Data['id'], $_Data['name'],$_Data['sub_product_milk_id']);
 
                 if(empty($result)){
                     $id = ProductMilkDetailService::updateData($_Data);

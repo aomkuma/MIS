@@ -7,9 +7,12 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class ProductMilkDetailService {
 
-    public static function checkDuplicate($id, $name) {
-        return ProductMilkDetail::where('id', '<>', $id)
-                        ->where('name', $name)
+    public static function checkDuplicate($id, $name, $subid) {
+        return ProductMilkDetail::where('product_milk_detail.id', '<>', $id)
+                        ->join('subproduct_milk', 'subproduct_milk.id', '=', 'product_milk_detail.sub_product_milk_id')
+                        ->join('product_milk', 'product_milk.id', '=', 'subproduct_milk.product_milk_id')
+                        ->where('subproduct_milk.id', $subid)
+                        ->where('product_milk_detail.name', $name)
                         ->first();
     }
 

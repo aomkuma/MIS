@@ -67,7 +67,7 @@ angular.module('e-homework').controller('UpdatePMDController', function ($scope,
     var cksize = size.split('-');
  
     if ($scope.ID !== undefined && $scope.ID !== null && cksize.length === 1) {
-        console.log('if');
+      
         $scope.loadData('subproduct-milk/get', $scope.ID);
         $scope.Subdata = {
             'id': ''
@@ -79,7 +79,7 @@ angular.module('e-homework').controller('UpdatePMDController', function ($scope,
             , 'update_date': ''
         };
     } else {
-         console.log('else');
+      
         $scope.loadData('product-milk-detail/get', $scope.ID);
     }
 

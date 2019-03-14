@@ -7,9 +7,11 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class SubProductMilkService {
 
-    public static function checkDuplicate($id, $name) {
-        return SubProductMilk::where('id', '<>', $id)
-                        ->where('name', $name)
+    public static function checkDuplicate($subid, $name, $id) {
+        return SubProductMilk::where('subproduct_milk.id', '<>', $subid)
+                        ->join('product_milk', 'product_milk.id', '=', 'subproduct_milk.product_milk_id')
+                        ->where('subproduct_milk.name', $name)
+                        ->where('subproduct_milk.product_milk_id', $id)
                         ->first();
     }
 
@@ -23,16 +25,16 @@ class SubProductMilkService {
     public static function getListByProductMilk($product_milk_id) {
         return SubProductMilk::select("subproduct_milk.*", 'product_milk.name as proname')
                         ->join('product_milk', 'product_milk.id', '=', 'subproduct_milk.product_milk_id')
-                        ->where('product_milk_id' , $product_milk_id)
+                        ->where('product_milk_id', $product_milk_id)
                         ->orderBy("subproduct_milk.id", 'DESC')
                         ->get()->toArray();
     }
 
     public static function getData($id) {
-        return SubProductMilk::select("subproduct_milk.id as subid", 'product_milk.name as proname','subproduct_milk.name as subname')
-                ->join('product_milk', 'product_milk.id', '=', 'subproduct_milk.product_milk_id')
-                ->where('subproduct_milk.id', $id)
-                ->first();
+        return SubProductMilk::select("subproduct_milk.id as subid", 'product_milk.name as proname', 'subproduct_milk.name as subname','product_milk.id as proid ')
+                        ->join('product_milk', 'product_milk.id', '=', 'subproduct_milk.product_milk_id')
+                        ->where('subproduct_milk.id', $id)
+                        ->first();
     }
 
     public static function updateData($obj) {

@@ -24,8 +24,8 @@ angular.module('e-homework').controller('ImportController', function ($scope, $c
     $scope.YearList = getYearListst(10, 2018);
     // $scope.MonthList = getMonthList();
     $scope.updateData = function (Data, AttachFile) {
-        
-        
+
+
         var Update = angular.copy(Data);
         if (Update.date !== null && Update.date !== '') {
             Update.date = makeSQLDate(Update.date);
@@ -38,7 +38,8 @@ angular.module('e-homework').controller('ImportController', function ($scope, $c
             $scope.loadList('import-personal/list/main');
             if (result == 'OK') {
                 alert('นำเข้าข้อมูลบุคลากรเรียบร้อย');
-
+                $scope.Data = null;
+                $scope.AttachFile = null;
             } else {
                 alert(result.data.DATA);
             }
