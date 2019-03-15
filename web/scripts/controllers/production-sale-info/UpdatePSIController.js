@@ -35,8 +35,8 @@ angular.module('e-homework').controller('UpdatePSIController', function($scope, 
 
     $scope.loadFactoryList = function(){
         
-      //  IndexOverlayFactory.overlayShow();
-        HTTPService.clientRequest('factory/list', null).then(function(result){
+      var params = {'region' : $scope.PersonRegion};
+        HTTPService.clientRequest('factory/list', params).then(function(result){
             if(result.data.STATUS == 'OK'){
                 $scope.FactoryList = result.data.DATA.DataList;
                 // console.log($scope.List);
@@ -65,34 +65,37 @@ angular.module('e-homework').controller('UpdatePSIController', function($scope, 
         });
     }
 
-    $scope.loadProductMilk = function(){
+    $scope.ProductMilkList = [];
+    $scope.loadProductMilk = function(index){
         // var params = {'actives':'Y', 'menu_type' : 'การสูญเสียในกระบวนการ'};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('product-milk/list', null).then(function(result){
             if(result.data.STATUS == 'OK'){
-                $scope.ProductMilkList = result.data.DATA.List;
+                $scope.ProductMilkList[index] = result.data.DATA.List;
                 IndexOverlayFactory.overlayHide();
             }
         });
     }
 
-    $scope.loadSubProductMilk = function(product_milk_id){
+    $scope.SubProductMilkList = [];
+    $scope.loadSubProductMilk = function(product_milk_id, index){
         var params = {'product_milk_id':product_milk_id};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('subproduct-milk/list/byparent', params).then(function(result){
             if(result.data.STATUS == 'OK'){
-                $scope.SubProductMilkList = result.data.DATA.List;
+                $scope.SubProductMilkList[index] = result.data.DATA.List;
                 IndexOverlayFactory.overlayHide();
             }
         });
     }
 
-    $scope.loadProductMilkDetail = function(subproduct_milk_id){
+    $scope.ProductMilkDetailList = [];
+    $scope.loadProductMilkDetail = function(subproduct_milk_id, index){
         var params = {'sub_product_milk_id':subproduct_milk_id};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('product-milk-detail/list/byparent', params).then(function(result){
             if(result.data.STATUS == 'OK'){
-                $scope.ProductMilkDetailList = result.data.DATA.List;
+                $scope.ProductMilkDetailList[index] = result.data.DATA.List;
                 IndexOverlayFactory.overlayHide();
             }
         });
@@ -117,11 +120,14 @@ angular.module('e-homework').controller('UpdatePSIController', function($scope, 
                 $scope.Data.factory_id = parseInt($scope.Data.factory_id);
                 $scope.DataDetailList = $scope.Data.production_sale_info_detail;
                 console.log($scope.Data);
-                
+                $scope.ProductMilkList = [$scope.DataDetailList.length];
+                $scope.SubProductMilkList = [$scope.DataDetailList.length];
+                $scope.ProductMilkDetailList = [$scope.DataDetailList.length];
                 // load sub dar=iry farming
                 for(var i =0; i < $scope.DataDetailList.length; i++){
-                   $scope.loadSubProductMilk($scope.DataDetailList[i].production_sale_info_type1);
-                $scope.loadProductMilkDetail($scope.DataDetailList[i].production_sale_info_type2);
+                    $scope.loadProductMilk(i);
+                    $scope.loadSubProductMilk($scope.DataDetailList[i].production_sale_info_type1, i);
+                    $scope.loadProductMilkDetail($scope.DataDetailList[i].production_sale_info_type2, i);
                 }
                 IndexOverlayFactory.overlayHide();
             }else{
@@ -228,6 +234,13 @@ angular.module('e-homework').controller('UpdatePSIController', function($scope, 
             };
 
         $scope.DataDetailList.push(detail);
+
+        var index = $scope.DataDetailList.length - 1;
+        $scope.ProductMilkList.push({});
+        $scope.SubProductMilkList.push({});
+        $scope.ProductMilkDetailList.push({});
+        
+        $scope.loadProductMilk(index);
     }
 
     $scope.removeDetail = function(id, index){
@@ -368,7 +381,7 @@ angular.module('e-homework').controller('UpdatePSIController', function($scope, 
 
     $scope.setData();
     $scope.loadFactoryList();
-    $scope.loadProductMilk();
+    $scope.loadProductMilk(0);
 
     // $scope.loadDairyFarming('MAIN', '');
     // $scope.loadDairyFarming('CHILD', '');

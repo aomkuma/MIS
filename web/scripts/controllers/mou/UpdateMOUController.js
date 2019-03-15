@@ -33,6 +33,7 @@ angular.module('e-homework').controller('UpdateMOUController', function($scope, 
             if(result.data.STATUS == 'OK'){
                 $scope.Data = result.data.DATA.Data;
                 $scope.Data.mou_amount = parseFloat($scope.Data.mou_amount);
+                $scope.Data.mou_value = parseFloat($scope.Data.mou_value);
                 $scope.Data.start_date = makeDate($scope.Data.start_date);
                 $scope.Data.end_date = makeDate($scope.Data.end_date);
 

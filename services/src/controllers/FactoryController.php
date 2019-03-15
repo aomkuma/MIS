@@ -19,8 +19,14 @@
         	try {
                 $params = $request->getParsedBody();
                 $user_session = $params['user_session'];
+                $region = $params['obj']['region'];
                 
-                $List = FactoryService::getList();
+                $RegionList = [];
+                foreach ($region as $key => $value) {
+                    $RegionList[] = $value['RegionID'];
+                }
+                // print_r($RegionList);exit;
+                $List = FactoryService::getList($RegionList);
                 
                 $this->data_result['DATA']['DataList'] = $List;
                 

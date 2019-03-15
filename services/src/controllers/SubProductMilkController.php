@@ -35,7 +35,7 @@ class SubProductMilkController extends Controller {
     public function getListByParent($request, $response, $args) {
         try {
             $params = $request->getParsedBody();
-            $product_milk_id = $params['obj']['id'];
+            $product_milk_id = $params['obj']['product_milk_id'];
 //                $menu_type = $params['obj']['menu_type'];
 //                $condition = $params['obj']['condition'];
             

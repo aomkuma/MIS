@@ -78,15 +78,20 @@ class ProductionInfoController extends Controller {
             // ini_set('display_errors','On');
             $params = $request->getParsedBody();
             $condition = $params['obj']['condition'];
+            $region = $params['obj']['region'];
+            $RegionList = [];
+            foreach ($region as $key => $value) {
+                $RegionList[] = $value['RegionID'];
+            }
 
             // print_r($RegionList);
             // exit;
             if ($condition['DisplayType'] == 'monthly') {
-                $Result = $this->getMonthDataList($condition);
+                $Result = $this->getMonthDataList($condition, $RegionList);
             } else if ($condition['DisplayType'] == 'quarter') {
-                $Result = $this->getQuarterDataList($condition);
+                $Result = $this->getQuarterDataList($condition, $RegionList);
             } else if ($condition['DisplayType'] == 'annually') {
-                $Result = $this->getAnnuallyDataList($condition);
+                $Result = $this->getAnnuallyDataList($condition, $RegionList);
             }
             $DataList = $Result['DataList'];
             $Summary = $Result['Summary'];
@@ -434,7 +439,7 @@ class ProductionInfoController extends Controller {
         return ['DataList' => $DataList, 'Summary' => $DataSummary, 'Detail' => $Datadetail];
     }
 
-    public function getMonthDataList($condition) {
+    public function getMonthDataList($condition, $RegionList) {
 
         $factory_id = $condition['Factory'];
         $ymFrom = $condition['YearTo'] . '-' . str_pad($condition['MonthFrom'], 2, "0", STR_PAD_LEFT);
@@ -464,7 +469,7 @@ class ProductionInfoController extends Controller {
         $ProducMilkList = ProductMilkService::getList();
 
         // get Factory
-        $FactoryList = FactoryService::getList();
+        $FactoryList = FactoryService::getList($RegionList, $factory_id);
         $curYear = $condition['YearTo'];
         $beforeYear = $condition['YearTo'] - 1;
 
@@ -677,7 +682,7 @@ class ProductionInfoController extends Controller {
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
 
-    public function getQuarterDataList($condition, $regions) {
+    public function getQuarterDataList($condition, $RegionList) {
 
         $factory_id = $condition['Factory'];
         // get loop to query
@@ -873,7 +878,7 @@ class ProductionInfoController extends Controller {
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
 
-    public function getAnnuallyDataList($condition, $regions) {
+    public function getAnnuallyDataList($condition, $RegionList) {
 
         $factory_id = $condition['Factory'];
 

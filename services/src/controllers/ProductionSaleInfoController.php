@@ -78,15 +78,19 @@ class ProductionSaleInfoController extends Controller {
             // ini_set('display_errors','On');
             $params = $request->getParsedBody();
             $condition = $params['obj']['condition'];
+            $RegionList = [];
+            foreach ($region as $key => $value) {
+                $RegionList[] = $value['RegionID'];
+            }
 
             // print_r($RegionList);
             // exit;
             if ($condition['DisplayType'] == 'monthly') {
-                $Result = $this->getMonthDataList($condition);
+                $Result = $this->getMonthDataList($condition, $RegionList);
             } else if ($condition['DisplayType'] == 'quarter') {
-                $Result = $this->getQuarterDataList($condition);
+                $Result = $this->getQuarterDataList($condition, $RegionList);
             } else if ($condition['DisplayType'] == 'annually') {
-                $Result = $this->getAnnuallyDataList($condition);
+                $Result = $this->getAnnuallyDataList($condition, $RegionList);
             }
             $DataList = $Result['DataList'];
             $Summary = $Result['Summary'];
@@ -102,7 +106,7 @@ class ProductionSaleInfoController extends Controller {
         }
     }
 
-    public function getMonthDataList($condition) {
+    public function getMonthDataList($condition, $RegionList) {
 
         $factory_id = $condition['Factory'];
         $ymFrom = $condition['YearTo'] . '-' . str_pad($condition['MonthFrom'], 2, "0", STR_PAD_LEFT);
@@ -132,7 +136,7 @@ class ProductionSaleInfoController extends Controller {
         $ProducMilkList = ProductMilkService::getList();
 
         // get Factory
-        $FactoryList = FactoryService::getList();
+        $FactoryList = FactoryService::getList($RegionLis, $factory_id);
         $curYear = $condition['YearTo'];
         $beforeYear = $condition['YearTo'] - 1;
 

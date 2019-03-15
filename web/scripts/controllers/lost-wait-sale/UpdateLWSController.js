@@ -35,8 +35,8 @@ angular.module('e-homework').controller('UpdateLWSController', function($scope, 
 
     $scope.loadFactoryList = function(){
         
-      //  IndexOverlayFactory.overlayShow();
-        HTTPService.clientRequest('factory/list', null).then(function(result){
+      var params = {'region' : $scope.PersonRegion};
+        HTTPService.clientRequest('factory/list', params).then(function(result){
             if(result.data.STATUS == 'OK'){
                 $scope.FactoryList = result.data.DATA.DataList;
                 // console.log($scope.List);
