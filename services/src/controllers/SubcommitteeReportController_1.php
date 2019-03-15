@@ -268,10 +268,10 @@ class SubcommitteeReportController extends Controller {
             foreach ($mastername as $key => $item) {
                 $mastes = MasterGoalService::getList('Y', $item);
                 // $detail['name'] = $item;
-                $objPHPExcel->getActiveSheet()->setCellValue('A' . (6 + $row), ($position + $key) . '. ' . $item);
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . (6 + $row), ($position + $key) . '.' . $item);
                 $objPHPExcel->getActiveSheet()->getStyle('A' . (6 + $row))->getFont()->setSize(14);
                 $objPHPExcel->getActiveSheet()->getStyle('A' . (6 + $row))->getFont()->setBold(true);
-               // $row++;
+                $row++;
 //                $detail['data'] = [];
                 foreach ($mastes as $keyitem => $itemmaster) {
                     $subposition = 1;
@@ -327,19 +327,16 @@ class SubcommitteeReportController extends Controller {
                         default : $result = null;
                     }
 
-                   // $detail2['mission'] += $itemmaster['goal_name'];
+                    $detail2['mission'] = $itemmaster['goal_name'];
                     $detail2['unit'] = $mission[0]['unit'];
-                    $detail2['target'] += $avg[0]['amount'];
-                    $detail2['actual'] += $actually['amount'];
-                   
-                    // array_push($detail['data'], $detail2);
-                }
-                 if ($detail2['target'] > 0) {
+                    $detail2['target'] = $avg[0]['amount'];
+                    $detail2['actual'] = $actually['amount'];
+                    if ($detail2['target'] > 0) {
                         $detail2['percen'] = ($detail2['actual'] * 100) / $detail2['target'];
                     } else {
                         $detail2['percen'] = 0;
                     }
-//                    $objPHPExcel->getActiveSheet()->setCellValue('A' . (6 + $row), '  ' . ($position + $key) . '.' . ($subposition + $keyitem) . ' ' . $detail2['mission']);
+                    $objPHPExcel->getActiveSheet()->setCellValue('A' . (6 + $row), '  ' . ($position + $key) . '.' . ($subposition + $keyitem) . ' ' . $detail2['mission']);
                     $objPHPExcel->getActiveSheet()->setCellValue('B' . (6 + $row), $detail2['unit']);
                     $objPHPExcel->getActiveSheet()->setCellValue('C' . (6 + $row), $detail2['target']);
                     $objPHPExcel->getActiveSheet()->setCellValue('D' . (6 + $row), $detail2['actual']);
@@ -350,6 +347,8 @@ class SubcommitteeReportController extends Controller {
                     $objPHPExcel->getActiveSheet()->getStyle('D' . (6 + $row))->getFont()->setSize(14);
                     $objPHPExcel->getActiveSheet()->getStyle('E' . (6 + $row))->getFont()->setSize(14);
                     $row++;
+                    // array_push($detail['data'], $detail2);
+                }
                 //       array_push($data, $detail);
             }
         } else {

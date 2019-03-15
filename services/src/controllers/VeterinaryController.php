@@ -54,14 +54,14 @@ class VeterinaryController extends Controller {
 
     public function loadDataApprove($request, $response, $args) {
         try {
-           
+
             $params = $request->getParsedBody();
             $user_session = $params['user_session'];
-            
+
             $Data = VeterinaryService::loadDataApprove($user_session['UserID']);
-            
+
             $this->data_result['DATA']['DataList'] = $Data;
-            
+
             return $this->returnResponse(200, $this->data_result, $response, false);
         } catch (\Exception $e) {
             return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
@@ -105,7 +105,7 @@ class VeterinaryController extends Controller {
     public function getMonthDataList($condition, $regions) {
         $ymFrom = $condition['YearTo'] . '-' . str_pad($condition['MonthFrom'], 2, "0", STR_PAD_LEFT);
         $ymTo = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT);
-        $toTime = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT) . '-28';// . VeterinaryController::getLastDayOfMonth($ymTo);
+        $toTime = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT) . '-28'; // . VeterinaryController::getLastDayOfMonth($ymTo);
         //exit;
         $fromTime = $condition['YearTo'] . '-' . str_pad($condition['MonthFrom'], 2, "0", STR_PAD_LEFT) . '-01';
 
@@ -130,7 +130,7 @@ class VeterinaryController extends Controller {
         $DataSummary['SummaryServicePercentage'] = 0;
         if ($diffMonth == 0) {
             $diffMonth = 1;
-        }else{
+        } else {
             $diffMonth += 1;
         }
         for ($i = 0; $i < $diffMonth; $i++) {
@@ -166,33 +166,33 @@ class VeterinaryController extends Controller {
                 $diffCowData = $data['CurrentCowData'] - $data['BeforeCowData'];
                 $data['DiffCowData'] = $diffCowData;
 
-                if($data['BeforeCowData'] != 0){
+                if ($data['BeforeCowData'] != 0) {
                     $data['DiffCowDataPercentage'] = (($data['CurrentCowData'] - $data['BeforeCowData']) / $data['BeforeCowData']) * 100;
-                }else if(empty($data['BeforeCowData']) && !empty($data['CurrentCowData'])){
+                } else if (empty($data['BeforeCowData']) && !empty($data['CurrentCowData'])) {
                     $data['DiffCowDataPercentage'] = 100;
                 }
-                
+
 
                 $diffServiceData = $data['CurrentServiceData'] - $data['BeforeServiceData'];
                 $data['DiffServiceData'] = $diffServiceData;
-                
 
-                if($data['BeforeServiceData'] != 0){
-                    $data['DiffServiceDataPercentage'] = (($data['CurrentServiceData'] - $data['BeforeServiceData']) /$data['BeforeServiceData']) * 100;
-                }else if(empty($data['BeforeServiceData']) && !empty($data['CurrentServiceData'])){
+
+                if ($data['BeforeServiceData'] != 0) {
+                    $data['DiffServiceDataPercentage'] = (($data['CurrentServiceData'] - $data['BeforeServiceData']) / $data['BeforeServiceData']) * 100;
+                } else if (empty($data['BeforeServiceData']) && !empty($data['CurrentServiceData'])) {
                     $data['DiffServiceDataPercentage'] = 100;
                 }
-                
+
                 $data['CreateDate'] = $CurrentCowData['update_date'];
                 $data['ApproveDate'] = $CurrentCowData['office_approve_date'];
-                if(!empty($CurrentCowData['office_approve_id'])){
-                    if(empty($CurrentCowData['office_approve_comment'])){
-                        $data['Status'] = 'อนุมัติ';        
-                    }else{
-                        $data['Status'] = 'ไม่อนุมัติ';        
+                if (!empty($CurrentCowData['office_approve_id'])) {
+                    if (empty($CurrentCowData['office_approve_comment'])) {
+                        $data['Status'] = 'อนุมัติ';
+                    } else {
+                        $data['Status'] = 'ไม่อนุมัติ';
                     }
                 }
-                
+
                 $data['Description'] = ['farm_type' => $farm_type
                     , 'item_type' => $item_type
                     , 'months' => $curMonth
@@ -232,9 +232,9 @@ class VeterinaryController extends Controller {
                 $diffCowData = floatval($data['CurrentCowData']) - floatval($data['BeforeCowData']);
                 $data['DiffCowData'] = $diffCowData;
 
-                if(floatval($data['BeforeCowData']) != 0){
+                if (floatval($data['BeforeCowData']) != 0) {
                     $data['DiffCowDataPercentage'] = floatval($data['CurrentCowData']) / floatval($data['BeforeCowData'] * 100);
-                }else{
+                } else {
                     $data['DiffCowDataPercentage'] = 0;
                 }
                 // if (is_nan($data['DiffCowDataPercentage'])) {
@@ -243,9 +243,9 @@ class VeterinaryController extends Controller {
                 $diffServiceData = $data['CurrentServiceData'] - $data['BeforeServiceData'];
                 $data['DiffServiceData'] = $diffServiceData;
 
-                if($data['BeforeServiceData'] != 0){
+                if ($data['BeforeServiceData'] != 0) {
                     $data['DiffServiceDataPercentage'] = floatval($data['CurrentServiceData']) / floatval($data['BeforeServiceData'] * 100);
-                }else{
+                } else {
                     $data['DiffServiceDataPercentage'] = 0;
                 }
                 // if (is_nan($data['DiffServiceDataPercentage'])) {
@@ -253,13 +253,12 @@ class VeterinaryController extends Controller {
                 // }
                 $data['CreateDate'] = $CurrentCowData['update_date'];
                 $data['ApproveDate'] = $CurrentCowData['office_approve_date'];
-                if(!empty($CurrentCowData['office_approve_id'])){
-                    if(empty($CurrentCowData['office_approve_comment'])){
-                        $data['Status'] = 'อนุมัติ';        
-                    }else{
-                        $data['Status'] = 'ไม่อนุมัติ';        
+                if (!empty($CurrentCowData['office_approve_id'])) {
+                    if (empty($CurrentCowData['office_approve_comment'])) {
+                        $data['Status'] = 'อนุมัติ';
+                    } else {
+                        $data['Status'] = 'ไม่อนุมัติ';
                     }
-                    
                 }
                 $data['Description'] = ['farm_type' => $farm_type
                     , 'item_type' => $item_type
@@ -271,17 +270,23 @@ class VeterinaryController extends Controller {
 
                 $DataSummary['SummaryCurrentCow'] = $DataSummary['SummaryCurrentCow'] + $data['CurrentCowData'];
                 $DataSummary['SummaryBeforeCow'] = $DataSummary['SummaryBeforeCow'] + $data['BeforeCowData'];
-                
+
                 $DataSummary['SummaryCurrentService'] = $DataSummary['SummaryCurrentService'] + $data['CurrentServiceData'];
                 $DataSummary['SummaryBeforeService'] = $DataSummary['SummaryBeforeService'] + $data['BeforeServiceData'];
-                
             }
             $curMonth++;
         }
+        if ($DataSummary['SummaryBeforeCow'] != 0) {
+            $DataSummary['SummaryCowPercentage'] = (($DataSummary['SummaryCurrentCow'] - $DataSummary['SummaryBeforeCow']) / $DataSummary['SummaryBeforeCow']) * 100;
+        }else{
+            $DataSummary['SummaryCowPercentage'] =100;
+        }
+        if ($DataSummary['SummaryBeforeService'] != 0) {
+            $DataSummary['SummaryServicePercentage'] = (($DataSummary['SummaryCurrentService'] - $DataSummary['SummaryBeforeService']) / $DataSummary['SummaryBeforeService']) * 100;
+        }else{
+            $DataSummary['SummaryServicePercentage'] =100;
+        }
 
-        $DataSummary['SummaryCowPercentage'] = (($DataSummary['SummaryCurrentCow'] - $DataSummary['SummaryBeforeCow']) /$DataSummary['SummaryBeforeCow']) * 100;
-        $DataSummary['SummaryServicePercentage'] = (($DataSummary['SummaryCurrentService'] - $DataSummary['SummaryBeforeService']) /$DataSummary['SummaryBeforeService']) * 100;
-      
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
 
@@ -292,7 +297,7 @@ class VeterinaryController extends Controller {
         $cnt = 0;
         $loop = 0;
         $j = $condition['QuarterFrom'];
-       
+
         for ($i = 0; $i < $diffYear; $i++) {
             if ($cnt == $diffYear) {
                 for ($k = 0; $k < $condition['QuarterTo']; $k++) {
@@ -315,7 +320,7 @@ class VeterinaryController extends Controller {
             }
             $cnt++;
         }
-        
+
         $loop++;
 
         $curQuarter = intval($condition['QuarterFrom']);
@@ -432,26 +437,26 @@ class VeterinaryController extends Controller {
                 $data['DiffServiceData'] = $Co_SumCurrentServiceData - $Co_SumBeforeServiceData;
                 $data['DiffServiceDataPercentage'] = 0;
 
-                if($data['BeforeCowData'] != 0){
+                if ($data['BeforeCowData'] != 0) {
                     $data['DiffCowDataPercentage'] = (($data['CurrentCowData'] - $data['BeforeCowData']) / $data['BeforeCowData']) * 100;
-                }else if(empty($data['BeforeCowData']) && !empty($data['CurrentCowData'])){
+                } else if (empty($data['BeforeCowData']) && !empty($data['CurrentCowData'])) {
                     $data['DiffCowDataPercentage'] = 100;
                 }
-                
 
-                if($data['BeforeServiceData'] != 0){
-                    $data['DiffServiceDataPercentage'] = (($data['CurrentServiceData'] - $data['BeforeServiceData']) /$data['BeforeServiceData']) * 100;
-                }else if(empty($data['BeforeServiceData']) && !empty($data['CurrentServiceData'])){
+
+                if ($data['BeforeServiceData'] != 0) {
+                    $data['DiffServiceDataPercentage'] = (($data['CurrentServiceData'] - $data['BeforeServiceData']) / $data['BeforeServiceData']) * 100;
+                } else if (empty($data['BeforeServiceData']) && !empty($data['CurrentServiceData'])) {
                     $data['DiffServiceDataPercentage'] = 100;
                 }
 
                 $data['CreateDate'] = $Co_UpdateDate;
                 $data['ApproveDate'] = $Co_ApproveDate;
-                if(!empty($Co_ApproveDate)){
-                    if(empty($Co_ApproveComment)){
-                        $data['Status'] = 'อนุมัติ';        
-                    }else{
-                        $data['Status'] = 'ไม่อนุมัติ';        
+                if (!empty($Co_ApproveDate)) {
+                    if (empty($Co_ApproveComment)) {
+                        $data['Status'] = 'อนุมัติ';
+                    } else {
+                        $data['Status'] = 'ไม่อนุมัติ';
                     }
                 }
                 $data['Description'] = ['farm_type' => $farm_type
@@ -483,11 +488,11 @@ class VeterinaryController extends Controller {
                 $data['DiffServiceDataPercentage'] = 0;
                 $data['CreateDate'] = $Lab_UpdateDate;
                 $data['ApproveDate'] = $Lab_ApproveDate;
-                if(!empty($Lab_ApproveDate)){
-                    if(empty($Lab_ApproveComment)){
-                        $data['Status'] = 'อนุมัติ';        
-                    }else{
-                        $data['Status'] = 'ไม่อนุมัติ';        
+                if (!empty($Lab_ApproveDate)) {
+                    if (empty($Lab_ApproveComment)) {
+                        $data['Status'] = 'อนุมัติ';
+                    } else {
+                        $data['Status'] = 'ไม่อนุมัติ';
                     }
                 }
                 $data['Description'] = ['farm_type' => $farm_type
@@ -500,10 +505,10 @@ class VeterinaryController extends Controller {
 
                 $DataSummary['SummaryCurrentCow'] = $DataSummary['SummaryCurrentCow'] + $data['CurrentCowData'];
                 $DataSummary['SummaryBeforeCow'] = $DataSummary['SummaryBeforeCow'] + $data['BeforeCowData'];
-                $DataSummary['SummaryCowPercentage'] = (($DataSummary['SummaryCurrentCow'] - $DataSummary['SummaryBeforeCow']) /$DataSummary['SummaryBeforeCow']) * 100;
+                $DataSummary['SummaryCowPercentage'] = (($DataSummary['SummaryCurrentCow'] - $DataSummary['SummaryBeforeCow']) / $DataSummary['SummaryBeforeCow']) * 100;
                 $DataSummary['SummaryCurrentService'] = $DataSummary['SummaryCurrentService'] + $data['CurrentServiceData'];
                 $DataSummary['SummaryBeforeService'] = $DataSummary['SummaryBeforeService'] + $data['BeforeServiceData'];
-                $DataSummary['SummaryServicePercentage'] = (($DataSummary['SummaryCurrentService'] - $DataSummary['SummaryBeforeService']) /$DataSummary['SummaryBeforeService']) * 100;
+                $DataSummary['SummaryServicePercentage'] = (($DataSummary['SummaryCurrentService'] - $DataSummary['SummaryBeforeService']) / $DataSummary['SummaryBeforeService']) * 100;
             }
 
             $curQuarter++;
@@ -512,9 +517,16 @@ class VeterinaryController extends Controller {
             }
         }
 
-        $DataSummary['SummaryCowPercentage'] = (($DataSummary['SummaryCurrentCow'] - $DataSummary['SummaryBeforeCow']) /$DataSummary['SummaryBeforeCow']) * 100;
-        $DataSummary['SummaryServicePercentage'] = (($DataSummary['SummaryCurrentService'] - $DataSummary['SummaryBeforeService']) /$DataSummary['SummaryBeforeService']) * 100;
-
+         if ($DataSummary['SummaryBeforeCow'] != 0) {
+            $DataSummary['SummaryCowPercentage'] = (($DataSummary['SummaryCurrentCow'] - $DataSummary['SummaryBeforeCow']) / $DataSummary['SummaryBeforeCow']) * 100;
+        }else{
+            $DataSummary['SummaryCowPercentage'] =100;
+        }
+        if ($DataSummary['SummaryBeforeService'] != 0) {
+            $DataSummary['SummaryServicePercentage'] = (($DataSummary['SummaryCurrentService'] - $DataSummary['SummaryBeforeService']) / $DataSummary['SummaryBeforeService']) * 100;
+        }else{
+            $DataSummary['SummaryServicePercentage'] =100;
+        }
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
 
@@ -541,7 +553,7 @@ class VeterinaryController extends Controller {
                 $Co_SumCurrentServiceData = 0;
                 $Co_SumBeforeServiceData = 0;
                 $Co_UpdateDate = '';
-                
+
                 $Co_ApproveDate = '';
                 $Co_ApproveComment = '';
 
@@ -624,26 +636,26 @@ class VeterinaryController extends Controller {
                 $data['DiffServiceData'] = $Co_SumCurrentServiceData - $Co_SumBeforeServiceData;
                 $data['DiffServiceDataPercentage'] = 0;
 
-                if($data['BeforeCowData'] != 0){
+                if ($data['BeforeCowData'] != 0) {
                     $data['DiffCowDataPercentage'] = (($data['CurrentCowData'] - $data['BeforeCowData']) / $data['BeforeCowData']) * 100;
-                }else if(empty($data['BeforeCowData']) && !empty($data['CurrentCowData'])){
+                } else if (empty($data['BeforeCowData']) && !empty($data['CurrentCowData'])) {
                     $data['DiffCowDataPercentage'] = 100;
                 }
-                
 
-                if($data['BeforeServiceData'] != 0){
-                    $data['DiffServiceDataPercentage'] = (($data['CurrentServiceData'] - $data['BeforeServiceData']) /$data['BeforeServiceData']) * 100;
-                }else if(empty($data['BeforeServiceData']) && !empty($data['CurrentServiceData'])){
+
+                if ($data['BeforeServiceData'] != 0) {
+                    $data['DiffServiceDataPercentage'] = (($data['CurrentServiceData'] - $data['BeforeServiceData']) / $data['BeforeServiceData']) * 100;
+                } else if (empty($data['BeforeServiceData']) && !empty($data['CurrentServiceData'])) {
                     $data['DiffServiceDataPercentage'] = 100;
                 }
 
                 $data['CreateDate'] = $Co_UpdateDate;
                 $data['ApproveDate'] = $Co_ApproveDate;
-                if(!empty($Co_ApproveDate)){
-                    if(empty($Co_ApproveComment)){
-                        $data['Status'] = 'อนุมัติ';        
-                    }else{
-                        $data['Status'] = 'ไม่อนุมัติ';        
+                if (!empty($Co_ApproveDate)) {
+                    if (empty($Co_ApproveComment)) {
+                        $data['Status'] = 'อนุมัติ';
+                    } else {
+                        $data['Status'] = 'ไม่อนุมัติ';
                     }
                 }
                 $data['Description'] = ['farm_type' => $farm_type
@@ -674,11 +686,11 @@ class VeterinaryController extends Controller {
                 $data['DiffServiceDataPercentage'] = 0;
                 $data['CreateDate'] = $Lab_UpdateDate;
                 $data['ApproveDate'] = $Lab_ApproveDate;
-                if(!empty($Lab_ApproveDate)){
-                    if(empty($Lab_ApproveComment)){
-                        $data['Status'] = 'อนุมัติ';        
-                    }else{
-                        $data['Status'] = 'ไม่อนุมัติ';        
+                if (!empty($Lab_ApproveDate)) {
+                    if (empty($Lab_ApproveComment)) {
+                        $data['Status'] = 'อนุมัติ';
+                    } else {
+                        $data['Status'] = 'ไม่อนุมัติ';
                     }
                 }
 
@@ -691,17 +703,24 @@ class VeterinaryController extends Controller {
 
                 $DataSummary['SummaryCurrentCow'] = $DataSummary['SummaryCurrentCow'] + $data['CurrentCowData'];
                 $DataSummary['SummaryBeforeCow'] = $DataSummary['SummaryBeforeCow'] + $data['BeforeCowData'];
-                $DataSummary['SummaryCowPercentage'] = (($DataSummary['SummaryCurrentCow'] - $DataSummary['SummaryBeforeCow']) /$DataSummary['SummaryBeforeCow']) * 100;
+                $DataSummary['SummaryCowPercentage'] = (($DataSummary['SummaryCurrentCow'] - $DataSummary['SummaryBeforeCow']) / $DataSummary['SummaryBeforeCow']) * 100;
                 $DataSummary['SummaryCurrentService'] = $DataSummary['SummaryCurrentService'] + $data['CurrentServiceData'];
                 $DataSummary['SummaryBeforeService'] = $DataSummary['SummaryBeforeService'] + $data['BeforeServiceData'];
-                $DataSummary['SummaryServicePercentage'] = (($DataSummary['SummaryCurrentService'] - $DataSummary['SummaryBeforeService']) /$DataSummary['SummaryBeforeService']) * 100;
+                $DataSummary['SummaryServicePercentage'] = (($DataSummary['SummaryCurrentService'] - $DataSummary['SummaryBeforeService']) / $DataSummary['SummaryBeforeService']) * 100;
             }
 
             $curYear++;
         }
-        $DataSummary['SummaryCowPercentage'] = (($DataSummary['SummaryCurrentCow'] - $DataSummary['SummaryBeforeCow']) /$DataSummary['SummaryBeforeCow']) * 100;
-        $DataSummary['SummaryServicePercentage'] = (($DataSummary['SummaryCurrentService'] - $DataSummary['SummaryBeforeService']) /$DataSummary['SummaryBeforeService']) * 100;
-        // exit;
+       if ($DataSummary['SummaryBeforeCow'] != 0) {
+            $DataSummary['SummaryCowPercentage'] = (($DataSummary['SummaryCurrentCow'] - $DataSummary['SummaryBeforeCow']) / $DataSummary['SummaryBeforeCow']) * 100;
+        }else{
+            $DataSummary['SummaryCowPercentage'] =100;
+        }
+        if ($DataSummary['SummaryBeforeService'] != 0) {
+            $DataSummary['SummaryServicePercentage'] = (($DataSummary['SummaryCurrentService'] - $DataSummary['SummaryBeforeService']) / $DataSummary['SummaryBeforeService']) * 100;
+        }else{
+            $DataSummary['SummaryServicePercentage'] =100;
+        } // exit;
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
 
@@ -952,7 +971,7 @@ class VeterinaryController extends Controller {
         $years = $description['years'];
         $quarter = $description['quarter'];
         $region_id = $description['region_id'];
-        
+
         $costList = [
             ['item' => 'สมาชิก', 'unit' => 'ราย']
             , ['item' => 'โคนม', 'unit' => 'ตัว']
@@ -1256,25 +1275,23 @@ class VeterinaryController extends Controller {
             $params = $request->getParsedBody();
             $_Veterinary = $params['obj']['Veterinary'];
             $user_session = $params['user_session'];
-            
+
             $OrgID = $user_session['OrgID'];
 
             $HeaderData = $this->do_post_request('http://' . $URL . '/dportal/dpo/public/mis/get/org/header/', "POST", ['OrgID' => $OrgID, 'Type' => 'OWNER']);
             $HeaderData = json_decode(trim($HeaderData), TRUE);
             // print_r($HeaderData);exit;
-            if($HeaderData['data']['DATA']['Header']['OrgType'] == 'DEPARTMENT'){
-                    $_Veterinary['dep_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
-                    $_Veterinary['dep_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
+            if ($HeaderData['data']['DATA']['Header']['OrgType'] == 'DEPARTMENT') {
+                $_Veterinary['dep_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                $_Veterinary['dep_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
+            } else if ($HeaderData['data']['DATA']['Header']['OrgType'] == 'DIVISION') {
+                $_Veterinary['division_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                $_Veterinary['division_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
+            } else if ($HeaderData['data']['DATA']['Header']['OrgType'] == 'OFFICE') {
+                $_Veterinary['office_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                $_Veterinary['office_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
+            }
 
-                }else if($HeaderData['data']['DATA']['Header']['OrgType'] == 'DIVISION'){
-                    $_Veterinary['division_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
-                    $_Veterinary['division_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
-
-                }else if($HeaderData['data']['DATA']['Header']['OrgType'] == 'OFFICE'){
-                    $_Veterinary['office_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
-                    $_Veterinary['office_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
-                }
-            
             $_VeterinaryDetailList = $params['obj']['VeterinaryDetailList'];
             unset($_Veterinary['veterinary_detail']);
 
@@ -1356,113 +1373,109 @@ class VeterinaryController extends Controller {
         }
     }
 
-    public function updateDataApprove($request, $response, $args){
-            // $URL = '172.23.10.224';
-            $URL = '127.0.0.1';
-            try{
-                $params = $request->getParsedBody();
-                $user_session = $params['user_session'];
-                $id = $params['obj']['id'];
-                $ApproveStatus = $params['obj']['ApproveStatus'];
-                $ApproveComment = $params['obj']['ApproveComment'];
-                $OrgType = $params['obj']['OrgType'];
-                $approval_id = $user_session['UserID'];
-                $OrgID = $user_session['OrgID'];
+    public function updateDataApprove($request, $response, $args) {
+        // $URL = '172.23.10.224';
+        $URL = '127.0.0.1';
+        try {
+            $params = $request->getParsedBody();
+            $user_session = $params['user_session'];
+            $id = $params['obj']['id'];
+            $ApproveStatus = $params['obj']['ApproveStatus'];
+            $ApproveComment = $params['obj']['ApproveComment'];
+            $OrgType = $params['obj']['OrgType'];
+            $approval_id = $user_session['UserID'];
+            $OrgID = $user_session['OrgID'];
 
-                if($ApproveStatus == 'approve'){
-                    // http post to dpo database to retrieve division's header
-                    $HeaderData = $this->do_post_request('http://' . $URL . '/dportal/dpo/public/mis/get/org/header/', "POST", ['UserID' => $approval_id, 'OrgID' => $OrgID]);
-                    $HeaderData = json_decode(trim($HeaderData), TRUE);
-                    
-                    $data = [];
-                    $ApproveComment = '';
+            if ($ApproveStatus == 'approve') {
+                // http post to dpo database to retrieve division's header
+                $HeaderData = $this->do_post_request('http://' . $URL . '/dportal/dpo/public/mis/get/org/header/', "POST", ['UserID' => $approval_id, 'OrgID' => $OrgID]);
+                $HeaderData = json_decode(trim($HeaderData), TRUE);
 
-                    if($OrgType == 'dep'){
-                        $data['dep_approve_date'] = date('Y-m-d H:i:s');
-                        $data['dep_approve_comment'] = $ApproveComment;
-                        $data['dep_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+                $data = [];
+                $ApproveComment = '';
 
-                        $data['division_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
-                    }else if($OrgType == 'division'){
-                        $data['division_approve_date'] = date('Y-m-d H:i:s');
-                        $data['division_approve_comment'] = $ApproveComment;
-                        $data['division_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+                if ($OrgType == 'dep') {
+                    $data['dep_approve_date'] = date('Y-m-d H:i:s');
+                    $data['dep_approve_comment'] = $ApproveComment;
+                    $data['dep_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
 
-                        $data['office_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
-                    }else if($OrgType == 'office'){
-                        $data['office_approve_date'] = date('Y-m-d H:i:s');
-                        $data['office_approve_comment'] = $ApproveComment;
-                        $data['office_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
-                        
-                    }
-                }else if($ApproveStatus == 'reject'){
+                    $data['division_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                } else if ($OrgType == 'division') {
+                    $data['division_approve_date'] = date('Y-m-d H:i:s');
+                    $data['division_approve_comment'] = $ApproveComment;
+                    $data['division_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
 
-                    if($OrgType == 'dep'){
-                        $data['dep_approve_date'] = date('Y-m-d H:i:s');                  
-                        $data['dep_approve_comment'] = $ApproveComment;
-                        $data['dep_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
-                    }else if($OrgType == 'division'){
-                        $data['dep_approve_date'] = NULL;                  
-                        $data['dep_approve_comment'] = NULL;
-                        
-                        $data['division_approve_id'] = NULL;
-                        $data['division_approve_date'] = date('Y-m-d H:i:s');
-                        $data['division_approve_comment'] = $ApproveComment;
-                        $data['division_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
-                    }else if($OrgType == 'office'){
-
-                        $data['dep_approve_date'] = NULL;                  
-                        $data['dep_approve_comment'] = NULL;
-                        
-                        $data['division_approve_id'] = NULL;
-                        $data['division_approve_date'] = NULL;
-                        $data['division_approve_comment'] = NULL;
-
-                        $data['office_approve_id'] = NULL;    
-                        $data['office_approve_date'] = date('Y-m-d H:i:s');                        
-                        $data['office_approve_comment'] = $ApproveComment;
-                        $data['office_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
-                    }
+                    $data['office_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                } else if ($OrgType == 'office') {
+                    $data['office_approve_date'] = date('Y-m-d H:i:s');
+                    $data['office_approve_comment'] = $ApproveComment;
+                    $data['office_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
                 }
+            } else if ($ApproveStatus == 'reject') {
 
-                // print_r($data );
-                // exit;
-                $result = VeterinaryService::updateDataApprove($id, $data);
+                if ($OrgType == 'dep') {
+                    $data['dep_approve_date'] = date('Y-m-d H:i:s');
+                    $data['dep_approve_comment'] = $ApproveComment;
+                    $data['dep_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+                } else if ($OrgType == 'division') {
+                    $data['dep_approve_date'] = NULL;
+                    $data['dep_approve_comment'] = NULL;
 
-                $this->data_result['DATA']['result'] = $result;
-                
-                return $this->returnResponse(200, $this->data_result, $response, false);
-                
-            }catch(\Exception $e){
-                return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
-            }   
+                    $data['division_approve_id'] = NULL;
+                    $data['division_approve_date'] = date('Y-m-d H:i:s');
+                    $data['division_approve_comment'] = $ApproveComment;
+                    $data['division_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+                } else if ($OrgType == 'office') {
+
+                    $data['dep_approve_date'] = NULL;
+                    $data['dep_approve_comment'] = NULL;
+
+                    $data['division_approve_id'] = NULL;
+                    $data['division_approve_date'] = NULL;
+                    $data['division_approve_comment'] = NULL;
+
+                    $data['office_approve_id'] = NULL;
+                    $data['office_approve_date'] = date('Y-m-d H:i:s');
+                    $data['office_approve_comment'] = $ApproveComment;
+                    $data['office_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+                }
+            }
+
+            // print_r($data );
+            // exit;
+            $result = VeterinaryService::updateDataApprove($id, $data);
+
+            $this->data_result['DATA']['result'] = $result;
+
+            return $this->returnResponse(200, $this->data_result, $response, false);
+        } catch (\Exception $e) {
+            return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+        }
+    }
+
+    private function do_post_request($url, $method, $data = [], $optional_headers = null) {
+        $params = array('http' => array(
+                'method' => $method,
+                'content' => http_build_query($data)
+        ));
+        if ($optional_headers !== null) {
+            $params['http']['header'] = $optional_headers;
+        }
+        $ctx = stream_context_create($params);
+        $fp = @fopen($url, 'rb', false, $ctx);
+        if (!$fp) {
+            print_r($fp);
+            return array("STATUS" => 'ERROR', "MSG" => "ERROR :: Problem with $url");
+            //throw new Exception("Problem with $url, $php_errormsg");
+        }
+        $response = @stream_get_contents($fp);
+        if ($response === false) {
+            print_r($response);
+            return array("STATUS" => 'ERROR', "MSG" => "ERROR :: Problem reading data from $url");
+            //            throw new Exception("Problem reading data from $url");
         }
 
-        private function do_post_request($url, $method, $data = [], $optional_headers = null)
-        {
-              $params = array('http' => array(
-                          'method' => $method,
-                          'content' => http_build_query($data)
-                        ));
-              if ($optional_headers !== null) {
-                $params['http']['header'] = $optional_headers;
-              }
-              $ctx = stream_context_create($params);
-              $fp = @fopen($url, 'rb', false, $ctx);
-               if (!$fp) {
-                print_r($fp);
-                    return array("STATUS"=>'ERROR',"MSG"=>"ERROR :: Problem with $url");
-                //throw new Exception("Problem with $url, $php_errormsg");
-              }
-              $response = @stream_get_contents($fp);
-              if ($response === false) {
-                print_r($response);
-                    return array("STATUS"=>'ERROR',"MSG"=>"ERROR :: Problem reading data from $url");
-    //            throw new Exception("Problem reading data from $url");
-              }
-
-              return $response;
-              
-        }
+        return $response;
+    }
 
 }

@@ -54,14 +54,14 @@ class TravelController extends Controller {
 
     public function loadDataApprove($request, $response, $args) {
         try {
-           
+
             $params = $request->getParsedBody();
             $user_session = $params['user_session'];
-            
+
             $Data = TravelService::loadDataApprove($user_session['UserID']);
-            
+
             $this->data_result['DATA']['DataList'] = $Data;
-            
+
             return $this->returnResponse(200, $this->data_result, $response, false);
         } catch (\Exception $e) {
             return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
@@ -179,29 +179,29 @@ class TravelController extends Controller {
                 $data['DiffAmount'] = $DiffAmount;
 
                 if ($data['BeforeAmount'] != 0) {
-                            $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
-                        }  else if(empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])){
-                            $data['DiffAmountPercentage'] = 100;
-                        }
+                    $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
+                    $data['DiffAmountPercentage'] = 100;
+                }
 
 
-                        $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
-                        $data['DiffBaht'] = $DiffBaht;
+                $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                $data['DiffBaht'] = $DiffBaht;
 
-                        if ($data['BeforeBaht'] != 0) {
-                            $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
-                        } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
-                            $data['DiffBahtPercentage'] = 100;
-                        }
+                if ($data['BeforeBaht'] != 0) {
+                    $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
+                } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
+                    $data['DiffBahtPercentage'] = 100;
+                }
 
 
                 $data['CreateDate'] = $Current['update_date'];
                 $data['ApproveDate'] = $Current['office_approve_date'];
-                if(!empty($Current['office_approve_id'])){
-                    if(empty($Current['office_approve_comment'])){
-                        $data['Status'] = 'อนุมัติ';        
-                    }else{
-                        $data['Status'] = 'ไม่อนุมัติ';        
+                if (!empty($Current['office_approve_id'])) {
+                    if (empty($Current['office_approve_comment'])) {
+                        $data['Status'] = 'อนุมัติ';
+                    } else {
+                        $data['Status'] = 'ไม่อนุมัติ';
                     }
                 }
                 $data['Description'] = ['months' => $curMonth
@@ -223,9 +223,16 @@ class TravelController extends Controller {
 
             $curMonth++;
         }
-
-        $DataSummary['SummaryTravelAmountPercentage'] = (($DataSummary['SummaryCurrentTravelAmount'] - $DataSummary['SummaryBeforTravelAmount']) /$DataSummary['SummaryBeforTravelAmount']) * 100;
-        $DataSummary['SummaryTravelIncomePercentage'] = (($DataSummary['SummaryCurrentTravelIncome'] - $DataSummary['SummaryBeforeTravelIncome']) /$DataSummary['SummaryBeforeTravelIncome']) * 100;
+        if ($DataSummary['SummaryBeforTravelAmount'] != 0) {
+            $DataSummary['SummaryTravelAmountPercentage'] = (($DataSummary['SummaryCurrentTravelAmount'] - $DataSummary['SummaryBeforTravelAmount']) / $DataSummary['SummaryBeforTravelAmount']) * 100;
+        } else {
+            $DataSummary['SummaryTravelAmountPercentage'] = 100;
+        }
+        if ($DataSummary['SummaryBeforeTravelIncome'] != 0) {
+            $DataSummary['SummaryTravelIncomePercentage'] = (($DataSummary['SummaryCurrentTravelIncome'] - $DataSummary['SummaryBeforeTravelIncome']) / $DataSummary['SummaryBeforeTravelIncome']) * 100;
+        } else {
+            $DataSummary['SummaryTravelIncomePercentage'] = 100;
+        }
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
@@ -365,7 +372,7 @@ class TravelController extends Controller {
                 $data['DiffAmount'] = $DiffAmount;
                 if ($data['BeforeAmount'] != 0) {
                     $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
-                }  else if(empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])){
+                } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
                     $data['DiffAmountPercentage'] = 100;
                 }
 
@@ -374,18 +381,18 @@ class TravelController extends Controller {
                 $data['DiffBaht'] = $DiffBaht;
 
                 if ($data['BeforeBaht'] != 0) {
-                    $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
-                } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                    $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
+                } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
                     $data['DiffBahtPercentage'] = 100;
                 }
 
                 $data['CreateDate'] = $UpdateDate;
                 $data['ApproveDate'] = $ApproveDate;
-                if(!empty($ApproveDate)){
-                    if(empty($ApproveComment)){
-                        $data['Status'] = 'อนุมัติ';        
-                    }else{
-                        $data['Status'] = 'ไม่อนุมัติ';        
+                if (!empty($ApproveDate)) {
+                    if (empty($ApproveComment)) {
+                        $data['Status'] = 'อนุมัติ';
+                    } else {
+                        $data['Status'] = 'ไม่อนุมัติ';
                     }
                 }
                 $data['Description'] = ['months' => $curMonth
@@ -413,9 +420,16 @@ class TravelController extends Controller {
             }
         }
 
-        $DataSummary['SummaryTravelAmountPercentage'] = (($DataSummary['SummaryCurrentTravelAmount'] - $DataSummary['SummaryBeforTravelAmount']) /$DataSummary['SummaryBeforTravelAmount']) * 100;
-        $DataSummary['SummaryTravelIncomePercentage'] = (($DataSummary['SummaryCurrentTravelIncome'] - $DataSummary['SummaryBeforeTravelIncome']) /$DataSummary['SummaryBeforeTravelIncome']) * 100;
-
+        if ($DataSummary['SummaryBeforTravelAmount'] != 0) {
+            $DataSummary['SummaryTravelAmountPercentage'] = (($DataSummary['SummaryCurrentTravelAmount'] - $DataSummary['SummaryBeforTravelAmount']) / $DataSummary['SummaryBeforTravelAmount']) * 100;
+        } else {
+            $DataSummary['SummaryTravelAmountPercentage'] = 100;
+        }
+        if ($DataSummary['SummaryBeforeTravelIncome'] != 0) {
+            $DataSummary['SummaryTravelIncomePercentage'] = (($DataSummary['SummaryCurrentTravelIncome'] - $DataSummary['SummaryBeforeTravelIncome']) / $DataSummary['SummaryBeforeTravelIncome']) * 100;
+        } else {
+            $DataSummary['SummaryTravelIncomePercentage'] = 100;
+        }
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
 
@@ -492,7 +506,7 @@ class TravelController extends Controller {
                 $data['DiffAmount'] = $DiffAmount;
                 if ($data['BeforeAmount'] != 0) {
                     $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
-                }  else if(empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])){
+                } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
                     $data['DiffAmountPercentage'] = 100;
                 }
 
@@ -501,18 +515,18 @@ class TravelController extends Controller {
                 $data['DiffBaht'] = $DiffBaht;
 
                 if ($data['BeforeBaht'] != 0) {
-                    $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
-                } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                    $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
+                } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
                     $data['DiffBahtPercentage'] = 100;
                 }
 
                 $data['CreateDate'] = $UpdateDate;
                 $data['ApproveDate'] = $ApproveDate;
-                if(!empty($ApproveDate)){
-                    if(empty($ApproveComment)){
-                        $data['Status'] = 'อนุมัติ';        
-                    }else{
-                        $data['Status'] = 'ไม่อนุมัติ';        
+                if (!empty($ApproveDate)) {
+                    if (empty($ApproveComment)) {
+                        $data['Status'] = 'อนุมัติ';
+                    } else {
+                        $data['Status'] = 'ไม่อนุมัติ';
                     }
                 }
                 $data['Description'] = ['months' => $curMonth
@@ -536,9 +550,16 @@ class TravelController extends Controller {
             $curYear++;
         }
 
-        $DataSummary['SummaryTravelAmountPercentage'] = (($DataSummary['SummaryCurrentTravelAmount'] - $DataSummary['SummaryBeforTravelAmount']) /$DataSummary['SummaryBeforTravelAmount']) * 100;
-        $DataSummary['SummaryTravelIncomePercentage'] = (($DataSummary['SummaryCurrentTravelIncome'] - $DataSummary['SummaryBeforeTravelIncome']) /$DataSummary['SummaryBeforeTravelIncome']) * 100;
-
+        if ($DataSummary['SummaryBeforTravelAmount'] != 0) {
+            $DataSummary['SummaryTravelAmountPercentage'] = (($DataSummary['SummaryCurrentTravelAmount'] - $DataSummary['SummaryBeforTravelAmount']) / $DataSummary['SummaryBeforTravelAmount']) * 100;
+        } else {
+            $DataSummary['SummaryTravelAmountPercentage'] = 100;
+        }
+        if ($DataSummary['SummaryBeforeTravelIncome'] != 0) {
+            $DataSummary['SummaryTravelIncomePercentage'] = (($DataSummary['SummaryCurrentTravelIncome'] - $DataSummary['SummaryBeforeTravelIncome']) / $DataSummary['SummaryBeforeTravelIncome']) * 100;
+        } else {
+            $DataSummary['SummaryTravelIncomePercentage'] = 100;
+        }
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
 
@@ -576,21 +597,19 @@ class TravelController extends Controller {
             $_Data = $params['obj']['Data'];
 
             $user_session = $params['user_session'];
-            
+
             $OrgID = $user_session['OrgID'];
 
             $HeaderData = $this->do_post_request('http://' . $URL . '/dportal/dpo/public/mis/get/org/header/', "POST", ['OrgID' => $OrgID, 'Type' => 'OWNER']);
             $HeaderData = json_decode(trim($HeaderData), TRUE);
             // print_r($HeaderData);exit;
-            if($HeaderData['data']['DATA']['Header']['OrgType'] == 'DEPARTMENT'){
+            if ($HeaderData['data']['DATA']['Header']['OrgType'] == 'DEPARTMENT') {
                 $_Data['dep_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
                 $data['dep_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
-
-            }else if($HeaderData['data']['DATA']['Header']['OrgType'] == 'DIVISION'){
+            } else if ($HeaderData['data']['DATA']['Header']['OrgType'] == 'DIVISION') {
                 $_Data['division_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
                 $data['division_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
-
-            }else if($HeaderData['data']['DATA']['Header']['OrgType'] == 'OFFICE'){
+            } else if ($HeaderData['data']['DATA']['Header']['OrgType'] == 'OFFICE') {
                 $_Data['office_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
                 $data['office_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
             }
@@ -636,7 +655,7 @@ class TravelController extends Controller {
 
     public function getAnnuallyDataListreport($condition, $regions) {
 
-       
+
         $curYear = $condition['YearFrom'];
 
         $beforeYear = $curYear - 1;
@@ -644,7 +663,7 @@ class TravelController extends Controller {
         $yearList = [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $DataList = [];
         $DataSummary = [];
-       
+
 
         // get master goal
         $Master = [
@@ -662,188 +681,185 @@ class TravelController extends Controller {
             ]
         ];
 
-       
 
-            // Loop User Regions
-            // foreach ($regions as $key => $value) {
 
-            foreach ($Master as $k => $v) {
+        // Loop User Regions
+        // foreach ($regions as $key => $value) {
+
+        foreach ($Master as $k => $v) {
 
 //                $training_cowbreed_type_id = $v['id'];
 //                $region_id = $value['RegionID'];
-                $field_amount = $v['field_amount'];
-                $field_price = $v['field_price'];
+            $field_amount = $v['field_amount'];
+            $field_price = $v['field_price'];
 
-              
 
-                $SumCurrentAmount = 0;
-                $SumCurrentBaht = 0;
-                $SumBeforeAmount = 0;
-                $SumBeforeBaht = 0;
-                // loop get quarter sum data
-                for ($j = 0; $j < 12; $j++) {
-                    $curMonth = $monthList[$j];
 
-                    $Current = TravelService::getMainList($curYear-$yearList[$j], $curMonth, $field_amount, $field_price);
-                    $SumCurrentAmount += floatval($Current['sum_amount']);
-                    $SumCurrentBaht += floatval($Current['sum_baht']);
+            $SumCurrentAmount = 0;
+            $SumCurrentBaht = 0;
+            $SumBeforeAmount = 0;
+            $SumBeforeBaht = 0;
+            // loop get quarter sum data
+            for ($j = 0; $j < 12; $j++) {
+                $curMonth = $monthList[$j];
 
-                    $Before = TravelService::getMainList($beforeYear-$yearList[$j], $curMonth, $field_amount, $field_price);
-                    $SumBeforeAmount += floatval($Before['sum_amount']);
-                    $SumBeforeBaht += floatval($Before['sum_baht']);
-                }
+                $Current = TravelService::getMainList($curYear - $yearList[$j], $curMonth, $field_amount, $field_price);
+                $SumCurrentAmount += floatval($Current['sum_amount']);
+                $SumCurrentBaht += floatval($Current['sum_baht']);
 
-                $data = [];
-                $data['RegionName'] = $v['label'];
-                //$data['CowBreedName'] = $v['goal_name'];
-                $data['Year'] = $curYear + 543;
-
-                $data['CurrentAmount'] = $SumCurrentAmount;
-                $data['CurrentBaht'] = $SumCurrentBaht;
-
-                $data['BeforeAmount'] = $SumBeforeAmount;
-                $data['BeforeBaht'] = $SumBeforeBaht;
-
-                $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
-                $data['DiffAmount'] = $DiffAmount;
-                $data['DiffAmountPercentage'] = 0;
-
-                $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
-                $data['DiffBaht'] = $DiffBaht;
-                $data['DiffBahtPercentage'] = 0;
-
-                $data['CreateDate'] = $CurrentCowService['update_date'];
-                $data['ApproveDate'] = '';
-                $data['Status'] = '';
-                $data['Description'] = ['months' => $curMonth
-                    , 'years' => $curYear
-                    , 'region_id' => $region_id
-                ];
-
-                array_push($DataList, $data);
-
-              $DataSummary['SummaryCurrentTravelAmount'] = $DataSummary['SummaryCurrentTravelAmount'] + $data['CurrentAmount'];
-                $DataSummary['SummaryBeforTravelAmount'] = $DataSummary['SummaryBeforTravelAmount'] + $data['BeforeAmount'];
-
-                $DataSummary['SummaryCurrentTravelIncome'] = $DataSummary['SummaryCurrentTravelIncome'] + $data['CurrentBaht'];
-                $DataSummary['SummaryBeforeTravelIncome'] = $DataSummary['SummaryBeforeTravelIncome'] + $data['BeforeBaht'];
-
-                $DataSummary['SummaryTravelAmountPercentage'] = $DataSummary['SummaryTravelAmountPercentage'] + $DataSummary['SummaryCurrentCowBreedAmount'] + $DataSummary['SummaryBeforeCowBreedAmount'];
-                $DataSummary['SummaryTravelIncomePercentage'] = $DataSummary['SummaryTravelIncomePercentage'] + $DataSummary['SummaryCurrentCowBreedIncome'] + $DataSummary['SummaryBeforeCowBreedIncome'];
+                $Before = TravelService::getMainList($beforeYear - $yearList[$j], $curMonth, $field_amount, $field_price);
+                $SumBeforeAmount += floatval($Before['sum_amount']);
+                $SumBeforeBaht += floatval($Before['sum_baht']);
             }
-            // }
 
-         
+            $data = [];
+            $data['RegionName'] = $v['label'];
+            //$data['CowBreedName'] = $v['goal_name'];
+            $data['Year'] = $curYear + 543;
+
+            $data['CurrentAmount'] = $SumCurrentAmount;
+            $data['CurrentBaht'] = $SumCurrentBaht;
+
+            $data['BeforeAmount'] = $SumBeforeAmount;
+            $data['BeforeBaht'] = $SumBeforeBaht;
+
+            $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+            $data['DiffAmount'] = $DiffAmount;
+            $data['DiffAmountPercentage'] = 0;
+
+            $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+            $data['DiffBaht'] = $DiffBaht;
+            $data['DiffBahtPercentage'] = 0;
+
+            $data['CreateDate'] = $CurrentCowService['update_date'];
+            $data['ApproveDate'] = '';
+            $data['Status'] = '';
+            $data['Description'] = ['months' => $curMonth
+                , 'years' => $curYear
+                , 'region_id' => $region_id
+            ];
+
+            array_push($DataList, $data);
+
+            $DataSummary['SummaryCurrentTravelAmount'] = $DataSummary['SummaryCurrentTravelAmount'] + $data['CurrentAmount'];
+            $DataSummary['SummaryBeforTravelAmount'] = $DataSummary['SummaryBeforTravelAmount'] + $data['BeforeAmount'];
+
+            $DataSummary['SummaryCurrentTravelIncome'] = $DataSummary['SummaryCurrentTravelIncome'] + $data['CurrentBaht'];
+            $DataSummary['SummaryBeforeTravelIncome'] = $DataSummary['SummaryBeforeTravelIncome'] + $data['BeforeBaht'];
+
+            $DataSummary['SummaryTravelAmountPercentage'] = $DataSummary['SummaryTravelAmountPercentage'] + $DataSummary['SummaryCurrentCowBreedAmount'] + $DataSummary['SummaryBeforeCowBreedAmount'];
+            $DataSummary['SummaryTravelIncomePercentage'] = $DataSummary['SummaryTravelIncomePercentage'] + $DataSummary['SummaryCurrentCowBreedIncome'] + $DataSummary['SummaryBeforeCowBreedIncome'];
+        }
+        // }
+
+
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
 
-    public function updateDataApprove($request, $response, $args){
-            // $URL = '172.23.10.224';
-            $URL = '127.0.0.1';
-            try{
-                $params = $request->getParsedBody();
-                $user_session = $params['user_session'];
-                $id = $params['obj']['id'];
-                $ApproveStatus = $params['obj']['ApproveStatus'];
-                $ApproveComment = $params['obj']['ApproveComment'];
-                $OrgType = $params['obj']['OrgType'];
-                $approval_id = $user_session['UserID'];
-                $OrgID = $user_session['OrgID'];
+    public function updateDataApprove($request, $response, $args) {
+        // $URL = '172.23.10.224';
+        $URL = '127.0.0.1';
+        try {
+            $params = $request->getParsedBody();
+            $user_session = $params['user_session'];
+            $id = $params['obj']['id'];
+            $ApproveStatus = $params['obj']['ApproveStatus'];
+            $ApproveComment = $params['obj']['ApproveComment'];
+            $OrgType = $params['obj']['OrgType'];
+            $approval_id = $user_session['UserID'];
+            $OrgID = $user_session['OrgID'];
 
-                if($ApproveStatus == 'approve'){
-                    // http post to dpo database to retrieve division's header
-                    $HeaderData = $this->do_post_request('http://' . $URL . '/dportal/dpo/public/mis/get/org/header/', "POST", ['UserID' => $approval_id, 'OrgID' => $OrgID]);
-                    $HeaderData = json_decode(trim($HeaderData), TRUE);
-                    
-                    $data = [];
-                    $ApproveComment = '';
+            if ($ApproveStatus == 'approve') {
+                // http post to dpo database to retrieve division's header
+                $HeaderData = $this->do_post_request('http://' . $URL . '/dportal/dpo/public/mis/get/org/header/', "POST", ['UserID' => $approval_id, 'OrgID' => $OrgID]);
+                $HeaderData = json_decode(trim($HeaderData), TRUE);
 
-                    if($OrgType == 'dep'){
-                        $data['dep_approve_date'] = date('Y-m-d H:i:s');
-                        $data['dep_approve_comment'] = $ApproveComment;
-                        $data['dep_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+                $data = [];
+                $ApproveComment = '';
 
-                        $data['division_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
-                    }else if($OrgType == 'division'){
-                        $data['division_approve_date'] = date('Y-m-d H:i:s');
-                        $data['division_approve_comment'] = $ApproveComment;
-                        $data['division_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+                if ($OrgType == 'dep') {
+                    $data['dep_approve_date'] = date('Y-m-d H:i:s');
+                    $data['dep_approve_comment'] = $ApproveComment;
+                    $data['dep_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
 
-                        $data['office_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
-                    }else if($OrgType == 'office'){
-                        $data['office_approve_date'] = date('Y-m-d H:i:s');
-                        $data['office_approve_comment'] = $ApproveComment;
-                        $data['office_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
-                        
-                    }
-                }else if($ApproveStatus == 'reject'){
+                    $data['division_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                } else if ($OrgType == 'division') {
+                    $data['division_approve_date'] = date('Y-m-d H:i:s');
+                    $data['division_approve_comment'] = $ApproveComment;
+                    $data['division_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
 
-                    if($OrgType == 'dep'){
-                        $data['dep_approve_date'] = date('Y-m-d H:i:s');                  
-                        $data['dep_approve_comment'] = $ApproveComment;
-                        $data['dep_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
-                    }else if($OrgType == 'division'){
-                        $data['dep_approve_date'] = NULL;                  
-                        $data['dep_approve_comment'] = NULL;
-                        
-                        $data['division_approve_id'] = NULL;
-                        $data['division_approve_date'] = date('Y-m-d H:i:s');
-                        $data['division_approve_comment'] = $ApproveComment;
-                        $data['division_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
-                    }else if($OrgType == 'office'){
-
-                        $data['dep_approve_date'] = NULL;                  
-                        $data['dep_approve_comment'] = NULL;
-                        
-                        $data['division_approve_id'] = NULL;
-                        $data['division_approve_date'] = NULL;
-                        $data['division_approve_comment'] = NULL;
-
-                        $data['office_approve_id'] = NULL;    
-                        $data['office_approve_date'] = date('Y-m-d H:i:s');                        
-                        $data['office_approve_comment'] = $ApproveComment;
-                        $data['office_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
-                    }
+                    $data['office_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                } else if ($OrgType == 'office') {
+                    $data['office_approve_date'] = date('Y-m-d H:i:s');
+                    $data['office_approve_comment'] = $ApproveComment;
+                    $data['office_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
                 }
+            } else if ($ApproveStatus == 'reject') {
 
-                // print_r($data );
-                // exit;
-                $result = TravelService::updateDataApprove($id, $data);
+                if ($OrgType == 'dep') {
+                    $data['dep_approve_date'] = date('Y-m-d H:i:s');
+                    $data['dep_approve_comment'] = $ApproveComment;
+                    $data['dep_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+                } else if ($OrgType == 'division') {
+                    $data['dep_approve_date'] = NULL;
+                    $data['dep_approve_comment'] = NULL;
 
-                $this->data_result['DATA']['result'] = $result;
-                
-                return $this->returnResponse(200, $this->data_result, $response, false);
-                
-            }catch(\Exception $e){
-                return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
-            }   
+                    $data['division_approve_id'] = NULL;
+                    $data['division_approve_date'] = date('Y-m-d H:i:s');
+                    $data['division_approve_comment'] = $ApproveComment;
+                    $data['division_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+                } else if ($OrgType == 'office') {
+
+                    $data['dep_approve_date'] = NULL;
+                    $data['dep_approve_comment'] = NULL;
+
+                    $data['division_approve_id'] = NULL;
+                    $data['division_approve_date'] = NULL;
+                    $data['division_approve_comment'] = NULL;
+
+                    $data['office_approve_id'] = NULL;
+                    $data['office_approve_date'] = date('Y-m-d H:i:s');
+                    $data['office_approve_comment'] = $ApproveComment;
+                    $data['office_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+                }
+            }
+
+            // print_r($data );
+            // exit;
+            $result = TravelService::updateDataApprove($id, $data);
+
+            $this->data_result['DATA']['result'] = $result;
+
+            return $this->returnResponse(200, $this->data_result, $response, false);
+        } catch (\Exception $e) {
+            return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+        }
+    }
+
+    private function do_post_request($url, $method, $data = [], $optional_headers = null) {
+        $params = array('http' => array(
+                'method' => $method,
+                'content' => http_build_query($data)
+        ));
+        if ($optional_headers !== null) {
+            $params['http']['header'] = $optional_headers;
+        }
+        $ctx = stream_context_create($params);
+        $fp = @fopen($url, 'rb', false, $ctx);
+        if (!$fp) {
+            print_r($fp);
+            return array("STATUS" => 'ERROR', "MSG" => "ERROR :: Problem with $url");
+            //throw new Exception("Problem with $url, $php_errormsg");
+        }
+        $response = @stream_get_contents($fp);
+        if ($response === false) {
+            print_r($response);
+            return array("STATUS" => 'ERROR', "MSG" => "ERROR :: Problem reading data from $url");
+            //            throw new Exception("Problem reading data from $url");
         }
 
-        private function do_post_request($url, $method, $data = [], $optional_headers = null)
-        {
-              $params = array('http' => array(
-                          'method' => $method,
-                          'content' => http_build_query($data)
-                        ));
-              if ($optional_headers !== null) {
-                $params['http']['header'] = $optional_headers;
-              }
-              $ctx = stream_context_create($params);
-              $fp = @fopen($url, 'rb', false, $ctx);
-               if (!$fp) {
-                print_r($fp);
-                    return array("STATUS"=>'ERROR',"MSG"=>"ERROR :: Problem with $url");
-                //throw new Exception("Problem with $url, $php_errormsg");
-              }
-              $response = @stream_get_contents($fp);
-              if ($response === false) {
-                print_r($response);
-                    return array("STATUS"=>'ERROR',"MSG"=>"ERROR :: Problem reading data from $url");
-    //            throw new Exception("Problem reading data from $url");
-              }
+        return $response;
+    }
 
-              return $response;
-              
-        }
 }

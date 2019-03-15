@@ -8,7 +8,7 @@
     
     class FactoryService {
 
-    	public static function getList($RegionList, $factory_id = ''){
+    	public static function getList($RegionList=[], $factory_id = ''){
             return Factory::where(function($query) use ($RegionList){
                         if(!empty($RegionList)){
                             $query->whereIn('region_id' , $RegionList);

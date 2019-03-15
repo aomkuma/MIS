@@ -54,14 +54,14 @@ class MineralController extends Controller {
 
     public function loadDataApprove($request, $response, $args) {
         try {
-           
+
             $params = $request->getParsedBody();
             $user_session = $params['user_session'];
-            
+
             $Data = MineralService::loadDataApprove($user_session['UserID']);
-            
+
             $this->data_result['DATA']['DataList'] = $Data;
-            
+
             return $this->returnResponse(200, $this->data_result, $response, false);
         } catch (\Exception $e) {
             return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
@@ -153,25 +153,25 @@ class MineralController extends Controller {
                 $data['DiffWeight'] = $DiffWeight;
                 if ($data['BeforeAmount'] != 0) {
                     $data['DiffWeightPercentage'] = (($data['CurrentWeight'] - $data['BeforeWeight']) / $data['BeforeWeight']) * 100;
-                }  else if(empty($data['BeforeWeight']) && !empty($data['CurrentWeight'])){
+                } else if (empty($data['BeforeWeight']) && !empty($data['CurrentWeight'])) {
                     $data['DiffWeightPercentage'] = 100;
                 }
 
                 $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
                 $data['DiffBaht'] = $DiffBaht;
                 if ($data['BeforeBaht'] != 0) {
-                    $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
-                } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                    $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
+                } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
                     $data['DiffBahtPercentage'] = 100;
                 }
 
                 $data['CreateDate'] = $Current['update_date'];
                 $data['ApproveDate'] = $Current['office_approve_date'];
-                if(!empty($Current['office_approve_id'])){
-                    if(empty($Current['office_approve_comment'])){
-                        $data['Status'] = 'อนุมัติ';        
-                    }else{
-                        $data['Status'] = 'ไม่อนุมัติ';        
+                if (!empty($Current['office_approve_id'])) {
+                    if (empty($Current['office_approve_comment'])) {
+                        $data['Status'] = 'อนุมัติ';
+                    } else {
+                        $data['Status'] = 'ไม่อนุมัติ';
                     }
                 }
                 $data['Description'] = ['months' => $curMonth
@@ -192,8 +192,8 @@ class MineralController extends Controller {
             $curMonth++;
         }
 
-        $DataSummary['SummaryMineralAmountPercentage'] = (($DataSummary['SummaryCurrentMineralAmount'] - $DataSummary['SummaryBeforMineralAmount']) /$DataSummary['SummaryBeforMineralAmount']) * 100;
-            $DataSummary['SummaryMineralIncomePercentage'] = (($DataSummary['SummaryCurrentMineralIncome'] - $DataSummary['SummaryBeforeMineralIncome']) /$DataSummary['SummaryBeforeMineralIncome']) * 100;
+        $DataSummary['SummaryMineralAmountPercentage'] = (($DataSummary['SummaryCurrentMineralAmount'] - $DataSummary['SummaryBeforMineralAmount']) / $DataSummary['SummaryBeforMineralAmount']) * 100;
+        $DataSummary['SummaryMineralIncomePercentage'] = (($DataSummary['SummaryCurrentMineralIncome'] - $DataSummary['SummaryBeforeMineralIncome']) / $DataSummary['SummaryBeforeMineralIncome']) * 100;
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
@@ -283,9 +283,16 @@ class MineralController extends Controller {
 
             $curMonth++;
         }
-
-        $DataSummary['SummaryMineralAmountPercentage'] = (($DataSummary['SummaryCurrentMineralAmount'] - $DataSummary['SummaryBeforMineralAmount']) /$DataSummary['SummaryBeforMineralAmount']) * 100;
-            $DataSummary['SummaryMineralIncomePercentage'] = (($DataSummary['SummaryCurrentMineralIncome'] - $DataSummary['SummaryBeforeMineralIncome']) /$DataSummary['SummaryBeforeMineralIncome']) * 100;
+        if ($DataSummary['SummaryBeforMineralAmount'] != 0) {
+            $DataSummary['SummaryMineralAmountPercentage'] = (($DataSummary['SummaryCurrentMineralAmount'] - $DataSummary['SummaryBeforMineralAmount']) / $DataSummary['SummaryBeforMineralAmount']) * 100;
+        } else {
+            $DataSummary['SummaryMineralAmountPercentage'] = 100;
+        }
+        if ($DataSummary['SummaryBeforeMineralIncome'] != 0) {
+            $DataSummary['SummaryMineralIncomePercentage'] = (($DataSummary['SummaryCurrentMineralIncome'] - $DataSummary['SummaryBeforeMineralIncome']) / $DataSummary['SummaryBeforeMineralIncome']) * 100;
+        } else {
+            $DataSummary['SummaryMineralIncomePercentage'] = 100;
+        }
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
@@ -398,25 +405,25 @@ class MineralController extends Controller {
                 $DiffWeight = $data['CurrentWeight'] - $data['BeforeWeight'];
                 if ($data['BeforeAmount'] != 0) {
                     $data['DiffWeightPercentage'] = (($data['CurrentWeight'] - $data['BeforeWeight']) / $data['BeforeWeight']) * 100;
-                }  else if(empty($data['BeforeWeight']) && !empty($data['CurrentWeight'])){
+                } else if (empty($data['BeforeWeight']) && !empty($data['CurrentWeight'])) {
                     $data['DiffWeightPercentage'] = 100;
                 }
 
                 $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
                 $data['DiffBaht'] = $DiffBaht;
                 if ($data['BeforeBaht'] != 0) {
-                    $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
-                } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                    $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
+                } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
                     $data['DiffBahtPercentage'] = 100;
                 }
 
                 $data['CreateDate'] = $UpdateDate;
                 $data['ApproveDate'] = $ApproveDate;
-                if(!empty($ApproveDate)){
-                    if(empty($ApproveComment)){
-                        $data['Status'] = 'อนุมัติ';        
-                    }else{
-                        $data['Status'] = 'ไม่อนุมัติ';        
+                if (!empty($ApproveDate)) {
+                    if (empty($ApproveComment)) {
+                        $data['Status'] = 'อนุมัติ';
+                    } else {
+                        $data['Status'] = 'ไม่อนุมัติ';
                     }
                 }
                 $data['Description'] = ['quarter' => $curQuarter
@@ -441,8 +448,8 @@ class MineralController extends Controller {
             }
         }
 
-        $DataSummary['SummaryMineralAmountPercentage'] = (($DataSummary['SummaryCurrentMineralAmount'] - $DataSummary['SummaryBeforMineralAmount']) /$DataSummary['SummaryBeforMineralAmount']) * 100;
-            $DataSummary['SummaryMineralIncomePercentage'] = (($DataSummary['SummaryCurrentMineralIncome'] - $DataSummary['SummaryBeforeMineralIncome']) /$DataSummary['SummaryBeforeMineralIncome']) * 100;
+        $DataSummary['SummaryMineralAmountPercentage'] = (($DataSummary['SummaryCurrentMineralAmount'] - $DataSummary['SummaryBeforMineralAmount']) / $DataSummary['SummaryBeforMineralAmount']) * 100;
+        $DataSummary['SummaryMineralIncomePercentage'] = (($DataSummary['SummaryCurrentMineralIncome'] - $DataSummary['SummaryBeforeMineralIncome']) / $DataSummary['SummaryBeforeMineralIncome']) * 100;
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
@@ -518,25 +525,25 @@ class MineralController extends Controller {
                 $data['DiffWeight'] = $DiffWeight;
                 if ($data['BeforeAmount'] != 0) {
                     $data['DiffWeightPercentage'] = (($data['CurrentWeight'] - $data['BeforeWeight']) / $data['BeforeWeight']) * 100;
-                }  else if(empty($data['BeforeWeight']) && !empty($data['CurrentWeight'])){
+                } else if (empty($data['BeforeWeight']) && !empty($data['CurrentWeight'])) {
                     $data['DiffWeightPercentage'] = 100;
                 }
 
                 $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
                 $data['DiffBaht'] = $DiffBaht;
                 if ($data['BeforeBaht'] != 0) {
-                    $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht'])  * 100;
-                } else if(empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])){
+                    $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
+                } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
                     $data['DiffBahtPercentage'] = 100;
                 }
 
                 $data['CreateDate'] = $UpdateDate;
                 $data['ApproveDate'] = $ApproveDate;
-                if(!empty($ApproveDate)){
-                    if(empty($ApproveComment)){
-                        $data['Status'] = 'อนุมัติ';        
-                    }else{
-                        $data['Status'] = 'ไม่อนุมัติ';        
+                if (!empty($ApproveDate)) {
+                    if (empty($ApproveComment)) {
+                        $data['Status'] = 'อนุมัติ';
+                    } else {
+                        $data['Status'] = 'ไม่อนุมัติ';
                     }
                 }
                 $data['Description'] = ['years' => $curYear
@@ -555,8 +562,8 @@ class MineralController extends Controller {
             $curYear++;
         }
 
-        $DataSummary['SummaryMineralAmountPercentage'] = (($DataSummary['SummaryCurrentMineralAmount'] - $DataSummary['SummaryBeforMineralAmount']) /$DataSummary['SummaryBeforMineralAmount']) * 100;
-            $DataSummary['SummaryMineralIncomePercentage'] = (($DataSummary['SummaryCurrentMineralIncome'] - $DataSummary['SummaryBeforeMineralIncome']) /$DataSummary['SummaryBeforeMineralIncome']) * 100;
+        $DataSummary['SummaryMineralAmountPercentage'] = (($DataSummary['SummaryCurrentMineralAmount'] - $DataSummary['SummaryBeforMineralAmount']) / $DataSummary['SummaryBeforMineralAmount']) * 100;
+        $DataSummary['SummaryMineralIncomePercentage'] = (($DataSummary['SummaryCurrentMineralIncome'] - $DataSummary['SummaryBeforeMineralIncome']) / $DataSummary['SummaryBeforeMineralIncome']) * 100;
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
@@ -836,21 +843,19 @@ class MineralController extends Controller {
             $_Data = $params['obj']['Data'];
 
             $user_session = $params['user_session'];
-            
+
             $OrgID = $user_session['OrgID'];
 
             $HeaderData = $this->do_post_request('http://' . $URL . '/dportal/dpo/public/mis/get/org/header/', "POST", ['OrgID' => $OrgID, 'Type' => 'OWNER']);
             $HeaderData = json_decode(trim($HeaderData), TRUE);
             // print_r($HeaderData);exit;
-            if($HeaderData['data']['DATA']['Header']['OrgType'] == 'DEPARTMENT'){
+            if ($HeaderData['data']['DATA']['Header']['OrgType'] == 'DEPARTMENT') {
                 $_Data['dep_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
                 $data['dep_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
-
-            }else if($HeaderData['data']['DATA']['Header']['OrgType'] == 'DIVISION'){
+            } else if ($HeaderData['data']['DATA']['Header']['OrgType'] == 'DIVISION') {
                 $_Data['division_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
                 $data['division_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
-
-            }else if($HeaderData['data']['DATA']['Header']['OrgType'] == 'OFFICE'){
+            } else if ($HeaderData['data']['DATA']['Header']['OrgType'] == 'OFFICE') {
                 $_Data['office_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
                 $data['office_approve_name'] = $HeaderData['data']['DATA']['Header']['FirstName'] . ' ' . $HeaderData['data']['DATA']['Header']['LastName'];
             }
@@ -1017,6 +1022,17 @@ class MineralController extends Controller {
                 $DataSummary['SummaryCurrentMineralIncome'] = $DataSummary['SummaryCurrentMineralIncome'] + $data['CurrentBaht'];
                 $DataSummary['SummaryBeforeMineralIncome'] = $DataSummary['SummaryBeforeMineralIncome'] + $data['BeforeBaht'];
                 $DataSummary['SummaryMineralIncomePercentage'] = 0;
+
+                if ($DataSummary['SummaryBeforMineralAmount'] != 0) {
+                    $DataSummary['SummaryMineralAmountPercentage'] = (($DataSummary['SummaryCurrentMineralAmount'] - $DataSummary['SummaryBeforMineralAmount']) / $DataSummary['SummaryBeforMineralAmount']) * 100;
+                } else {
+                    $DataSummary['SummaryMineralAmountPercentage'] = 100;
+                }
+                if ($DataSummary['SummaryBeforeMineralIncome'] != 0) {
+                    $DataSummary['SummaryMineralIncomePercentage'] = (($DataSummary['SummaryCurrentMineralIncome'] - $DataSummary['SummaryBeforeMineralIncome']) / $DataSummary['SummaryBeforeMineralIncome']) * 100;
+                } else {
+                    $DataSummary['SummaryMineralIncomePercentage'] = 100;
+                }
             }
             //  print_r($data);
             $curQuarter++;
@@ -1108,6 +1124,16 @@ class MineralController extends Controller {
                 $DataSummary['SummaryCurrentMineralIncome'] = $DataSummary['SummaryCurrentMineralIncome'] + $data['CurrentBaht'];
                 $DataSummary['SummaryBeforeMineralIncome'] = $DataSummary['SummaryBeforeMineralIncome'] + $data['BeforeBaht'];
                 $DataSummary['SummaryMineralIncomePercentage'] = 0;
+                if ($DataSummary['SummaryBeforMineralAmount'] != 0) {
+                    $DataSummary['SummaryMineralAmountPercentage'] = (($DataSummary['SummaryCurrentMineralAmount'] - $DataSummary['SummaryBeforMineralAmount']) / $DataSummary['SummaryBeforMineralAmount']) * 100;
+                } else {
+                    $DataSummary['SummaryMineralAmountPercentage'] = 100;
+                }
+                if ($DataSummary['SummaryBeforeMineralIncome'] != 0) {
+                    $DataSummary['SummaryMineralIncomePercentage'] = (($DataSummary['SummaryCurrentMineralIncome'] - $DataSummary['SummaryBeforeMineralIncome']) / $DataSummary['SummaryBeforeMineralIncome']) * 100;
+                } else {
+                    $DataSummary['SummaryMineralIncomePercentage'] = 100;
+                }
             }
             $curYear++;
         }
@@ -1115,112 +1141,109 @@ class MineralController extends Controller {
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
 
-    public function updateDataApprove($request, $response, $args){
-            // $URL = '172.23.10.224';
-            $URL = '127.0.0.1';
-            try{
-                $params = $request->getParsedBody();
-                $user_session = $params['user_session'];
-                $id = $params['obj']['id'];
-                $ApproveStatus = $params['obj']['ApproveStatus'];
-                $ApproveComment = $params['obj']['ApproveComment'];
-                $OrgType = $params['obj']['OrgType'];
-                $approval_id = $user_session['UserID'];
-                $OrgID = $user_session['OrgID'];
+    public function updateDataApprove($request, $response, $args) {
+        // $URL = '172.23.10.224';
+        $URL = '127.0.0.1';
+        try {
+            $params = $request->getParsedBody();
+            $user_session = $params['user_session'];
+            $id = $params['obj']['id'];
+            $ApproveStatus = $params['obj']['ApproveStatus'];
+            $ApproveComment = $params['obj']['ApproveComment'];
+            $OrgType = $params['obj']['OrgType'];
+            $approval_id = $user_session['UserID'];
+            $OrgID = $user_session['OrgID'];
 
-                if($ApproveStatus == 'approve'){
-                    // http post to dpo database to retrieve division's header
-                    $HeaderData = $this->do_post_request('http://' . $URL . '/dportal/dpo/public/mis/get/org/header/', "POST", ['UserID' => $approval_id, 'OrgID' => $OrgID]);
-                    $HeaderData = json_decode(trim($HeaderData), TRUE);
-                    
-                    $data = [];
-                    $ApproveComment = '';
+            if ($ApproveStatus == 'approve') {
+                // http post to dpo database to retrieve division's header
+                $HeaderData = $this->do_post_request('http://' . $URL . '/dportal/dpo/public/mis/get/org/header/', "POST", ['UserID' => $approval_id, 'OrgID' => $OrgID]);
+                $HeaderData = json_decode(trim($HeaderData), TRUE);
 
-                    if($OrgType == 'dep'){
-                        $data['dep_approve_date'] = date('Y-m-d H:i:s');
-                        $data['dep_approve_comment'] = $ApproveComment;
-                        $data['dep_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+                $data = [];
+                $ApproveComment = '';
 
-                        $data['division_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
-                    }else if($OrgType == 'division'){
-                        $data['division_approve_date'] = date('Y-m-d H:i:s');
-                        $data['division_approve_comment'] = $ApproveComment;
-                        $data['division_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+                if ($OrgType == 'dep') {
+                    $data['dep_approve_date'] = date('Y-m-d H:i:s');
+                    $data['dep_approve_comment'] = $ApproveComment;
+                    $data['dep_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
 
-                        $data['office_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
-                    }else if($OrgType == 'office'){
-                        $data['office_approve_date'] = date('Y-m-d H:i:s');
-                        $data['office_approve_comment'] = $ApproveComment;
-                        $data['office_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
-                        
-                    }
-                }else if($ApproveStatus == 'reject'){
+                    $data['division_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                } else if ($OrgType == 'division') {
+                    $data['division_approve_date'] = date('Y-m-d H:i:s');
+                    $data['division_approve_comment'] = $ApproveComment;
+                    $data['division_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
 
-                    if($OrgType == 'dep'){
-                        $data['dep_approve_date'] = date('Y-m-d H:i:s');                  
-                        $data['dep_approve_comment'] = $ApproveComment;
-                        $data['dep_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
-                    }else if($OrgType == 'division'){
-                        $data['dep_approve_date'] = NULL;                  
-                        $data['dep_approve_comment'] = NULL;
-                        
-                        $data['division_approve_id'] = NULL;
-                        $data['division_approve_date'] = date('Y-m-d H:i:s');
-                        $data['division_approve_comment'] = $ApproveComment;
-                        $data['division_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
-                    }else if($OrgType == 'office'){
-
-                        $data['dep_approve_date'] = NULL;                  
-                        $data['dep_approve_comment'] = NULL;
-                        
-                        $data['division_approve_id'] = NULL;
-                        $data['division_approve_date'] = NULL;
-                        $data['division_approve_comment'] = NULL;
-
-                        $data['office_approve_id'] = NULL;    
-                        $data['office_approve_date'] = date('Y-m-d H:i:s');                        
-                        $data['office_approve_comment'] = $ApproveComment;
-                        $data['office_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
-                    }
+                    $data['office_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                } else if ($OrgType == 'office') {
+                    $data['office_approve_date'] = date('Y-m-d H:i:s');
+                    $data['office_approve_comment'] = $ApproveComment;
+                    $data['office_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
                 }
+            } else if ($ApproveStatus == 'reject') {
 
-                // print_r($data );
-                // exit;
-                $result = MineralService::updateDataApprove($id, $data);
+                if ($OrgType == 'dep') {
+                    $data['dep_approve_date'] = date('Y-m-d H:i:s');
+                    $data['dep_approve_comment'] = $ApproveComment;
+                    $data['dep_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+                } else if ($OrgType == 'division') {
+                    $data['dep_approve_date'] = NULL;
+                    $data['dep_approve_comment'] = NULL;
 
-                $this->data_result['DATA']['result'] = $result;
-                
-                return $this->returnResponse(200, $this->data_result, $response, false);
-                
-            }catch(\Exception $e){
-                return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
-            }   
+                    $data['division_approve_id'] = NULL;
+                    $data['division_approve_date'] = date('Y-m-d H:i:s');
+                    $data['division_approve_comment'] = $ApproveComment;
+                    $data['division_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+                } else if ($OrgType == 'office') {
+
+                    $data['dep_approve_date'] = NULL;
+                    $data['dep_approve_comment'] = NULL;
+
+                    $data['division_approve_id'] = NULL;
+                    $data['division_approve_date'] = NULL;
+                    $data['division_approve_comment'] = NULL;
+
+                    $data['office_approve_id'] = NULL;
+                    $data['office_approve_date'] = date('Y-m-d H:i:s');
+                    $data['office_approve_comment'] = $ApproveComment;
+                    $data['office_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+                }
+            }
+
+            // print_r($data );
+            // exit;
+            $result = MineralService::updateDataApprove($id, $data);
+
+            $this->data_result['DATA']['result'] = $result;
+
+            return $this->returnResponse(200, $this->data_result, $response, false);
+        } catch (\Exception $e) {
+            return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+        }
+    }
+
+    private function do_post_request($url, $method, $data = [], $optional_headers = null) {
+        $params = array('http' => array(
+                'method' => $method,
+                'content' => http_build_query($data)
+        ));
+        if ($optional_headers !== null) {
+            $params['http']['header'] = $optional_headers;
+        }
+        $ctx = stream_context_create($params);
+        $fp = @fopen($url, 'rb', false, $ctx);
+        if (!$fp) {
+            print_r($fp);
+            return array("STATUS" => 'ERROR', "MSG" => "ERROR :: Problem with $url");
+            //throw new Exception("Problem with $url, $php_errormsg");
+        }
+        $response = @stream_get_contents($fp);
+        if ($response === false) {
+            print_r($response);
+            return array("STATUS" => 'ERROR', "MSG" => "ERROR :: Problem reading data from $url");
+            //            throw new Exception("Problem reading data from $url");
         }
 
-        private function do_post_request($url, $method, $data = [], $optional_headers = null)
-        {
-              $params = array('http' => array(
-                          'method' => $method,
-                          'content' => http_build_query($data)
-                        ));
-              if ($optional_headers !== null) {
-                $params['http']['header'] = $optional_headers;
-              }
-              $ctx = stream_context_create($params);
-              $fp = @fopen($url, 'rb', false, $ctx);
-               if (!$fp) {
-                print_r($fp);
-                    return array("STATUS"=>'ERROR',"MSG"=>"ERROR :: Problem with $url");
-                //throw new Exception("Problem with $url, $php_errormsg");
-              }
-              $response = @stream_get_contents($fp);
-              if ($response === false) {
-                print_r($response);
-                    return array("STATUS"=>'ERROR',"MSG"=>"ERROR :: Problem reading data from $url");
-    //            throw new Exception("Problem reading data from $url");
-              }
+        return $response;
+    }
 
-              return $response;
-              
-        }
 }

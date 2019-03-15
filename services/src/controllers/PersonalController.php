@@ -141,7 +141,7 @@ class PersonalController extends Controller {
                 $data = [];
                 $data['text'] = 'รวม';
                 $data['color'] = '#B2BABB';
-                $data['textdate'] =  $mt . ' ' . $condition['YearTo'];
+                $data['textdate'] = $mt . ' ' . $condition['YearTo'];
                 $data['Month'] = $monthName;
                 $data['Position'] = $value['positiontype'];
                 $data['SummaryCurrentsum'] = 0;
@@ -221,8 +221,8 @@ class PersonalController extends Controller {
                         $data['SummaryBeforeout'] += $data['BeforeEmployee'][$keyitem]['outsource'];
                         if ($sumbefore != 0) {
                             $data['CurrentEmployee'][$keyitem]['percent'] = (($sumcurrent - $sumbefore) * 100) / $sumbefore;
-                        }else{
-                             $data['CurrentEmployee'][$keyitem]['percent'] = 100;
+                        } else {
+                            $data['CurrentEmployee'][$keyitem]['percent'] = 100;
                         }
 
                         $data['SummaryPercentage'] += ($sumcurrent + $sumbefore);
@@ -273,10 +273,12 @@ class PersonalController extends Controller {
             $data['SummaryBeforeout'] = 0;
             $data['SummaryPercentage'] = 0;
             $data['SummarysumPercentage'] = 0;
+
             // get cooperative type
 
             $data['CurrentEmployee'] = PersonalService::get8($curYear, $curMonth);
-
+            $data['CurrentEmployee'][0]['lv8'] = $data['CurrentEmployee'][0]['summary'];
+            
             $data['BeforeEmployee'] = PersonalService::get8($beforeYear, $curMonth);
             $data['CurrentEmployee'][0]['director'] = intval(0);
             $data['BeforeEmployee'][0]['director'] = intval(0);
@@ -319,7 +321,8 @@ class PersonalController extends Controller {
             $datatotal['SummaryCurrentout'] += $data['SummaryCurrentout'];
             $datatotal['SummaryBeforeout'] += $data['SummaryBeforeout'];
             $datatotal['SummaryPercentage'] += $data['SummaryPercentage'];
-            if ($datatotal['SummaryBefore'] != 0) {
+            $datatotal['lv8'] +=  $data['SummaryCurrent'];
+                    if ($datatotal['SummaryBefore'] != 0) {
                 $datatotal['SummarysumPercentage'] = (($datatotal['SummaryCurrent'] - $datatotal['SummaryBefore']) * 100) / $datatotal['SummaryBefore'];
             } else {
                 $datatotal['SummarysumPercentage'] = 100;
@@ -978,7 +981,7 @@ class PersonalController extends Controller {
                     $data['CurrentEmployee'][$key]['percent'] = 0;
                     $data['SummaryCurrentsum'] += $current['summary'];
                     $data['SummaryCurrentdirector'] += $current['director'];
-                     $data['SummaryCurrentout'] += $current['outsource'];
+                    $data['SummaryCurrentout'] += $current['outsource'];
                     $data['lv1'] += $current['lv1'];
                     $data['lv2'] += $current['lv2'];
                     $data['lv3'] += $current['lv3'];
@@ -996,8 +999,8 @@ class PersonalController extends Controller {
                     foreach ($data['CurrentEmployee'] as $keyitem => $item) {
 //                          
 
-                        $sumcurrent = $item['summary'] + $item['director']+$item['outsource'];
-                        $sumbefore = $data['BeforeEmployee'][$keyitem]['summary'] + $data['BeforeEmployee'][$keyitem]['director']+ $data['BeforeEmployee'][$keyitem]['outsource'];
+                        $sumcurrent = $item['summary'] + $item['director'] + $item['outsource'];
+                        $sumbefore = $data['BeforeEmployee'][$keyitem]['summary'] + $data['BeforeEmployee'][$keyitem]['director'] + $data['BeforeEmployee'][$keyitem]['outsource'];
                         $data['CurrentEmployee'][$keyitem]['sumc'] = $sumcurrent;
                         $data['CurrentEmployee'][$keyitem]['sumb'] = $sumbefore;
                         $data['CurrentEmployee'][$keyitem]['sum'] = $sumbefore + $sumcurrent;
@@ -1005,7 +1008,7 @@ class PersonalController extends Controller {
 //                        
                         $data['SummaryBeforesum'] += $data['BeforeEmployee'][$keyitem]['summary'];
                         $data['SummaryBeforedirector'] += $data['BeforeEmployee'][$keyitem]['director'];
-                         $data['SummaryBeforeout']  += $data['BeforeEmployee'][$keyitem]['outsource'];
+                        $data['SummaryBeforeout'] += $data['BeforeEmployee'][$keyitem]['outsource'];
                         $data['SummaryBefore'] += $sumbefore;
                         if ($sumbefore != 0) {
                             $data['CurrentEmployee'][$keyitem]['percent'] = (($sumcurrent - $sumbefore) * 100) / $sumbefore;
