@@ -37,8 +37,8 @@ angular.module('e-homework').controller('MainSPMController', function ($scope, $
         window.location.href = '#/subproduct-milk/update/' + id;
     }
 
-    $scope.goUpdate = function (id) {
-        window.location.href = '#/subproduct-milk/update/' + id;
+  $scope.goEdit = function (detailid) {
+        window.location.href = '#/subproduct-milk/update/' + detailid + '-xx';
     }
 
     $scope.goAddsub = function (id) {

@@ -1536,7 +1536,7 @@ class SubcommitteeReportController extends Controller {
             $objPHPExcel->getActiveSheet()->setCellValue('A2', $header);
             $objPHPExcel->getActiveSheet()->setCellValue('A3', '2. ผลการดำเนินงานด้านอุตสาหกรรมนม');
 
-            $objPHPExcel->getActiveSheet()->setCellValue('A4', $this->getMonthName($beforemonth) . ' ' . ($condition['YearTo'] + 543));
+            $objPHPExcel->getActiveSheet()->setCellValue('A4', $this->getMonthName($beforemonth) . ' ' . ($year + 543));
             $objPHPExcel->getActiveSheet()->mergeCells('A4:A5');
             $objPHPExcel->getActiveSheet()->setCellValue('B4', 'เป้าหมาย ' . $this->getMonthName($condition['MonthFrom']) . ' ' . ($condition['YearTo'] + 543));
 
@@ -1783,6 +1783,10 @@ class SubcommitteeReportController extends Controller {
                 $detail['peroct'] = ($detail['collectoct'] * 100) / $detail['targetoct'];
             }
             array_push($data3, $detail);
+            /////tb2
+            
+            
+            
         } else {
             $beforeQuarter = $condition['QuarterFrom'];
             $year = $condition['YearFrom'];

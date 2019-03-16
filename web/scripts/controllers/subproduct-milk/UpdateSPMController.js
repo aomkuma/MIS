@@ -22,7 +22,7 @@ angular.module('e-homework').controller('UpdateSPMController', function ($scope,
         HTTPService.clientRequest(action, params).then(function (result) {
             if (result.data.STATUS == 'OK') {
                 $scope.List2 = result.data.DATA.List;
-                // console.log($scope.UserList);
+                console.log($scope.List2);
             }
             IndexOverlayFactory.overlayHide();
         });
@@ -49,7 +49,7 @@ angular.module('e-homework').controller('UpdateSPMController', function ($scope,
         HTTPService.clientRequest(action, params).then(function (result) {
             if (result.data.STATUS == 'OK') {
                 $scope.Data = result.data.DATA.Data;
-                console.log(result);
+                // console.log(result);
                 $scope.Data.name = result.data.DATA.Data.proname;
                 $scope.Subdata = {
                     'id': result.data.DATA.Data.subid
@@ -60,7 +60,7 @@ angular.module('e-homework').controller('UpdateSPMController', function ($scope,
                     , 'create_date': ''
                     , 'update_date': ''
                 };
-                   console.log($scope.Subdata.product_milk_id);
+                //   console.log($scope.Subdata.product_milk_id);
                 $scope.loadList('subproduct-milk/list/byparent', $scope.Subdata.product_milk_id);
             }
             IndexOverlayFactory.overlayHide();
@@ -89,12 +89,14 @@ angular.module('e-homework').controller('UpdateSPMController', function ($scope,
     }
 
     $scope.cancelUpdate = function () {
-        window.location.href = '#/subproduct-milk';
+        window.location.href = '#/product-milk';
     }
     $scope.goUpdate = function (detailid) {
         window.location.href = '#/subproduct-milk/update/' + detailid + '-xx';
     }
-
+    $scope.goAdd = function (id) {
+        window.location.href = '#/product-milk-detail/update/' + id;
+    }
 
     $scope.Subdata = {
         'id': ''

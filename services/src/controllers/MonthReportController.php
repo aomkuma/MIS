@@ -16,6 +16,7 @@ use App\Controller\ProductionInfoController;
 use App\Service\FactoryService;
 use App\Service\SubProductMilkService;
 use App\Service\ProductMilkService;
+use App\Service\CooperativeService;
 use App\Controller\ProductionSaleInfoController;
 use App\Controller\LostInProcessController;
 use App\Controller\LostOutProcessController;
@@ -100,13 +101,14 @@ class MonthReportController extends Controller {
             $condition['YearTo'] = $obj['obj']['condition']['Year'];
             $condition['MonthFrom'] = $obj['obj']['condition']['Month'];
             $condition['MonthTo'] = $obj['obj']['condition']['Month'];
-            $region = $obj['obj']['region'];
+            $region = CooperativeService::getRegionList();
 
 
             $objPHPExcel = new PHPExcel();
             $objPHPExcel = $this->generatePowerExcel($objPHPExcel, $condition, $region);
             $objPHPExcel = $this->generatePower2Excel($objPHPExcel, $condition, $region);
             $objPHPExcel = $this->generateVeterinaryExcel($objPHPExcel, $condition, $region);
+           // die();
             $objPHPExcel = $this->generateInseminationExcel($objPHPExcel, $condition, $region);
             $objPHPExcel = $this->generateMineralExcel($objPHPExcel, $condition, $region);
             $objPHPExcel = $this->generateTrainingCowbreedExcel($objPHPExcel, $condition, $region);
@@ -369,6 +371,7 @@ class MonthReportController extends Controller {
         $sheet = $objPHPExcel->getSheetCount();
         $objPHPExcel->createSheet($sheet);
         $objPHPExcel->setActiveSheetIndex($sheet);
+        print_r($region);
         $data = VeterinaryController::getMonthDataList($condition, $region);
         $showm = 0;
         $showy = $condition['YearFrom'];

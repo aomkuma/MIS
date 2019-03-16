@@ -9,11 +9,13 @@ class ProductMilk extends \Illuminate\Database\Eloquent\Model {
     public $timestamps = false;
     protected $fillable = array('id'
         , 'name'
+        , 'actives'
         , 'editable'
         , 'create_date'
         , 'update_date'
         , 'create_by'
         , 'update_by'
+        , 'factory_id'
     );
 
 }

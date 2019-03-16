@@ -30,6 +30,10 @@
                         <button class="btn btn-success" ng-click="goAddsub(data.id)">
 
                             เพิ่มประเภทย่อย
+                        </button>
+                        <button class="btn btn-success" ng-click="goUpdate(data.id)">
+
+                            แก้ไข
                         </button></td>
                     <td style="text-align: center;">{{data.name}}</td>
                     <td style="text-align: center;" ng-class="{'inactive-text':data.actives == 'N'}">{{data.actives=='Y'?'ใช้งาน':'ไม่ใช้งาน'}}</td>

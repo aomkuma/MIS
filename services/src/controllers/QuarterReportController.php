@@ -16,6 +16,7 @@ use App\Controller\ProductionInfoController;
 use App\Service\FactoryService;
 use App\Service\SubProductMilkService;
 use App\Service\ProductMilkService;
+use App\Service\CooperativeService;
 use App\Controller\ProductionSaleInfoController;
 use App\Controller\LostInProcessController;
 use App\Controller\LostOutProcessController;
@@ -95,7 +96,7 @@ class QuarterReportController extends Controller {
             $condition['QuarterTo'] = $obj['obj']['condition']['Quarter'];
             $condition['MonthFrom'] = 1;
             $condition['MonthTo'] = 1;
-            $region = $obj['obj']['region'];
+            $region = CooperativeService::getRegionList();
 
 
             $objPHPExcel = new PHPExcel();

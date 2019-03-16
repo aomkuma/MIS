@@ -25,6 +25,7 @@ class ProductMilkService {
     }
 
     public static function updateData($obj) {
+     
         if (empty($obj['id'])) {
             $obj['create_date'] = date('Y-m-d H:i:s');
             $obj['update_date'] = date('Y-m-d H:i:s');

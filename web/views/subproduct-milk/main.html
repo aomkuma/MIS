@@ -31,7 +31,12 @@
                         <button class="btn btn-success" ng-click="goAddsub(data.id)">
 
                             เพิ่มรายการ
-                        </button></td>
+                        </button>
+                     <button class="btn btn-success" ng-click="goEdit(data.id)">
+
+                                แก้ไข
+                            </button>
+                    </td>
                     <td style="text-align: center;">{{data.proname}}</td>
                     <td style="text-align: center;">{{data.name}}</td>
                     <td style="text-align: center;" ng-class="{'inactive-text':data.actives == 'N'}">{{data.actives=='Y'?'ใช้งาน':'ไม่ใช้งาน'}}</td>

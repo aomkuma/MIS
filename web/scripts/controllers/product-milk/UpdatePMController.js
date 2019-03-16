@@ -29,6 +29,7 @@ angular.module('e-homework').controller('UpdatePMController', function($scope, $
 
     $scope.save = function(Data){
         var params = {'Data' : Data};
+        console.log(params);
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('product-milk/update', params).then(function(result){
             if(result.data.STATUS == 'OK'){
@@ -57,14 +58,14 @@ angular.module('e-homework').controller('UpdatePMController', function($scope, $
         , 'goal_type':''
         , 'menu_type':null
         , 'goal_name':''
-        , 'actives':'Y'
+        , 'actives':''
         , 'create_date':''
         , 'update_date':''
     };
 
     
     if($scope.ID !== undefined && $scope.ID !== null){
-        $scope.loadData('master-goal/get', $scope.ID);
+        $scope.loadData('product-milk/get', $scope.ID);
     }
 
 });
