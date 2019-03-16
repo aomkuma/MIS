@@ -297,7 +297,9 @@
 		<thead style="background-color: #BD1212; color: #FFF;">
 			<tr>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">รวมผลิตภัณฑ์</th>
-				<th rowspan="2" style="text-align: center; vertical-align: middle;">เดือน</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;" ng-show="condition.DisplayType == 'monthly'">เดือน</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;" ng-show="condition.DisplayType == 'quarter'">ไตรมาส</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;" ng-show="condition.DisplayType == 'annually'">ปี</th>
 				<th colspan="2" style="text-align: center; vertical-align: middle;">{{CurYear}}</th>
 				<th colspan="2" style="text-align: center; vertical-align: middle;">{{LastYear}}</th>
 				<th colspan="4" style="text-align: center;">ผลต่าง</th>
@@ -317,7 +319,9 @@
 			
 			<tr ng-repeat="data in DetailList" style="background-color: {{data.bg_color}};">
 				<td>{{data.ProductionInfoName}}</td>
-				<td>{{data.Month}}</td>
+				<td ng-show="condition.DisplayType == 'monthly'">{{data.Month}}</td>
+				<td ng-show="condition.DisplayType == 'quarter'">{{data.Quarter}}</td>
+				<td ng-show="condition.DisplayType == 'annually'">{{data.Year}}</td>
 				<td>{{numberFormat(data.CurrentAmount)}}</td>
 				<td>{{numberFormatComma(data.CurrentBaht)}}</td>
 				<td>{{numberFormat(data.BeforeAmount)}}</td>

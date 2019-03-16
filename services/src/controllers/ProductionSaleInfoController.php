@@ -133,10 +133,10 @@ class ProductionSaleInfoController extends Controller {
         $GrandTotal_BeforeBaht = 0;
 
         // get ProductMilkService
-        $ProducMilkList = ProductMilkService::getList();
+        $ProducMilkList = ProductMilkService::getList('','',[],$factory_id);
 
         // get Factory
-        $FactoryList = FactoryService::getList($RegionLis, $factory_id);
+        // $FactoryList = FactoryService::getList($RegionList, $factory_id);
         $curYear = $condition['YearTo'];
         $beforeYear = $condition['YearTo'] - 1;
 
@@ -146,7 +146,13 @@ class ProductionSaleInfoController extends Controller {
 
                 $data = [];
                 $data['bg_color'] = '#ccc';
-                $data['ProductionSaleInfoName'] = $value['name'];
+                $data['ProductionInfoName'] = $value['name'];
+                $data['show_button'] = 'Y';
+                $data['Description'] = ['months' => $curMonth
+                    , 'years' => $curYear
+                    , 'factory_id' => $factory_id
+                    , 'DisplayType' => $condition['DisplayType']
+                ];
                 array_push($DataList, $data);
 
                 $Total_CurrentAmount = 0;
@@ -155,17 +161,13 @@ class ProductionSaleInfoController extends Controller {
                 $Total_BeforeBaht = 0;
 
                 // loop by factory
-                foreach ($FactoryList as $key1 => $value1) {
+                // foreach ($FactoryList as $key1 => $value1) {
 
-                    $data = [];
-                    $data['bg_color'] = '#ccc';
-                    $data['ProductionSaleInfoName'] = $value1['factory_name'];
-                    $data['show_button'] = 'Y';
-                    $data['Description'] = ['months' => $curMonth
-                        , 'years' => $curYear
-                        , 'factory_id' => $factory_id
-                    ];
-                    array_push($DataList, $data);
+                    // $data = [];
+                    // $data['bg_color'] = '#ccc';
+                    // $data['ProductionInfoName'] = $value1['factory_name'];
+                    
+                    // array_push($DataList, $data);
 
                     // get SubProductMilkService
                     $SubProductMilkList = SubProductMilkService::getListByProductMilk($value['id']);
@@ -177,7 +179,7 @@ class ProductionSaleInfoController extends Controller {
                     $Sum_BeforeAmount = 0;
                     $Sum_BeforeBaht = 0;
 
-                    $factory_id = $value1['id'];
+                    // $factory_id = $value1['id'];
 
                     foreach ($SubProductMilkList as $k => $v) {
 
@@ -187,10 +189,11 @@ class ProductionSaleInfoController extends Controller {
 
                         $data = [];
                         // $data['RegionName'] = $value['RegionName'];
-                        $data['ProductionSaleInfoName'] = $v['name'];
+                        $data['ProductionInfoName'] = $v['name'];
                         $data['Month'] = $monthName;
 
                         // get cooperative type
+                        // echo "$curYear, $curMonth, $factory_id, $master_type_id";exit;
                         $Current = ProductionSaleInfoService::getMainList($curYear, $curMonth, $factory_id, $master_type_id);
                         // print_r($Current);exit;
                         $data['CurrentAmount'] = floatval($Current['sum_amount']);
@@ -202,10 +205,13 @@ class ProductionSaleInfoController extends Controller {
 
                         $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
                         $data['DiffAmount'] = $DiffAmount;
+
                         if ($data['BeforeAmount'] != 0) {
                             $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
                         } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
                             $data['DiffAmountPercentage'] = 100;
+                        }else{
+                            $data['DiffAmountPercentage'] = 0;
                         }
 
 
@@ -216,6 +222,8 @@ class ProductionSaleInfoController extends Controller {
                             $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
                         } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
                             $data['DiffBahtPercentage'] = 100;
+                        }else{
+                            $data['DiffBahtPercentage'] = 0;
                         }
 
                         $data['CreateDate'] = $Current['update_date'];
@@ -251,11 +259,11 @@ class ProductionSaleInfoController extends Controller {
                         $GrandTotal_CurrentBaht += $data['CurrentBaht'];
                         $GrandTotal_BeforeAmount += $data['BeforeAmount'];
                         $GrandTotal_BeforeBaht += $data['BeforeBaht'];
-                    }
+                    // }
 
                     $data = [];
                     $data['bg_color'] = '#AFE1FA';
-                    $data['ProductionSaleInfoName'] = 'รวม';
+                    $data['ProductionInfoName'] = 'รวม';
 
                     $data['CurrentAmount'] = $Sum_CurrentAmount;
                     $data['CurrentBaht'] = $Sum_CurrentBaht;
@@ -269,6 +277,8 @@ class ProductionSaleInfoController extends Controller {
                         $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
                     } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
                         $data['DiffAmountPercentage'] = 100;
+                    }else{
+                        $data['DiffAmountPercentage'] = 0;
                     }
 
 
@@ -279,37 +289,39 @@ class ProductionSaleInfoController extends Controller {
                         $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
                     } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
                         $data['DiffBahtPercentage'] = 100;
+                    }else{
+                        $data['DiffBahtPercentage'] = 0;
                     }
                     array_push($DataList, $data);
                 }
-                $data = [];
-                $data['bg_color'] = '#A0DEFD';
-                $data['ProductionSaleInfoName'] = 'รวมทั้งสิ้น';
+                // $data = [];
+                // $data['bg_color'] = '#A0DEFD';
+                // $data['ProductionInfoName'] = 'รวมทั้งสิ้น';
 
-                $data['CurrentAmount'] = $Total_CurrentAmount;
-                $data['CurrentBaht'] = $Total_CurrentBaht;
+                // $data['CurrentAmount'] = $Total_CurrentAmount;
+                // $data['CurrentBaht'] = $Total_CurrentBaht;
 
-                $data['BeforeAmount'] = $Total_BeforeAmount;
-                $data['BeforeBaht'] = $Total_BeforeBaht;
+                // $data['BeforeAmount'] = $Total_BeforeAmount;
+                // $data['BeforeBaht'] = $Total_BeforeBaht;
 
-                $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
-                $data['DiffAmount'] = $DiffAmount;
-                if ($data['BeforeAmount'] != 0) {
-                    $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
-                } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
-                    $data['DiffAmountPercentage'] = 100;
-                }
+                // $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+                // $data['DiffAmount'] = $DiffAmount;
+                // if ($data['BeforeAmount'] != 0) {
+                //     $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                // } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
+                //     $data['DiffAmountPercentage'] = 100;
+                // }
 
 
-                $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
-                $data['DiffBaht'] = $DiffBaht;
+                // $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                // $data['DiffBaht'] = $DiffBaht;
 
-                if ($data['BeforeBaht'] != 0) {
-                    $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
-                } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
-                    $data['DiffBahtPercentage'] = 100;
-                }
-                array_push($DataList, $data);
+                // if ($data['BeforeBaht'] != 0) {
+                //     $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
+                // } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
+                //     $data['DiffBahtPercentage'] = 100;
+                // }
+                // array_push($DataList, $data);
             }
 
             $curMonth++;
@@ -330,6 +342,8 @@ class ProductionSaleInfoController extends Controller {
             $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
         } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
             $data['DiffAmountPercentage'] = 100;
+        }else{
+            $data['DiffAmountPercentage'] = 0;
         }
 
 
@@ -340,6 +354,8 @@ class ProductionSaleInfoController extends Controller {
             $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
         } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
             $data['DiffBahtPercentage'] = 100;
+        }else{
+            $data['DiffBahtPercentage'] = 0;
         }
         $data['DiffBaht'] = $DiffBaht;
 
@@ -348,7 +364,7 @@ class ProductionSaleInfoController extends Controller {
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
 
-    public function getQuarterDataList($condition, $regions) {
+    public function getQuarterDataList($condition, $RegionList) {
 
         $factory_id = $condition['Factory'];
         // get loop to query
@@ -394,12 +410,13 @@ class ProductionSaleInfoController extends Controller {
         $DataList = [];
         $DataSummary = [];
 
-        // get master goal
-        $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียในกระบวนการ');
-        $Sum_CurrentAmount = 0;
-        $Sum_CurrentBaht = 0;
-        $Sum_BeforeAmount = 0;
-        $Sum_BeforeBaht = 0;
+        $GrandTotal_CurrentAmount = 0;
+        $GrandTotal_CurrentBaht = 0;
+        $GrandTotal_BeforeAmount = 0;
+        $GrandTotal_BeforeBaht = 0;
+
+        // get ProductMilkService
+        $ProducMilkList = ProductMilkService::getList('','',[],$factory_id);
 
         for ($i = 0; $i < $loop; $i++) {
 
@@ -419,106 +436,201 @@ class ProductionSaleInfoController extends Controller {
                 $monthList = [7, 8, 9];
             }
 
-
-            foreach ($MasterGoalList as $k => $v) {
-
-                $master_type_id = $v['id'];
-
-                $SumCurrentAmount = 0;
-                $SumCurrentBaht = 0;
-                $SumBeforeAmount = 0;
-                $SumBeforeBaht = 0;
-                $UpdateDate = '';
-                $ApproveDate = '';
-                $ApproveComment = '';
-                // loop get quarter sum data
-                for ($j = 0; $j < count($monthList); $j++) {
-                    $curMonth = $monthList[$j];
-
-                    $Current = ProductionSaleInfoService::getMainList($curYear, $curMonth, $factory_id, $master_type_id);
-                    $SumCurrentAmount += floatval($Current['sum_amount']);
-                    $SumCurrentBaht += floatval($Current['sum_baht']);
-
-                    $Before = ProductionSaleInfoService::getMainList($beforeYear, $curMonth, $factory_id, $master_type_id);
-                    $SumBeforeAmount += floatval($Before['sum_amount']);
-                    $SumBeforeBaht += floatval($Before['sum_baht']);
-
-                    if (!empty($Current['update_date'])) {
-                        $UpdateDate = $Current['update_date'];
-                    }
-                    if (!empty($Current['office_approve_id'])) {
-                        $ApproveDate = $Current['office_approve_date'];
-                    }
-                    if (!empty($Current['office_approve_comment'])) {
-                        $ApproveComment = $Current['office_approve_comment'];
-                    }
-                }
+            foreach ($ProducMilkList as $key => $value) {
 
                 $data = [];
-                $data['RegionName'] = $value['RegionName'];
-                $data['ProductionSaleInfoName'] = $v['goal_name'];
-                $data['Quarter'] = $curQuarter . ' (' . (($curQuarter == 1 ? $curYear + 543 + 1 : $curYear + 543)) . ')';
-
-                $data['CurrentAmount'] = $SumCurrentAmount;
-                $data['CurrentBaht'] = $SumCurrentBaht;
-
-                $data['BeforeAmount'] = $SumBeforeAmount;
-                $data['BeforeBaht'] = $SumBeforeBaht;
-
-                $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
-                $data['DiffAmount'] = $DiffAmount;
-                if ($data['BeforeAmount'] != 0) {
-                    $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
-                } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
-                    $data['DiffAmountPercentage'] = 100;
-                }
-
-
-                $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
-                $data['DiffBaht'] = $DiffBaht;
-
-                if ($data['BeforeBaht'] != 0) {
-                    $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
-                } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
-                    $data['DiffBahtPercentage'] = 100;
-                }
-
-                $data['CreateDate'] = $UpdateDate;
-                $data['ApproveDate'] = $ApproveDate;
-                if (!empty($ApproveDate)) {
-                    if (empty($ApproveComment)) {
-                        $data['Status'] = 'อนุมัติ';
-                    } else {
-                        $data['Status'] = 'ไม่อนุมัติ';
-                    }
-                }
+                $data['bg_color'] = '#ccc';
+                $data['ProductionInfoName'] = $value['name'];
+                $data['show_button'] = 'Y';
                 $data['Description'] = ['months' => $curMonth
                     , 'years' => $curYear
                     , 'quarter' => $curQuarter
-                    , 'region_id' => $region_id
+                    , 'factory_id' => $factory_id
+                    , 'DisplayType' => $condition['DisplayType']
                 ];
-
                 array_push($DataList, $data);
 
-                $DataSummary['SummaryAmount'] = $DataSummary['SummaryAmount'] + $data['CurrentAmount'];
-                $DataSummary['SummaryBaht'] = $DataSummary['SummaryBaht'] + $data['CurrentBaht'];
+                $Total_CurrentAmount = 0;
+                $Total_CurrentBaht = 0;
+                $Total_BeforeAmount = 0;
+                $Total_BeforeBaht = 0;
 
-                $Sum_CurrentAmount += $data['CurrentAmount'];
-                $Sum_CurrentBaht += $data['CurrentBaht'];
-                $Sum_BeforeAmount += $data['BeforeAmount'];
-                $Sum_BeforeBaht += $data['BeforeBaht'];
+                // loop by factory
+                // foreach ($FactoryList as $key1 => $value1) {
+
+                    // $data = [];
+                    // $data['bg_color'] = '#ccc';
+                    // $data['ProductionInfoName'] = $value1['factory_name'];
+                    
+                    // array_push($DataList, $data);
+
+                    // get SubProductMilkService
+                    $SubProductMilkList = SubProductMilkService::getListByProductMilk($value['id']);
+
+                    // Prepare condition
+
+                    $Sum_CurrentAmount = 0;
+                    $Sum_CurrentBaht = 0;
+                    $Sum_BeforeAmount = 0;
+                    $Sum_BeforeBaht = 0;
+
+                    // $factory_id = $value1['id'];
+
+                    foreach ($SubProductMilkList as $k => $v) {
+
+                        $master_type_id = $v['id'];
+
+                        $monthName = ProductionSaleInfoController::getMonthName($curMonth);
+
+                        // get cooperative type
+                        $SumCurrentAmount = 0;
+                        $SumCurrentBaht = 0;
+                        $SumBeforeAmount = 0;
+                        $SumBeforeBaht = 0;
+                        $UpdateDate = '';
+                        $ApproveDate = '';
+                        $ApproveComment = '';
+                        // loop get quarter sum data
+
+                        for ($j = 0; $j < count($monthList); $j++) {
+
+                            $curMonth = $monthList[$j];
+                            $Current = ProductionSaleInfoService::getMainList($curYear, $curMonth, $factory_id, $master_type_id);
+                            // print_r($Current);exit;
+                            $SumCurrentAmount += floatval($Current['sum_amount']);
+                            $SumCurrentBaht += floatval($Current['sum_baht']);
+
+                            $Before = ProductionSaleInfoService::getMainList($beforeYear, $curMonth, $factory_id, $master_type_id);
+                            $SumBeforeAmount += floatval($Before['sum_amount']);
+                            $SumBeforeBaht += floatval($Before['sum_baht']);
+
+                            if (!empty($Current['update_date'])) {
+                                $UpdateDate = $Current['update_date'];
+                            }
+                            if (!empty($Current['office_approve_id'])) {
+                                $ApproveDate = $Current['office_approve_date'];
+                            }
+                            if (!empty($Current['office_approve_comment'])) {
+                                $ApproveComment = $Current['office_approve_comment'];
+                            }
+                        }
+
+                        $data = [];
+                        // $data['RegionName'] = $value['RegionName'];
+                        $data['ProductionInfoName'] = $v['name'];
+                        $data['Quarter'] = $curQuarter;
+
+                        $data['CurrentAmount'] = $SumCurrentAmount;
+                        $data['CurrentBaht'] = $SumCurrentBaht;
+
+                        $data['BeforeAmount'] = $SumBeforeAmount;
+                        $data['BeforeBaht'] = $SumBeforeBaht;
+
+                        $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+                        $data['DiffAmount'] = $DiffAmount;
+
+                        if ($data['BeforeAmount'] != 0) {
+                            $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                        } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
+                            $data['DiffAmountPercentage'] = 100;
+                        }else{
+                            $data['DiffAmountPercentage'] = 0;
+                        }
+
+
+                        $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                        $data['DiffBaht'] = $DiffBaht;
+
+                        if ($data['BeforeBaht'] != 0) {
+                            $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
+                        } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
+                            $data['DiffBahtPercentage'] = 100;
+                        }else{
+                            $data['DiffBahtPercentage'] = 0;
+                        }
+
+                        $data['CreateDate'] = $Current['update_date'];
+                        $data['ApproveDate'] = $Current['office_approve_date'];
+                        if (!empty($Current['office_approve_id'])) {
+                            if (empty($Current['office_approve_comment'])) {
+                                $data['Status'] = 'อนุมัติ';
+                            } else {
+                                $data['Status'] = 'ไม่อนุมัติ';
+                            }
+                        }
+                        $data['Description'] = ['months' => $curMonth
+                            , 'years' => $curYear
+                            , 'factory_id' => $factory_id
+                        ];
+
+                        array_push($DataList, $data);
+
+                        $DataSummary['SummaryAmount'] = $DataSummary['SummaryAmount'] + $data['CurrentAmount'];
+                        $DataSummary['SummaryBaht'] = $DataSummary['SummaryBaht'] + $data['CurrentBaht'];
+
+                        $Sum_CurrentAmount += $data['CurrentAmount'];
+                        $Sum_CurrentBaht += $data['CurrentBaht'];
+                        $Sum_BeforeAmount += $data['BeforeAmount'];
+                        $Sum_BeforeBaht += $data['BeforeBaht'];
+
+                        $Total_CurrentAmount += $data['CurrentAmount'];
+                        $Total_CurrentBaht += $data['CurrentBaht'];
+                        $Total_BeforeAmount += $data['BeforeAmount'];
+                        $Total_BeforeBaht += $data['BeforeBaht'];
+
+                        $GrandTotal_CurrentAmount += $data['CurrentAmount'];
+                        $GrandTotal_CurrentBaht += $data['CurrentBaht'];
+                        $GrandTotal_BeforeAmount += $data['BeforeAmount'];
+                        $GrandTotal_BeforeBaht += $data['BeforeBaht'];
+                    // }
+
+                    $data = [];
+                    $data['bg_color'] = '#AFE1FA';
+                    $data['ProductionInfoName'] = 'รวม';
+
+                    $data['CurrentAmount'] = $Sum_CurrentAmount;
+                    $data['CurrentBaht'] = $Sum_CurrentBaht;
+
+                    $data['BeforeAmount'] = $Sum_BeforeAmount;
+                    $data['BeforeBaht'] = $Sum_BeforeBaht;
+
+                    $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+                    $data['DiffAmount'] = $DiffAmount;
+                    if ($data['BeforeAmount'] != 0) {
+                        $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                    } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
+                        $data['DiffAmountPercentage'] = 100;
+                    }else{
+                        $data['DiffAmountPercentage'] = 0;
+                    }
+
+
+                    $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                    $data['DiffBaht'] = $DiffBaht;
+
+                    if ($data['BeforeBaht'] != 0) {
+                        $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
+                    } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
+                        $data['DiffBahtPercentage'] = 100;
+                    }else{
+                        $data['DiffBahtPercentage'] = 0;
+                    }
+                    array_push($DataList, $data);
+                }
+                
             }
+
+            $curMonth++;
         }
 
         $data = [];
         // $data['RegionName'] = $value['RegionName'];
-        $data['bg_color'] = '#ccc';
-        $data['Month'] = 'รวม';
-        $data['CurrentAmount'] = $Sum_CurrentAmount;
-        $data['CurrentBaht'] = $Sum_CurrentBaht;
-
-        $data['BeforeAmount'] = $Sum_BeforeAmount;
-        $data['BeforeBaht'] = $Sum_BeforeBaht;
+        $data['bg_color'] = '#87D0F5';
+        $data['Quarter'] = 'รวมทุกรายการ';
+        $data['CurrentAmount'] = $GrandTotal_CurrentAmount;
+        $data['CurrentBaht'] = $GrandTotal_CurrentBaht;
+        $data['BeforeAmount'] = $GrandTotal_BeforeAmount;
+        $data['BeforeBaht'] = $GrandTotal_BeforeBaht;
 
         $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
         $data['DiffAmount'] = $DiffAmount;
@@ -526,6 +638,8 @@ class ProductionSaleInfoController extends Controller {
             $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
         } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
             $data['DiffAmountPercentage'] = 100;
+        }else{
+            $data['DiffAmountPercentage'] = 0;
         }
 
 
@@ -536,22 +650,26 @@ class ProductionSaleInfoController extends Controller {
             $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
         } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
             $data['DiffBahtPercentage'] = 100;
+        }else{
+            $data['DiffBahtPercentage'] = 0;
         }
+
         $data['DiffBaht'] = $DiffBaht;
 
         array_push($DataList, $data);
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
+    
     }
 
-    public function getAnnuallyDataList($condition, $regions) {
+    public function getAnnuallyDataList($condition, $RegionList) {
 
         $factory_id = $condition['Factory'];
 
         $loop = 1; //intval($condition['YearTo']) - intval($condition['YearFrom']) + 1;
         $curYear = $condition['YearTo'];
 
-        $beforeYear = $calcYear - 1;
+        $beforeYear = $curYear - 1;
         $monthList = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
         $DataList = [];
@@ -559,116 +677,210 @@ class ProductionSaleInfoController extends Controller {
         $curYear = $condition['YearTo'];
 
         // get master goal
-        $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียในกระบวนการ');
-        $Sum_CurrentAmount = 0;
-        $Sum_CurrentBaht = 0;
-        $Sum_BeforeAmount = 0;
-        $Sum_BeforeBaht = 0;
+        $GrandTotal_CurrentAmount = 0;
+        $GrandTotal_CurrentBaht = 0;
+        $GrandTotal_BeforeAmount = 0;
+        $GrandTotal_BeforeBaht = 0;
+
+        // get ProductMilkService
+        $ProducMilkList = ProductMilkService::getList('','',[],$factory_id);
 
         for ($i = 0; $i < $loop; $i++) {
 
-            foreach ($MasterGoalList as $k => $v) {
-
-                $master_type_id = $v['id'];
-                $region_id = $value['RegionID'];
-
-
-                $calcYear = intval($curYear) - 1;
-
-                $SumCurrentAmount = 0;
-                $SumCurrentBaht = 0;
-                $SumBeforeAmount = 0;
-                $SumBeforeBaht = 0;
-                $UpdateDate = '';
-                $ApproveDate = '';
-                $ApproveComment = '';
-                // loop get quarter sum data
-                for ($j = 0; $j < 12; $j++) {
-                    $curMonth = $monthList[$j];
-
-                    $Current = ProductionSaleInfoService::getMainList($curYear, $curMonth, $factory_id, $master_type_id);
-                    $SumCurrentAmount += floatval($Current['sum_amount']);
-                    $SumCurrentBaht += floatval($Current['sum_baht']);
-
-                    $Before = ProductionSaleInfoService::getMainList($beforeYear, $curMonth, $factory_id, $master_type_id);
-                    $SumBeforeAmount += floatval($Before['sum_amount']);
-                    $SumBeforeBaht += floatval($Before['sum_baht']);
-
-                    if (!empty($Current['update_date'])) {
-                        $UpdateDate = $Current['update_date'];
-                    }
-                    if (!empty($Current['office_approve_id'])) {
-                        $ApproveDate = $Current['office_approve_date'];
-                    }
-                    if (!empty($Current['office_approve_comment'])) {
-                        $ApproveComment = $Current['office_approve_comment'];
-                    }
-                }
+            foreach ($ProducMilkList as $key => $value) {
 
                 $data = [];
-                $data['RegionName'] = $value['RegionName'];
-                $data['ProductionSaleInfoName'] = $v['goal_name'];
-                $data['Year'] = $curYear + 543;
-
-                $data['CurrentAmount'] = $SumCurrentAmount;
-                $data['CurrentBaht'] = $SumCurrentBaht;
-
-                $data['BeforeAmount'] = $SumBeforeAmount;
-                $data['BeforeBaht'] = $SumBeforeBaht;
-
-                $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
-                $data['DiffAmount'] = $DiffAmount;
-                if ($data['BeforeAmount'] != 0) {
-                    $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
-                } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
-                    $data['DiffAmountPercentage'] = 100;
-                }
-
-
-                $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
-                $data['DiffBaht'] = $DiffBaht;
-
-                if ($data['BeforeBaht'] != 0) {
-                    $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
-                } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
-                    $data['DiffBahtPercentage'] = 100;
-                }
-
-                $data['CreateDate'] = $UpdateDate;
-                $data['ApproveDate'] = $ApproveDate;
-                if (!empty($ApproveDate)) {
-                    if (empty($ApproveComment)) {
-                        $data['Status'] = 'อนุมัติ';
-                    } else {
-                        $data['Status'] = 'ไม่อนุมัติ';
-                    }
-                }
+                $data['bg_color'] = '#ccc';
+                $data['ProductionInfoName'] = $value['name'];
+                $data['show_button'] = 'Y';
                 $data['Description'] = ['months' => $curMonth
                     , 'years' => $curYear
-                    , 'region_id' => $region_id
+                    , 'factory_id' => $factory_id
+                    , 'DisplayType' => $condition['DisplayType']
                 ];
-
                 array_push($DataList, $data);
 
-                $DataSummary['SummaryAmount'] = $DataSummary['SummaryAmount'] + $data['CurrentAmount'];
-                $DataSummary['SummaryBaht'] = $DataSummary['SummaryBaht'] + $data['CurrentBaht'];
+                $Total_CurrentAmount = 0;
+                $Total_CurrentBaht = 0;
+                $Total_BeforeAmount = 0;
+                $Total_BeforeBaht = 0;
 
-                $Sum_CurrentAmount += $data['CurrentAmount'];
-                $Sum_CurrentBaht += $data['CurrentBaht'];
-                $Sum_BeforeAmount += $data['BeforeAmount'];
-                $Sum_BeforeBaht += $data['BeforeBaht'];
+                // loop by factory
+                // foreach ($FactoryList as $key1 => $value1) {
+
+                    // $data = [];
+                    // $data['bg_color'] = '#ccc';
+                    // $data['ProductionInfoName'] = $value1['factory_name'];
+                    
+                    // array_push($DataList, $data);
+
+                    // get SubProductMilkService
+                    $SubProductMilkList = SubProductMilkService::getListByProductMilk($value['id']);
+
+                    // Prepare condition
+
+                    $Sum_CurrentAmount = 0;
+                    $Sum_CurrentBaht = 0;
+                    $Sum_BeforeAmount = 0;
+                    $Sum_BeforeBaht = 0;
+
+                    // $factory_id = $value1['id'];
+
+                    foreach ($SubProductMilkList as $k => $v) {
+
+                        $master_type_id = $v['id'];
+
+                        $monthName = ProductionSaleInfoController::getMonthName($curMonth);
+
+                        // get cooperative type
+                        $SumCurrentAmount = 0;
+                        $SumCurrentBaht = 0;
+                        $SumBeforeAmount = 0;
+                        $SumBeforeBaht = 0;
+                        $UpdateDate = '';
+                        $ApproveDate = '';
+                        $ApproveComment = '';
+                        // loop get quarter sum data
+
+                        for ($j = 0; $j < 12; $j++) {
+
+                            $curMonth = $monthList[$j];
+                            $Current = ProductionSaleInfoService::getMainList($curYear, $curMonth, $factory_id, $master_type_id);
+                            // print_r($Current);exit;
+                            $SumCurrentAmount += floatval($Current['sum_amount']);
+                            $SumCurrentBaht += floatval($Current['sum_baht']);
+
+                            $Before = ProductionSaleInfoService::getMainList($beforeYear, $curMonth, $factory_id, $master_type_id);
+                            $SumBeforeAmount += floatval($Before['sum_amount']);
+                            $SumBeforeBaht += floatval($Before['sum_baht']);
+
+                            if (!empty($Current['update_date'])) {
+                                $UpdateDate = $Current['update_date'];
+                            }
+                            if (!empty($Current['office_approve_id'])) {
+                                $ApproveDate = $Current['office_approve_date'];
+                            }
+                            if (!empty($Current['office_approve_comment'])) {
+                                $ApproveComment = $Current['office_approve_comment'];
+                            }
+                        }
+
+                        $data = [];
+                        // $data['RegionName'] = $value['RegionName'];
+                        $data['ProductionInfoName'] = $v['name'];
+                        // $data['Quarter'] = $curQuarter;
+
+                        $data['CurrentAmount'] = $SumCurrentAmount;
+                        $data['CurrentBaht'] = $SumCurrentBaht;
+
+                        $data['BeforeAmount'] = $SumBeforeAmount;
+                        $data['BeforeBaht'] = $SumBeforeBaht;
+
+                        $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+                        $data['DiffAmount'] = $DiffAmount;
+
+                        if ($data['BeforeAmount'] != 0) {
+                            $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                        } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
+                            $data['DiffAmountPercentage'] = 100;
+                        }else{
+                            $data['DiffAmountPercentage'] = 0;
+                        }
+
+
+                        $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                        $data['DiffBaht'] = $DiffBaht;
+
+                        if ($data['BeforeBaht'] != 0) {
+                            $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
+                        } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
+                            $data['DiffBahtPercentage'] = 100;
+                        }else{
+                            $data['DiffBahtPercentage'] = 0;
+                        }
+
+                        $data['CreateDate'] = $Current['update_date'];
+                        $data['ApproveDate'] = $Current['office_approve_date'];
+                        if (!empty($Current['office_approve_id'])) {
+                            if (empty($Current['office_approve_comment'])) {
+                                $data['Status'] = 'อนุมัติ';
+                            } else {
+                                $data['Status'] = 'ไม่อนุมัติ';
+                            }
+                        }
+                        $data['Description'] = ['months' => $curMonth
+                            , 'years' => $curYear
+                            , 'factory_id' => $factory_id
+                        ];
+
+                        array_push($DataList, $data);
+
+                        $DataSummary['SummaryAmount'] = $DataSummary['SummaryAmount'] + $data['CurrentAmount'];
+                        $DataSummary['SummaryBaht'] = $DataSummary['SummaryBaht'] + $data['CurrentBaht'];
+
+                        $Sum_CurrentAmount += $data['CurrentAmount'];
+                        $Sum_CurrentBaht += $data['CurrentBaht'];
+                        $Sum_BeforeAmount += $data['BeforeAmount'];
+                        $Sum_BeforeBaht += $data['BeforeBaht'];
+
+                        $Total_CurrentAmount += $data['CurrentAmount'];
+                        $Total_CurrentBaht += $data['CurrentBaht'];
+                        $Total_BeforeAmount += $data['BeforeAmount'];
+                        $Total_BeforeBaht += $data['BeforeBaht'];
+
+                        $GrandTotal_CurrentAmount += $data['CurrentAmount'];
+                        $GrandTotal_CurrentBaht += $data['CurrentBaht'];
+                        $GrandTotal_BeforeAmount += $data['BeforeAmount'];
+                        $GrandTotal_BeforeBaht += $data['BeforeBaht'];
+                    // }
+
+                    $data = [];
+                    $data['bg_color'] = '#AFE1FA';
+                    $data['ProductionInfoName'] = 'รวม';
+
+                    $data['CurrentAmount'] = $Sum_CurrentAmount;
+                    $data['CurrentBaht'] = $Sum_CurrentBaht;
+
+                    $data['BeforeAmount'] = $Sum_BeforeAmount;
+                    $data['BeforeBaht'] = $Sum_BeforeBaht;
+
+                    $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+                    $data['DiffAmount'] = $DiffAmount;
+                    if ($data['BeforeAmount'] != 0) {
+                        $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                    } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
+                        $data['DiffAmountPercentage'] = 100;
+                    }else{
+                        $data['DiffAmountPercentage'] = 0;
+                    }
+
+
+                    $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                    $data['DiffBaht'] = $DiffBaht;
+
+                    if ($data['BeforeBaht'] != 0) {
+                        $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
+                    } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
+                        $data['DiffBahtPercentage'] = 100;
+                    }else{
+                        $data['DiffBahtPercentage'] = 0;
+                    }
+                    array_push($DataList, $data);
+                }
+                
             }
+
+            $curMonth++;
         }
 
         $data = [];
         // $data['RegionName'] = $value['RegionName'];
-        $data['bg_color'] = '#ccc';
-        $data['Month'] = 'รวม';
-        $data['CurrentAmount'] = $Sum_CurrentAmount;
-        $data['CurrentBaht'] = $Sum_CurrentBaht;
-
-        $data['BeforeAmount'] = $Sum_BeforeAmount;
-        $data['BeforeBaht'] = $Sum_BeforeBaht;
+        $data['bg_color'] = '#87D0F5';
+        $data['ProductionInfoName'] = 'รวมทุกรายการ';
+        $data['CurrentAmount'] = $GrandTotal_CurrentAmount;
+        $data['CurrentBaht'] = $GrandTotal_CurrentBaht;
+        $data['BeforeAmount'] = $GrandTotal_BeforeAmount;
+        $data['BeforeBaht'] = $GrandTotal_BeforeBaht;
 
         $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
         $data['DiffAmount'] = $DiffAmount;
@@ -676,6 +888,8 @@ class ProductionSaleInfoController extends Controller {
             $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
         } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
             $data['DiffAmountPercentage'] = 100;
+        }else{
+            $data['DiffAmountPercentage'] = 0;
         }
 
 
@@ -686,6 +900,8 @@ class ProductionSaleInfoController extends Controller {
             $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
         } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
             $data['DiffBahtPercentage'] = 100;
+        }else{
+            $data['DiffBahtPercentage'] = 0;
         }
         $data['DiffBaht'] = $DiffBaht;
 
@@ -702,21 +918,39 @@ class ProductionSaleInfoController extends Controller {
             $user_session = $params['user_session'];
             $condition = $params['obj']['condition'];
 
-            $factory_id = $condition['factory_id'];
-            $ymFrom = $condition['years'] . '-' . str_pad($condition['months'], 2, "0", STR_PAD_LEFT);
-            $ymTo = $condition['years'] . '-' . str_pad($condition['months'], 2, "0", STR_PAD_LEFT);
-            $toTime = $condition['years'] . '-' . str_pad($condition['months'], 2, "0", STR_PAD_LEFT) . '-28';
-            $fromTime = $condition['years'] . '-' . str_pad($condition['months'], 2, "0", STR_PAD_LEFT) . '-01';
-
-            $date1 = new \DateTime($toTime);
-            $date2 = new \DateTime($fromTime);
-            $diff = $date1->diff($date2);
-            $diffMonth = (($diff->format('%y') * 12) + $diff->format('%m'));
-            if ($diffMonth == 0) {
-                $diffMonth = 1;
-            } else {
-                $diffMonth += 1;
+            if($condition['DisplayType'] == 'monthly'){
+                $monthList = [$condition['months']];
+            }else if($condition['DisplayType'] == 'quarter'){
+                
+                $curQuarter = intval($condition['quarter']);
+                if ($curQuarter == 1) {
+                    $monthList = [10, 11, 12];
+                } else if ($curQuarter == 2) {
+                    $monthList = [1, 2, 3];
+                } else if ($curQuarter == 3) {
+                    $monthList = [4, 5, 6];
+                } else if ($curQuarter == 4) {
+                    $monthList = [7, 8, 9];
+                }
+            }else if($condition['DisplayType'] == 'annually'){
+                $monthList = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
             }
+
+            $factory_id = $condition['factory_id'];
+            // $ymFrom = $condition['years'] . '-' . str_pad($condition['months'], 2, "0", STR_PAD_LEFT);
+            // $ymTo = $condition['years'] . '-' . str_pad($condition['months'], 2, "0", STR_PAD_LEFT);
+            // $toTime = $condition['years'] . '-' . str_pad($condition['months'], 2, "0", STR_PAD_LEFT) . '-28';
+            // $fromTime = $condition['years'] . '-' . str_pad($condition['months'], 2, "0", STR_PAD_LEFT) . '-01';
+
+            // $date1 = new \DateTime($toTime);
+            // $date2 = new \DateTime($fromTime);
+            // $diff = $date1->diff($date2);
+            // $diffMonth = (($diff->format('%y') * 12) + $diff->format('%m'));
+            // if ($diffMonth == 0) {
+            //     $diffMonth = 1;
+            // } else {
+            //     $diffMonth += 1;
+            // }
             $curMonth = $condition['months'];
             $curYear = $condition['years'];
             $DataList = [];
@@ -728,12 +962,12 @@ class ProductionSaleInfoController extends Controller {
             $GrandTotal_BeforeBaht = 0;
 
             // get ProductMilkService
-            $ProducMilkList = ProductMilkService::getList();
+            $ProducMilkList = ProductMilkService::getList('','',[],$factory_id);
 
             // get Factory
             $FactoryList = FactoryService::getData($factory_id);
 
-            for ($i = 0; $i < $diffMonth; $i++) {
+            // for ($i = 0; $i < $diffMonth; $i++) {
 
 
                 // loop by factory
@@ -741,7 +975,7 @@ class ProductionSaleInfoController extends Controller {
 
                     $data = [];
                     $data['bg_color'] = '#ccc';
-                    $data['ProductionSaleInfoName'] = $value1['factory_name'];
+                    $data['ProductionInfoName'] = $value1['factory_name'];
                     $data['show_button'] = 'Y';
                     array_push($DataList, $data);
 
@@ -755,7 +989,7 @@ class ProductionSaleInfoController extends Controller {
 
                         $data = [];
                         $data['bg_color'] = '#ccc';
-                        $data['ProductionSaleInfoName'] = $value['name'];
+                        $data['ProductionInfoName'] = $value['name'];
                         array_push($DataList, $data);
 
                         // get SubProductMilkService
@@ -769,13 +1003,13 @@ class ProductionSaleInfoController extends Controller {
                         $Sum_BeforeAmount = 0;
                         $Sum_BeforeBaht = 0;
 
-                        $factory_id = $value1['id'];
+                        // $factory_id = $value1['id'];
 
                         foreach ($SubProductMilkList as $k => $v) {
 
                             $data = [];
                             $data['bg_color'] = '#ccc';
-                            $data['ProductionSaleInfoName'] = $v['name'];
+                            $data['ProductionInfoName'] = $v['name'];
                             array_push($DataList, $data);
 
                             // get ProductMilkDetailService
@@ -783,24 +1017,55 @@ class ProductionSaleInfoController extends Controller {
 
                             foreach ($ProductMilkDetailList as $k1 => $v1) {
 
+                                $SumCurrentAmount = 0;
+                                $SumCurrentBaht = 0;
+                                $SumBeforeAmount = 0;
+                                $SumBeforeBaht = 0;
                                 $master_type_id = $v1['id'];
 
                                 $monthName = ProductionSaleInfoController::getMonthName($curMonth);
 
+                                for ($j = 0; $j < count($monthList); $j++) {
+
+                                    $curMonth = $monthList[$j];
+                                    $Current = ProductionSaleInfoService::getDetailList($curYear, $curMonth, $factory_id, $master_type_id);
+                                    // print_r($Current);exit;
+                                    $SumCurrentAmount += floatval($Current['sum_amount']);
+                                    $SumCurrentBaht += floatval($Current['sum_baht']);
+
+                                    $Before = ProductionSaleInfoService::getDetailList($beforeYear, $curMonth, $factory_id, $master_type_id);
+                                    $SumBeforeAmount += floatval($Before['sum_amount']);
+                                    $SumBeforeBaht += floatval($Before['sum_baht']);
+
+                                }
+
                                 $data = [];
                                 // $data['RegionName'] = $value['RegionName'];
-                                $data['ProductionSaleInfoName'] = $v1['name'];
+                                $data['ProductionInfoName'] = $v1['name'];
                                 $data['Month'] = $monthName;
+                                $data['Quarter'] = $curQuarter;
+                                $data['Year'] = ($curYear + 543);
+
+                                $data['CurrentAmount'] = $SumCurrentAmount;
+                                $data['CurrentBaht'] = $SumCurrentBaht;
+
+                                $data['BeforeAmount'] = $SumBeforeAmount;
+                                $data['BeforeBaht'] = $SumBeforeBaht;
+
+                                // $data = [];
+                                // $data['RegionName'] = $value['RegionName'];
+                                // $data['ProductionInfoName'] = $v1['name'];
+                                // $data['Month'] = $monthName;
 
                                 // get cooperative type
-                                $Current = ProductionSaleInfoService::getDetailList($curYear, $curMonth, $factory_id, $master_type_id);
-                                // print_r($Current);exit;
-                                $data['CurrentAmount'] = floatval($Current['sum_amount']);
-                                $data['CurrentBaht'] = floatval($Current['sum_baht']);
+                                // $Current = ProductionSaleInfoService::getDetailList($curYear, $curMonth, $factory_id, $master_type_id);
+                                // // print_r($Current);exit;
+                                // $data['CurrentAmount'] = floatval($Current['sum_amount']);
+                                // $data['CurrentBaht'] = floatval($Current['sum_baht']);
 
-                                $Before = ProductionSaleInfoService::getDetailList($beforeYear, $curMonth, $factory_id, $master_type_id);
-                                $data['BeforeAmount'] = floatval($Before['sum_amount']);
-                                $data['BeforeBaht'] = floatval($Before['sum_baht']);
+                                // $Before = ProductionSaleInfoService::getDetailList($beforeYear, $curMonth, $factory_id, $master_type_id);
+                                // $data['BeforeAmount'] = floatval($Before['sum_amount']);
+                                // $data['BeforeBaht'] = floatval($Before['sum_baht']);
 
                                 $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
                                 $data['DiffAmount'] = $DiffAmount;
@@ -808,6 +1073,8 @@ class ProductionSaleInfoController extends Controller {
                                     $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
                                 } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
                                     $data['DiffAmountPercentage'] = 100;
+                                }else{
+                                    $data['DiffAmountPercentage'] = 0;
                                 }
 
 
@@ -818,6 +1085,8 @@ class ProductionSaleInfoController extends Controller {
                                     $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
                                 } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
                                     $data['DiffBahtPercentage'] = 100;
+                                }else{
+                                    $data['DiffBahtPercentage'] = 0;
                                 }
 
                                 $data['CreateDate'] = $Current['update_date'];
@@ -858,7 +1127,7 @@ class ProductionSaleInfoController extends Controller {
 
                         $data = [];
                         $data['bg_color'] = '#AFE1FA';
-                        $data['ProductionSaleInfoName'] = 'รวม';
+                        $data['ProductionInfoName'] = 'รวม';
 
                         $data['CurrentAmount'] = $Sum_CurrentAmount;
                         $data['CurrentBaht'] = $Sum_CurrentBaht;
@@ -872,6 +1141,8 @@ class ProductionSaleInfoController extends Controller {
                             $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
                         } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
                             $data['DiffAmountPercentage'] = 100;
+                        }else{
+                            $data['DiffAmountPercentage'] = 0;
                         }
 
 
@@ -882,12 +1153,14 @@ class ProductionSaleInfoController extends Controller {
                             $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
                         } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
                             $data['DiffBahtPercentage'] = 100;
+                        }else{
+                            $data['DiffBahtPercentage'] = 0;
                         }
                         array_push($DataList, $data);
                     }
                     $data = [];
                     $data['bg_color'] = '#A0DEFD';
-                    $data['ProductionSaleInfoName'] = 'รวมทั้งสิ้น';
+                    $data['ProductionInfoName'] = 'รวมทั้งสิ้น';
 
                     $data['CurrentAmount'] = $Total_CurrentAmount;
                     $data['CurrentBaht'] = $Total_CurrentBaht;
@@ -901,6 +1174,8 @@ class ProductionSaleInfoController extends Controller {
                         $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
                     } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
                         $data['DiffAmountPercentage'] = 100;
+                    }else{
+                        $data['DiffAmountPercentage'] = 0;
                     }
 
 
@@ -911,12 +1186,14 @@ class ProductionSaleInfoController extends Controller {
                         $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
                     } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
                         $data['DiffBahtPercentage'] = 100;
+                    }else{
+                        $data['DiffBahtPercentage'] = 0;
                     }
                     array_push($DataList, $data);
                 }
 
                 $curMonth++;
-            }
+            // }
 
 
 
@@ -1350,7 +1627,7 @@ class ProductionSaleInfoController extends Controller {
 
                             $master_type_id = $v1['id'];
 
-//                            $monthName = ProductionInfoController::getMonthName($curMonth);
+//                            $monthName = ProductionSaleInfoController::getMonthName($curMonth);
                             //   $data = [];
 //                            $data['subProductionInfoName'] = $v['name'];
 //                            $data['Month'] = $monthName;
