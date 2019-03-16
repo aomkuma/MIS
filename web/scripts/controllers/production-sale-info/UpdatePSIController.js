@@ -310,7 +310,7 @@ angular.module('e-homework').controller('UpdatePSIController', function($scope, 
                 console.log(result);
                 if(result.data.STATUS == 'OK'){
                     alert('บันทึกสำเร็จ');
-                    window.location.href = '#/production-sale-info/update/' + Data.id;
+                    window.location.href = '#/production-sale-info';///update/' + Data.id;
                 }else{
                     alert(result.data.DATA);
                 }
@@ -344,7 +344,7 @@ angular.module('e-homework').controller('UpdatePSIController', function($scope, 
                 console.log(result);
                 if(result.data.STATUS == 'OK'){
                     alert('บันทึกสำเร็จ');
-                    window.location.href = '#/production-sale-info/update/' + Data.id;
+                    window.location.href = '#/production-sale-info';///update/' + Data.id;
                 }else{
                     alert(result.data.DATA);
                 }

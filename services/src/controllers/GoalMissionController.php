@@ -17,9 +17,17 @@
         public function getList($request, $response, $args){
             try{
                 $params = $request->getParsedBody();
+                $user_session = $params['user_session'];
+                $PersonRegion = $params['obj']['PersonRegion'];
                 $condition = $params['obj']['condition'];
                 $UserID = $params['obj']['UserID'];
-                $_List = GoalMissionService::getList($condition, $UserID);
+
+                $RegionList = [];
+                foreach ($PersonRegion as $key => $value) {
+                    $RegionList[] = $value['RegionID'];
+                }
+
+                $_List = GoalMissionService::getList($condition, $UserID, $RegionList);
 
                 $this->data_result['DATA']['List'] = $_List;
 

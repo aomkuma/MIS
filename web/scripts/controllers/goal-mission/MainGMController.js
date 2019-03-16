@@ -50,7 +50,7 @@ angular.module('e-homework').controller('MainGMController', function($scope, $co
     }
 
     $scope.loadList = function(action){
-        var params = {'condition' : $scope.condition, 'UserID' : $scope.currentUser.UserID};
+        var params = {'condition' : $scope.condition, 'UserID' : $scope.currentUser.UserID, 'PersonRegion' : $scope.$parent.PersonRegion};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest(action, params).then(function(result){
             if(result.data.STATUS == 'OK'){

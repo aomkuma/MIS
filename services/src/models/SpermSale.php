@@ -24,6 +24,7 @@ class SpermSale extends \Illuminate\Database\Eloquent\Model {
                   , 'dep_approve_name'
                   , 'division_approve_name'
                   , 'office_approve_name'
+                  , 'user_comment'
   							);
 
     public function spermSaleDetail()

@@ -316,7 +316,7 @@ angular.module('e-homework').controller('UpdateTCBController', function($scope, 
                 console.log(result);
                 if(result.data.STATUS == 'OK'){
                     alert('บันทึกสำเร็จ');
-                    window.location.href = '#/training-cowbreed/update/' + Data.id;
+                    window.location.href = '#/training-cowbreed';///update/' + Data.id;
                 }else{
                     alert(result.data.DATA);
                 }
@@ -350,7 +350,7 @@ angular.module('e-homework').controller('UpdateTCBController', function($scope, 
                 console.log(result);
                 if(result.data.STATUS == 'OK'){
                     alert('บันทึกสำเร็จ');
-                    window.location.href = '#/training-cowbreed/update/' + Data.id;
+                    window.location.href = '#/training-cowbreed';///update/' + Data.id;
                 }else{
                     alert(result.data.DATA);
                 }

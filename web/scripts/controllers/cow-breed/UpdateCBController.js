@@ -322,7 +322,7 @@ angular.module('e-homework').controller('UpdateCBController', function($scope, $
                 console.log(result);
                 if(result.data.STATUS == 'OK'){
                     alert('บันทึกสำเร็จ');
-                    window.location.href = '#/cow-breed/update/' + Data.id;
+                    window.location.href = '#/cow-breed/update';//    /' + Data.id;
                 }else{
                     alert(result.data.DATA);
                 }
@@ -356,7 +356,7 @@ angular.module('e-homework').controller('UpdateCBController', function($scope, $
                 console.log(result);
                 if(result.data.STATUS == 'OK'){
                     alert('บันทึกสำเร็จ');
-                    window.location.href = '#/cow-breed/update/' + Data.id;
+                    window.location.href = '#/cow-breed';///update/' + Data.id;
                 }else{
                     alert(result.data.DATA);
                 }

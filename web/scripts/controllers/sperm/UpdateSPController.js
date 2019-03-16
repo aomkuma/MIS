@@ -336,7 +336,7 @@ angular.module('e-homework').controller('UpdateSPController', function($scope, $
                 console.log(result);
                 if(result.data.STATUS == 'OK'){
                     alert('บันทึกสำเร็จ');
-                    window.location.href = '#/sperm/update/' + Data.id;
+                    window.location.href = '#/sperm';///update/' + Data.id;
                 }else{
                     alert(result.data.DATA);
                 }
@@ -370,7 +370,7 @@ angular.module('e-homework').controller('UpdateSPController', function($scope, $
                 console.log(result);
                 if(result.data.STATUS == 'OK'){
                     alert('บันทึกสำเร็จ');
-                    window.location.href = '#/sperm/update/' + Data.id;
+                    window.location.href = '#/sperm';///update/' + Data.id;
                 }else{
                     alert(result.data.DATA);
                 }

@@ -271,7 +271,7 @@ angular.module('e-homework').controller('UpdateLOPController', function($scope, 
                 console.log(result);
                 if(result.data.STATUS == 'OK'){
                     alert('บันทึกสำเร็จ');
-                    window.location.href = '#/lost-out-process/update/' + Data.id;
+                    window.location.href = '#/lost-out-process';///update/' + Data.id;
                 }else{
                     alert(result.data.DATA);
                 }
@@ -305,7 +305,7 @@ angular.module('e-homework').controller('UpdateLOPController', function($scope, 
                 console.log(result);
                 if(result.data.STATUS == 'OK'){
                     alert('บันทึกสำเร็จ');
-                    window.location.href = '#/lost-out-process/update/' + Data.id;
+                    window.location.href = '#/lost-out-process';///update/' + Data.id;
                 }else{
                     alert(result.data.DATA);
                 }

@@ -9,7 +9,7 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class GoalMissionService {
 
-    public static function getList($condition, $UserID) {
+    public static function getList($condition, $UserID, $RegionList) {
         return GoalMission::where(function($query) use ($condition) {
                             if (!empty($condition['Year']['yearText'])) {
                                 $query->where('years', $condition['Year']['yearText']);
@@ -29,6 +29,7 @@ class GoalMissionService {
                             $query->orWhere('division_approve_id', $UserID);
                             $query->orWhere('office_approve_id', $UserID);
                         })
+                        ->whereIn('goal_mission.region_id', $RegionList)
                         ->join('region', 'region.RegionID', '=', 'goal_mission.region_id')
                         ->orderBy("update_date", 'DESC')
                         ->get();

@@ -329,7 +329,7 @@ angular.module('e-homework').controller('UpdateMNController', function($scope, $
                 console.log(result);
                 if(result.data.STATUS == 'OK'){
                     alert('บันทึกสำเร็จ');
-                    window.location.href = '#/mineral/update/' + Data.id;
+                    window.location.href = '#/mineral';///update/' + Data.id;
                 }else{
                     alert(result.data.DATA);
                 }
@@ -363,7 +363,7 @@ angular.module('e-homework').controller('UpdateMNController', function($scope, $
                 console.log(result);
                 if(result.data.STATUS == 'OK'){
                     alert('บันทึกสำเร็จ');
-                    window.location.href = '#/mineral/update/' + Data.id;
+                    window.location.href = '#/mineral';///update/' + Data.id;
                 }else{
                     alert(result.data.DATA);
                 }

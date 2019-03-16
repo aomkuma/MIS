@@ -317,7 +317,7 @@ angular.module('e-homework').controller('UpdateCMController', function($scope, $
                 console.log(result);
                 if(result.data.STATUS == 'OK'){
                     alert('บันทึกสำเร็จ');
-                    window.location.href = '#/cooperative-milk/update/' + Data.id;
+                    window.location.href = '#/cooperative-milk';//    /update/' + Data.id;
                 }else{
                     alert(result.data.DATA);
                 }
@@ -351,7 +351,7 @@ angular.module('e-homework').controller('UpdateCMController', function($scope, $
                 console.log(result);
                 if(result.data.STATUS == 'OK'){
                     alert('บันทึกสำเร็จ');
-                    window.location.href = '#/cooperative-milk/update/' + Data.id;
+                    window.location.href = '#/cooperative-milk';///update/' + Data.id;
                 }else{
                     alert(result.data.DATA);
                 }

@@ -271,7 +271,7 @@ angular.module('e-homework').controller('UpdateLIPController', function($scope, 
                 console.log(result);
                 if(result.data.STATUS == 'OK'){
                     alert('บันทึกสำเร็จ');
-                    window.location.href = '#/lost-in-process/update/' + Data.id;
+                    window.location.href = '#/lost-in-process';///update/' + Data.id;
                 }else{
                     alert(result.data.DATA);
                 }
@@ -305,7 +305,7 @@ angular.module('e-homework').controller('UpdateLIPController', function($scope, 
                 console.log(result);
                 if(result.data.STATUS == 'OK'){
                     alert('บันทึกสำเร็จ');
-                    window.location.href = '#/lost-in-process/update/' + Data.id;
+                    window.location.href = '#/lost-in-process';///update/' + Data.id;
                 }else{
                     alert(result.data.DATA);
                 }

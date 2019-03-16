@@ -759,7 +759,7 @@ class VeterinaryController extends Controller {
         $months = $description['months'];
         $region_id = $description['region_id'];
         $costList = [
-            ['item' => 'สมาขิก', 'unit' => 'ราย']
+            ['item' => 'สมาชิก', 'unit' => 'ราย']
             , ['item' => 'โคนม', 'unit' => 'ตัว']
             , ['item' => 'ค่าวัสดุ', 'unit' => 'บาท']
             , ['item' => 'ค่าบริการ', 'unit' => 'บาท']
@@ -857,7 +857,7 @@ class VeterinaryController extends Controller {
         $quarter = $description['quarter'];
         $region_id = $description['region_id'];
         $costList = [
-            ['item' => 'สมาขิก', 'unit' => 'ราย']
+            ['item' => 'สมาชิก', 'unit' => 'ราย']
             , ['item' => 'โคนม', 'unit' => 'ตัว']
             , ['item' => 'ค่าวัสดุ', 'unit' => 'บาท']
             , ['item' => 'ค่าบริการ', 'unit' => 'บาท']
@@ -1092,7 +1092,7 @@ class VeterinaryController extends Controller {
             $region_id = $description['region_id'];
 
             $costList = [
-                ['item' => 'สมาขิก', 'unit' => 'ราย']
+                ['item' => 'สมาชิก', 'unit' => 'ราย']
                 , ['item' => 'โคนม', 'unit' => 'ตัว']
                 , ['item' => 'ค่าวัสดุ', 'unit' => 'บาท']
                 , ['item' => 'ค่าบริการ', 'unit' => 'บาท']

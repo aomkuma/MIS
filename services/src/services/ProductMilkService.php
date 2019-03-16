@@ -14,9 +14,13 @@ class ProductMilkService {
                         ->first();
     }
 
-    public static function getList($actives = '', $menu_type = '', $condition = []) {
-        return ProductMilk::
-                        orderBy("id", 'DESC')
+    public static function getList($actives = '', $menu_type = '', $condition = [], $factory_id = '') {
+        return ProductMilk::where(function($query) use ($factory_id){
+                            if(!empty($factory_id)){
+                                $query->where('factory_id' , $factory_id);
+                            }
+                        })
+                        ->orderBy("id", 'DESC')
                         ->get()->toArray();
     }
 

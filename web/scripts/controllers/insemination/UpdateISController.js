@@ -313,7 +313,7 @@ angular.module('e-homework').controller('UpdateISController', function($scope, $
                 console.log(result);
                 if(result.data.STATUS == 'OK'){
                     alert('บันทึกสำเร็จ');
-                    window.location.href = '#/insemination/update/' + Data.id;
+                    window.location.href = '#/insemination';///update/' + Data.id;
                 }else{
                     alert(result.data.DATA);
                 }
@@ -347,7 +347,7 @@ angular.module('e-homework').controller('UpdateISController', function($scope, $
                 console.log(result);
                 if(result.data.STATUS == 'OK'){
                     alert('บันทึกสำเร็จ');
-                    window.location.href = '#/insemination/update/' + Data.id;
+                    window.location.href = '#/insemination';///update/' + Data.id;
                 }else{
                     alert(result.data.DATA);
                 }
