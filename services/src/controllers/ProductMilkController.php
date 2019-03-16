@@ -20,8 +20,10 @@
 //                $actives = $params['obj']['actives'];
 //                $menu_type = $params['obj']['menu_type'];
 //                $condition = $params['obj']['condition'];
-
-                $_List = ProductMilkService::getList();
+                $facid=$params['obj']['facid'];
+//print_r($params);
+//        die();
+                $_List = ProductMilkService::getList('','','',$facid);
 
                 $this->data_result['DATA']['List'] = $_List;
 
@@ -58,7 +60,7 @@
                 $_Data = $params['obj']['Data'];
                 // print_r($_Data);exit;
                 // // Update to none role
-                $result = ProductMilkService::checkDuplicate($_Data['id'], $_Data['name']);
+                $result = ProductMilkService::checkDuplicate($_Data['id'], $_Data['name'],$_Data['factory_id']);
 
                 if(empty($result)){
                     $id = ProductMilkService::updateData($_Data);

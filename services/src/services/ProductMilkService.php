@@ -7,20 +7,24 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class ProductMilkService {
 
-    public static function checkDuplicate($id, $name) {
-        return ProductMilk::where('id', '<>', $id)
-                        ->where('name', $name)
-                        
+    public static function checkDuplicate($id, $name, $facit) {
+        return ProductMilk::join('factory', 'factory.id', '=', 'product_milk.factory_id')
+                        ->where('factory.id', $facit)
+                        ->where('product_milk.id', '<>', $id)
+                        ->where('product_milk.name', $name)
                         ->first();
     }
 
     public static function getList($actives = '', $menu_type = '', $condition = [], $factory_id = '') {
-        return ProductMilk::where(function($query) use ($factory_id){
-                            if(!empty($factory_id)){
-                                $query->where('factory_id' , $factory_id);
+        //  
+        return ProductMilk:: select("product_milk.*", 'factory.factory_name','factory.id as factory_id')
+                        ->join('factory', 'factory.id', '=', 'product_milk.factory_id')
+                        ->where(function($query) use ($factory_id) {
+                            if (!empty($factory_id)) {
+                                $query->where('factory_id', $factory_id);
                             }
                         })
-                        ->orderBy("id", 'DESC')
+                        ->orderBy("product_milk.id", 'DESC')
                         ->get()->toArray();
     }
 
@@ -29,7 +33,7 @@ class ProductMilkService {
     }
 
     public static function updateData($obj) {
-     
+
         if (empty($obj['id'])) {
             $obj['create_date'] = date('Y-m-d H:i:s');
             $obj['update_date'] = date('Y-m-d H:i:s');

@@ -23,9 +23,10 @@ class ProductMilkDetailService {
 //    }
 
     public static function getList($actives = '', $menu_type = '', $condition = []) {
-        return ProductMilkDetail::select("product_milk_detail.*", 'product_milk.name as proname', 'subproduct_milk.name as subname')
+        return ProductMilkDetail::select("product_milk_detail.*", 'product_milk.name as proname', 'subproduct_milk.name as subname', 'factory.factory_name')
                         ->join('subproduct_milk', 'subproduct_milk.id', '=', 'product_milk_detail.sub_product_milk_id')
                         ->join('product_milk', 'product_milk.id', '=', 'subproduct_milk.product_milk_id')
+                 ->join('factory', 'factory.id', '=', 'product_milk.factory_id')
                         ->orderBy("product_milk_detail.id", 'DESC')
                         ->get()
                         ->toArray();
