@@ -11,11 +11,11 @@
             <caption>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
                     <select name="Year" class="form-control" ng-model="Data.factory_id" ng-options="data.id as data.factory_name for data in FactoryList" required="required">
-
+                        <option value="">ทั้งหมด</option>
                     </select>
                 </div>
                 <div class="col-lg-1 col-md-1 col-sm-2 col-xs-2">
-                   <button class="btn btn-primary" ng-click="goSearch(Data.factory_id)"><span class="glyphicon glyphicon-search"></span> ค้นหา</button>
+                    <button class="btn btn-primary" ng-click="goSearch(Data.factory_id)"><span class="glyphicon glyphicon-search"></span> ค้นหา</button>
                 </div>
                 <button class="btn btn-danger pull-right" ng-click="goUpdate('')">
                     <span class="glyphicon glyphicon-plus"></span> 

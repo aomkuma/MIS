@@ -30,9 +30,12 @@ angular.module('e-homework').controller('MainPMController', function ($scope, $c
         var params = {'region': $scope.PersonRegion};
         HTTPService.clientRequest('factory/list', params).then(function (result) {
             if (result.data.STATUS == 'OK') {
+              
+              
                 $scope.FactoryList = result.data.DATA.DataList;
+                 
                 // console.log($scope.List);
-                $scope.Data.factory_id = $scope.FactoryList[0].id;
+              //  $scope.Data.factory_id = $scope.FactoryList[0].id;
 
             }
             IndexOverlayFactory.overlayHide();
