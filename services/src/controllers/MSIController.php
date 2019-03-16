@@ -662,14 +662,16 @@ class MSIController extends Controller {
         try {
             $params = $request->getParsedBody();
             $user_session = $params['user_session'];
-            $regions = $params['obj']['region'];
-            $years = $params['obj']['condition']['YearTo'];
+            $region_id = $params['obj']['condition']['region_id'];
+            $years = $params['obj']['condition']['years'];
 
-            $region_list = [];
-            foreach ($regions as $key => $value) {
-                $region = MSIController::checkRegion($value['RegionID']);
-                $region_list[] = $region;
-            }
+            $region = MBIController::checkRegion($region_id);
+            $region_list[] = $region;
+            // $region_list = [];
+            // foreach ($regions as $key => $value) {
+            //     $region = MSIController::checkRegion($value['RegionID']);
+            //     $region_list[] = $region;
+            // }
 
             $DataList = [];
 

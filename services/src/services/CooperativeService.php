@@ -42,6 +42,10 @@
             return Region::all();      
         }
 
+        public static function getRegion($RegionID){
+            return Region::find($RegionID);      
+        }
+
         public static function getData($id){
             return Cooperative::find($id);      
         }

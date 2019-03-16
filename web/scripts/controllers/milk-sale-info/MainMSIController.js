@@ -111,11 +111,11 @@ angular.module('e-homework').controller('MainMSIController', function($scope, $c
         });
     }
 
-    $scope.loadListDetail = function(action){
+    $scope.loadListDetail = function(action, data){
         $scope.CurYear = $scope.condition.YearTo + 543;
         $scope.LastYear = $scope.CurYear - 1;
         var params = {
-            'condition' : $scope.condition
+            'condition' : data
             , 'region' : $scope.PersonRegion
         };
         IndexOverlayFactory.overlayShow();
@@ -194,7 +194,7 @@ angular.module('e-homework').controller('MainMSIController', function($scope, $c
 
     $scope.viewDetail = function(data){
         $scope.ViewType = 'DETAIL';
-        $scope.loadListDetail('msi/list/milk-sale-info/detail');
+        $scope.loadListDetail('msi/list/milk-sale-info/detail', data);
         // console.log($scope.DetailList);
     }
 

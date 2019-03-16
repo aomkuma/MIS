@@ -666,14 +666,20 @@ class MBIController extends Controller {
         try {
             $params = $request->getParsedBody();
             $user_session = $params['user_session'];
-            $regions = $params['obj']['region'];
-            $years = $params['obj']['condition']['YearTo'];
+            $region_id = $params['obj']['condition']['region_id'];
+            $years = $params['obj']['condition']['years'];
 
-            $region_list = [];
-            foreach ($regions as $key => $value) {
-                $region = MBIController::checkRegion($value['RegionID']);
-                $region_list[] = $region;
-            }
+            $region = MBIController::checkRegion($region_id);
+            $region_list[] = $region;
+            // $region = CooperativeService::getRegion($region_id);
+            // $region_list[] = $region['RegionName'];
+            // print_r($region_list);
+            // exit;
+            // $region_list = [];
+            // foreach ($regions as $key => $value) {
+            //     $region = MBIController::checkRegion($value['RegionID']);
+            //     $region_list[] = $region;
+            // }
 
             $DataList = [];
 
