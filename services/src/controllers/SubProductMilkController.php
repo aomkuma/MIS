@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Service\SubProductMilkService;
+use App\Service\ProductMilkDetailService;
+use App\Service\MasterGoalService;
 
 class SubProductMilkController extends Controller {
 
@@ -81,8 +83,28 @@ class SubProductMilkController extends Controller {
             $result = SubProductMilkService::checkDuplicate($_Data['id'], $_Data['name'],$_Data['product_milk_id']);
 
             if (empty($result)) {
+
+                // Get old data
+                $OldData = SubProductMilkService::getData($_Data['id']);
+
                 $id = SubProductMilkService::updateData($_Data);
                 $this->data_result['DATA']['id'] = $id;
+
+                $ProductMilkDetail = ProductMilkDetailService::getListByParent($_Data['id']);
+
+                foreach ($ProductMilkDetail as $key1 => $value1) {
+                    
+                    // find master goal by name
+                    $old_goal_name = $OldData['proname'] . ' - ' . $OldData['subname'] . ' - ' . $value1['name'];
+                    $MasterGoal = MasterGoalService::getDataByName($old_goal_name);
+                    // Add master goal
+                    if(!empty($MasterGoal)){
+                        $MasterGoal['goal_name'] = $OldData['proname'] . ' - ' . $_Data['name'] . ' - ' . $value1['name'];
+                        MasterGoalService::updateData($MasterGoal);
+                    }
+
+                }
+
             } else {
                 // print_r($result);exit;
                 $this->data_result['STATUS'] = 'ERROR';

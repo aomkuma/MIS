@@ -45,6 +45,10 @@ class MasterGoalService {
         return MasterGoal::find($id);
     }
 
+    public static function getDataByName($goal_name) {
+        return MasterGoal::where('goal_name', $goal_name)->get()->toArray()[0];
+    }
+
     public static function updateData($obj) {
         if (empty($obj['id'])) {
             $obj['create_date'] = date('Y-m-d H:i:s');

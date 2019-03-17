@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Service\ProductMilkService;
+use App\Service\SubProductMilkService;
 use App\Service\ProductMilkDetailService;
+use App\Service\MasterGoalService;
 
 class ProductMilkDetailController extends Controller {
 
@@ -97,8 +100,34 @@ class ProductMilkDetailController extends Controller {
             $result = ProductMilkDetailService::checkDuplicate($_Data['id'], $_Data['name'], $_Data['sub_product_milk_id']);
 
             if (empty($result)) {
+
+                // Get old data
+                $OldData = ProductMilkDetailService::getData($_Data['id']);
+
                 $id = ProductMilkDetailService::updateData($_Data);
                 $this->data_result['DATA']['id'] = $id;
+
+                // get product milk name & sub product milk name
+                $SubProductMilk = SubProductMilkService::getData($_Data['sub_product_milk_id']);
+                $ProductMilkName = $SubProductMilk['proname'];
+                $SubProductMilkName = $SubProductMilk['subname'];
+                
+                // find master goal by name
+                $old_goal_name = $ProductMilkName . ' - ' . $SubProductMilkName . ' - ' . $OldData['name'];
+                $MasterGoal = MasterGoalService::getDataByName($old_goal_name);
+                // Add master goal
+                if(!empty($MasterGoal)){
+                    $MasterGoal = [];
+                    $MasterGoal['id'] = '';
+                    $MasterGoal['goal_type'] = 'II';
+                    $MasterGoal['menu_type'] = 'ข้อมูลการผลิต';
+                    $MasterGoal['actives'] = 'Y';    
+                }
+
+                $MasterGoal['goal_name'] = $ProductMilkName . ' - ' . $SubProductMilkName . ' - ' . $_Data['name'];
+
+                MasterGoalService::updateData($MasterGoal);
+
             } else {
                 // print_r($result);exit;
                 $this->data_result['STATUS'] = 'ERROR';
