@@ -26,7 +26,7 @@ class ProductMilkDetailService {
         return ProductMilkDetail::select("product_milk_detail.*", 'product_milk.name as proname', 'subproduct_milk.name as subname', 'factory.factory_name')
                         ->join('subproduct_milk', 'subproduct_milk.id', '=', 'product_milk_detail.sub_product_milk_id')
                         ->join('product_milk', 'product_milk.id', '=', 'subproduct_milk.product_milk_id')
-                 ->join('factory', 'factory.id', '=', 'product_milk.factory_id')
+                        ->join('factory', 'factory.id', '=', 'product_milk.factory_id')
                         ->orderBy("product_milk_detail.id", 'DESC')
                         ->get()
                         ->toArray();
@@ -39,11 +39,13 @@ class ProductMilkDetailService {
                         ->toArray();
     }
 
-    public static function getListByParent2($sub_product_milk_id) {
+    public static function getListByParent2($sub_product_milk_id,$facid) {
         return ProductMilkDetail::select("product_milk_detail.*", 'product_milk.name as proname', 'subproduct_milk.name as subname')
                         ->join('subproduct_milk', 'subproduct_milk.id', '=', 'product_milk_detail.sub_product_milk_id')
                         ->join('product_milk', 'product_milk.id', '=', 'subproduct_milk.product_milk_id')
+                        ->join('factory', 'factory.id', '=', 'product_milk.factory_id')
                         ->where('sub_product_milk_id', $sub_product_milk_id)
+                        ->where('factory.id', $facid)
                         ->orderBy("product_milk_detail.id", 'DESC')
                         ->get()
                         ->toArray();
