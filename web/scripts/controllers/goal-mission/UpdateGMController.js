@@ -206,6 +206,7 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
             }
         }
         $scope.totalAmount = parseFloat($scope.totalAmount.toFixed(2));
+        console.log('Total amount : ', $scope.totalAmount);
     }
     $scope.reCalcPrice = function(){
         $scope.totalPriceValue = 0;

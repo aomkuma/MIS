@@ -761,7 +761,7 @@ class VeterinaryController extends Controller {
         $costList = [
             ['item' => 'สมาชิก', 'unit' => 'ราย']
             , ['item' => 'โคนม', 'unit' => 'ตัว']
-            , ['item' => 'ค่าวัสดุ', 'unit' => 'บาท']
+            , ['item' => 'ค่าเวชภัณฑ์', 'unit' => 'บาท']
             , ['item' => 'ค่าบริการ', 'unit' => 'บาท']
         ];
 
@@ -859,7 +859,7 @@ class VeterinaryController extends Controller {
         $costList = [
             ['item' => 'สมาชิก', 'unit' => 'ราย']
             , ['item' => 'โคนม', 'unit' => 'ตัว']
-            , ['item' => 'ค่าวัสดุ', 'unit' => 'บาท']
+            , ['item' => 'ค่าเวชภัณฑ์', 'unit' => 'บาท']
             , ['item' => 'ค่าบริการ', 'unit' => 'บาท']
         ];
         if ($quarter == 1) {
@@ -975,7 +975,7 @@ class VeterinaryController extends Controller {
         $costList = [
             ['item' => 'สมาชิก', 'unit' => 'ราย']
             , ['item' => 'โคนม', 'unit' => 'ตัว']
-            , ['item' => 'ค่าวัสดุ', 'unit' => 'บาท']
+            , ['item' => 'ค่าเวชภัณฑ์', 'unit' => 'บาท']
             , ['item' => 'ค่าบริการ', 'unit' => 'บาท']
         ];
 
@@ -1094,7 +1094,7 @@ class VeterinaryController extends Controller {
             $costList = [
                 ['item' => 'สมาชิก', 'unit' => 'ราย']
                 , ['item' => 'โคนม', 'unit' => 'ตัว']
-                , ['item' => 'ค่าวัสดุ', 'unit' => 'บาท']
+                , ['item' => 'ค่าเวชภัณฑ์', 'unit' => 'บาท']
                 , ['item' => 'ค่าบริการ', 'unit' => 'บาท']
             ];
 

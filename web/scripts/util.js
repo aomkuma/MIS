@@ -62,9 +62,9 @@ function regExValidate(fieldVal, regExType) {
 	}
 }
 
-Number.prototype.toFixed = function(decimalPlaces) {
-	return toFixedPoint((this * 1).toPrecision(10), decimalPlaces);
-};
+// Number.prototype.toFixed = function(decimalPlaces) {
+// 	return toFixedPoint((this * 1).toPrecision(10), decimalPlaces);
+// };
 
 function toFixedPoint(num, dotplace) {
 	num = num + '';
