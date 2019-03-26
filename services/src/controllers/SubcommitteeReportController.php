@@ -129,6 +129,7 @@ class SubcommitteeReportController extends Controller {
 
                 default : $result = null;
             }
+//            
 //            die();
             // $filename = 'MIS_Report-รายงานรายเดือน' . '_' . date('YmdHis') . '.xlsx';
             $filename = 'MIS_Report-Subcommittee_' . '_' . date('YmdHis') . '.xlsx';
@@ -2205,6 +2206,31 @@ class SubcommitteeReportController extends Controller {
                     )
                 )
         );
+          $row+=7;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), 'หมายเหตู');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), 'เป้าหมายจากแผนปฏิบัติงานปี ' . ($condition['YearFrom'] + 543));
+        $objPHPExcel->getActiveSheet()->mergeCells('B' . $row . ':D' . $row);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':D' . $row)->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':D' . $row)->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':D' . $row)->applyFromArray(
+                array(
+                    'font' => array(
+                        'name' => 'AngsanaUPC'
+                    )
+                )
+        );
+        $row++;
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), 'ข้อมูล ณ วันที่ ' . ($condition['date'] ));
+        $objPHPExcel->getActiveSheet()->mergeCells('B' . $row . ':D' . $row);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':D' . $row)->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':D' . $row)->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':D' . $row)->applyFromArray(
+                array(
+                    'font' => array(
+                        'name' => 'AngsanaUPC'
+                    )
+                )
+        );
         return $objPHPExcel;
     }
 
@@ -2316,8 +2342,8 @@ class SubcommitteeReportController extends Controller {
             $beforeQuarter = $condition['QuarterFrom'];
             $year = $condition['YearFrom'];
             $beforeyear = $condition['YearFrom'];
-            
-              if ($condition['QuarterFrom'] == 1) {
+
+            if ($condition['QuarterFrom'] == 1) {
                 $montharr = [10, 11, 12];
                 $beforemontharr = [7, 8, 9];
                 $year--;
@@ -2765,6 +2791,33 @@ class SubcommitteeReportController extends Controller {
                     )
                 )
         );
+        $row++;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), 'หมายเหตู');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), 'เป้าหมายจากแผนปฏิบัติงานปี ' . ($condition['YearFrom'] + 543));
+        $objPHPExcel->getActiveSheet()->mergeCells('B' . $row . ':D' . $row);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':D' . $row)->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':D' . $row)->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':D' . $row)->applyFromArray(
+                array(
+                    'font' => array(
+                        'name' => 'AngsanaUPC'
+                    )
+                )
+        );
+        $row++;
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), 'ข้อมูล ณ วันที่ ' . ($condition['date'] ));
+        $objPHPExcel->getActiveSheet()->mergeCells('B' . $row . ':D' . $row);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':D' . $row)->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':D' . $row)->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':D' . $row)->applyFromArray(
+                array(
+                    'font' => array(
+                        'name' => 'AngsanaUPC'
+                    )
+                )
+        );
+
+
         $objPHPExcel = $this->generatesheet5($objPHPExcel, $condition, $header, $detail, $total);
         return $objPHPExcel;
     }
@@ -3357,7 +3410,72 @@ class SubcommitteeReportController extends Controller {
                     )
                 )
         );
-
+$row++;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), 'หมายเหตุ');
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), '1. สูญเสียทั้งกระบวนการผลิตหมายถึง ' );
+        $objPHPExcel->getActiveSheet()->mergeCells('B' . $row . ':H' . $row);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':H' . $row)->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':H' . $row)->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':H' . $row)->applyFromArray(
+                array(
+                    'font' => array(
+                        'name' => 'AngsanaUPC'
+                    )
+                )
+        );
+        $row++;
+        
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), '  1.1 สญเสียในกระบวนการเกิดจากการปรุงแต่งและการบรรจุ ' );
+        $objPHPExcel->getActiveSheet()->mergeCells('B' . $row . ':H' . $row);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':H' . $row)->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':H' . $row)->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':H' . $row)->applyFromArray(
+                array(
+                    'font' => array(
+                        'name' => 'AngsanaUPC'
+                    )
+                )
+        );
+       
+        $row++;
+        
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), '  1.2 สูญเสียหลังกระบวนการผลิตเกิดจากสินค้าชำรุด,การตรวจคุณภาพ,ตัวอย่างคัดเบอร์ลังและผลิตภัณฑ์ที่คุณภาพไม่ตรงตามมาตรฐาน อ.ส.ค. ' );
+        $objPHPExcel->getActiveSheet()->mergeCells('B' . $row . ':H' . $row);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':H' . $row)->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':H' . $row)->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':H' . $row)->applyFromArray(
+                array(
+                    'font' => array(
+                        'name' => 'AngsanaUPC'
+                    )
+                )
+        );
+        $row++;
+        
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), '  1.3 สูญเสียระหว่างรอจำหน่ายเกิดจากสินค้าชำรุดจากสัตว์และการขนส่งเคลื่อนย้าย' );
+        $objPHPExcel->getActiveSheet()->mergeCells('B' . $row . ':H' . $row);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':H' . $row)->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':H' . $row)->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':H' . $row)->applyFromArray(
+                array(
+                    'font' => array(
+                        'name' => 'AngsanaUPC'
+                    )
+                )
+        );
+         $row++;
+        
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), 'ข้อมูล ณ วันที่ ' . ($condition['date'] ));
+        $objPHPExcel->getActiveSheet()->mergeCells('B' . $row . ':H' . $row);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':H' . $row)->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':H' . $row)->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':H' . $row)->applyFromArray(
+                array(
+                    'font' => array(
+                        'name' => 'AngsanaUPC'
+                    )
+                )
+        );
 ////
         //  $postion = $_SESSION["postion"];
         $hrow = $_SESSION["row"];
@@ -3378,7 +3496,7 @@ class SubcommitteeReportController extends Controller {
         $objPHPExcel->getActiveSheet()->getStyle('A' . ($hrow) . ':E' . ($hrow + 1))->getFont()->setSize(14);
         $objPHPExcel->getActiveSheet()->getStyle('A' . ($hrow) . ':E' . ($hrow + 1))->getFont()->setBold(true);
 ////
-
+        
         return $objPHPExcel;
     }
 
