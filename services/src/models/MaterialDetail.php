@@ -10,6 +10,7 @@ class MaterialDetail extends \Illuminate\Database\Eloquent\Model {
                   , 'material_type_id'
                   , 'amount_unit'
   								, 'amount'
+                  , 'price'
                   , 'create_date'
                   , 'update_date'
   							);

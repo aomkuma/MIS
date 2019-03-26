@@ -84,16 +84,26 @@
 								ปริมาณ
 							</div>
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input type="text" ng-model="SpermDetail.amount" class="form-control">
+							</div>
+							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 								<select class="form-control" ng-model="SpermDetail.amount_unit"><!--ng-change="loadDairyFarming('CHILD', SpermDetail.dairy_farming_id)" -->
 									<option value="">กรุณาเลือก..</option>
+									<option value="ลิตร">ลิตร</option>
+									<option value="ชุด">ชุด</option>
+									<option value="กล่อง">กล่อง</option>
+									<option value="ถัง">ถัง</option>
+									<option value="แกนล่อน">แกนล่อน</option>
+									<option value="ขวด">ขวด</option>
+									<option value="กิโลกรัม">กิโลกรัม</option>
 									<option value="หลอด">หลอด</option>
 								</select>
 							</div>
 							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-								จำนวน
+								มูลค่า
 							</div>
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<input type="text" ng-model="SpermDetail.amount" class="form-control">
+								<input type="text" ng-model="SpermDetail.price" class="form-control">
 							</div>
 							<div class="col-lg-1 col-md-1">
 								<button class="btn btn-danger" ng-click="removeDetail(SpermDetail.id, parentIndex)">

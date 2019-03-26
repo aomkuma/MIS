@@ -80,6 +80,15 @@ class VeterinaryController extends Controller {
             $condition = $params['obj']['condition'];
             $regions = $params['obj']['region'];
 
+            $RegionList = [];
+            foreach ($regions as $key => $value) {
+                if($value['RegionID'] != 2){
+                    $RegionList[] = $value;
+                }
+            }
+
+            $regions = $RegionList;
+
             if ($condition['DisplayType'] == 'monthly') {
                 $Result = $this->getMonthDataList($condition, $regions);
             } else if ($condition['DisplayType'] == 'quarter') {
@@ -145,7 +154,7 @@ class VeterinaryController extends Controller {
                 $monthName = VeterinaryController::getMonthName($curMonth);
 
                 $data = [];
-                $data['RegionName'] = $value['RegionName'] . ' (สหกรณ์)';
+                $data['RegionName'] = $value['RegionName'];
                 $data['Month'] = $monthName;
                 $data['Quarter'] = ($i + 1);
                 $data['Year'] = ($curYear);
@@ -209,65 +218,68 @@ class VeterinaryController extends Controller {
 
                 array_push($DataList, $data);
 
-                #### End of cooperative 
-                // get lab type
-                $data = [];
-                $data['RegionName'] = $value['RegionName'] . ' (ห้องปฏิบัติการ)';
-                $data['Month'] = $monthName;
-                $data['Quarter'] = ($i + 1);
-                $data['Year'] = ($curYear);
-                $farm_type = 'lab';
-                $item_type = 'โคนม';
-                $CurrentCowData = VeterinaryService::getMainList($curYear, $curMonth, $region_id, $farm_type, $item_type);
-                $data['CurrentCowData'] = floatval($CurrentCowData['sum_amount']);
-                $BeforeCowData = VeterinaryService::getMainList($beforeYear, $curMonth, $region_id, $farm_type, $item_type);
-                $data['BeforeCowData'] = floatval($BeforeCowData['sum_amount']);
 
-                $item_type = 'ค่าบริการ';
-                $CurrentServiceData = VeterinaryService::getMainList($curYear, $curMonth, $region_id, $farm_type, $item_type);
-                $data['CurrentServiceData'] = floatval($CurrentServiceData['sum_amount']);
-                $BeforeServiceData = VeterinaryService::getMainList($beforeYear, $curMonth, $region_id, $farm_type, $item_type);
-                $data['BeforeServiceData'] = floatval($BeforeServiceData['sum_amount']);
+                if($value['RegionID'] == 1){
+                    #### End of cooperative 
+                    // get lab type
+                    $data = [];
+                    $data['RegionName'] = $value['RegionName'] . ' (ห้องปฏิบัติการ)';
+                    $data['Month'] = $monthName;
+                    $data['Quarter'] = ($i + 1);
+                    $data['Year'] = ($curYear);
+                    $farm_type = 'lab';
+                    $item_type = 'โคนม';
+                    $CurrentCowData = VeterinaryService::getMainList($curYear, $curMonth, $region_id, $farm_type, $item_type);
+                    $data['CurrentCowData'] = floatval($CurrentCowData['sum_amount']);
+                    $BeforeCowData = VeterinaryService::getMainList($beforeYear, $curMonth, $region_id, $farm_type, $item_type);
+                    $data['BeforeCowData'] = floatval($BeforeCowData['sum_amount']);
 
-                $diffCowData = floatval($data['CurrentCowData']) - floatval($data['BeforeCowData']);
-                $data['DiffCowData'] = $diffCowData;
+                    $item_type = 'ค่าบริการ';
+                    $CurrentServiceData = VeterinaryService::getMainList($curYear, $curMonth, $region_id, $farm_type, $item_type);
+                    $data['CurrentServiceData'] = floatval($CurrentServiceData['sum_amount']);
+                    $BeforeServiceData = VeterinaryService::getMainList($beforeYear, $curMonth, $region_id, $farm_type, $item_type);
+                    $data['BeforeServiceData'] = floatval($BeforeServiceData['sum_amount']);
 
-                if (floatval($data['BeforeCowData']) != 0) {
-                    $data['DiffCowDataPercentage'] = floatval($data['CurrentCowData']) / floatval($data['BeforeCowData'] * 100);
-                } else {
-                    $data['DiffCowDataPercentage'] = 0;
-                }
-                // if (is_nan($data['DiffCowDataPercentage'])) {
-                //     $data['DiffCowDataPercentage'] = 0;
-                // }
-                $diffServiceData = $data['CurrentServiceData'] - $data['BeforeServiceData'];
-                $data['DiffServiceData'] = $diffServiceData;
+                    $diffCowData = floatval($data['CurrentCowData']) - floatval($data['BeforeCowData']);
+                    $data['DiffCowData'] = $diffCowData;
 
-                if ($data['BeforeServiceData'] != 0) {
-                    $data['DiffServiceDataPercentage'] = floatval($data['CurrentServiceData']) / floatval($data['BeforeServiceData'] * 100);
-                } else {
-                    $data['DiffServiceDataPercentage'] = 0;
-                }
-                // if (is_nan($data['DiffServiceDataPercentage'])) {
-                //     $data['DiffServiceDataPercentage'] = 0;
-                // }
-                $data['CreateDate'] = $CurrentCowData['update_date'];
-                $data['ApproveDate'] = $CurrentCowData['office_approve_date'];
-                if (!empty($CurrentCowData['office_approve_id'])) {
-                    if (empty($CurrentCowData['office_approve_comment'])) {
-                        $data['Status'] = 'อนุมัติ';
+                    if (floatval($data['BeforeCowData']) != 0) {
+                        $data['DiffCowDataPercentage'] = floatval($data['CurrentCowData']) / floatval($data['BeforeCowData'] * 100);
                     } else {
-                        $data['Status'] = 'ไม่อนุมัติ';
+                        $data['DiffCowDataPercentage'] = 0;
                     }
-                }
-                $data['Description'] = ['farm_type' => $farm_type
-                    , 'item_type' => $item_type
-                    , 'months' => $curMonth
-                    , 'years' => $curYear
-                    , 'region_id' => $region_id
-                ];
-                array_push($DataList, $data);
+                    // if (is_nan($data['DiffCowDataPercentage'])) {
+                    //     $data['DiffCowDataPercentage'] = 0;
+                    // }
+                    $diffServiceData = $data['CurrentServiceData'] - $data['BeforeServiceData'];
+                    $data['DiffServiceData'] = $diffServiceData;
 
+                    if ($data['BeforeServiceData'] != 0) {
+                        $data['DiffServiceDataPercentage'] = floatval($data['CurrentServiceData']) / floatval($data['BeforeServiceData'] * 100);
+                    } else {
+                        $data['DiffServiceDataPercentage'] = 0;
+                    }
+                    // if (is_nan($data['DiffServiceDataPercentage'])) {
+                    //     $data['DiffServiceDataPercentage'] = 0;
+                    // }
+                    $data['CreateDate'] = $CurrentCowData['update_date'];
+                    $data['ApproveDate'] = $CurrentCowData['office_approve_date'];
+                    if (!empty($CurrentCowData['office_approve_id'])) {
+                        if (empty($CurrentCowData['office_approve_comment'])) {
+                            $data['Status'] = 'อนุมัติ';
+                        } else {
+                            $data['Status'] = 'ไม่อนุมัติ';
+                        }
+                    }
+                    $data['Description'] = ['farm_type' => $farm_type
+                        , 'item_type' => $item_type
+                        , 'months' => $curMonth
+                        , 'years' => $curYear
+                        , 'region_id' => $region_id
+                    ];
+                    array_push($DataList, $data);
+                }
+                
                 $DataSummary['SummaryCurrentCow'] = $DataSummary['SummaryCurrentCow'] + $data['CurrentCowData'];
                 $DataSummary['SummaryBeforeCow'] = $DataSummary['SummaryBeforeCow'] + $data['BeforeCowData'];
 
