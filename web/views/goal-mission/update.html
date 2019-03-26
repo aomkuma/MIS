@@ -1,6 +1,11 @@
 <div ng-include src="'views/header.html'"></div>
 <div class="page-header">
-	<h3>บริหารจัดการข้อมูล > เป้าหมายการดำเนินงาน</h3>
+	<h3>
+		<span ng-repeat="data in MenuName">
+	        <span ng-show="$index > 0">></span>
+	        {{data.menu_name_th}}
+	    </span>
+	</h3>
 </div>
 <fieldset ng-disabled="Data.editable == 'N' || !Maker">
 	<div class="col-lg-10 col-lg-offset-1" ng-form="form_data">

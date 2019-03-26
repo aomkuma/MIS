@@ -51,26 +51,20 @@ class MSIController extends Controller {
 
     public function checkRegion($regionID) {
         switch ($regionID) {
-            case '1':
-                return 'จังหวัดสระบุรี';
-                break;
-            case '2':
-                return 'กรุงเทพมหานคร';
-                break;
             case '3':
-                return 'ภาคกลาง';
+                return 'โรงงานนมมวกเหล็ก';
                 break;
             case '4':
-                return 'จังหวัดประจวบคีรีขันธ์';
+                return 'โรงงานนมปราณบุรี';
                 break;
             case '5':
-                return 'จังหวัดขอนแก่น';
+                return 'โรงงานนมขอนแก่น';
                 break;
             case '6':
-                return 'จังหวัดสุโขทัย';
+                return 'โรงงานนมสุโขทัย';
                 break;
             case '7':
-                return 'จังหวัดเชียงใหม่';
+                return 'โรงงานนมเชียงใหม่';
                 break;
             default: break;
         }
@@ -85,6 +79,17 @@ class MSIController extends Controller {
             $params = $request->getParsedBody();
             $user_session = $params['user_session'];
             $regions = $params['obj']['region'];
+
+            $RegionList = [];
+            foreach ($regions as $key => $value) {
+                if($value['RegionID'] != 1 && $value['RegionID'] != 2){
+                    $RegionList[] = $value;
+                }
+            }
+
+            $regions = $RegionList;
+            // print_r($regions);exit;
+
             $monthFrom = $params['obj']['condition']['MonthFrom'];
             $monthTo = $params['obj']['condition']['MonthTo'];
             $years = $params['obj']['condition']['YearTo'];
@@ -467,6 +472,16 @@ class MSIController extends Controller {
             $params = $request->getParsedBody();
             $user_session = $params['user_session'];
             $regions = $params['obj']['region'];
+
+            $RegionList = [];
+            foreach ($regions as $key => $value) {
+                if($value['RegionID'] != 1 && $value['RegionID'] != 2){
+                    $RegionList[] = $value;
+                }
+            }
+
+            $regions = $RegionList;
+
             $quarter = $params['obj']['condition']['QuarterFrom'];
             $years = $params['obj']['condition']['YearTo'];
 
@@ -571,6 +586,16 @@ class MSIController extends Controller {
             $params = $request->getParsedBody();
             $user_session = $params['user_session'];
             $regions = $params['obj']['region'];
+
+            $RegionList = [];
+            foreach ($regions as $key => $value) {
+                if($value['RegionID'] != 1 && $value['RegionID'] != 2){
+                    $RegionList[] = $value;
+                }
+            }
+
+            $regions = $RegionList;
+            
             $years = $params['obj']['condition']['YearTo'];
 
 

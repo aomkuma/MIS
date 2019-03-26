@@ -36,13 +36,17 @@
                     ->get()->toArray();      
         }
 
-        public static function getListForVeterinary($type, $parent_id = ''){
+        public static function getListForVeterinary($type, $parent_id = '', $data_arr = []){
             return DairyFarming::
-                    where(function($query) use ($type, $parent_id){
+                    where(function($query) use ($type, $parent_id, $data_arr){
                         
                         $query->where('actives' , 'Y');
                         if($type == 'MAIN'){
                             $query->whereNull('parent_id');
+                            if(!empty($data_arr)){
+                                $query->whereIn('dairy_farming_name', $data_arr);
+                            }
+                            
                         }else{
                             if(!empty($parent_id)){
                                 $query->where('parent_id' , $parent_id);    

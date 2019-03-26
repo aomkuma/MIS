@@ -1,6 +1,11 @@
 <div ng-include src="'views/header.html'"></div>
 <div class="page-header">
-	<h3>ข้อมูลอุตสาหกรรม  >  ข้อมูลการจำหน่ายผลิตภัณฑ์</h3>
+	<h3>
+		<span ng-repeat="data in MenuName">
+	        <span ng-show="$index > 0">></span>
+	        {{data.menu_name_th}}
+	    </span>
+	</h3>
 </div>
 <div class="col-lg-10 col-lg-offset-1" ng-form="form_data">
 	<div class="row form-group">
@@ -68,7 +73,7 @@
 							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 								ประเภทหลัก
 							</div>
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 								<select class="form-control" ng-model="DataDetail.production_sale_info_type1" ng-options="data.id as data.name for data in ProductMilkList[parentIndex]" ng-change="loadSubProductMilk(DataDetail.production_sale_info_type1, parentIndex)"><!--ng-change="loadDairyFarming('CHILD', DataDetail.dairy_farming_id)" -->
 									<option value="">กรุณาเลือก..</option>
 								</select>
@@ -76,7 +81,7 @@
 							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 								ประเภทย่อย
 							</div>
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 								<select class="form-control" ng-model="DataDetail.production_sale_info_type2" ng-options="data.id as data.name for data in SubProductMilkList[parentIndex]" ng-change="loadProductMilkDetail(DataDetail.production_sale_info_type2, parentIndex)"><!--ng-change="loadDairyFarming('CHILD', DataDetail.dairy_farming_id)" -->
 									<option value="">กรุณาเลือก..</option>
 								</select>
@@ -84,7 +89,7 @@
 							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 								รายการ
 							</div>
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 								<select class="form-control" ng-model="DataDetail.production_sale_info_type3" ng-options="data.id as data.name for data in ProductMilkDetailList[parentIndex]" ><!--ng-change="loadDairyFarming('CHILD', DataDetail.dairy_farming_id)" -->
 									<option value="">กรุณาเลือก..</option>
 								</select>

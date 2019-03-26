@@ -1,6 +1,9 @@
 <div ng-include src="'views/header.html'"></div>
 <div class="page-header">
-	<h3>บริหารจัดการข้อมูล > บริหารจัดการกิจกรรมบริการสัตวแพทย์</h3>
+	<span ng-repeat="data in MenuName">
+	        <span ng-show="$index > 0">></span>
+	        {{data.menu_name_th}}
+	    </span>
 </div>
 <div class="col-lg-10 col-lg-offset-1" ng-form="form_data">
 	<div class="row form-group">

@@ -1,7 +1,9 @@
 angular.module('e-homework').controller('MainISController', function($scope, $cookies, $filter, $state, $uibModal, HTTPService, IndexOverlayFactory) {
 	//console.log('Hello !');
     $scope.DEFAULT_LANGUAGE = 'TH';
-    $scope.menu_selected = 'dairyfarming';
+    $scope.menu_selected = 'insemination';
+    
+
     var $user_session = sessionStorage.getItem('user_session');
     
     if($user_session != null){
@@ -12,6 +14,17 @@ angular.module('e-homework').controller('MainISController', function($scope, $co
 
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));    
     $scope.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));   
+
+    $scope.page_type = 'insemination';
+    $scope.getMenu = function(action, menu_type){
+        var params = {'menu_type' : menu_type};
+        HTTPService.clientRequest(action, params).then(function(result){
+            console.log(result);
+            $scope.MenuName = result.data.DATA.Menu;
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+    $scope.getMenu('menu/get/type' ,$scope.page_type);
 
     $scope.getUserRole = function(){
         var params = {'UserID' : $scope.currentUser.UserID};

@@ -12,6 +12,18 @@ angular.module('e-homework').controller('MainCooperativeController', function($s
 
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));    
 
+    $scope.page_type = 'cooperative';
+    $scope.getMenu = function(action, menu_type){
+        var params = {'menu_type' : menu_type};
+        HTTPService.clientRequest(action, params).then(function(result){
+            console.log(result);
+            $scope.MenuName = result.data.DATA.Menu;
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+    $scope.getMenu('menu/get/type' ,$scope.page_type);
+
+
     $scope.loadRegionList = function(){
         
         IndexOverlayFactory.overlayShow();

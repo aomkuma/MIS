@@ -1,6 +1,11 @@
 <div ng-include src="'views/header.html'"></div>
 <div class="page-header">
-	<h3>ข้อมูลกิจการโคนม  >  ข้อมูลแร่ธาตุ พรีมิกซ์ และอาหาร</h3>
+	<h3>
+		<span ng-repeat="data in MenuName">
+	        <span ng-show="$index > 0">></span>
+	        {{data.menu_name_th}}
+	    </span>
+	</h3>
 </div>
 <div class="col-lg-10 col-lg-offset-1" ng-form="form_data">
 	<div class="row form-group">
@@ -63,31 +68,37 @@
 					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 						วันที่แก้ไขล่าสุด {{getThaiDateTimeFromString(MineralDetail.update_date)}}
 					</div>
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						รายการ
-					</div>
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select class="form-control" ng-model="MineralDetail.food_id" ng-options="data.id as data.goal_name for data in MasterGoalList" ><!--ng-change="loadDairyFarming('CHILD', MineralDetail.dairy_farming_id)" -->
-							<option value="">กรุณาเลือก..</option>
-						</select>
-					</div>
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						ปริมาณจำหน่าย (กิโลกรัม)
-					</div>
-					<div class="col-lg-2 col-md-32 col-sm-12 col-xs-12">
-						<input type="text" class="form-control" ng-model="MineralDetail.amount">
-					</div>
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						มูลค่า (บาท)
-					</div>
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<input type="text" class="form-control" ng-model="MineralDetail.values">
-					</div>
-					<div class="col-lg-2">
-						<button class="btn btn-danger" ng-click="removeDetail(MineralDetail.id, parentIndex)">
-							<span class="glyphicon glyphicon-trash"></span> 
-							
-						</button>
+					<div class="col-lg-12">
+						<div class="row form-group">
+							<div class="col-lg-2 col-md-1 col-sm-12 col-xs-12">
+								รายการ
+							</div>
+							<div class="col-lg-5 col-md-2 col-sm-12 col-xs-12">
+								<select class="form-control" ng-model="MineralDetail.food_id" ng-options="data.id as data.goal_name for data in MasterGoalList" ><!--ng-change="loadDairyFarming('CHILD', MineralDetail.dairy_farming_id)" -->
+									<option value="">กรุณาเลือก..</option>
+								</select>
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								ปริมาณจำหน่าย (กิโลกรัม)
+							</div>
+							<div class="col-lg-2 col-md-32 col-sm-12 col-xs-12">
+								<input type="text" class="form-control" ng-model="MineralDetail.amount">
+							</div>
+							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+								มูลค่า (บาท)
+							</div>
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input type="text" class="form-control" ng-model="MineralDetail.values">
+							</div>
+							<div class="col-lg-2">
+								<button class="btn btn-danger" ng-click="removeDetail(MineralDetail.id, parentIndex)">
+									<span class="glyphicon glyphicon-trash"></span> 
+									
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 				<!--<div class="row form-group">

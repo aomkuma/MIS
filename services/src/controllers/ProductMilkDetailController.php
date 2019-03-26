@@ -116,15 +116,16 @@ class ProductMilkDetailController extends Controller {
                 $old_goal_name = $ProductMilkName . ' - ' . $SubProductMilkName . ' - ' . $OldData['name'];
                 $MasterGoal = MasterGoalService::getDataByName($old_goal_name);
                 // Add master goal
-                if(!empty($MasterGoal)){
-                    $MasterGoal = [];
+                if(empty($MasterGoal)){
+                    
                     $MasterGoal['id'] = '';
                     $MasterGoal['goal_type'] = 'II';
                     $MasterGoal['menu_type'] = 'ข้อมูลการผลิต';
                     $MasterGoal['actives'] = 'Y';    
+                    $MasterGoal['goal_name'] = $ProductMilkName . ' - ' . $SubProductMilkName . ' - ' . $_Data['name'];
+                }else{
+                    $MasterGoal['goal_name'] = $ProductMilkName . ' - ' . $SubProductMilkName . ' - ' . $_Data['name'];
                 }
-
-                $MasterGoal['goal_name'] = $ProductMilkName . ' - ' . $SubProductMilkName . ' - ' . $_Data['name'];
 
                 MasterGoalService::updateData($MasterGoal);
 

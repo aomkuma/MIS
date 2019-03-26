@@ -13,6 +13,17 @@ angular.module('e-homework').controller('MainSPController', function($scope, $co
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));    
     $scope.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));   
 
+    $scope.page_type = 'sperm';
+    $scope.getMenu = function(action, menu_type){
+        var params = {'menu_type' : menu_type};
+        HTTPService.clientRequest(action, params).then(function(result){
+            console.log(result);
+            $scope.MenuName = result.data.DATA.Menu;
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+    $scope.getMenu('menu/get/type' ,$scope.page_type);    
+
     $scope.getUserRole = function(){
         var params = {'UserID' : $scope.currentUser.UserID};
         IndexOverlayFactory.overlayShow();

@@ -14,6 +14,17 @@ angular.module('e-homework').controller('UpdateVTController', function($scope, $
     $scope.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));    
     // console.log($scope.$parent.Menu);
 
+    $scope.page_type = 'veterinary';
+    $scope.getMenu = function(action, menu_type){
+        var params = {'menu_type' : menu_type};
+        HTTPService.clientRequest(action, params).then(function(result){
+            console.log(result);
+            $scope.MenuName = result.data.DATA.Menu;
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+    $scope.getMenu('menu/get/type' ,$scope.page_type);     
+
     $scope.getUserRole = function(){
         var params = {'UserID' : $scope.currentUser.UserID};
         IndexOverlayFactory.overlayShow();
@@ -48,7 +59,7 @@ angular.module('e-homework').controller('UpdateVTController', function($scope, $
     }
 
     $scope.loadDairyFarming = function(type, parent_id, index){
-        var params = {'type':type, 'parent_id' : parent_id};
+        var params = {'type':type, 'parent_id' : parent_id, 'data_arr' : ['ทะเบียนโค','การบริการผสมเทียม']};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('dairy-farming/list/veterinary', params).then(function(result){
             if(result.data.STATUS == 'OK'){
