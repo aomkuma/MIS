@@ -1,6 +1,11 @@
 <div ng-include src="'views/header.html'"></div>
 <div class="page-header">
-	<h3>ข้อมูลกิจการโคนม  >  บริการสัตวแพทย์</h3>
+	<h3>
+		<span ng-repeat="data in MenuName">
+	        <span ng-show="$index > 0">></span>
+	        {{data.menu_name_th}}
+	    </span>
+	</h3>
 </div>
 <div class="col-lg-10 col-lg-offset-1" ng-form="form_data">
 	
@@ -102,6 +107,8 @@
 								<option value="โคนม">โคนม</option>
 								<option value="ค่าเวชภัณฑ์">ค่าเวชภัณฑ์</option>
 								<option value="ค่าบริการ">ค่าบริการ</option>
+								<option value="ค่าวัสดุ">ค่าวัสดุ</option>
+								<option value="ปริมาณงาน">ปริมาณงาน</option>
 							</select>
 						</div>
 						<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">

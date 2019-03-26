@@ -14,6 +14,17 @@ angular.module('e-homework').controller('UpdateLOPController', function($scope, 
     $scope.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));    
     // console.log($scope.$parent.Menu);
 
+    $scope.page_type = 'lost-out-process';
+    $scope.getMenu = function(action, menu_type){
+        var params = {'menu_type' : menu_type};
+        HTTPService.clientRequest(action, params).then(function(result){
+            console.log(result);
+            $scope.MenuName = result.data.DATA.Menu;
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+    $scope.getMenu('menu/get/type' ,$scope.page_type);
+    
     $scope.getUserRole = function(){
         var params = {'UserID' : $scope.currentUser.UserID};
         IndexOverlayFactory.overlayShow();
@@ -66,7 +77,7 @@ angular.module('e-homework').controller('UpdateLOPController', function($scope, 
     }
 
     $scope.loadMasterGoalList = function(){
-        var params = {'actives':'Y', 'menu_type' : 'การสูญเสียนอกกระบวนการ'};
+        var params = {'actives':'Y', 'menu_type' : 'การสูญเสียหลังกระบวนการ'};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('master-goal/list', params).then(function(result){
             if(result.data.STATUS == 'OK'){

@@ -11,7 +11,18 @@ angular.module('e-homework').controller('UpdateSPSController', function($scope, 
     }
     $scope.ID = $routeParams.id;
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session')); 
-    $scope.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));       
+    $scope.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));  
+
+    $scope.page_type = 'sperm-sale';
+    $scope.getMenu = function(action, menu_type){
+        var params = {'menu_type' : menu_type};
+        HTTPService.clientRequest(action, params).then(function(result){
+            console.log(result);
+            $scope.MenuName = result.data.DATA.Menu;
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+    $scope.getMenu('menu/get/type' ,$scope.page_type);           
     // console.log($scope.$parent.Menu);
 
     $scope.getUserRole = function(){

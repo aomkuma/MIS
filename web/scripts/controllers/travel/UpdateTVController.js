@@ -13,6 +13,17 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));    
     // console.log($scope.$parent.Menu);
 
+    $scope.page_type = 'travel';
+    $scope.getMenu = function(action, menu_type){
+        var params = {'menu_type' : menu_type};
+        HTTPService.clientRequest(action, params).then(function(result){
+            console.log(result);
+            $scope.MenuName = result.data.DATA.Menu;
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+    $scope.getMenu('menu/get/type' ,$scope.page_type);       
+
     $scope.getUserRole = function(){
         var params = {'UserID' : $scope.currentUser.UserID};
         IndexOverlayFactory.overlayShow();

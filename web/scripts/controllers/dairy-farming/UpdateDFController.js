@@ -14,6 +14,17 @@ angular.module('e-homework').controller('UpdateDFController', function($scope, $
     $scope.$parent.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));      
     // console.log($scope.$parent.Menu);
 
+    $scope.page_type = 'dairy-farming';
+    $scope.getMenu = function(action, menu_type){
+        var params = {'menu_type' : menu_type};
+        HTTPService.clientRequest(action, params).then(function(result){
+            console.log(result);
+            $scope.MenuName = result.data.DATA.Menu;
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+    $scope.getMenu('menu/get/type' ,$scope.page_type);
+    
     $scope.loadParentList = function(action){
         var params = {'actives' : 'Y'};
         IndexOverlayFactory.overlayShow();

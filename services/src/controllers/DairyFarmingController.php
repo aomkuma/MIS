@@ -47,8 +47,9 @@
                 $params = $request->getParsedBody();
                 $type = $params['obj']['type'];
                 $parent_id = $params['obj']['parent_id'];
+                $data_arr = $params['obj']['data_arr'];
                 
-                $_List = DairyFarmingService::getListForVeterinary($type, $parent_id);
+                $_List = DairyFarmingService::getListForVeterinary($type, $parent_id, $data_arr);
 
                 $this->data_result['DATA']['List'] = $_List;
 

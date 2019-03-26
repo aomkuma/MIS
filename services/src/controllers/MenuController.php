@@ -128,6 +128,43 @@
             }
         }
 
+        public function getMenuByType($request, $response, $args){
+            try{
+                $params = $request->getParsedBody();
+                $menu_type = $params['obj']['menu_type'];
+                $user_session = $params['user_session'];
+
+                $_Menu = MenuService::getMenuByType($menu_type);
+                $menu_id = $_Menu['id'];
+                // find parent menu
+                $MenuList = [];
+                $menu_check = $_Menu;
+                $cnt = 0;
+                do{
+                    // echo $menu_check->parent_id;
+                    // print_r($menu_check);
+                    $menu = MenuService::getMenu($menu_check['parent_menu']);
+                    // print_r($menu);
+                    $menu_check = $menu;
+                    array_unshift($MenuList, $menu);
+                    //exit;
+                    $cnt++;
+                }while($menu['parent_menu'] != '0' && $cnt < 5);
+                array_push($MenuList, $_Menu);
+                // exit;
+                if(!empty($user_session['email'])&&$menu_id!=''){
+                // Update User visit page
+                    MenuService::updateVisit($user_session['email'], $menu_id);
+                }
+                $this->data_result['DATA']['Menu'] = $MenuList;
+
+                return $this->returnResponse(200, $this->data_result, $response, false);
+
+            }catch(\Exception $e){
+                return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+            }
+        }       
+
         public function getMenu($request, $response, $args){
             try{
                 $params = $request->getParsedBody();

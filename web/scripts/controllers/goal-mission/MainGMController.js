@@ -12,7 +12,19 @@ angular.module('e-homework').controller('MainGMController', function($scope, $co
     }
 
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));   
-    $scope.$parent.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));   
+    $scope.$parent.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));  
+
+    $scope.page_type = 'goal-mission';
+    $scope.getMenu = function(action, menu_type){
+        var params = {'menu_type' : menu_type};
+        HTTPService.clientRequest(action, params).then(function(result){
+            console.log(result);
+            $scope.MenuName = result.data.DATA.Menu;
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+    $scope.getMenu('menu/get/type' ,$scope.page_type);
+     
     $scope.Approval = false;
     $scope.getUserRole = function(){
         var params = {'UserID' : $scope.currentUser.UserID};

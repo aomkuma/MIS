@@ -17,6 +17,7 @@ $app->post('/menu/get/', 'MenuController:getMenu');
 $app->post('/menu/update/', 'MenuController:updateMenu');
 $app->post('/menu/page/get/', 'MenuController:GetMenuPage');
 $app->post('/menu/get/parent/', 'MenuController:GetMenuParent');
+$app->post('/menu/get/type/', 'MenuController:getMenuByType');
 
 $app->post('/account-permission/get/', 'AccountPermissionController:getData');
 $app->post('/account-permission/update/', 'AccountPermissionController:updateData');

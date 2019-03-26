@@ -1,6 +1,11 @@
 <div ng-include src="'views/header.html'"></div>
 <div class="page-header">
-	<h3>ข้อมูลอุตสาหกรรม  >  การสูญเสียรอการจำหน่าย</h3>
+	<h3>
+		<span ng-repeat="data in MenuName">
+	        <span ng-show="$index > 0">></span>
+	        {{data.menu_name_th}}
+	    </span>
+	</h3>
 </div>
 <div class="col-lg-10 col-lg-offset-1" ng-form="form_data">
 	<div class="row form-group">
@@ -66,7 +71,7 @@
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						รายการ
 					</div>
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 						<select class="form-control" ng-model="DataDetail.lost_wait_sale_type" ng-options="data.id as data.goal_name for data in MasterGoalList" ><!--ng-change="loadDairyFarming('CHILD', DataDetail.dairy_farming_id)" -->
 							<option value="">กรุณาเลือก..</option>
 						</select>

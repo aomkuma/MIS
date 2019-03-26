@@ -1,6 +1,11 @@
 <div ng-include src="'views/header.html'"></div>
 <div class="page-header">
-	<h3>ข้อมูลกิจการโคนม  >  บันทึกข้อมูลการจำหน่ายน้ำเชื้อแช่แข็ง</h3>
+	<h3>
+		<span ng-repeat="data in MenuName">
+	        <span ng-show="$index > 0">></span>
+	        {{data.menu_name_th}}
+	    </span>
+	</h3>
 </div>
 <div class="col-lg-10 col-lg-offset-1" ng-form="form_data">
 	<div class="row form-group">
@@ -63,37 +68,44 @@
 					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 						วันที่แก้ไขล่าสุด {{getThaiDateTimeFromString(SpermDetail.update_date)}}
 					</div>
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						รายการ
-					</div>
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select class="form-control" ng-model="SpermDetail.sperm_sale_type_id" ng-options="data.id as data.goal_name for data in MasterGoalList" ><!--ng-change="loadDairyFarming('CHILD', SpermDetail.dairy_farming_id)" -->
-							<option value="">กรุณาเลือก..</option>
-						</select>
-					</div>
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						จำนวน (หลอด)
-					</div>
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						<input type="text" class="form-control" ng-model="SpermDetail.amount"><!-- ng-blur="calcTotalValues(SpermDetail)"-->
-					</div>
-					<!--<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						ราคาต่อหลอด
-					</div>
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<input type="text" class="form-control" ng-model="SpermDetail.price" ng-blur="calcTotalValues(SpermDetail)">
-					</div>-->
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						มูลค่า (บาท)
-					</div>
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<input type="text" class="form-control" ng-model="SpermDetail.values">
-					</div>
-					<div class="col-lg-1 col-md-1">
-						<button class="btn btn-danger" ng-click="removeDetail(SpermDetail.id, parentIndex)">
-							<span class="glyphicon glyphicon-trash"></span> 
+					<div class="col-lg-12">
+						<div class="row form-group">
+							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+								รายการ
+							</div>
+							<div class="col-lg-5 col-md-2 col-sm-12 col-xs-12">
+								<select class="form-control" ng-model="SpermDetail.sperm_sale_type_id" ng-options="data.id as data.goal_name for data in MasterGoalList" ><!--ng-change="loadDairyFarming('CHILD', SpermDetail.dairy_farming_id)" -->
+									<option value="">กรุณาเลือก..</option>
+								</select>
+							</div>
 							
-						</button>
+						</div>
+						<div class="row form-group">
+							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+								จำนวน (หลอด)
+							</div>
+							<div class="col-lg-2 col-md-1 col-sm-12 col-xs-12">
+								<input type="text" class="form-control" ng-model="SpermDetail.amount"><!-- ng-blur="calcTotalValues(SpermDetail)"-->
+							</div>
+							<!--<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+								ราคาต่อหลอด
+							</div>
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input type="text" class="form-control" ng-model="SpermDetail.price" ng-blur="calcTotalValues(SpermDetail)">
+							</div>-->
+							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+								มูลค่า (บาท)
+							</div>
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input type="text" class="form-control" ng-model="SpermDetail.values">
+							</div>
+							<div class="col-lg-1 col-md-1">
+								<button class="btn btn-danger" ng-click="removeDetail(SpermDetail.id, parentIndex)">
+									<span class="glyphicon glyphicon-trash"></span> 
+									
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 				<!--<div class="row form-group">

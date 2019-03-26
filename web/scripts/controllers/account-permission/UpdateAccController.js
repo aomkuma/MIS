@@ -12,6 +12,19 @@ angular.module('e-homework').controller('UpdateAccController', function($scope, 
     $scope.ID = $routeParams.id;
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));    
     console.log($scope.$parent.Menu);
+
+    $scope.page_type = 'account-permission';
+    $scope.getMenu = function(action, menu_type){
+        var params = {'menu_type' : menu_type};
+        HTTPService.clientRequest(action, params).then(function(result){
+            console.log(result);
+            $scope.MenuName = result.data.DATA.Menu;
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+    $scope.getMenu('menu/get/type' ,$scope.page_type);
+
+
     $scope.loadUser = function(action, id){
         var params = {'UserID' : id};
         IndexOverlayFactory.overlayShow();

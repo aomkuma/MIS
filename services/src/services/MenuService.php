@@ -52,6 +52,11 @@
             return Page::where('menu_id', $menu_id)->first();      
         }
 
+        public static function getMenuByType($menu_type){
+            // echo $menu_type ;exit;
+            return Menu::where('menu_url', $menu_type)->first();      
+        }
+
         public static function updateMenu($obj){
 
         	$model = Menu::find($obj['id']);
