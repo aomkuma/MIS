@@ -152,4 +152,14 @@ class MineralService {
                         ->toArray();
     }
 
+    public static function getcomment($years, $months, $region_id) {
+        return Mineral::select("cooperative.cooperative_name", "mineral.months", "mineral.user_comment")
+                        ->join('cooperative', 'cooperative.id', '=', 'mineral.cooperative_id')
+                        ->where("mineral.years", $years)
+                        ->where("mineral.months", $months)
+                        ->where("mineral.region_id", $region_id)
+                        ->get()
+                        ->toArray();
+    }
+
 }

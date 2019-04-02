@@ -8,30 +8,30 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class CowBreedService {
 
-    public static function loadDataApprove($UserID){
-            return CowBreed::select("cow_breed.*", 'cooperative.cooperative_name')
-                            ->join('cooperative', 'cooperative.id', '=', 'cow_breed.cooperative_id')
-                            ->where(function($query) use ($UserID){
-                                $query->where('dep_approve_id' , $UserID);    
-                                $query->whereNull('dep_approve_date');    
-                            })
-                            ->orWhere(function($query) use ($UserID){
-                                $query->where('division_approve_id' , $UserID);    
-                                $query->whereNull('division_approve_date');    
-                            })
-                            ->orWhere(function($query) use ($UserID){
-                                $query->where('office_approve_id' , $UserID);    
-                                $query->whereNull('office_approve_date');    
-                            })
-                            ->get();
-        }
+    public static function loadDataApprove($UserID) {
+        return CowBreed::select("cow_breed.*", 'cooperative.cooperative_name')
+                        ->join('cooperative', 'cooperative.id', '=', 'cow_breed.cooperative_id')
+                        ->where(function($query) use ($UserID) {
+                            $query->where('dep_approve_id', $UserID);
+                            $query->whereNull('dep_approve_date');
+                        })
+                        ->orWhere(function($query) use ($UserID) {
+                            $query->where('division_approve_id', $UserID);
+                            $query->whereNull('division_approve_date');
+                        })
+                        ->orWhere(function($query) use ($UserID) {
+                            $query->where('office_approve_id', $UserID);
+                            $query->whereNull('office_approve_date');
+                        })
+                        ->get();
+    }
 
     public static function getMainList($years, $months, $region_id, $cow_breed_type_id) {
         return CowBreed::select(DB::raw("SUM(amount) AS sum_amount")
                                 , DB::raw("SUM(`price`) AS sum_baht")
-                                , "cow_breed.update_date","office_approve_id"
-                                    ,"office_approve_date"
-                                    ,"office_approve_comment")
+                                , "cow_breed.update_date", "office_approve_id"
+                                , "office_approve_date"
+                                , "office_approve_comment")
                         ->join("cow_breed_detail", 'cow_breed_detail.cow_breed_id', '=', 'cow_breed.id')
                         ->where("years", $years)
                         ->where("months", $months)
@@ -112,6 +112,16 @@ class CowBreedService {
                             $query->orWhere('office_approve_comment', '');
                         })
                         ->first()
+                        ->toArray();
+    }
+
+    public static function getcomment($years, $months, $region_id) {
+        return CowBreed::select("cooperative.cooperative_name", "cow_breed.months", "cow_breed.user_comment")
+                        ->join('cooperative', 'cooperative.id', '=', 'cow_breed.cooperative_id')
+                        ->where("cow_breed.years", $years)
+                        ->where("cow_breed.months", $months)
+                        ->where("cow_breed.region_id", $region_id)
+                        ->get()
                         ->toArray();
     }
 

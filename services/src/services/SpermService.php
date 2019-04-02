@@ -8,30 +8,30 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class SpermService {
 
-    public static function loadDataApprove($UserID){
-            return Sperm::select("sperm.*", 'cooperative.cooperative_name')
-                            ->join('cooperative', 'cooperative.id', '=', 'sperm.cooperative_id')
-                            ->where(function($query) use ($UserID){
-                                $query->where('dep_approve_id' , $UserID);    
-                                $query->whereNull('dep_approve_date');    
-                            })
-                            ->orWhere(function($query) use ($UserID){
-                                $query->where('division_approve_id' , $UserID);    
-                                $query->whereNull('division_approve_date');    
-                            })
-                            ->orWhere(function($query) use ($UserID){
-                                $query->where('office_approve_id' , $UserID);    
-                                $query->whereNull('office_approve_date');    
-                            })
-                            ->get();
-        }
+    public static function loadDataApprove($UserID) {
+        return Sperm::select("sperm.*", 'cooperative.cooperative_name')
+                        ->join('cooperative', 'cooperative.id', '=', 'sperm.cooperative_id')
+                        ->where(function($query) use ($UserID) {
+                            $query->where('dep_approve_id', $UserID);
+                            $query->whereNull('dep_approve_date');
+                        })
+                        ->orWhere(function($query) use ($UserID) {
+                            $query->where('division_approve_id', $UserID);
+                            $query->whereNull('division_approve_date');
+                        })
+                        ->orWhere(function($query) use ($UserID) {
+                            $query->where('office_approve_id', $UserID);
+                            $query->whereNull('office_approve_date');
+                        })
+                        ->get();
+    }
 
     public static function getMainList($years, $months, $region_id) {
         return Sperm::select(DB::raw("SUM(amount) AS sum_amount")
                                 , DB::raw("SUM(`price`) AS sum_baht")
-                                , "sperm.update_date","office_approve_id"
-                                    ,"office_approve_date"
-                                    ,"office_approve_comment")
+                                , "sperm.update_date", "office_approve_id"
+                                , "office_approve_date"
+                                , "office_approve_comment")
                         ->join("sperm_detail", 'sperm_detail.sperm_id', '=', 'sperm.id')
                         ->where("years", $years)
                         ->where("months", $months)
@@ -55,7 +55,8 @@ class SpermService {
     public static function getDetailmonth($years, $months, $sperm_item_id, $region) {
         $ckid = null;
         return Sperm::select(DB::raw("SUM(amount) AS amount")
-                                , DB::raw("SUM(`price`) AS price"))
+                                , DB::raw("SUM(`price`) AS price")
+                                , "user_comment")
                         ->join("sperm_detail", 'sperm_detail.sperm_id', '=', 'sperm.id')
                         ->where("years", $years)
                         ->where("months", $months)
@@ -179,6 +180,16 @@ class SpermService {
     public static function updateDataApprove($id, $obj) {
 
         return Sperm::where('id', $id)->update($obj);
+    }
+
+    public static function getcomment($years, $months, $region_id) {
+        return Sperm::select("cooperative.cooperative_name","sperm.months", "sperm.user_comment")
+                        ->join('cooperative', 'cooperative.id', '=', 'sperm.cooperative_id')
+                        ->where("sperm.years", $years)
+                        ->where("sperm.months", $months)
+                        ->where("sperm.region_id", $region_id)
+                        ->get()
+                        ->toArray();
     }
 
 }

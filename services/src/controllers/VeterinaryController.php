@@ -98,8 +98,7 @@ class VeterinaryController extends Controller {
             }
             $DataList = $Result['DataList'];
             $Summary = $Result['Summary'];
-            // print_r($DataList);
-            // exit;
+          
 
             $this->data_result['DATA']['DataList'] = $DataList;
             $this->data_result['DATA']['Summary'] = $Summary;

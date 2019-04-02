@@ -8,28 +8,28 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class TrainingCowBreedService {
 
-    public static function loadDataApprove($UserID){
-            return TrainingCowBreed::where(function($query) use ($UserID){
-                                $query->where('dep_approve_id' , $UserID);    
-                                $query->whereNull('dep_approve_date');    
-                            })
-                            ->orWhere(function($query) use ($UserID){
-                                $query->where('division_approve_id' , $UserID);    
-                                $query->whereNull('division_approve_date');    
-                            })
-                            ->orWhere(function($query) use ($UserID){
-                                $query->where('office_approve_id' , $UserID);    
-                                $query->whereNull('office_approve_date');    
-                            })
-                            ->get();
-        }
+    public static function loadDataApprove($UserID) {
+        return TrainingCowBreed::where(function($query) use ($UserID) {
+                            $query->where('dep_approve_id', $UserID);
+                            $query->whereNull('dep_approve_date');
+                        })
+                        ->orWhere(function($query) use ($UserID) {
+                            $query->where('division_approve_id', $UserID);
+                            $query->whereNull('division_approve_date');
+                        })
+                        ->orWhere(function($query) use ($UserID) {
+                            $query->where('office_approve_id', $UserID);
+                            $query->whereNull('office_approve_date');
+                        })
+                        ->get();
+    }
 
     public static function getMainList($years, $months, $region_id, $training_cowbreed_type_id) {
         return TrainingCowBreed::select(DB::raw("SUM(amount) AS sum_amount")
                                 , DB::raw("SUM(`values`) AS sum_baht")
-                                , "training_cowbreed.update_date","office_approve_id"
-                                    ,"office_approve_date"
-                                    ,"office_approve_comment")
+                                , "training_cowbreed.update_date", "office_approve_id"
+                                , "office_approve_date"
+                                , "office_approve_comment")
                         ->join("training_cowbreed_detail", 'training_cowbreed_detail.training_cowbreed_id', '=', 'training_cowbreed.id')
                         ->where("years", $years)
                         ->where("months", $months)
@@ -161,6 +161,16 @@ class TrainingCowBreedService {
     public static function updateDataApprove($id, $obj) {
 
         return TrainingCowBreed::where('id', $id)->update($obj);
+    }
+
+    public static function getcomment($years, $months, $region_id) {
+        return TrainingCowBreed::select("cooperative.cooperative_name", "training_cowbreed.months", "training_cowbreed.user_comment")
+                        ->join('cooperative', 'cooperative.id', '=', 'training_cowbreed.cooperative_id')
+                        ->where("training_cowbreed.years", $years)
+                        ->where("training_cowbreed.months", $months)
+                        ->where("training_cowbreed.region_id", $region_id)
+                        ->get()
+                        ->toArray();
     }
 
 }

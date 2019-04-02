@@ -180,5 +180,14 @@ class TravelService {
 
         return Travel::where('id', $id)->update($obj);
     }
+    public static function getcomment($years, $months, $region_id) {
+        return Travel::select("months", "user_comment")
+                        
+                        ->where("years", $years)
+                        ->where("months", $months)
+                        ->where("region_id", $region_id)
+                        ->get()
+                        ->toArray();
+    }
 
 }

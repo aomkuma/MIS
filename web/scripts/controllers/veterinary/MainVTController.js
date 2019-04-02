@@ -126,7 +126,7 @@ angular.module('e-homework').controller('MainVTController', function($scope, $co
                 $scope.DetailList = result.data.DATA.DetailList;
                 $scope.CooperativeList = result.data.DATA.CooperativeList;
                 // $scope.SummaryData = result.data.DATA.Summary;
-                // console.log($scope.List);
+                 console.log($scope.DetailList);
             }
             IndexOverlayFactory.overlayHide();
         });

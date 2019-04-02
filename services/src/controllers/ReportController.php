@@ -11,6 +11,7 @@ use App\Service\CowBreedService;
 use App\Service\CowGroupService;
 use App\Service\TrainingCowBreedService;
 use App\Service\InseminationService;
+use App\Service\VeterinaryService;
 use PHPExcel;
 
 class ReportController extends Controller {
@@ -43,7 +44,9 @@ class ReportController extends Controller {
     public function exportVeterinaryExcel($request, $response) {
         // error_reporting(E_ERROR);
         // error_reporting(E_ALL);
-        // ini_set('display_errors','On');           
+        // ini_set('display_errors','On');      
+        $yearList = [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $monthList = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
         try {
             $obj = $request->getParsedBody();
 
@@ -61,13 +64,36 @@ class ReportController extends Controller {
 
             switch ($condition['DisplayType']) {
                 case 'annually' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม ปี ' . ($condition['YearFrom'] + 543);
-                    $objPHPExcel = $this->generateVeterinaryExcel($objPHPExcel, $condition, $data, $cooperative, $header);
+                    foreach ($monthList as $key => $m) {
+                        $comment = VeterinaryService::getcomment($data['Description']['years'] - $yearList[$key], $m, $data['Description']['region_id']);
+                        array_push($commentarr, $comment);
+                    }
+                    $objPHPExcel = $this->generateVeterinaryExcel($objPHPExcel, $condition, $data, $cooperative, $header, $commentarr);
                     break;
                 case 'monthly' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม เดือน ' . $this->getMonthName($description['months']) . ' ปี ' . ($description['years'] + 543);
-                    $objPHPExcel = $this->generateVeterinaryExcel($objPHPExcel, $condition, $data, $cooperative, $header);
+                    $comment = VeterinaryService::getcomment($data['Description']['years'], $data['Description']['months'], $data['Description']['region_id']);
+                    array_push($commentarr, $comment);
+                    $objPHPExcel = $this->generateVeterinaryExcel($objPHPExcel, $condition, $data, $cooperative, $header, $commentarr);
                     break;
                 case 'quarter' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม ไตรมาสที่ ' . $description['quarter'] . ' ปี ' . ($condition['YearFrom'] + 543);
-                    $objPHPExcel = $this->generateVeterinaryExcel($objPHPExcel, $condition, $data, $cooperative, $header);
+                    $month = [];
+                    $year = $data['Description']['years'];
+                    if ($data['Description']['quarter'] == 1) {
+                        $textyear = $data['Description']['years'] + 1;
+                        $month = [10, 11, 12];
+                        $year--;
+                    } else if ($data['Description']['quarter'] == 2) {
+                        $month = [1, 2, 3];
+                    } else if ($data['Description']['quarter'] == 3) {
+                        $month = [4, 5, 6];
+                    } else if ($data['Description']['quarter'] == 4) {
+                        $month = [7, 8, 9];
+                    }
+                    foreach ($month as $m) {
+                        $comment = VeterinaryService::getcomment($year, $m, $data['Description']['region_id']);
+                        array_push($commentarr, $comment);
+                    }
+                    $objPHPExcel = $this->generateVeterinaryExcel($objPHPExcel, $condition, $data, $cooperative, $header, $commentarr);
                     break;
 
                 default : $result = null;
@@ -91,7 +117,7 @@ class ReportController extends Controller {
         }
     }
 
-    private function generateVeterinaryExcel($objPHPExcel, $condition, $data, $cooperative, $header) {
+    private function generateVeterinaryExcel($objPHPExcel, $condition, $data, $cooperative, $header, $comment) {
         $objPHPExcel->getActiveSheet()->setTitle("สัตวแพท");
         $objPHPExcel->getActiveSheet()->setCellValue('A1', $header);
         $objPHPExcel->getActiveSheet()->mergeCells('A2:A3');
@@ -246,7 +272,27 @@ class ReportController extends Controller {
                     )
                 )
         );
-
+        $row = $con_row + 1;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), 'หมายเหตุ :');
+        $row++;
+        foreach ($comment as $item) {
+            foreach ($item as $com) {
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), ($com['cooperative_name']));
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), ($this->getMonthName($com['months'])));
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), ($com['user_comment']));
+                $objPHPExcel->getActiveSheet()->mergeCells('C' . $row . ':E' . ($row ));
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->getFont()->setSize(14);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->applyFromArray(
+                        array(
+                            'font' => array(
+                                'name' => 'AngsanaUPC'
+                            )
+                        )
+                );
+                $row++;
+            }
+        }
         return $objPHPExcel;
     }
 
@@ -313,7 +359,9 @@ class ReportController extends Controller {
     public function exportMineralExcel($request, $response) {
         // error_reporting(E_ERROR);
         // error_reporting(E_ALL);
-        // ini_set('display_errors','On');           
+        // ini_set('display_errors','On');    
+        $yearList = [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $monthList = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
         try {
             $obj = $request->getParsedBody();
             // print_r($obj);
@@ -333,13 +381,37 @@ class ReportController extends Controller {
 
             switch ($condition['DisplayType']) {
                 case 'annually' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม ปี ' . ($condition['YearFrom'] + 543);
-                    $objPHPExcel = $this->generateMineralExcel($objPHPExcel, $condition, $data, $header, $item, $itemunit);
+                    foreach ($monthList as $key => $m) {
+                        $comment = MineralService::getcomment($data['Description']['years'] - $yearList[$key], $m, $data['Description']['region_id']);
+                        array_push($commentarr, $comment);
+                    }
+                    $objPHPExcel = $this->generateMineralExcel($objPHPExcel, $condition, $data, $header, $item, $itemunit, $commentarr);
                     break;
-                case 'monthly' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม เดือน ' . $this->getMonthName($description['months']) . ' ปี ' . ($description['years'] + 543);
-                    $objPHPExcel = $this->generateMineralExcel($objPHPExcel, $condition, $data, $header, $item, $itemunit);
+                case 'monthly' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม เดือน ' . $this->getMonthName($description['months']) . ' ปี ' . ($condition['YearFrom'] + 543);
+                    $comment = SpermService::getcomment($data['Description']['years'], $data['Description']['months'], $data['Description']['region_id']);
+                    array_push($commentarr, $comment);
+
+                    $objPHPExcel = $this->generateMineralExcel($objPHPExcel, $condition, $data, $header, $item, $itemunit, $commentarr);
                     break;
                 case 'quarter' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม ไตรมาสที่ ' . $description['quarter'] . ' ปี ' . ($condition['YearFrom'] + 543);
-                    $objPHPExcel = $this->generateMineralExcel($objPHPExcel, $condition, $data, $header, $item, $itemunit);
+                    $month = [];
+                    $year = $data['Description']['years'];
+                    if ($data['Description']['quarter'] == 1) {
+                        $textyear = $data['Description']['years'] + 1;
+                        $month = [10, 11, 12];
+                        $year--;
+                    } else if ($data['Description']['quarter'] == 2) {
+                        $month = [1, 2, 3];
+                    } else if ($data['Description']['quarter'] == 3) {
+                        $month = [4, 5, 6];
+                    } else if ($data['Description']['quarter'] == 4) {
+                        $month = [7, 8, 9];
+                    }
+                    foreach ($month as $m) {
+                        $comment = SpermService::getcomment($year, $m, $data['Description']['region_id']);
+                        array_push($commentarr, $comment);
+                    }
+                    $objPHPExcel = $this->generateMineralExcel($objPHPExcel, $condition, $data, $header, $item, $itemunit, $commentarr);
                     break;
 
                 default : $result = null;
@@ -363,7 +435,7 @@ class ReportController extends Controller {
         }
     }
 
-    private function generateMineralExcel($objPHPExcel, $condition, $data, $header, $item, $itemunit) {
+    private function generateMineralExcel($objPHPExcel, $condition, $data, $header, $item, $itemunit, $comment) {
         $objPHPExcel->getActiveSheet()->setTitle("แร่ธาตุ และอาหาร");
         $objPHPExcel->getActiveSheet()->setCellValue('A1', $header);
         $objPHPExcel->getActiveSheet()->mergeCells('A2:A3');
@@ -485,18 +557,41 @@ class ReportController extends Controller {
                     )
                 )
         );
-
+        $row = $con_row + 1;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), 'หมายเหตุ :');
+        $row++;
+        foreach ($comment as $item) {
+            foreach ($item as $com) {
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), ($com['cooperative_name']));
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), ($this->getMonthName($com['months'])));
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), ($com['user_comment']));
+                $objPHPExcel->getActiveSheet()->mergeCells('C' . $row . ':E' . ($row ));
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->getFont()->setSize(14);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->applyFromArray(
+                        array(
+                            'font' => array(
+                                'name' => 'AngsanaUPC'
+                            )
+                        )
+                );
+                $row++;
+            }
+        }
         return $objPHPExcel;
     }
 
     public function exportSpermExcel($request, $response) {
         // error_reporting(E_ERROR);
         // error_reporting(E_ALL);
-        // ini_set('display_errors','On');           
+        // ini_set('display_errors','On');        
+        $yearList = [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $monthList = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
         try {
+
             $obj = $request->getParsedBody();
             $mastesgoallist = MasterGoalService::getList('Y', 'ผลิตน้ำเชื้อแช่แข็ง');
-
+            $commentarr = [];
 
             $condition = $obj['obj']['condition'];
 //            $cooperative = $obj['obj']['CooperativeList'];
@@ -511,17 +606,39 @@ class ReportController extends Controller {
 
             switch ($condition['DisplayType']) {
                 case 'annually' :$header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม ปี ' . ($data['Description']['years'] + 543);
-                    $objPHPExcel = $this->generateSpermExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
+                    foreach ($monthList as $key => $m) {
+                        $comment = SpermService::getcomment($data['Description']['years'] - $yearList[$key], $m, $data['Description']['region_id']);
+                        array_push($commentarr, $comment);
+                    }
+
+                    $objPHPExcel = $this->generateSpermExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType'], $commentarr);
                     break;
                 case 'monthly' : $header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม เดือน ' . $this->getMonthName($data['Description']['months']) . ' ปี ' . ($data['Description']['years'] + 543);
-                    $objPHPExcel = $this->generateSpermExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
+                    $comment = SpermService::getcomment($data['Description']['years'], $data['Description']['months'], $data['Description']['region_id']);
+                    array_push($commentarr, $comment);
+
+                    $objPHPExcel = $this->generateSpermExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType'], $commentarr);
                     break;
                 case 'quarter' :
+                    $month = [];
+                    $year = $data['Description']['years'];
                     if ($data['Description']['quarter'] == 1) {
                         $textyear = $data['Description']['years'] + 1;
+                        $month = [10, 11, 12];
+                        $year--;
+                    } else if ($data['Description']['quarter'] == 2) {
+                        $month = [1, 2, 3];
+                    } else if ($data['Description']['quarter'] == 3) {
+                        $month = [4, 5, 6];
+                    } else if ($data['Description']['quarter'] == 4) {
+                        $month = [7, 8, 9];
+                    }
+                    foreach ($month as $m) {
+                        $comment = SpermService::getcomment($year, $m, $data['Description']['region_id']);
+                        array_push($commentarr, $comment);
                     }
                     $header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม ไตรมาสที่ ' . $data['Description']['quarter'] . ' ปี ' . ($textyear + 543);
-                    $objPHPExcel = $this->generateSpermExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
+                    $objPHPExcel = $this->generateSpermExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType'], $commentarr);
                     break;
 
                 default : $result = null;
@@ -546,7 +663,7 @@ class ReportController extends Controller {
         }
     }
 
-    private function generateSpermExcel($objPHPExcel, $mastesgoallist, $header, $data, $type) {
+    private function generateSpermExcel($objPHPExcel, $mastesgoallist, $header, $data, $type, $comment) {
         $objPHPExcel->getActiveSheet()->setTitle("ผลิตน้ำเชื้อแช่แข็ง");
         $objPHPExcel->getActiveSheet()->setCellValue('A1', $header);
 
@@ -721,26 +838,40 @@ class ReportController extends Controller {
                     )
                 )
         );
-
-
+        $row = $highestRow + 1;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), 'หมายเหตุ :');
+        $row++;
+        foreach ($comment as $item) {
+            foreach ($item as $com) {
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), ($com['cooperative_name']));
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), ($this->getMonthName($com['months'])));
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), ($com['user_comment']));
+                $objPHPExcel->getActiveSheet()->mergeCells('C' . $row . ':E' . ($row ));
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->getFont()->setSize(14);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->applyFromArray(
+                        array(
+                            'font' => array(
+                                'name' => 'AngsanaUPC'
+                            )
+                        )
+                );
+                $row++;
+            }
+        }
         return $objPHPExcel;
     }
 
     public function exportTravelExcel($request, $response) {
-
+        $yearList = [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $monthList = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
         try {
             $obj = $request->getParsedBody();
             $mastesgoallist = MasterGoalService::getList('Y', 'ท่องเที่ยว');
 
             $condition = $obj['obj']['condition'];
             $data = $obj['obj']['data'];
-//            $data['Description']['years'] = 2018;
-            //           $condition['DisplayType'] = 'annually';
-//            $data['Description']['months'] = 1;
-//            $data['Quarter'] = 1;
-//            $data['Description']['region_id'] = 3;
-//            print_r($obj);
-//            die();
+
             $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_in_memory_gzip;
 
             $catch_result = \PHPExcel_Settings::setCacheStorageMethod($cacheMethod);
@@ -749,13 +880,38 @@ class ReportController extends Controller {
 
             switch ($condition['DisplayType']) {
                 case 'annually' :$header = 'รายงานผลการดำเนินงาน ฝ่ายท่องเที่ยวเชิงเกษตร ปี ' . ($data['Description']['years'] + 543);
-                    $objPHPExcel = $this->generateTravelExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
+                    foreach ($monthList as $key => $m) {
+                        $comment = TravelService::getcomment($data['Description']['years'] - $yearList[$key], $m, $data['Description']['region_id']);
+                        array_push($commentarr, $comment);
+                    }
+
+                    $objPHPExcel = $this->generateTravelExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType'], $commentarr);
                     break;
                 case 'monthly' : $header = 'รายงานผลการดำเนินงาน ฝ่ายท่องเที่ยวเชิงเกษตร เดือน ' . $this->getMonthName($data['Description']['months']) . ' ปี ' . ($data['Description']['years'] + 543);
-                    $objPHPExcel = $this->generateTravelExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
+                    $comment = TravelService::getcomment($data['Description']['years'], $data['Description']['months'], $data['Description']['region_id']);
+                    array_push($commentarr, $comment);
+
+                    $objPHPExcel = $this->generateTravelExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType'], $commentarr);
                     break;
                 case 'quarter' :$header = 'รายงานผลการดำเนินงาน ฝ่ายท่องเที่ยวเชิงเกษตร ไตรมาสที่ ' . $data['Quarter'] . ' ปี ' . ($data['Description']['years'] + 543);
-                    $objPHPExcel = $this->generateTravelExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
+                    $month = [];
+                    $year = $data['Description']['years'];
+                    if ($data['Description']['quarter'] == 1) {
+                        $textyear = $data['Description']['years'] + 1;
+                        $month = [10, 11, 12];
+                        $year--;
+                    } else if ($data['Description']['quarter'] == 2) {
+                        $month = [1, 2, 3];
+                    } else if ($data['Description']['quarter'] == 3) {
+                        $month = [4, 5, 6];
+                    } else if ($data['Description']['quarter'] == 4) {
+                        $month = [7, 8, 9];
+                    }
+                    foreach ($month as $m) {
+                        $comment = TravelService::getcomment($year, $m, $data['Description']['region_id']);
+                        array_push($commentarr, $comment);
+                    }
+                    $objPHPExcel = $this->generateTravelExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType'], $commentarr);
                     break;
 
                 default : $result = null;
@@ -779,7 +935,7 @@ class ReportController extends Controller {
         }
     }
 
-    private function generateTravelExcel($objPHPExcel, $mastesgoallist, $header, $data, $type) {
+    private function generateTravelExcel($objPHPExcel, $mastesgoallist, $header, $data, $type, $comment) {
         $objPHPExcel->getActiveSheet()->setTitle("ท่องเที่ยว");
         $objPHPExcel->getActiveSheet()->setCellValue('A1', $header);
         $objPHPExcel->getActiveSheet()->setCellValue('A2', 'รายการ');
@@ -820,7 +976,7 @@ class ReportController extends Controller {
         $missionad = GoalMissionService::getGoaltravel($mastesgoaladult[0]['id'], $data['Description']['years']);
         $missionch = GoalMissionService::getGoaltravel($mastesgoalchild[0]['id'], $data['Description']['years']);
         $missionst = GoalMissionService::getGoaltravel($mastesgoalstudent[0]['id'], $data['Description']['years']);
-       
+
         if ($data['Description']['quarter'] == 1) {
             $y = $data['Description']['years'] + 1;
 
@@ -839,7 +995,7 @@ class ReportController extends Controller {
 
         $avgst = GoalMissionService::getMissionavg($missionst[0]['id'], $data['Description']['years'], $data['Description']['months']);
 //       
-      
+
         if ($type == 'annually') {
             $tvmonth = TravelService::getDetailmonth($data['Description']['years'], 9, $mastesgoallist[0]['id']);
             foreach ($this->monthList as $key => $item) {
@@ -1184,12 +1340,33 @@ class ReportController extends Controller {
         $objPHPExcel->getActiveSheet()->getStyle('B6:I10')
                 ->getNumberFormat()
                 ->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-
+        $row = $highestRow + 1;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), 'หมายเหตุ :');
+        $row++;
+        foreach ($comment as $item) {
+            foreach ($item as $com) {
+                //  $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), ($com['cooperative_name']));
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), ($this->getMonthName($com['months'])));
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), ($com['user_comment']));
+                $objPHPExcel->getActiveSheet()->mergeCells('C' . $row . ':E' . ($row ));
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->getFont()->setSize(14);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->applyFromArray(
+                        array(
+                            'font' => array(
+                                'name' => 'AngsanaUPC'
+                            )
+                        )
+                );
+                $row++;
+            }
+        }
         return $objPHPExcel;
     }
 
     public function exportCowbreedExcel($request, $response) {
-
+        $yearList = [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $monthList = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
         try {
             $obj = $request->getParsedBody();
             $mastesgoallist = MasterGoalService::getList('Y', 'ปัจจัยการเลี้ยงโค');
@@ -1207,13 +1384,36 @@ class ReportController extends Controller {
 
             switch ($condition['DisplayType']) {
                 case 'annually' :$header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม ปี ' . ($data['Description']['years'] + 543);
-                    $objPHPExcel = $this->generateCowbreedExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
+                    foreach ($monthList as $key => $m) {
+                        $comment = CowBreedService::getcomment($data['Description']['years'] - $yearList[$key], $m, $data['Description']['region_id']);
+                        array_push($commentarr, $comment);
+                    }
+                    $objPHPExcel = $this->generateCowbreedExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType'], $commentarr);
                     break;
                 case 'monthly' : $header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม เดือน ' . $this->getMonthName($data['Description']['months']) . ' ปี ' . ($data['Description']['years'] + 543);
-                    $objPHPExcel = $this->generateCowbreedExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
+                    $comment = CowBreedService::getcomment($data['Description']['years'], $data['Description']['months'], $data['Description']['region_id']);
+                    array_push($commentarr, $comment);
+                    $objPHPExcel = $this->generateCowbreedExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType'], $commentarr);
                     break;
                 case 'quarter' :$header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม ไตรมาสที่ ' . $data['Quarter'] . ' ปี ' . ($data['Description']['years'] + 543);
-                    $objPHPExcel = $this->generateCowbreedExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
+                    $month = [];
+                    $year = $data['Description']['years'];
+                    if ($data['Description']['quarter'] == 1) {
+                        $textyear = $data['Description']['years'] + 1;
+                        $month = [10, 11, 12];
+                        $year--;
+                    } else if ($data['Description']['quarter'] == 2) {
+                        $month = [1, 2, 3];
+                    } else if ($data['Description']['quarter'] == 3) {
+                        $month = [4, 5, 6];
+                    } else if ($data['Description']['quarter'] == 4) {
+                        $month = [7, 8, 9];
+                    }
+                    foreach ($month as $m) {
+                        $comment = CowBreedService::getcomment($year, $m, $data['Description']['region_id']);
+                        array_push($commentarr, $comment);
+                    }
+                    $objPHPExcel = $this->generateCowbreedExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType'], $commentarr);
                     break;
 
                 default : $result = null;
@@ -1238,7 +1438,7 @@ class ReportController extends Controller {
         }
     }
 
-    private function generateCowbreedExcel($objPHPExcel, $mastesgoallist, $header, $data, $type) {
+    private function generateCowbreedExcel($objPHPExcel, $mastesgoallist, $header, $data, $type, $comment) {
 
         $objPHPExcel->getActiveSheet()->setTitle("ปัจจัยการเลี้ยงโค");
         $objPHPExcel->getActiveSheet()->setCellValue('A1', $header);
@@ -1517,14 +1717,33 @@ class ReportController extends Controller {
                     )
                 )
         );
-
+        $row = $highestRow + 1;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), 'หมายเหตุ :');
+        $row++;
+        foreach ($comment as $item) {
+            foreach ($item as $com) {
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), ($com['cooperative_name']));
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), ($this->getMonthName($com['months'])));
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), ($com['user_comment']));
+                $objPHPExcel->getActiveSheet()->mergeCells('C' . $row . ':E' . ($row ));
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->getFont()->setSize(14);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->applyFromArray(
+                        array(
+                            'font' => array(
+                                'name' => 'AngsanaUPC'
+                            )
+                        )
+                );
+                $row++;
+            }
+        }
         return $objPHPExcel;
     }
 
     public function exportCowgroupExcel($request, $response) {
-        // error_reporting(E_ERROR);
-        // error_reporting(E_ALL);
-        // ini_set('display_errors','On');           
+        $yearList = [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $monthList = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
         try {
             $obj = $request->getParsedBody();
             $mastesgoallist = MasterGoalService::getList('Y', 'ข้อมูลฝูงโค');
@@ -1548,13 +1767,36 @@ class ReportController extends Controller {
 
             switch ($condition['DisplayType']) {
                 case 'annually' :$header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม ปี ' . ($data['Description']['years'] + 543);
-                    $objPHPExcel = $this->generateCowgroupExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
+                    foreach ($monthList as $key => $m) {
+                        $comment = CowGroupService::getcomment($data['Description']['years'] - $yearList[$key], $m, $data['Description']['region_id']);
+                        array_push($commentarr, $comment);
+                    }
+                    $objPHPExcel = $this->generateCowgroupExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType'], $commentarr);
                     break;
                 case 'monthly' : $header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม เดือน ' . $this->getMonthName($data['Description']['months']) . ' ปี ' . ($data['Description']['years'] + 543);
-                    $objPHPExcel = $this->generateCowgroupExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
+                    $comment = CowGroupService::getcomment($data['Description']['years'], $data['Description']['months'], $data['Description']['region_id']);
+                    array_push($commentarr, $comment);
+                    $objPHPExcel = $this->generateCowgroupExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType'], $commentarr);
                     break;
                 case 'quarter' :$header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม ไตรมาสที่ ' . $data['Quarter'] . ' ปี ' . ($data['Description']['years'] + 543);
-                    $objPHPExcel = $this->generateCowgroupExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
+                    $month = [];
+                    $year = $data['Description']['years'];
+                    if ($data['Description']['quarter'] == 1) {
+                        $textyear = $data['Description']['years'] + 1;
+                        $month = [10, 11, 12];
+                        $year--;
+                    } else if ($data['Description']['quarter'] == 2) {
+                        $month = [1, 2, 3];
+                    } else if ($data['Description']['quarter'] == 3) {
+                        $month = [4, 5, 6];
+                    } else if ($data['Description']['quarter'] == 4) {
+                        $month = [7, 8, 9];
+                    }
+                    foreach ($month as $m) {
+                        $comment = CowGroupService::getcomment($year, $m, $data['Description']['region_id']);
+                        array_push($commentarr, $comment);
+                    }
+                    $objPHPExcel = $this->generateCowgroupExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType'], $commentarr);
                     break;
 
                 default : $result = null;
@@ -1579,7 +1821,7 @@ class ReportController extends Controller {
         }
     }
 
-    private function generateCowgroupExcel($objPHPExcel, $mastesgoallist, $header, $data, $type) {
+    private function generateCowgroupExcel($objPHPExcel, $mastesgoallist, $header, $data, $type, $commemt) {
 
         $objPHPExcel->getActiveSheet()->setTitle("ข้อมูลฝูงโค");
         $objPHPExcel->getActiveSheet()->setCellValue('A1', $header);
@@ -1862,14 +2104,33 @@ class ReportController extends Controller {
                     )
                 )
         );
-
+        $row = $highestRow + 1;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), 'หมายเหตุ :');
+        $row++;
+        foreach ($comment as $item) {
+            foreach ($item as $com) {
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), ($com['cooperative_name']));
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), ($this->getMonthName($com['months'])));
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), ($com['user_comment']));
+                $objPHPExcel->getActiveSheet()->mergeCells('C' . $row . ':E' . ($row ));
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->getFont()->setSize(14);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->applyFromArray(
+                        array(
+                            'font' => array(
+                                'name' => 'AngsanaUPC'
+                            )
+                        )
+                );
+                $row++;
+            }
+        }
         return $objPHPExcel;
     }
 
     public function exportTrainingcowbreedExcel($request, $response) {
-        // error_reporting(E_ERROR);
-        // error_reporting(E_ALL);
-        // ini_set('display_errors','On');           
+        $yearList = [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $monthList = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
         try {
             $obj = $request->getParsedBody();
             $mastesgoallist = MasterGoalService::getList('Y', 'ฝึกอบรม');
@@ -1893,13 +2154,36 @@ class ReportController extends Controller {
 
             switch ($condition['DisplayType']) {
                 case 'annually' :$header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม ปี ' . ($data['Description']['years'] + 543);
-                    $objPHPExcel = $this->generateTrainingcowbreedExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
+                    foreach ($monthList as $key => $m) {
+                        $comment = TrainingCowBreedService::getcomment($data['Description']['years'] - $yearList[$key], $m, $data['Description']['region_id']);
+                        array_push($commentarr, $comment);
+                    }
+                    $objPHPExcel = $this->generateTrainingcowbreedExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType'], $commentarr);
                     break;
                 case 'monthly' : $header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม เดือน ' . $this->getMonthName($data['Description']['months']) . ' ปี ' . ($data['Description']['years'] + 543);
-                    $objPHPExcel = $this->generateTrainingcowbreedExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
+                    $comment = TrainingCowBreedService::getcomment($data['Description']['years'], $data['Description']['months'], $data['Description']['region_id']);
+                    array_push($commentarr, $comment);
+                    $objPHPExcel = $this->generateTrainingcowbreedExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType'], $commentarr);
                     break;
                 case 'quarter' :$header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม ไตรมาสที่ ' . $data['Description']['quarter'] . ' ปี ' . ($data['Description']['years'] + 543);
-                    $objPHPExcel = $this->generateTrainingcowbreedExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
+                    $month = [];
+                    $year = $data['Description']['years'];
+                    if ($data['Description']['quarter'] == 1) {
+                        $textyear = $data['Description']['years'] + 1;
+                        $month = [10, 11, 12];
+                        $year--;
+                    } else if ($data['Description']['quarter'] == 2) {
+                        $month = [1, 2, 3];
+                    } else if ($data['Description']['quarter'] == 3) {
+                        $month = [4, 5, 6];
+                    } else if ($data['Description']['quarter'] == 4) {
+                        $month = [7, 8, 9];
+                    }
+                    foreach ($month as $m) {
+                        $comment = TrainingCowBreedService::getcomment($year, $m, $data['Description']['region_id']);
+                        array_push($commentarr, $comment);
+                    }
+                    $objPHPExcel = $this->generateTrainingcowbreedExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType'], $commentarr);
                     break;
 
                 default : $result = null;
@@ -1924,7 +2208,7 @@ class ReportController extends Controller {
         }
     }
 
-    private function generateTrainingcowbreedExcel($objPHPExcel, $mastesgoallist, $header, $data, $type) {
+    private function generateTrainingcowbreedExcel($objPHPExcel, $mastesgoallist, $header, $data, $type, $comment) {
 
         $objPHPExcel->getActiveSheet()->setTitle("ฝึกอบรม");
         $objPHPExcel->getActiveSheet()->setCellValue('A1', $header);
@@ -2201,14 +2485,33 @@ class ReportController extends Controller {
                     )
                 )
         );
-
+        $row = $highestRow + 1;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), 'หมายเหตุ :');
+        $row++;
+        foreach ($comment as $item) {
+            foreach ($item as $com) {
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), ($com['cooperative_name']));
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), ($this->getMonthName($com['months'])));
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), ($com['user_comment']));
+                $objPHPExcel->getActiveSheet()->mergeCells('C' . $row . ':E' . ($row ));
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->getFont()->setSize(14);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->applyFromArray(
+                        array(
+                            'font' => array(
+                                'name' => 'AngsanaUPC'
+                            )
+                        )
+                );
+                $row++;
+            }
+        }
         return $objPHPExcel;
     }
 
     public function exportInseminationExcel($request, $response) {
-        // error_reporting(E_ERROR);
-        // error_reporting(E_ALL);
-        // ini_set('display_errors','On');           
+        $yearList = [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $monthList = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
         try {
             $obj = $request->getParsedBody();
             $mastesgoallist = MasterGoalService::getList('Y', 'ผสมเทียม');
@@ -2231,13 +2534,36 @@ class ReportController extends Controller {
 
             switch ($condition['DisplayType']) {
                 case 'annually' :$header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม ปี ' . ($data['Description']['years'] + 543);
-                    $objPHPExcel = $this->generateInseminationExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
+                    foreach ($monthList as $key => $m) {
+                        $comment = InseminationService::getcomment($data['Description']['years'] - $yearList[$key], $m, $data['Description']['region_id']);
+                        array_push($commentarr, $comment);
+                    }
+                    $objPHPExcel = $this->generateInseminationExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType'], $commentarr);
                     break;
                 case 'monthly' : $header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม เดือน ' . $this->getMonthName($data['Description']['months']) . ' ปี ' . ($data['Description']['years'] + 543);
-                    $objPHPExcel = $this->generateInseminationExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
+                    $comment = InseminationService::getcomment($data['Description']['years'], $data['Description']['months'], $data['Description']['region_id']);
+                    array_push($commentarr, $comment);
+                    $objPHPExcel = $this->generateInseminationExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType'], $commentarr);
                     break;
                 case 'quarter' :$header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม ไตรมาสที่ ' . $data['Quarter'];
-                    $objPHPExcel = $this->generateInseminationExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType']);
+                    $month = [];
+                    $year = $data['Description']['years'];
+                    if ($data['Description']['quarter'] == 1) {
+                        $textyear = $data['Description']['years'] + 1;
+                        $month = [10, 11, 12];
+                        $year--;
+                    } else if ($data['Description']['quarter'] == 2) {
+                        $month = [1, 2, 3];
+                    } else if ($data['Description']['quarter'] == 3) {
+                        $month = [4, 5, 6];
+                    } else if ($data['Description']['quarter'] == 4) {
+                        $month = [7, 8, 9];
+                    }
+                    foreach ($month as $m) {
+                        $comment = InseminationService::getcomment($year, $m, $data['Description']['region_id']);
+                        array_push($commentarr, $comment);
+                    }
+                    $objPHPExcel = $this->generateInseminationExcel($objPHPExcel, $mastesgoallist, $header, $data, $condition['DisplayType'], $commentarr);
                     break;
 
                 default : $result = null;
@@ -2262,7 +2588,7 @@ class ReportController extends Controller {
         }
     }
 
-    private function generateInseminationExcel($objPHPExcel, $mastesgoallist, $header, $data, $type) {
+    private function generateInseminationExcel($objPHPExcel, $mastesgoallist, $header, $data, $type, $comment) {
 
         $objPHPExcel->getActiveSheet()->setTitle("ผสมเทียม");
         $objPHPExcel->getActiveSheet()->setCellValue('A1', $header);
@@ -2606,7 +2932,27 @@ class ReportController extends Controller {
                     )
                 )
         );
-
+        $row = $highestRow + 1;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), 'หมายเหตุ :');
+        $row++;
+        foreach ($comment as $item) {
+            foreach ($item as $com) {
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), ($com['cooperative_name']));
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . ($row), ($this->getMonthName($com['months'])));
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . ($row), ($com['user_comment']));
+                $objPHPExcel->getActiveSheet()->mergeCells('C' . $row . ':E' . ($row ));
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->getFont()->setSize(14);
+                $objPHPExcel->getActiveSheet()->getStyle('A' . $row . ':E' . ($row ))->applyFromArray(
+                        array(
+                            'font' => array(
+                                'name' => 'AngsanaUPC'
+                            )
+                        )
+                );
+                $row++;
+            }
+        }
         return $objPHPExcel;
     }
 
