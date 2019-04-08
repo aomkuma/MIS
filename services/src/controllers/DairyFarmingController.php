@@ -3,6 +3,8 @@
     namespace App\Controller;
     
     use App\Service\DairyFarmingService;
+    use App\Service\MasterGoalService;
+    
 
     class DairyFarmingController extends Controller {
         
@@ -98,11 +100,42 @@
                 // ini_set('display_errors','On');
                 $params = $request->getParsedBody();
                 $_Data = $params['obj']['Data'];
+
+                // Get old data
+                $OldData = DairyFarmingService::getData($_Data['id']);
+
+                if(!empty($_Data['parent_id'])){
+                    // Get Parent Data 
+                    $ParentData = DairyFarmingService::getData($_Data['parent_id']);
+
+                    if(!empty($ParentData)){
+                        $ParentDataName = $ParentData['dairy_farming_name'] . ' - ';
+                    }
+                }
+                
                 
                 $dairy_farming_type = $_Data['dairy_farming_type'];
                 $id = DairyFarmingService::updateData($_Data);
                 // Update child farm type 
                 DairyFarmingService::updateDairyFarmTypeData($id, $dairy_farming_type);
+
+                // add to master goal
+                // find master goal by name
+                $old_goal_name = $ParentDataName . $OldData['dairy_farming_name'];
+                $MasterGoal = MasterGoalService::getDataByName($old_goal_name);
+                // Add master goal
+                if(!empty($MasterGoal)){
+                    $MasterGoal['goal_name'] = $ParentDataName . $_Data['dairy_farming_name'];
+                    // MasterGoalService::updateData($MasterGoal);
+                }else{
+                    $MasterGoal['id'] = '';
+                    $MasterGoal['goal_type'] = '';
+                    $MasterGoal['menu_type'] = '';
+                    $MasterGoal['actives'] = 'Y';    
+                    $MasterGoal['goal_name'] = $ParentDataName . $OldData['dairy_farming_name'];
+                }
+
+                MasterGoalService::updateData($MasterGoal);
                 
                 $this->data_result['DATA']['id'] = $id;
                 

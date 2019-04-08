@@ -17,6 +17,78 @@
             $this->db = $db;
         }
 
+        public function getListAll($request, $response, $args){
+            try{
+                $params = $request->getParsedBody();
+//                $actives = $params['obj']['actives'];
+//                $menu_type = $params['obj']['menu_type'];
+//                $condition = $params['obj']['condition'];
+                
+
+                $_ProductMilkList = ProductMilkService::getList('','','','');
+
+                $ProductMilkList = [];
+                
+                foreach ($_ProductMilkList as $k1 => $v1) {
+                    // get all sub product milk by product milk id
+                    $_SubProductMilk = SubProductMilkService::getListByProductMilk($v1['id']);
+                    $SubProductMilkList = [];
+                    
+                    foreach ($_SubProductMilk as $k2 => $v2) {
+                        // get all product milk detail by sub product milk id
+                        $_ProductMilkDetail = ProductMilkDetailService::getListByParent($v2['id']);
+                        
+                        foreach ($_ProductMilkDetail as $k3 => $v3) {
+                            $arr = [];
+                            $arr['ProductMilk']['DATA'] = $_ProductMilkList;
+                            $arr['ProductMilk']['DEFAULT'] = $v1['id'];
+                            $arr['SubProductMilk']['DATA'] = $_SubProductMilk;
+                            $arr['SubProductMilk']['DEFAULT'] = $v2['id'];
+                            $arr['ProductMilkDetail']['DATA'] = $_ProductMilkDetail;
+                            $arr['ProductMilkDetail']['DEFAULT'] = $v3['id'];
+                            array_push($ProductMilkList, $arr);
+                            
+                        }
+
+                        if(empty($_ProductMilkDetail)){
+                            $arr = [];
+                            $arr['ProductMilk']['DATA'] = $_ProductMilkList;
+                            $arr['ProductMilk']['DEFAULT'] = $v1['id'];
+                            $arr['SubProductMilk']['DATA'] = $_SubProductMilk;
+                            $arr['SubProductMilk']['DEFAULT'] = $v2['id'];
+                            $arr['ProductMilkDetail']['DATA'] = null;
+                            $arr['ProductMilkDetail']['DEFAULT'] = null;
+                            array_push($ProductMilkList, $arr);
+                        }
+                        // $v2['ProductMilkDetail'] = $_ProductMilkDetail;
+                        // array_push($SubProductMilkList, $v2);
+                        
+                    }
+
+                    if(empty($_SubProductMilk)){
+                            $arr = [];
+                            $arr['ProductMilk']['DATA'] = $_ProductMilkList;
+                            $arr['ProductMilk']['DEFAULT'] = $v1['id'];
+                            $arr['SubProductMilk']['DATA'] = null;
+                            $arr['SubProductMilk']['DEFAULT'] = null;
+                            $arr['ProductMilkDetail']['DATA'] = null;
+                            $arr['ProductMilkDetail']['DEFAULT'] = null;
+                            array_push($ProductMilkList, $arr);
+                        }
+                    // $v1['SubProductMilk'] = $SubProductMilkList;
+                    // array_push($ProductMilkList, $v1);
+                    
+                }
+
+                $this->data_result['DATA'] = $ProductMilkList;
+
+                return $this->returnResponse(200, $this->data_result, $response, false);
+                
+            }catch(\Exception $e){
+                return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+            }
+        }
+
         public function getList($request, $response, $args){
             try{
                 $params = $request->getParsedBody();

@@ -114,6 +114,16 @@ angular.module('e-homework').controller('UpdateLIPController', function($scope, 
                 if($scope.Data.id != ''){
                     $scope.Data.id = '';
                 }
+
+                for(var i = 0; i < $scope.MasterGoalList.length; i++){
+                    $scope.DataDetailList.push({
+                            'id':''
+                            ,'lost_in_process_id':''
+                            ,'lost_in_process_type':$scope.MasterGoalList[i].id
+                            ,'amount':''
+                            ,'value':''
+                        });
+                    }
             }
             $scope.FactoryName = '';
             $scope.MonthName = '';

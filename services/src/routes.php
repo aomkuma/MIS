@@ -190,6 +190,7 @@ $app->post('/msi/list/milk-sale-info/detail/', 'MSIController:getListMSIDetail')
 $app->post('/product-milk/list/', 'ProductMilkController:getList');
 $app->post('/product-milk/get/', 'ProductMilkController:getData');
 $app->post('/product-milk/update/', 'ProductMilkController:updateData');
+$app->post('/product-milk/list/all/', 'ProductMilkController:getListAll');
 
 $app->post('/subproduct-milk/list/', 'SubProductMilkController:getList');
 $app->post('/subproduct-milk/list/byparent/', 'SubProductMilkController:getListByParent');

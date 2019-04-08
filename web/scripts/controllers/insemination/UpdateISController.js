@@ -59,7 +59,7 @@ angular.module('e-homework').controller('UpdateISController', function($scope, $
     }
 
     $scope.loadDairyFarming = function(type, parent_id){
-        var params = {'type':type, 'parent_id' : parent_id};
+        var params = {'type':type, 'parent_id' : parent_id, 'data_arr' : ['ทะเบียนโค','การบริการผสมเทียม']};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('dairy-farming/list/insemination', params).then(function(result){
             if(result.data.STATUS == 'OK'){

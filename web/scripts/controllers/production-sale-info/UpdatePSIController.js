@@ -76,6 +76,38 @@ angular.module('e-homework').controller('UpdatePSIController', function($scope, 
         });
     }
 
+    $scope.loadDefaultProductMilk = function(){
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('product-milk/list/all', null).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                // $scope.ProductMilkList[index] = result.data.DATA.List;
+                console.log(result.data.DATA);
+                var totalRows = result.data.DATA.length;
+                $scope.ProductMilkList = [totalRows];
+                $scope.SubProductMilkList = [totalRows];
+                $scope.ProductMilkDetailList = [totalRows];
+
+                for(var i = 0; i < totalRows; i++){
+                    $scope.DataDetailList.push({'id':''
+                                                ,'lost_in_process_id':''
+                                                ,'lost_in_process_type':''
+                                                ,'amount':''
+                                                ,'value':''
+                                                ,'production_sale_info_type1' : result.data.DATA[i].ProductMilk.DEFAULT 
+                                                , 'production_sale_info_type2' : result.data.DATA[i].SubProductMilk.DEFAULT
+                                                , 'production_sale_info_type3' : result.data.DATA[i].ProductMilkDetail.DEFAULT
+                                            });
+
+                    console.log(result.data.DATA[i].ProductMilk);
+                    $scope.ProductMilkList[i] = result.data.DATA[i].ProductMilk.DATA;
+                    $scope.SubProductMilkList[i] = result.data.DATA[i].SubProductMilk.DATA;
+                    $scope.ProductMilkDetailList[i] = result.data.DATA[i].ProductMilkDetail.DATA;
+                }
+                IndexOverlayFactory.overlayHide();
+            }
+        });
+    }
+
     $scope.ProductMilkList = [];
     $scope.loadProductMilk = function(index){
         // var params = {'actives':'Y', 'menu_type' : 'การสูญเสียในกระบวนการ'};
@@ -145,6 +177,8 @@ angular.module('e-homework').controller('UpdatePSIController', function($scope, 
                 if($scope.Data.id != ''){
                     $scope.Data.id = '';
                 }
+
+                $scope.loadDefaultProductMilk();
             }
             $scope.FactoryName = '';
             $scope.MonthName = '';

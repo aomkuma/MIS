@@ -114,6 +114,16 @@ angular.module('e-homework').controller('UpdateLWSController', function($scope, 
                 if($scope.Data.id != ''){
                     $scope.Data.id = '';
                 }
+
+                for(var i = 0; i < $scope.MasterGoalList.length; i++){
+                    $scope.DataDetailList.push({
+                            'id':''
+                            ,'lost_wait_sale_id':''
+                            ,'lost_wait_sale_type':$scope.MasterGoalList[i].id
+                            ,'amount':''
+                            ,'value':''
+                        });
+                    }
             }
             $scope.FactoryName = '';
             $scope.MonthName = '';
@@ -206,8 +216,8 @@ angular.module('e-homework').controller('UpdateLWSController', function($scope, 
     $scope.addDataDetail = function(){
         var detail = {
                 'id':''
-                ,'lost_in_process_id':''
-                ,'lost_in_process_type':''
+                ,'lost_wait_sale_id':''
+                ,'lost_wait_sale_type':''
                 ,'amount':''
                 ,'value':''
             };

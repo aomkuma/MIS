@@ -70,6 +70,27 @@ class MBIController extends Controller {
         }
     }
 
+    public function checkProvince($regionID) {
+        switch ($regionID) {
+            case '3':
+                return 'จังหวัดสระบุรี';
+                break;
+            case '4':
+                return 'จังหวัดประจวบคีรีขันธ์';
+                break;
+            case '5':
+                return 'จังหวัดขอนแก่น';
+                break;
+            case '6':
+                return 'จังหวัดสุโขทัย';
+                break;
+            case '7':
+                return 'จังหวัดเชียงใหม่';
+                break;
+            default: break;
+        }
+    }
+
     public function getListMBIMonth($request, $response, $args) {
         // error_reporting(E_ERROR);
         //     error_reporting(E_ALL);
@@ -120,11 +141,11 @@ class MBIController extends Controller {
                 foreach ($regions as $key => $value) {
 
                     $monthName = MBIController::getMonthName($curMonth);
-                    $region = MBIController::checkRegion($value['RegionID']);
+                    $region = MBIController::checkProvince($value['RegionID']);
                     $region_id = $value['RegionID'];
 
                     $data = [];
-                    $data['RegionName'] = $region;
+                    $data['RegionName'] = MBIController::checkRegion($value['RegionID']);
                     $data['Month'] = $monthName;
 
                     // Cur year
@@ -510,11 +531,11 @@ class MBIController extends Controller {
             foreach ($regions as $key => $value) {
 
                 $monthName = MBIController::getMonthName($curMonth);
-                $region = MBIController::checkRegion($value['RegionID']);
+                $region = MBIController::checkProvince($value['RegionID']);
                 $region_id = $value['RegionID'];
 
                 $data = [];
-                $data['RegionName'] = $region;
+                $data['RegionName'] = MBIController::checkRegion($value['RegionID']);;
                 $data['Month'] = $quarter;
 
                 // Cur year
@@ -612,11 +633,11 @@ class MBIController extends Controller {
             foreach ($regions as $key => $value) {
 
                 $monthName = MBIController::getMonthName($curMonth);
-                $region = MBIController::checkRegion($value['RegionID']);
+                $region = MBIController::checkProvince($value['RegionID']);
                 $region_id = $value['RegionID'];
 
                 $data = [];
-                $data['RegionName'] = $region;
+                $data['RegionName'] = MBIController::checkRegion($value['RegionID']);;
                 $data['Month'] = $quarter;
 
                 // Cur year
@@ -693,7 +714,7 @@ class MBIController extends Controller {
             $region_id = $params['obj']['condition']['region_id'];
             $years = $params['obj']['condition']['years'];
 
-            $region = MBIController::checkRegion($region_id);
+            $region = MBIController::checkProvince($region_id);
             $region_list[] = $region;
             // $region = CooperativeService::getRegion($region_id);
             // $region_list[] = $region['RegionName'];
@@ -877,6 +898,16 @@ class MBIController extends Controller {
             $params = $request->getParsedBody();
             $user_session = $params['user_session'];
             $regions = $params['obj']['region'];
+
+            $RegionList = [];
+            foreach ($regions as $key => $value) {
+                if($value['RegionID'] != 1 && $value['RegionID'] != 2){
+                    $RegionList[] = $value;
+                }
+            }
+
+            $regions = $RegionList;
+            
             $displayType = $params['obj']['condition']['DisplayType'];
             $monthFrom = $params['obj']['condition']['MonthFrom'];
             $quarterFrom = $params['obj']['condition']['QuarterFrom'];
@@ -932,7 +963,7 @@ class MBIController extends Controller {
             foreach ($regions as $key => $value) {
 
                 $monthName = MBIController::getMonthName($curMonth);
-                $region = MBIController::checkRegion($value['RegionID']);
+                $region = MBIController::checkProvince($value['RegionID']);
                 $region_id = $value['RegionID'];
 
                 $data = [];
@@ -1067,7 +1098,7 @@ class MBIController extends Controller {
 
             // get cooperative from region
             $CooperativeList = CooperativeService::getListByRegion($region_id);
-            $region = MBIController::checkRegion($region_id);
+            $region = MBIController::checkProvince($region_id);
 
             $Sum_MOUAmount = 0;
             $Sum_MOUBaht = 0;

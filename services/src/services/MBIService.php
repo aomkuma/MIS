@@ -14,7 +14,7 @@ class MBIService {
 
     public static function getListMBI($fromTime, $toTime, $region) {
         echo "$fromTime, $toTime, $region";
-        return XxCustPoRmV::select(
+        return XxCustPoRmVendorV::select(
                                 'REGION'
                                 , DB::raw("SUM(AMOUNT) AS sum_baht")
                                 , DB::raw("SUM(QUANTITY) AS sum_amount")
@@ -27,7 +27,7 @@ class MBIService {
 
     public static function getListMBIreoprt($fromTime, $toTime) {
         // echo "$fromTime, $toTime, $region";
-        return XxCustPoRmV::select(
+        return XxCustPoRmVendorV::select(
                                 DB::raw("SUM(AMOUNT) AS sum_baht")
                                 , DB::raw("SUM(QUANTITY) AS sum_amount")
                         )
@@ -42,7 +42,7 @@ class MBIService {
         $fromTime = $year . '-' . str_pad($month, 2, "0", STR_PAD_LEFT) . '-01';
         $toTime = $year . '-' . str_pad($month, 2, "0", STR_PAD_LEFT) . '-28';
 
-        return XxCustPoRmV::select(
+        return XxCustPoRmVendorV::select(
                                
                                  DB::raw("SUM(QUANTITY) AS amount")
                         )
@@ -80,7 +80,7 @@ class MBIService {
 
     public static function getListMBIByYear($fromTime, $toTime, $region) {
         // echo "$fromTime, $toTime, $region";
-        return XxCustPoRmV::select(
+        return XxCustPoRmVendorV::select(
                                 DB::raw("SUM(AMOUNT) AS sum_baht")
                                 , DB::raw("SUM(QUANTITY) AS sum_amount")
                         )
@@ -92,7 +92,7 @@ class MBIService {
 
     public static function getListMBIDetail($fromTime, $toTime, $region) {
         // echo "$fromTime, $toTime, $region";
-        return XxCustPoRmV::select(
+        return XxCustPoRmVendorV::select(
                                 DB::raw("SUM(AMOUNT) AS sum_baht")
                                 , DB::raw("SUM(QUANTITY) AS sum_amount")
                         )
@@ -140,7 +140,7 @@ class MBIService {
         $st = $years . '-' . $months . '-01';
         $en = $years . '-' . $months . '-31';
 
-        return XxCustPoRmV::select(
+        return XxCustPoRmVendorV::select(
                                 DB::raw("SUM(AMOUNT) AS sum_baht")
                                 , DB::raw("SUM(QUANTITY) AS sum_amount")
                         )

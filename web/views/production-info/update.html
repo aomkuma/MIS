@@ -70,31 +70,37 @@
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 								วันที่แก้ไขล่าสุด {{getThaiDateTimeFromString(DataDetail.update_date)}}
 							</div>
-							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-								ประเภทหลัก
-							</div>
-							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-								<select class="form-control" ng-model="DataDetail.production_info_type1" ng-options="data.id as data.name for data in ProductMilkList[parentIndex]" ng-change="loadSubProductMilk(DataDetail.production_info_type1, parentIndex)"><!--ng-change="loadDairyFarming('CHILD', DataDetail.dairy_farming_id)" -->
-									<option value="">กรุณาเลือก..</option>
-								</select>
-							</div>
-							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-								ประเภทย่อย
-							</div>
-							<div class="col-lg-3 col-md-2\3 col-sm-12 col-xs-12">
-								<select class="form-control" ng-model="DataDetail.production_info_type2" ng-options="data.id as data.name for data in SubProductMilkList[parentIndex]" ng-change="loadProductMilkDetail(DataDetail.production_info_type2, parentIndex)"><!--ng-change="loadDairyFarming('CHILD', DataDetail.dairy_farming_id)" -->
-									<option value="">กรุณาเลือก..</option>
-								</select>
-							</div>
-							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-								รายการ
-							</div>
-							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-								<select class="form-control" ng-model="DataDetail.production_info_type3" ng-options="data.id as data.name for data in ProductMilkDetailList[parentIndex]" ><!--ng-change="loadDairyFarming('CHILD', DataDetail.dairy_farming_id)" -->
-									<option value="">กรุณาเลือก..</option>
-								</select>
-							</div>
 						</div>
+						<div class="row form-group">
+								<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+									ประเภทหลัก
+								</div>
+								<div class="col-lg-11 col-md-11 col-sm-12 col-xs-12">
+									<select class="form-control" ng-model="DataDetail.production_info_type1" ng-options="data.id as data.name for data in ProductMilkList[parentIndex]" ng-change="loadSubProductMilk(DataDetail.production_info_type1, parentIndex)"><!--ng-change="loadDairyFarming('CHILD', DataDetail.dairy_farming_id)" -->
+										<option value="">กรุณาเลือก..</option>
+									</select>
+								</div>
+							</div>
+							<div class="row form-group">
+								<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+									ประเภทย่อย
+								</div>
+								<div class="col-lg-11 col-md-11 col-sm-12 col-xs-12">
+									<select class="form-control" ng-model="DataDetail.production_info_type2" ng-options="data.id as data.name for data in SubProductMilkList[parentIndex]" ng-change="loadProductMilkDetail(DataDetail.production_info_type2, parentIndex)"><!--ng-change="loadDairyFarming('CHILD', DataDetail.dairy_farming_id)" -->
+										<option value="">กรุณาเลือก..</option>
+									</select>
+								</div>
+							</div>
+							<div class="row form-group">
+								<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+									รายการ
+								</div>
+								<div class="col-lg-11 col-md-11 col-sm-12 col-xs-12">
+									<select class="form-control" ng-model="DataDetail.production_info_type3" ng-options="data.id as data.name for data in ProductMilkDetailList[parentIndex]" ><!--ng-change="loadDairyFarming('CHILD', DataDetail.dairy_farming_id)" -->
+										<option value="">กรุณาเลือก..</option>
+									</select>
+								</div>
+							</div>
 						<div class="row form-group">
 							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 								ปริมาณ (ลิตร)

@@ -59,7 +59,7 @@ angular.module('e-homework').controller('UpdateVTController', function($scope, $
     }
 
     $scope.loadDairyFarming = function(type, parent_id, index){
-        var params = {'type':type, 'parent_id' : parent_id, 'data_arr' : ['ทะเบียนโค','การบริการผสมเทียม']};
+        var params = {'type':type, 'parent_id' : parent_id};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('dairy-farming/list/veterinary', params).then(function(result){
             if(result.data.STATUS == 'OK'){

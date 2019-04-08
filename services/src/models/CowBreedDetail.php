@@ -9,6 +9,7 @@ class CowBreedDetail extends \Illuminate\Database\Eloquent\Model {
   								, 'cow_breed_id'
                   , 'cow_breed_type_id'
   								, 'amount'
+                  , 'amount_unit'
                   , 'price'
                   , 'create_date'
                   , 'update_date'

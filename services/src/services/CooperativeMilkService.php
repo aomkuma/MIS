@@ -82,6 +82,7 @@
                     //->with('mouHistories')
                     ->with(array('cooperativeMilkDetail' => function($query){
                         $query->orderBy('update_date', 'DESC');
+                        $query->orderBy('id', 'DESC');
                     }))
                     ->first();      
         }
