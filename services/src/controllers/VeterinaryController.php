@@ -270,6 +270,13 @@ class VeterinaryController extends Controller {
                             $data['Status'] = 'ไม่อนุมัติ';
                         }
                     }
+
+                    $DataSummary['SummaryCurrentCow'] = $DataSummary['SummaryCurrentCow'] + $data['CurrentCowData'];
+                    $DataSummary['SummaryBeforeCow'] = $DataSummary['SummaryBeforeCow'] + $data['BeforeCowData'];
+
+                    $DataSummary['SummaryCurrentService'] = $DataSummary['SummaryCurrentService'] + $data['CurrentServiceData'];
+                    $DataSummary['SummaryBeforeService'] = $DataSummary['SummaryBeforeService'] + $data['BeforeServiceData'];
+
                     $data['Description'] = ['farm_type' => $farm_type
                         , 'item_type' => $item_type
                         , 'months' => $curMonth
@@ -279,12 +286,9 @@ class VeterinaryController extends Controller {
                     array_push($DataList, $data);
                 }
                 
-                $DataSummary['SummaryCurrentCow'] = $DataSummary['SummaryCurrentCow'] + $data['CurrentCowData'];
-                $DataSummary['SummaryBeforeCow'] = $DataSummary['SummaryBeforeCow'] + $data['BeforeCowData'];
-
-                $DataSummary['SummaryCurrentService'] = $DataSummary['SummaryCurrentService'] + $data['CurrentServiceData'];
-                $DataSummary['SummaryBeforeService'] = $DataSummary['SummaryBeforeService'] + $data['BeforeServiceData'];
-            }
+                
+                // echo $data['CurrentCowData'] . ' - ' . $DataSummary['SummaryCurrentCow']."\n";
+            }//exit;
             $curMonth++;
         }
         if ($DataSummary['SummaryBeforeCow'] != 0) {

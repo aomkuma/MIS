@@ -34,6 +34,7 @@
 
         public static function getListByRegion($region_id){
             return Cooperative::where('region_id', $region_id)
+                    ->where('actives', 'Y')
                     ->orderBy("id", 'ASC')
                     ->get();      
         }

@@ -963,7 +963,7 @@ class MBIController extends Controller {
             foreach ($regions as $key => $value) {
 
                 $monthName = MBIController::getMonthName($curMonth);
-                $region = MBIController::checkProvince($value['RegionID']);
+                $region = MBIController::checkRegion($value['RegionID']);
                 $region_id = $value['RegionID'];
 
                 $data = [];
@@ -1053,7 +1053,7 @@ class MBIController extends Controller {
         try {
             $params = $request->getParsedBody();
             $user_session = $params['user_session'];
-            $display_type = $params['obj']['condition']['display_type'];
+            $displayType = $params['obj']['condition']['display_type'];
             $region_id = $params['obj']['condition']['region_id'];
             $monthFrom = $params['obj']['condition']['months'];
             $quarter = $params['obj']['condition']['quarters'];
@@ -1097,9 +1097,14 @@ class MBIController extends Controller {
 
 
             // get cooperative from region
-            $CooperativeList = CooperativeService::getListByRegion($region_id);
+            if($region_id == 3){
+                $co_region_id = 1;
+            }else{
+                $co_region_id = $region_id;
+            }
+            $CooperativeList = CooperativeService::getListByRegion($co_region_id);
             $region = MBIController::checkProvince($region_id);
-
+            $provice = $region;
             $Sum_MOUAmount = 0;
             $Sum_MOUBaht = 0;
             $Sum_DataAmount = 0;
@@ -1130,10 +1135,10 @@ class MBIController extends Controller {
                 $data['AVGBaht'] = number_format($data['MOUBaht'] / $data['MOUAmount'], 2);
 
                 // MBI
-                $fromTime = ($years - 1) . '-10-01';
-                $toTime = ($years) . '-09-30';
-
-                $MBI = MBIService::getListMBIByVendor($fromTime, $toTime, $cooperative_name);
+                // $fromTime = ($years - 1) . '-10-01';
+                // $toTime = ($years) . '-09-30';
+                // echo "$fromTime, $toTime, $region";exit;
+                $MBI = MBIService::getListMBIByVendor($fromTime, $toTime, $cooperative_name, $provice);
                 $data['DataAmount'] = floatval($MBI['sum_amount']);
                 $data['DataBaht'] = floatval($MBI['sum_baht']);
 
@@ -1166,7 +1171,8 @@ class MBIController extends Controller {
             $data = [];
             $data['DataAmount'] = floatval($MBI['sum_amount']);
             $data['DataBaht'] = floatval($MBI['sum_baht']);
-
+            $Sum_DataAmount += $data['DataAmount'];
+            $Sum_DataBaht += $data['DataBaht'];
             // $data['AVGBaht'] = number_format($data['DataBaht'] / $data['DataAmount'], 2);
             array_push($DataList, $data);
 

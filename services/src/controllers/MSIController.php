@@ -1123,8 +1123,8 @@ class MSIController extends Controller {
                 $data['AVGBaht'] = number_format($data['MOUBaht'] / $data['MOUAmount'], 2);
 
                 // MSI
-                $fromTime = ($years - 1) . '-10-01';
-                $toTime = ($years) . '-09-30';
+                // $fromTime = ($years - 1) . '-10-01';
+                // $toTime = ($years) . '-09-30';
 
                 $MSI = MSIService::getListMSIByVendor($fromTime, $toTime, $cooperative_name);
                 $data['DataAmount'] = floatval($MSI['sum_amount']);

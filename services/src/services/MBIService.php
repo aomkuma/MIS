@@ -53,15 +53,16 @@ class MBIService {
                         ->toArray();
     }
 
-    public static function getListMBIByVendor($fromTime, $toTime, $region) {
-        // echo "$fromTime, $toTime, $region";
+    public static function getListMBIByVendor($fromTime, $toTime, $cooperative_name, $region) {
+        
         return XxCustPoRmVendorV::select(
                                 'REGION'
                                 , DB::raw("SUM(AMOUNT) AS sum_baht")
                                 , DB::raw("SUM(QUANTITY) AS sum_amount")
                         )
                         ->whereBetween('TRANSACTION_DATE', [$fromTime, $toTime])
-                        ->where('VENDOR_NAME', $region)
+                        ->where('VENDOR_NAME', $cooperative_name)
+                        ->where('REGION', $region)
                         ->first();
     }
 
