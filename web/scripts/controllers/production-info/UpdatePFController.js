@@ -78,7 +78,9 @@ angular.module('e-homework').controller('UpdatePFController', function($scope, $
 
     $scope.loadDefaultProductMilk = function(){
         IndexOverlayFactory.overlayShow();
-        HTTPService.clientRequest('product-milk/list/all', null).then(function(result){
+        var params = {'facid':$scope.Data.factory_id};
+        console.log(params);
+        HTTPService.clientRequest('product-milk/list/all', params).then(function(result){
             if(result.data.STATUS == 'OK'){
                 // $scope.ProductMilkList[index] = result.data.DATA.List;
                 console.log(result.data.DATA);
@@ -110,9 +112,10 @@ angular.module('e-homework').controller('UpdatePFController', function($scope, $
 
     $scope.ProductMilkList = [];
     $scope.loadProductMilk = function(index){
-        // var params = {'actives':'Y', 'menu_type' : 'การสูญเสียในกระบวนการ'};
+
+        var params = {'facid':$scope.Data.factory_id};
         IndexOverlayFactory.overlayShow();
-        HTTPService.clientRequest('product-milk/list', null).then(function(result){
+        HTTPService.clientRequest('product-milk/list', params).then(function(result){
             if(result.data.STATUS == 'OK'){
                 $scope.ProductMilkList[index] = result.data.DATA.List;
                 IndexOverlayFactory.overlayHide();

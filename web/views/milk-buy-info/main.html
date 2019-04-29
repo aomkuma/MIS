@@ -317,11 +317,11 @@
 		<tbody >
 			<tr ng-repeat="data in DetailList" style="background-color: {{data.bg_color}};">
 				<td>{{data.Month}}</td>
-				<td>{{numberFormat(data.CurrentAmount)}}</td>
+				<td>{{numberFormatComma(data.CurrentAmount)}}</td>
 				<td>{{numberFormatComma(data.CurrentBaht)}}</td>
-				<td>{{numberFormat(data.BeforeAmount)}}</td>
+				<td>{{numberFormatComma(data.BeforeAmount)}}</td>
 				<td>{{numberFormatComma(data.BeforeBaht)}}</td>
-				<td>{{numberFormat(data.DiffAmount)}}</td>
+				<td>{{numberFormatComma(data.DiffAmount)}}</td>
 				<td>{{numberFormatComma(data.DiffAmountPercentage)}}</td>
 				<td>{{numberFormatComma(data.DiffBaht)}}</td>
 				<td>{{numberFormatComma(data.DiffBahtPercentage)}}</td>

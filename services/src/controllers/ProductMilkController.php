@@ -24,8 +24,8 @@
 //                $menu_type = $params['obj']['menu_type'];
 //                $condition = $params['obj']['condition'];
                 
-
-                $_ProductMilkList = ProductMilkService::getList('','','','');
+                $facid=$params['obj']['facid'];
+                $_ProductMilkList = ProductMilkService::getList('','','',$facid);
 
                 $ProductMilkList = [];
                 

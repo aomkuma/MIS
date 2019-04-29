@@ -383,11 +383,11 @@
 			<tr ng-repeat="data in MOUList" style="background-color: {{data.bg_color}};">
 				<td>{{data.RegionName}}</td>
 				<td>{{data.Quarter}}</td>
-				<td>{{numberFormat(data.MOUAmount)}}</td>
+				<td>{{numberFormatComma(data.MOUAmount)}}</td>
 				<td>{{numberFormatComma(data.MOUBaht)}}</td>
-				<td>{{numberFormat(data.DataAmount)}}</td>
+				<td>{{numberFormatComma(data.DataAmount)}}</td>
 				<td>{{numberFormatComma(data.DataBaht)}}</td>
-				<td>{{numberFormat(data.TotalMOUAmount)}}</td>
+				<td>{{numberFormatComma(data.TotalMOUAmount)}}</td>
 				<td>{{numberFormatComma(data.TotalMOUBaht)}}</td>
 				<td>{{numberFormatComma(data.TotalDataAmount)}}</td>
 				<td>{{numberFormatComma(data.TotalDataBaht)}}</td>

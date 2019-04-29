@@ -52,19 +52,19 @@ class MSIController extends Controller {
     public function checkRegion($regionID) {
         switch ($regionID) {
             case '3':
-                return 'โรงงานนมมวกเหล็ก';
+                return 'สำนักงานภาคมวกเหล็ก';
                 break;
             case '4':
-                return 'โรงงานนมปราณบุรี';
+                return 'สำนักงานภาคปราณบุรี';
                 break;
             case '5':
-                return 'โรงงานนมขอนแก่น';
+                return 'สำนักงานภาคขอนแก่น';
                 break;
             case '6':
-                return 'โรงงานนมสุโขทัย';
+                return 'สำนักงานภาคสุโขทัย';
                 break;
             case '7':
-                return 'โรงงานนมเชียงใหม่';
+                return 'สำนักงานภาคเชียงใหม่';
                 break;
             default: break;
         }
