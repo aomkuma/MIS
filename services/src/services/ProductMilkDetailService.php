@@ -45,7 +45,12 @@ class ProductMilkDetailService {
                         ->join('product_milk', 'product_milk.id', '=', 'subproduct_milk.product_milk_id')
                         ->join('factory', 'factory.id', '=', 'product_milk.factory_id')
                         ->where('sub_product_milk_id', $sub_product_milk_id)
-                        ->where('factory.id', $facid)
+                        // ->where('factory.id', $facid)
+                        ->where(function($query) use ($facid){
+                            if(!empty($facid)){
+                                $query->where('factory.id' , $facid);     
+                            }
+                            })
                         ->orderBy("product_milk_detail.id", 'DESC')
                         ->get()
                         ->toArray();

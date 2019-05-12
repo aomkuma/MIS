@@ -113,6 +113,7 @@ class MBIController extends Controller {
             $monthFrom = $params['obj']['condition']['MonthFrom'];
             $monthTo = $params['obj']['condition']['MonthTo'];
             $years = $params['obj']['condition']['YearTo'];
+            $selected_year = $params['obj']['condition']['YearTo'];
 
             $ymFrom = $condition['YearTo'] . '-' . str_pad($condition['MonthFrom'], 2, "0", STR_PAD_LEFT);
             $ymTo = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT);
@@ -189,7 +190,7 @@ class MBIController extends Controller {
                     }
 
                     $data['Description'] = ['months' => $curMonth
-                        , 'years' => $years
+                        , 'years' => $selected_year
                         , 'region_id' => $region_id
                     ];
 
@@ -508,6 +509,7 @@ class MBIController extends Controller {
 
             $quarter = $params['obj']['condition']['QuarterFrom'];
             $years = $params['obj']['condition']['YearTo'];
+            $selected_year = $params['obj']['condition']['YearTo'];
 
             if ($quarter == '1') {
                 $monthFrom = 10;
@@ -578,7 +580,7 @@ class MBIController extends Controller {
                 }
 
                 $data['Description'] = ['months' => $curMonth
-                    , 'years' => $years
+                    , 'years' => $selected_year
                     , 'region_id' => $region_id
                 ];
 
@@ -621,7 +623,7 @@ class MBIController extends Controller {
             $regions = $RegionList;
             
             $years = $params['obj']['condition']['YearTo'];
-
+            $selected_year = $params['obj']['condition']['YearTo'];
 
             $monthFrom = 10;
             $monthTo = 9;
@@ -680,7 +682,7 @@ class MBIController extends Controller {
                 }
 
                 $data['Description'] = ['months' => $curMonth
-                    , 'years' => $years
+                    , 'years' => $selected_year
                     , 'region_id' => $region_id
                 ];
 
@@ -810,7 +812,7 @@ class MBIController extends Controller {
 
                 array_push($DataList, $data);
 
-                if ($i > 0 && ($i + 1) % 3 == 0) {
+                if ($i > 0 && ($i + 1) % 3 == 0) { 
 
                     $data = [];
                     $data['Month'] = 'ไตรมาส ' . $quarter;

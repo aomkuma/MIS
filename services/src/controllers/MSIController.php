@@ -115,6 +115,8 @@ class MSIController extends Controller {
             $monthTo = $params['obj']['condition']['MonthTo'];
             $years = $params['obj']['condition']['YearTo'];
 
+            $selected_year = $params['obj']['condition']['YearTo'];
+
             $ymFrom = $condition['YearTo'] . '-' . str_pad($condition['MonthFrom'], 2, "0", STR_PAD_LEFT);
             $ymTo = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT);
             $toTime = $condition['YearTo'] . '-' . str_pad($condition['MonthTo'], 2, "0", STR_PAD_LEFT) . '-28'; // .TravelController::getLastDayOfMonth($ym);
@@ -190,7 +192,7 @@ class MSIController extends Controller {
                     }
 
                     $data['Description'] = ['months' => $curMonth
-                        , 'years' => $years
+                        , 'years' => $selected_year
                         , 'region_id' => $region_id
                     ];
 
@@ -505,6 +507,7 @@ class MSIController extends Controller {
 
             $quarter = $params['obj']['condition']['QuarterFrom'];
             $years = $params['obj']['condition']['YearTo'];
+            $selected_year = $params['obj']['condition']['YearTo'];
 
             if ($quarter == '1') {
                 $monthFrom = 10;
@@ -575,7 +578,7 @@ class MSIController extends Controller {
                 }
 
                 $data['Description'] = ['months' => $curMonth
-                    , 'years' => $years
+                    , 'years' => $selected_year
                     , 'region_id' => $region_id
                 ];
 
@@ -618,7 +621,7 @@ class MSIController extends Controller {
             $regions = $RegionList;
             
             $years = $params['obj']['condition']['YearTo'];
-
+            $selected_year = $params['obj']['condition']['YearTo'];
 
             $monthFrom = 10;
             $monthTo = 9;
@@ -677,7 +680,7 @@ class MSIController extends Controller {
                 }
 
                 $data['Description'] = ['months' => $curMonth
-                    , 'years' => $years
+                    , 'years' => $selected_year
                     , 'region_id' => $region_id
                 ];
 
@@ -710,7 +713,7 @@ class MSIController extends Controller {
             $user_session = $params['user_session'];
             $region_id = $params['obj']['condition']['region_id'];
             $years = $params['obj']['condition']['years'];
-
+            $selected_year = $params['obj']['condition']['years'];
             $region = MBIController::checkProvince($region_id);
             $region_list[] = $region;
             // $region_list = [];

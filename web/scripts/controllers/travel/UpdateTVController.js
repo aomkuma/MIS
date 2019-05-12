@@ -176,7 +176,7 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
     }
 
     $scope.getThaiDateTimeFromString = function(date){
-        console.log(date);
+        // console.log(date);
         if(date != undefined && date != null && date != ''){
             return convertSQLDateTimeToReportDateTime(date);
         }
@@ -219,6 +219,7 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
 
     $scope.addSpermDetail = function(){
 
+        console.log($scope.SpermDetailList);
         var detail = {
                 'id':''
                 ,'travel_id':''
@@ -243,9 +244,25 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
                         ,'child':''
                         ,'student':''
                     }
+
+               ,'Item' : []
             };
 
+          for(var i = 0 ; i < $scope.MasterGoalList.length; i++){
+              // console.log($scope.MasterGoalList[i]);
+              var goal = $scope.MasterGoalList[i];
+              goal['goal_id'] = $scope.MasterGoalList[i].id;
+              goal['id'] = '';
+              goal['total_person_pay'] = 0;
+              goal['unit_price'] = 0;
+              goal['discount'] = 0;
+              goal['total_price'] = 0;
+              detail.Item.push(goal);
+          }
+          console.log(detail);
+          // return ;
         $scope.SpermDetailList.push(detail);
+        console.log($scope.SpermDetailList);
     }
 
     $scope.removeDetail = function(id, index){
@@ -336,14 +353,19 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
         SpermDetail.total_amount = SpermDetail.except_amount + SpermDetail.student_amount + SpermDetail.child_amount + SpermDetail.adult_amount; 
     }
 
-    $scope.calcPrice = function(SpermDetail){
-
-        SpermDetail.except_prices = SpermDetail.except_prices == null?0:SpermDetail.except_prices;
-        SpermDetail.student_prices = SpermDetail.student_prices == null?0:SpermDetail.student_prices;
-        SpermDetail.child_prices = SpermDetail.child_prices == null?0:SpermDetail.child_prices;
-        SpermDetail.adult_prices = SpermDetail.adult_prices == null?0:SpermDetail.adult_prices;
+    $scope.calcPrice = function(data){
+        data.total_person_pay = data.total_person_pay == null?0:data.total_person_pay;
+        data.unit_price = data.unit_price == null?0:data.unit_price;
+        data.discount = data.discount == null?0:data.discount;
+        var discount_thb = (data.unit_price * data.total_person_pay) * (data.discount / 100);
+        data.total_price = data.unit_price * data.total_person_pay - discount_thb;
+        console.log(data);
+        // SpermDetail.except_prices = SpermDetail.except_prices == null?0:SpermDetail.except_prices;
+        // SpermDetail.student_prices = SpermDetail.student_prices == null?0:SpermDetail.student_prices;
+        // SpermDetail.child_prices = SpermDetail.child_prices == null?0:SpermDetail.child_prices;
+        // SpermDetail.adult_prices = SpermDetail.adult_prices == null?0:SpermDetail.adult_prices;
         
-        SpermDetail.total_prices = SpermDetail.except_prices + SpermDetail.student_prices + SpermDetail.child_prices + SpermDetail.adult_prices; 
+        // SpermDetail.total_prices = SpermDetail.except_prices + SpermDetail.student_prices + SpermDetail.child_prices + SpermDetail.adult_prices; 
     }
 
     $scope.approve = function(Data, OrgType){

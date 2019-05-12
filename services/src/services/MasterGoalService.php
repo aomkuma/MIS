@@ -57,6 +57,7 @@ class MasterGoalService {
             return $model->id;
         } else {
             $obj['update_date'] = date('Y-m-d H:i:s');
+            // print_r($obj);exit;
             $model = MasterGoal::find($obj['id'])->update($obj);
             return $obj['id'];
         }

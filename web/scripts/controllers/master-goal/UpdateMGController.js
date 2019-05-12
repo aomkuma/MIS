@@ -28,6 +28,7 @@ angular.module('e-homework').controller('UpdateMGController', function($scope, $
     }
 
     $scope.save = function(Data){
+        console.log(Data);
         var params = {'Data' : Data};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('master-goal/update', params).then(function(result){
@@ -62,12 +63,25 @@ angular.module('e-homework').controller('UpdateMGController', function($scope, $
     $scope.Data = {
         'id':''
         , 'goal_type':''
+        , 'sub_goal_type':''
         , 'menu_type':null
         , 'goal_name':''
         , 'actives':'Y'
         , 'create_date':''
         , 'update_date':''
     };
+
+    $scope.SubGoalTypeList = [{'type':'แร่ธาตุ พรีมิกซ์ และอาหาร','name':'แร่ธาตุ'}
+                        ,{'type':'แร่ธาตุ พรีมิกซ์ และอาหาร','name':'พรีมิกซ์'}
+                        ,{'type':'แร่ธาตุ พรีมิกซ์ และอาหาร','name':'อาหาร'}
+                        ,{'type':'ข้อมูลฝูงโค','name':'โคเพิ่ม'}
+                        ,{'type':'ข้อมูลฝูงโค','name':'โคลด'}
+                    ];
+
+    $scope.SubGoalTypeList1 = [{'type':'ข้อมูลฝูงโค','name':'โคเพิ่ม'}
+                        ,{'type':'ข้อมูลฝูงโค','name':'โคลด'}
+                        
+                    ];
 
     $scope.MenuTypeList = [{'type':'DBI', 'value':'บริการสัตวแพทย์', 'name' : 'บริการสัตวแพทย์'}
                             ,{'type':'DBI', 'value':'ผสมเทียม', 'name' : 'ผสมเทียม'}

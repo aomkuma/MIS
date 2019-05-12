@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Model\Travel;
 use App\Model\TravelDetail;
+use App\Model\TravelItem;
 use Illuminate\Database\Capsule\Manager as DB;
 
 class TravelService {
@@ -24,15 +25,17 @@ class TravelService {
                             ->get();
         }
 
-    public static function getMainList($years, $months, $field_amount, $field_price) {
+    public static function getMainList($years, $months, $field_amount, $field_price, $goal_id) {
         return Travel::select(DB::raw("SUM(" . $field_amount . ") AS sum_amount")
                                 , DB::raw("SUM(" . $field_price . ") AS sum_baht")
                                 , "travel.update_date","office_approve_id"
                                     ,"office_approve_date"
                                     ,"office_approve_comment")
                         ->join("travel_detail", 'travel_detail.travel_id', '=', 'travel.id')
+                        ->join("travel_item", 'travel_item.travel_id', '=', 'travel.id')
                         ->where("years", $years)
                         ->where("months", $months)
+                        ->where("goal_id", $goal_id)
                         // ->where("region_id", $region_id)
                         ->first()
                         ->toArray();
@@ -55,6 +58,14 @@ class TravelService {
                                 $query->orderBy('update_date', 'DESC');
                             }))
                         ->first();
+    }
+
+    public static function getItem($travel_detail_id) {
+        return TravelItem::select("travel_item.*"
+                        , "master_goal.goal_name"
+                    )
+                    ->leftJoin("master_goal", "master_goal.id", '=', 'travel_item.goal_id')
+                    ->where('travel_detail_id', $travel_detail_id)->get();
     }
 
     public static function updateData($obj) {
@@ -81,6 +92,20 @@ class TravelService {
         } else {
             $obj['update_date'] = date('Y-m-d H:i:s');
             $model = TravelDetail::find($obj['id'])->update($obj);
+            return $obj['id'];
+        }
+    }
+
+    public static function updateItemData($obj) {
+
+        if (empty($obj['id'])) {
+            $obj['create_date'] = date('Y-m-d H:i:s');
+            $obj['update_date'] = date('Y-m-d H:i:s');
+            $model = TravelItem::create($obj);
+            return $model->id;
+        } else {
+            $obj['update_date'] = date('Y-m-d H:i:s');
+            $model = TravelItem::find($obj['id'])->update($obj);
             return $obj['id'];
         }
     }

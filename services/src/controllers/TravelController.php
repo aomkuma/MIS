@@ -132,20 +132,31 @@ class TravelController extends Controller {
         $DataList = [];
         $DataSummary = [];
 
-        $Master = [
-            ['label' => 'บุคคลทั่วไป (ผู้ใหญ่)'
-                , 'field_amount' => 'adult_pay'
-                , 'field_price' => 'adult_price'
-            ],
-            ['label' => 'บุคคลทั่วไป (เด็ก)'
-                , 'field_amount' => 'child_pay'
-                , 'field_price' => 'child_price'
-            ],
-            ['label' => 'นักศึกษา'
-                , 'field_amount' => 'student_pay'
-                , 'field_price' => 'student_price'
-            ]
-        ];
+        // get master
+        $MasterGoalList = MasterGoalService::getList('Y', 'ท่องเที่ยว');
+        $Master = [];
+        foreach ($MasterGoalList as $key => $value) {
+            $data = [];
+            $data['goal_id'] = $value['id'];
+            $data['label'] = $value['goal_name'];
+            $data['field_amount'] = 'total_person_pay';
+            $data['field_price'] = 'total_price';
+            array_push($Master, $data);
+        }
+        // $Master = [
+        //     ['label' => 'บุคคลทั่วไป (ผู้ใหญ่)'
+        //         , 'field_amount' => 'adult_pay'
+        //         , 'field_price' => 'adult_price'
+        //     ],
+        //     ['label' => 'บุคคลทั่วไป (เด็ก)'
+        //         , 'field_amount' => 'child_pay'
+        //         , 'field_price' => 'child_price'
+        //     ],
+        //     ['label' => 'นักศึกษา'
+        //         , 'field_amount' => 'student_pay'
+        //         , 'field_price' => 'student_price'
+        //     ]
+        // ];
         for ($i = 0; $i < $diffMonth; $i++) {
 
             // Prepare condition
@@ -158,6 +169,7 @@ class TravelController extends Controller {
                 // $region_id = $value['label'];
                 $field_amount = $value['field_amount'];
                 $field_price = $value['field_price'];
+                $goal_id = $value['goal_id'];
 
                 $monthName = TravelController::getMonthName($curMonth);
 
@@ -167,11 +179,11 @@ class TravelController extends Controller {
 
                 // get cooperative type
 
-                $Current = TravelService::getMainList($curYear, $curMonth, $field_amount, $field_price);
+                $Current = TravelService::getMainList($curYear, $curMonth, $field_amount, $field_price, $goal_id);
                 $data['CurrentAmount'] = floatval($Current['sum_amount']);
                 $data['CurrentBaht'] = floatval($Current['sum_baht']);
 
-                $Before = TravelService::getMainList($beforeYear, $curMonth, $field_amount, $field_price);
+                $Before = TravelService::getMainList($beforeYear, $curMonth, $field_amount, $field_price, $goal_id);
                 $data['BeforeAmount'] = floatval($Before['sum_amount']);
                 $data['BeforeBaht'] = floatval($Before['sum_baht']);
 
@@ -569,7 +581,6 @@ class TravelController extends Controller {
 
             $id = $params['obj']['id'];
 
-
             $months = $params['obj']['months'];
             $years = $params['obj']['years'];
 
@@ -578,7 +589,16 @@ class TravelController extends Controller {
             } else {
                 $_Data = TravelService::getData($months, $years);
             }
+            // print_r($_Data['travelDetail']);
+            // get item
+            $Data = [];
+            foreach ($_Data['travelDetail'] as $key => $value) {
+                $value['Item'] = TravelService::getItem($value['id']);
+                array_push($Data, $value);
+            }
 
+            $_Data['travel_detail'] = $Data;
+            // exit;
             $this->data_result['DATA']['Data'] = $_Data;
 
             return $this->returnResponse(200, $this->data_result, $response, true);
@@ -626,7 +646,23 @@ class TravelController extends Controller {
 
             foreach ($_Detail as $key => $value) {
                 $value['travel_id'] = $id;
-                TravelService::updateDetailData($value);
+                $TravelItem = $value['Item'];
+                unset($value['Item']);
+                $detail_id = TravelService::updateDetailData($value);
+
+                foreach ($TravelItem as $k => $v) {
+                    $item = [];
+                    $item['id'] = $v['id'];
+                    $item['travel_id'] = $id;
+                    $item['travel_detail_id'] = $detail_id;
+                    $item['goal_id'] = $v['goal_id'];
+                    $item['total_person_pay'] = $v['total_person_pay'];
+                    $item['unit_price'] = $v['unit_price'];
+                    $item['discount'] = $v['discount'];
+                    $item['total_price'] = $v['total_price'];
+
+                    TravelService::updateItemData($item);
+                }
             }
 
             //           

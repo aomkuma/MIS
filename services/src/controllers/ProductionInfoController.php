@@ -592,38 +592,38 @@ class ProductionInfoController extends Controller {
                     $GrandTotal_BeforeBaht += $data['BeforeBaht'];
                     // }
 
-                    $data = [];
-                    $data['bg_color'] = '#AFE1FA';
-                    $data['ProductionInfoName'] = 'รวม';
+                    // $data = [];
+                    // $data['bg_color'] = '#AFE1FA';
+                    // $data['ProductionInfoName'] = 'รวม';
 
-                    $data['CurrentAmount'] = $Sum_CurrentAmount;
-                    $data['CurrentBaht'] = $Sum_CurrentBaht;
+                    // $data['CurrentAmount'] = $Sum_CurrentAmount;
+                    // $data['CurrentBaht'] = $Sum_CurrentBaht;
 
-                    $data['BeforeAmount'] = $Sum_BeforeAmount;
-                    $data['BeforeBaht'] = $Sum_BeforeBaht;
+                    // $data['BeforeAmount'] = $Sum_BeforeAmount;
+                    // $data['BeforeBaht'] = $Sum_BeforeBaht;
 
-                    $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
-                    $data['DiffAmount'] = $DiffAmount;
-                    if ($data['BeforeAmount'] != 0) {
-                        $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
-                    } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
-                        $data['DiffAmountPercentage'] = 100;
-                    } else {
-                        $data['DiffAmountPercentage'] = 0;
-                    }
+                    // $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+                    // $data['DiffAmount'] = $DiffAmount;
+                    // if ($data['BeforeAmount'] != 0) {
+                    //     $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                    // } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
+                    //     $data['DiffAmountPercentage'] = 100;
+                    // } else {
+                    //     $data['DiffAmountPercentage'] = 0;
+                    // }
 
 
-                    $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
-                    $data['DiffBaht'] = $DiffBaht;
+                    // $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                    // $data['DiffBaht'] = $DiffBaht;
 
-                    if ($data['BeforeBaht'] != 0) {
-                        $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
-                    } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
-                        $data['DiffBahtPercentage'] = 100;
-                    } else {
-                        $data['DiffBahtPercentage'] = 0;
-                    }
-                    array_push($DataList, $data);
+                    // if ($data['BeforeBaht'] != 0) {
+                    //     $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
+                    // } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
+                    //     $data['DiffBahtPercentage'] = 100;
+                    // } else {
+                    //     $data['DiffBahtPercentage'] = 0;
+                    // }
+                    // array_push($DataList, $data);
                 }
                 // $data = [];
                 // $data['bg_color'] = '#A0DEFD';

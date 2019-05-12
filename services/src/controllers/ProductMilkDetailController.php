@@ -39,6 +39,9 @@ class ProductMilkDetailController extends Controller {
         try {
             $params = $request->getParsedBody();
             $sub_product_milk_id = $params['obj']['sub_product_milk_id'];
+            if(empty($sub_product_milk_id)){
+                $sub_product_milk_id = $params['obj']['id'];
+            }
 //                $menu_type = $params['obj']['menu_type'];
 //                $condition = $params['obj']['condition'];
 

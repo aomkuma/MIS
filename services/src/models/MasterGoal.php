@@ -9,6 +9,7 @@ class MasterGoal extends \Illuminate\Database\Eloquent\Model {
     public $timestamps = false;
     protected $fillable = array('id'
         , 'goal_type'
+        , 'sub_goal_type'
         , 'menu_type'
         , 'goal_name'
         , 'actives'

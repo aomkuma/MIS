@@ -168,7 +168,7 @@ class TrainingCowBreedService {
                         ->join('cooperative', 'cooperative.id', '=', 'training_cowbreed.cooperative_id')
                         ->where("training_cowbreed.years", $years)
                         ->where("training_cowbreed.months", $months)
-                        ->where("training_cowbreed.region_id", $region_id)
+                        // ->where("training_cowbreed.region_id", $region_id)
                         ->get()
                         ->toArray();
     }

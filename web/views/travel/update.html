@@ -122,9 +122,19 @@
 										<th></th>
 										<th>จำนวนผู้เข้าชมที่ต้องจ่าย</th>
 										<th>ราคาต่อหน่วย</th>
+										<th>ส่วนลด</th>
+										<th>ราคารวม</th>
 									</tr>
 								</thead>
 								<tbody>
+									<tr ng-repeat="data in SpermDetail.Item">
+										<td>{{data.goal_name}}</td>
+										<td><input type="number" class="form-control" ng-model="data.total_person_pay" ng-blur="calcPrice(data)"></td>
+										<td><input type="number" class="form-control" ng-model="data.unit_price" ng-blur="calcPrice(data)"></td>
+										<td><input type="number" class="form-control" ng-model="data.discount" ng-blur="calcPrice(data)"></td>
+										<td><input type="number" class="form-control" ng-model="data.total_price"></td>
+									</tr>
+									<!--
 									<tr>
 										<td>จำนวนผู้เข้าชมที่ยกเว้น</td>
 										<td><input type="number" class="form-control" ng-model="SpermDetail.except_amount" ng-change="calcAmount(SpermDetail)"></td>
@@ -150,6 +160,8 @@
 										<td><input type="number" class="form-control" ng-model="SpermDetail.total_amount" readonly="true"></td>
 										<td><input type="number" class="form-control" ng-model="SpermDetail.total_prices" readonly="true"></td>
 									</tr>
+
+								-->
 								</tbody>
 							</table>
 						</div>
