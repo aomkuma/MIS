@@ -409,10 +409,10 @@ class ProductionSaleInfoController extends Controller {
 
         // get ProductMilkService
         $ProducMilkList = ProductMilkService::getList('', '', [], $factory_id);
-
+        for($a = 0; $a < 4; $a++){
         for ($i = 0; $i < $loop; $i++) {
 
-            if ($i > 0 && $curQuarter == 2) {
+            if (/*$i > 0 &&*/ $curQuarter == 2) {
                 $curYear++;
                 $beforeYear = $curYear - 1;
             }
@@ -609,6 +609,8 @@ class ProductionSaleInfoController extends Controller {
             }
 
             $curMonth++;
+        }
+        $curQuarter++;
         }
 
         $data = [];

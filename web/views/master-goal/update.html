@@ -47,7 +47,7 @@
 	</div>
 	<div class="row form-group" ng-show="Data.menu_type == 'แร่ธาตุ พรีมิกซ์ และอาหาร' || Data.menu_type == 'ข้อมูลฝูงโค'">
 		<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-			ประเภทย่อย {{'ss'+Data.sub_goal_type}}
+			ประเภทย่อย
 		</div> 
 		<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 			<select class="form-control" ng-model="Data.sub_goal_type" ng-options="data.name as data.name for data in SubGoalTypeList | filter:{type:Data.menu_type}">
