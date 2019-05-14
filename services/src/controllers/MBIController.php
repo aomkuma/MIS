@@ -72,6 +72,9 @@ class MBIController extends Controller {
 
     public function checkProvince($regionID) {
         switch ($regionID) {
+            case '1':
+                return 'จังหวัดสระบุรี';
+                break;
             case '3':
                 return 'จังหวัดสระบุรี';
                 break;
