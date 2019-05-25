@@ -188,7 +188,7 @@ angular.module('e-homework').controller('UpdateCBController', function($scope, $
         $scope.SpermDetailList = [];
         // $scope.setSperm();
         $scope.loadData('cow-breed/get');
-        
+        $scope.$parent.getGoalByMenu('ปัจจัยการเลี้ยงโค', $scope.Sperm.years, $scope.Sperm.months);
         // $scope.SpermDetailList = [
         //     {
         //         'id':''

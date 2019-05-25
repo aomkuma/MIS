@@ -89,21 +89,22 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
         
         
         var params = {
-            'months' : $scope.Sperm.months
+            'days' : $scope.Sperm.days
+            ,'months' : $scope.Sperm.months
             ,'years' : $scope.Sperm.years
         };
         if(id != null){
             params = {'id':id};
         }else{
-            params = {
-                'months' : $scope.Sperm.months
+            params = {'days' : $scope.Sperm.days
+                ,'months' : $scope.Sperm.months
                 ,'years' : $scope.Sperm.years
             };
         }
         
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest(action, params).then(function(result){
-            if(result.data.STATUS == 'OK' && result.data.DATA.Data != null){
+            if(result.data.STATUS == 'OK' && result.data.DATA.Data.id != null){
                 $scope.Sperm = result.data.DATA.Data;
                 // $scope.Sperm.cooperative_id = parseInt($scope.Sperm.cooperative_id);
                 if($scope.Sperm.travel_detail !== null){
@@ -187,7 +188,7 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
         $scope.SpermDetailList = [];
         // $scope.setSperm();
         $scope.loadData('travel/get');
-
+        $scope.$parent.getGoalByMenu('ท่องเที่ยว', $scope.Sperm.years, $scope.Sperm.months);
         
         // $scope.SpermDetailList = [
         //     {

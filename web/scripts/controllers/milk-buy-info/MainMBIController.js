@@ -203,7 +203,8 @@ angular.module('e-homework').controller('MainMBIController', function($scope, $c
     }
 
 
-    $scope.viewDetail = function(data){
+    $scope.viewDetail = function(RegionName, data){
+        $scope.RegionName = RegionName;
         console.log(data);
         $scope.ViewType = 'DETAIL';
         $scope.loadListDetail('mbi/list/milk-buy-info/detail', data);

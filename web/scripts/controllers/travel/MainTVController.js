@@ -130,7 +130,20 @@ angular.module('e-homework').controller('MainTVController', function($scope, $co
 
     $scope.viewDetail = function(){
         $scope.ViewType = 'DETAIL';
-        console.log($scope.DetailList);
+        var params = {
+
+            'condition' : $scope.condition
+            , 'region' : $scope.PersonRegion
+        };
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('travel/list/detail', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.DetailList = result.data.DATA.DataList;
+                // $scope.SummaryData = result.data.DATA.Summary;
+                console.log($scope.DetailList);
+            }
+            IndexOverlayFactory.overlayHide();
+        });
     }
     $scope.exportReport = function(data,condition){
        // console.log(DetailList, $scope.data_description);

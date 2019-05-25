@@ -190,3 +190,7 @@ $container['SubProductMilkController'] = function ($c) {
 $container['ProductMilkDetailController'] = function ($c) {
     return new \App\Controller\ProductMilkDetailController($c->get('logger'), $c->get('db'));
 };
+
+$container['CowgroupFatherController'] = function ($c) {
+    return new \App\Controller\CowgroupFatherController($c->get('logger'), $c->get('db'));
+};

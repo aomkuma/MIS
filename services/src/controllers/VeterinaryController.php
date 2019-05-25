@@ -165,11 +165,26 @@ class VeterinaryController extends Controller {
                 $BeforeCowData = VeterinaryService::getMainList($beforeYear, $curMonth, $region_id, $farm_type, $item_type);
                 $data['BeforeCowData'] = floatval($BeforeCowData['sum_amount']);
 
+                // get insemination
+                $farm_type = 'Cooperative';
+                $item_type = 'โคนม';
+                $CurrentCowInsData = VeterinaryService::getMainList($curYear, $curMonth, $region_id, $farm_type, $item_type, '17');
+                $data['CurrentCowInsData'] = floatval($CurrentCowInsData['sum_amount']);
+                $BeforeCowInsData = VeterinaryService::getMainList($beforeYear, $curMonth, $region_id, $farm_type, $item_type, '17');
+                $data['BeforeCowInsData'] = floatval($BeforeCowInsData['sum_amount']);
+
                 $item_type = 'ค่าบริการ';
                 $CurrentServiceData = VeterinaryService::getMainList($curYear, $curMonth, $region_id, $farm_type, $item_type);
                 $data['CurrentServiceData'] = floatval($CurrentServiceData['sum_amount']);
                 $BeforeServiceData = VeterinaryService::getMainList($beforeYear, $curMonth, $region_id, $farm_type, $item_type);
                 $data['BeforeServiceData'] = floatval($BeforeServiceData['sum_amount']);
+
+                // get insemination
+                $item_type = 'ค่าบริการ';
+                $CurrentServiceInsData = VeterinaryService::getMainList($curYear, $curMonth, $region_id, $farm_type, $item_type, '17');
+                $data['CurrentServiceInsData'] = floatval($CurrentServiceInsData['sum_amount']);
+                $BeforeServiceInsData = VeterinaryService::getMainList($beforeYear, $curMonth, $region_id, $farm_type, $item_type, '17');
+                $data['BeforeServiceInsData'] = floatval($BeforeServiceInsData['sum_amount']);
 
                 $diffCowData = $data['CurrentCowData'] - $data['BeforeCowData'];
                 $data['DiffCowData'] = $diffCowData;
@@ -178,6 +193,20 @@ class VeterinaryController extends Controller {
                     $data['DiffCowDataPercentage'] = (($data['CurrentCowData'] - $data['BeforeCowData']) / $data['BeforeCowData']) * 100;
                 } else if (empty($data['BeforeCowData']) && !empty($data['CurrentCowData'])) {
                     $data['DiffCowDataPercentage'] = 100;
+                }else{
+                    $data['DiffCowDataPercentage'] = 0;
+                }
+
+                // Insemination
+                $diffCowInsData = $data['CurrentCowInsData'] - $data['BeforeCowInsData'];
+                $data['DiffCowInsData'] = $diffCowInsData;
+
+                if ($data['BeforeCowInsData'] != 0) {
+                    $data['DiffCowDataInsPercentage'] = (($data['CurrentCowInsData'] - $data['BeforeCowInsData']) / $data['BeforeCowInsData']) * 100;
+                } else if (empty($data['BeforeCowInsData']) && !empty($data['CurrentCowInsData'])) {
+                    $data['DiffCowInsDataPercentage'] = 100;
+                }else{
+                    $data['DiffCowInsDataPercentage'] = 0;
                 }
 
 
@@ -189,6 +218,21 @@ class VeterinaryController extends Controller {
                     $data['DiffServiceDataPercentage'] = (($data['CurrentServiceData'] - $data['BeforeServiceData']) / $data['BeforeServiceData']) * 100;
                 } else if (empty($data['BeforeServiceData']) && !empty($data['CurrentServiceData'])) {
                     $data['DiffServiceDataPercentage'] = 100;
+                }else{
+                    $data['DiffServiceDataPercentage'] = 0;
+                }
+
+                // Insemination
+                $diffServiceInsData = $data['CurrentServiceInsData'] - $data['BeforeServiceInsData'];
+                $data['DiffServiceInsData'] = $diffServiceInsData;
+
+
+                if ($data['BeforeServiceInsData'] != 0) {
+                    $data['DiffServiceInsDataPercentage'] = (($data['CurrentServiceInsData'] - $data['BeforeServiceInsData']) / $data['BeforeServiceInsData']) * 100;
+                } else if (empty($data['BeforeServiceInsData']) && !empty($data['CurrentServiceInsData'])) {
+                    $data['DiffServiceInsDataPercentage'] = 100;
+                }else{
+                     $data['DiffServiceInsDataPercentage'] = 0;
                 }
 
                 $data['CreateDate'] = $CurrentCowData['update_date'];
@@ -208,11 +252,11 @@ class VeterinaryController extends Controller {
                     , 'region_id' => $region_id
                 ];
 
-                $DataSummary['SummaryCurrentCow'] = $DataSummary['SummaryCurrentCow'] + $data['CurrentCowData'];
-                $DataSummary['SummaryBeforeCow'] = $DataSummary['SummaryBeforeCow'] + $data['BeforeCowData'];
+                $DataSummary['SummaryCurrentCow'] = $DataSummary['SummaryCurrentCow'] + $data['CurrentCowData'] + $data['CurrentCowInsData'];
+                $DataSummary['SummaryBeforeCow'] = $DataSummary['SummaryBeforeCow'] + $data['BeforeCowData'] + $data['BeforeCowInsData'];
                 $DataSummary['SummaryCowPercentage'] = 0;
-                $DataSummary['SummaryCurrentService'] = $DataSummary['SummaryCurrentService'] + $data['CurrentServiceData'];
-                $DataSummary['SummaryBeforeService'] = $DataSummary['SummaryBeforeService'] + $data['BeforeServiceData'];
+                $DataSummary['SummaryCurrentService'] = $DataSummary['SummaryCurrentService'] + $data['CurrentServiceData'] + $data['CurrentServiceInsData'];
+                $DataSummary['SummaryBeforeService'] = $DataSummary['SummaryBeforeService'] + $data['BeforeServiceData'] + $data['BeforeServiceInsData'];
                 $DataSummary['SummaryServicePercentage'] = 0;
 
                 array_push($DataList, $data);
@@ -233,11 +277,26 @@ class VeterinaryController extends Controller {
                     $BeforeCowData = VeterinaryService::getMainList($beforeYear, $curMonth, $region_id, $farm_type, $item_type);
                     $data['BeforeCowData'] = floatval($BeforeCowData['sum_amount']);
 
+                    // get insemination
+                    $farm_type = 'lab';
+                    $item_type = 'โคนม';
+                    $CurrentCowInsData = VeterinaryService::getMainList($curYear, $curMonth, $region_id, $farm_type, $item_type, '17');
+                    $data['CurrentCowInsData'] = floatval($CurrentCowInsData['sum_amount']);
+                    $BeforeCowInsData = VeterinaryService::getMainList($beforeYear, $curMonth, $region_id, $farm_type, $item_type, '17');
+                    $data['BeforeCowInsData'] = floatval($BeforeCowInsData['sum_amount']);
+
                     $item_type = 'ค่าบริการ';
                     $CurrentServiceData = VeterinaryService::getMainList($curYear, $curMonth, $region_id, $farm_type, $item_type);
                     $data['CurrentServiceData'] = floatval($CurrentServiceData['sum_amount']);
                     $BeforeServiceData = VeterinaryService::getMainList($beforeYear, $curMonth, $region_id, $farm_type, $item_type);
                     $data['BeforeServiceData'] = floatval($BeforeServiceData['sum_amount']);
+
+                    // get insemination
+                    $item_type = 'ค่าบริการ';
+                    $CurrentServiceInsData = VeterinaryService::getMainList($curYear, $curMonth, $region_id, $farm_type, $item_type, '17');
+                    $data['CurrentServiceInsData'] = floatval($CurrentServiceInsData['sum_amount']);
+                    $BeforeServiceInsData = VeterinaryService::getMainList($beforeYear, $curMonth, $region_id, $farm_type, $item_type, '17');
+                    $data['BeforeServiceInsData'] = floatval($BeforeServiceInsData['sum_amount']);
 
                     $diffCowData = floatval($data['CurrentCowData']) - floatval($data['BeforeCowData']);
                     $data['DiffCowData'] = $diffCowData;
@@ -246,6 +305,18 @@ class VeterinaryController extends Controller {
                         $data['DiffCowDataPercentage'] = floatval($data['CurrentCowData']) / floatval($data['BeforeCowData'] * 100);
                     } else {
                         $data['DiffCowDataPercentage'] = 0;
+                    }
+
+                    // Insemination
+                    $diffCowInsData = $data['CurrentCowInsData'] - $data['BeforeCowInsData'];
+                    $data['DiffCowInsData'] = $diffCowInsData;
+
+                    if ($data['BeforeCowInsData'] != 0) {
+                        $data['DiffCowDataInsPercentage'] = (($data['CurrentCowInsData'] - $data['BeforeCowInsData']) / $data['BeforeCowInsData']) * 100;
+                    } else if (empty($data['BeforeCowInsData']) && !empty($data['CurrentCowInsData'])) {
+                        $data['DiffCowInsDataPercentage'] = 100;
+                    }else{
+                        $data['DiffCowInsDataPercentage'] = 0;
                     }
                     // if (is_nan($data['DiffCowDataPercentage'])) {
                     //     $data['DiffCowDataPercentage'] = 0;
@@ -257,6 +328,18 @@ class VeterinaryController extends Controller {
                         $data['DiffServiceDataPercentage'] = floatval($data['CurrentServiceData']) / floatval($data['BeforeServiceData'] * 100);
                     } else {
                         $data['DiffServiceDataPercentage'] = 0;
+                    }
+
+                    $diffServiceInsData = $data['CurrentServiceInsData'] - $data['BeforeServiceInsData'];
+                    $data['DiffServiceInsData'] = $diffServiceInsData;
+
+
+                    if ($data['BeforeServiceInsData'] != 0) {
+                        $data['DiffServiceInsDataPercentage'] = (($data['CurrentServiceInsData'] - $data['BeforeServiceInsData']) / $data['BeforeServiceInsData']) * 100;
+                    } else if (empty($data['BeforeServiceInsData']) && !empty($data['CurrentServiceInsData'])) {
+                        $data['DiffServiceInsDataPercentage'] = 100;
+                    } else {
+                        $data['DiffServiceInsDataPercentage'] = 0;
                     }
                     // if (is_nan($data['DiffServiceDataPercentage'])) {
                     //     $data['DiffServiceDataPercentage'] = 0;
@@ -271,11 +354,11 @@ class VeterinaryController extends Controller {
                         }
                     }
 
-                    $DataSummary['SummaryCurrentCow'] = $DataSummary['SummaryCurrentCow'] + $data['CurrentCowData'];
-                    $DataSummary['SummaryBeforeCow'] = $DataSummary['SummaryBeforeCow'] + $data['BeforeCowData'];
+                    $DataSummary['SummaryCurrentCow'] = $DataSummary['SummaryCurrentCow'] + $data['CurrentCowData'] + $data['CurrentCowInsData'];
+                    $DataSummary['SummaryBeforeCow'] = $DataSummary['SummaryBeforeCow'] + $data['BeforeCowData'] + $data['BeforeCowInsData'];
 
-                    $DataSummary['SummaryCurrentService'] = $DataSummary['SummaryCurrentService'] + $data['CurrentServiceData'];
-                    $DataSummary['SummaryBeforeService'] = $DataSummary['SummaryBeforeService'] + $data['BeforeServiceData'];
+                    $DataSummary['SummaryCurrentService'] = $DataSummary['SummaryCurrentService'] + $data['CurrentServiceData'] + $data['CurrentServiceInsData'];
+                    $DataSummary['SummaryBeforeService'] = $DataSummary['SummaryBeforeService'] + $data['BeforeServiceData'] + $data['BeforeServiceInsData'];
 
                     $data['Description'] = ['farm_type' => $farm_type
                         , 'item_type' => $item_type

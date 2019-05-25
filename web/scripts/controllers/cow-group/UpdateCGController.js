@@ -192,6 +192,7 @@ angular.module('e-homework').controller('UpdateCGController', function($scope, $
         // $scope.setSperm();
         $scope.loadData('cow-group/get');
         
+        $scope.$parent.getGoalByMenu('ข้อมูลฝูงโค', $scope.Sperm.years, $scope.Sperm.months);
         // $scope.SpermDetailList = [
         //     {
         //         'id':''

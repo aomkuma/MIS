@@ -31,6 +31,7 @@ $app->post('/goal-mission/get/', 'GoalMissionController:getData');
 $app->post('/goal-mission/update/', 'GoalMissionController:updateData');
 $app->post('/goal-mission/update/editable/', 'GoalMissionController:updateDataEditable');
 $app->post('/goal-mission/update/approve/', 'GoalMissionController:updateDataApprove');
+$app->post('/goal-mission/menu/', 'GoalMissionController:getGoalByMenuType');
 
 $app->post('/mou/list/', 'MouController:getList');
 $app->post('/mou/get/', 'MouController:getData');
@@ -145,6 +146,8 @@ $app->post('/travel/delete/detail/', 'TravelController:removeDetailData');
 $app->post('/travel/report/', 'ReportController:exportTravelExcel');
 $app->post('/travel/update/approve/', 'TravelController:updateDataApprove');
 $app->post('/travel/list/approve/', 'TravelController:loadDataApprove');
+$app->post('/travel/list/detail/', 'TravelController:loadDetailList');
+
 
 $app->post('/cooperative-milk/list/main/', 'CooperativeMilkController:getMainList');
 $app->post('/cooperative-milk/get/', 'CooperativeMilkController:getData');
@@ -160,6 +163,14 @@ $app->post('/cow-group/delete/detail/', 'CowGroupController:removeDetailData');
 $app->post('/cow-group/report/', 'ReportController:exportCowgroupExcel');
 $app->post('/cow-group/update/approve/', 'CowGroupController:updateDataApprove');
 $app->post('/cow-group/list/approve/', 'CowGroupController:loadDataApprove');
+
+$app->post('/cow-group-father/list/main/', 'CowgroupFatherController:getMainList');
+$app->post('/cow-group-father/get/', 'CowgroupFatherController:getData');
+$app->post('/cow-group-father/update/', 'CowgroupFatherController:updateData');
+$app->post('/cow-group-father/delete/detail/', 'CowgroupFatherController:removeDetailData');
+$app->post('/cow-group-father/report/', 'ReportController:exportCowgroupExcel');
+$app->post('/cow-group-father/update/approve/', 'CowgroupFatherController:updateDataApprove');
+$app->post('/cow-group-father/list/approve/', 'CowgroupFatherController:loadDataApprove');
 
 $app->post('/monthreport/report/', 'MonthReportController:exportmonthreportExcel');
 $app->post('/quarterreport/report/', 'QuarterReportController:exportquarterreportExcel');

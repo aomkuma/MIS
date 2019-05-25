@@ -5,9 +5,226 @@ namespace App\Service;
 use App\Model\GoalMission;
 use App\Model\GoalMissionAvg;
 use App\Model\GoalMissionHistory;
+use App\Model\Veterinary;
+use App\Model\Mineral;
+// use App\Model\Insemination;
+use App\Model\Sperm;
+use App\Model\SpermSale;
+use App\Model\Material;
+use App\Model\CowGroup;
+use App\Model\Travel;
+use App\Model\CowBreed;
+use App\Model\TrainingCowBreed;
+use App\Model\CooperativeMilk;
+use App\Model\CowGroupFather;
+
 use Illuminate\Database\Capsule\Manager as DB;
 
 class GoalMissionService {
+
+    public static function getGoalMissionYear($menu_type, $years) {
+        return GoalMission::select(DB::raw("SUM(amount) AS total_amount")
+                                , DB::raw("SUM(price_value) AS price_value")
+                                )
+                        ->where('years', $years)
+                        ->where('menu_type', $menu_type)
+                        ->first();
+    }
+
+    public static function getMenuTotal($menu_type, $years, $months = '') {
+        $res = GoalMission::select(DB::raw("SUM(mis_goal_mission_avg.amount) AS total_amount")
+                                , DB::raw("SUM(mis_goal_mission_avg.price_value) AS price_value")
+                                )
+                        ->join('goal_mission_avg', 'goal_mission_avg.goal_mission_id', '=', 'goal_mission.id')
+                        // ->where('years', $years)
+                        ->where(function($query) use ($years, $months) {
+                            if (!empty($months)) {
+                                $query->where('avg_date', $years . '-' . $months. '-01');
+                            }
+                        })
+                        ->where('menu_type', $menu_type)
+                        ->first();
+        return $res['price_value'];
+        // switch($menu_type){
+        //     case 'บริการสัตวแพทย์': $res = GoalMissionService::getVeterinaryTotal($menu_type, $years, $months);break;
+        //     // case 'ผสมเทียม': $res = GoalMissionService::getVeterinaryTotal($menu_type, $years, $months);break;
+        //     case 'แร่ธาตุ พรีมิกซ์ และอาหาร': $res = GoalMissionService::getMineralTotal($menu_type, $years, $months);break;
+        //     case 'ผลิตน้ำเชื้อแช่แข็ง': $res = GoalMissionService::getSpermTotal($menu_type, $years, $months);break;
+        //     case 'จำหน่ายน้ำเชื้อแช่แข็ง': $res = GoalMissionService::getSpermSaleTotal($menu_type, $years, $months);break;
+        //     case 'วัสดุผสมเทียมและอื่นๆ': $res = GoalMissionService::getMaterialTotal($menu_type, $years, $months);break;
+        //     case 'ปัจจัยการเลี้ยงโค': $res = GoalMissionService::getCowBreedTotal($menu_type, $years, $months);break;
+        //     case 'ฝึกอบรม': $res = GoalMissionService::getTrainingCowBreedTotal($menu_type, $years, $months);break;
+        //     case 'ท่องเที่ยว': $res = GoalMissionService::getTraveTotal($menu_type, $years, $months);break;
+        //     case 'สหกรณ์และปริมาณน้ำนม': $res = GoalMissionService::getCooperativeMilkTotal($menu_type, $years, $months);break;
+        //     case 'ข้อมูลฝูงโค': $res = GoalMissionService::getCowGroupTotal($menu_type, $years, $months);break;
+        //     case 'ข้อมูลฝูงโคพ่อพันธุ์': $res = GoalMissionService::getCowGroupFatherTotal($menu_type, $years, $months);break;
+        // }
+
+        // return $res;
+    }
+
+
+    public static function getVeterinaryTotal($menu_type, $years, $months = '') {
+        $data = Veterinary::select(DB::raw("SUM(item_amount) AS total_amount")
+                                // , "SUM(price_value) AS price_value"
+                                )
+                        ->join("veterinary_item", "veterinary_item.veterinary_id", '=', 'veterinary.id')
+                        ->where('years', $years)
+                        // ->where('menu_type', $menu_type)
+                        ->where(function($query) use ($months) {
+                            if (!empty($months)) {
+                                $query->where('months', $months);
+                            }
+                        })
+                        ->first();
+        return $data['total_amount'];
+    }   
+
+    public static function getMineralTotal($menu_type, $years, $months = '') {
+        $data = Mineral::select(DB::raw("SUM(`values`) AS total_amount")
+                                // , "SUM(price_value) AS price_value"
+                                )
+                        ->join("mineral_detail", "mineral_detail.mineral_id", '=', 'mineral.id')
+                        ->where('years', $years)
+                        // ->where('menu_type', $menu_type)
+                        ->where(function($query) use ($months) {
+                            if (!empty($months)) {
+                                $query->where('months', $months);
+                            }
+                        })
+                        ->first();
+        return $data['total_amount'];
+    }    
+
+    public static function getSpermTotal($menu_type, $years, $months = '') {
+        $data = Sperm::select(DB::raw("SUM(`price`) AS total_amount")
+                                // , "SUM(price_value) AS price_value"
+                                )
+                        ->join("sperm_detail", "sperm_detail.sperm_id", '=', 'sperm.id')
+                        ->where('years', $years)
+                        // ->where('menu_type', $menu_type)
+                        ->where(function($query) use ($months) {
+                            if (!empty($months)) {
+                                $query->where('months', $months);
+                            }
+                        })
+                        ->first();
+        return $data['total_amount'];
+    }
+
+    public static function getSpermSaleTotal($menu_type, $years, $months = '') {
+        $data = SpermSale::select(DB::raw("SUM(`values`) AS total_amount")
+                                // , "SUM(price_value) AS price_value"
+                                )
+                        ->join("sperm_sale_detail", "sperm_sale_detail.sperm_id", '=', 'sperm_sale.id')
+                        ->where('years', $years)
+                        // ->where('menu_type', $menu_type)
+                        ->where(function($query) use ($months) {
+                            if (!empty($months)) {
+                                $query->where('months', $months);
+                            }
+                        })
+                        ->first();
+        return $data['total_amount'];
+    }
+
+    public static function getMaterialTotal($menu_type, $years, $months = '') {
+        $data = Material::select(DB::raw("SUM(`price`) AS total_amount")
+                                // , "SUM(price_value) AS price_value"
+                                )
+                        ->join("material_detail", "material_detail.material_id", '=', 'material.id')
+                        ->where('years', $years)
+                        // ->where('menu_type', $menu_type)
+                        ->where(function($query) use ($months) {
+                            if (!empty($months)) {
+                                $query->where('months', $months);
+                            }
+                        })
+                        ->first();
+        return $data['total_amount'];
+    }
+
+    public static function getCowBreedTotal($menu_type, $years, $months = '') {
+        $data = CowBreed::select(DB::raw("SUM(`price`) AS total_amount")
+                                // , "SUM(price_value) AS price_value"
+                                )
+                        ->join("cow_breed_detail", "cow_breed_detail.cow_breed_id", '=', 'cow_breed.id')
+                        ->where('years', $years)
+                        // ->where('menu_type', $menu_type)
+                        ->where(function($query) use ($months) {
+                            if (!empty($months)) {
+                                $query->where('months', $months);
+                            }
+                        })
+                        ->first();
+        return $data['total_amount'];
+    }
+
+    public static function getTrainingCowBreedTotal($menu_type, $years, $months = '') {
+        $data = TrainingCowBreed::select(DB::raw("SUM(`values`) AS total_amount")
+                                // , "SUM(price_value) AS price_value"
+                                )
+                        ->join("training_cowbreed_detail", "training_cowbreed_detail.training_cowbreed_id", '=', 'training_cowbreed.id')
+                        ->where('years', $years)
+                        // ->where('menu_type', $menu_type)
+                        ->where(function($query) use ($months) {
+                            if (!empty($months)) {
+                                $query->where('months', $months);
+                            }
+                        })
+                        ->first();
+        return $data['total_amount'];
+    }    
+
+    public static function getTraveTotal($menu_type, $years, $months = '') {
+        $data = Travel::select(DB::raw("SUM(`total_price`) AS total_amount")
+                                // , "SUM(price_value) AS price_value"
+                                )
+                        ->join("travel_item", "travel_item.travel_id", '=', 'travel_item.id')
+                        ->where('years', $years)
+                        // ->where('menu_type', $menu_type)
+                        ->where(function($query) use ($months) {
+                            if (!empty($months)) {
+                                $query->where('months', $months);
+                            }
+                        })
+                        ->first();
+        return $data['total_amount'];
+    }    
+
+    public static function getCooperativeMilkTotal($menu_type, $years, $months = '') {
+        $data = CooperativeMilk::select(DB::raw("SUM(`total_values`) AS total_amount")
+                                // , "SUM(price_value) AS price_value"
+                                )
+                        ->join("cooperative_milk_detail", "cooperative_milk_detail.cooperative_milk_id", '=', 'cooperative_milk.id')
+                        ->where('years', $years)
+                        // ->where('menu_type', $menu_type)
+                        ->where(function($query) use ($months) {
+                            if (!empty($months)) {
+                                $query->where('months', $months);
+                            }
+                        })
+                        ->first();
+        return $data['total_amount'];
+    }
+
+    public static function getCowGroupTotal($menu_type, $years, $months = '') {
+        $data = CowGroup::select(DB::raw("SUM(`go_factory_values` + cow_values + decline_values) AS total_amount")
+                                // , "SUM(price_value) AS price_value"
+                                )
+                        ->join("cow_group_detail", "cow_group_detail.cow_group_id", '=', 'cow_group.id')
+                        ->where('years', $years)
+                        // ->where('menu_type', $menu_type)
+                        ->where(function($query) use ($months) {
+                            if (!empty($months)) {
+                                $query->where('months', $months);
+                            }
+                        })
+                        ->first();
+        return $data['total_amount'];
+    }
+
+    
 
     public static function getList($condition, $UserID, $RegionList) {
         return GoalMission::where(function($query) use ($condition) {

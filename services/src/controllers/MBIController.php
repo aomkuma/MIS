@@ -136,6 +136,7 @@ class MBIController extends Controller {
 
             $DataList = [];
             $DataSummary = [];
+            $TotalLine = [];
 
             $beforYear = intval($years) - 1;
             $curMonth = $monthFrom;
@@ -162,7 +163,7 @@ class MBIController extends Controller {
 
                     $data['CurrentAmount'] = floatval($Current['sum_amount']);
                     $data['CurrentBaht'] = floatval($Current['sum_baht']);
-
+                    $TotalLine['CurrentBaht'] = $TotalLine['CurrentBaht'] + $data['CurrentBaht'];
                     // Before year
 
                     $fromTime = $beforYear . '-' . str_pad($curMonth, 2, "0", STR_PAD_LEFT) . '-01';
@@ -172,6 +173,7 @@ class MBIController extends Controller {
                     $Before = MBIService::getListMBI($fromTime, $toTime, $region);
                     $data['BeforeAmount'] = floatval($Before['sum_amount']);
                     $data['BeforeBaht'] = floatval($Before['sum_baht']);
+                    $TotalLine['BeforeBaht'] = $TotalLine['BeforeBaht'] + $data['BeforeBaht'];
 
                     $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
                     $data['DiffAmount'] = $DiffAmount;
@@ -185,6 +187,7 @@ class MBIController extends Controller {
 
                     $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
                     $data['DiffBaht'] = $DiffBaht;
+                    $TotalLine['DiffBaht'] = $TotalLine['DiffBaht'] + $data['DiffBaht'];
 
                     if ($data['BeforeBaht'] != 0) {
                         $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
@@ -201,11 +204,13 @@ class MBIController extends Controller {
 
                     $DataSummary['SummaryAmount'] = $DataSummary['SummaryAmount'] + $data['CurrentAmount'];
                     $DataSummary['SummaryValue'] = $DataSummary['SummaryValue'] + $data['CurrentBaht'];
+
                 }
 
                 $curMonth++;
             }
-
+            $TotalLine['RegionName'] = 'รวม';
+            array_push($DataList, $TotalLine);
             // exit;
 
             $this->data_result['DATA']['List'] = $DataList;
@@ -531,7 +536,7 @@ class MBIController extends Controller {
 
             $DataList = [];
             $DataSummary = [];
-
+            $TotalLine = [];
 
             foreach ($regions as $key => $value) {
 
@@ -552,7 +557,7 @@ class MBIController extends Controller {
 
                 $data['CurrentAmount'] = floatval($Current['sum_amount']);
                 $data['CurrentBaht'] = floatval($Current['sum_baht']);
-
+                $TotalLine['CurrentBaht'] = $TotalLine['CurrentBaht'] + $data['CurrentBaht'];
                 // Before year
 
                 $ymTo = ($years - 1) . '-' . str_pad($monthTo, 2, "0", STR_PAD_LEFT);
@@ -562,6 +567,7 @@ class MBIController extends Controller {
                 $Before = MBIService::getListMBI($fromTime, $toTime, $region);
                 $data['BeforeAmount'] = floatval($Before['sum_amount']);
                 $data['BeforeBaht'] = floatval($Before['sum_baht']);
+                $TotalLine['BeforeBaht'] = $TotalLine['BeforeBaht'] + $data['BeforeBaht'];
 
                 $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
                 $data['DiffAmount'] = $DiffAmount;
@@ -575,6 +581,7 @@ class MBIController extends Controller {
 
                 $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
                 $data['DiffBaht'] = $DiffBaht;
+                $TotalLine['DiffBaht'] = $TotalLine['DiffBaht'] + $data['DiffBaht'];
 
                 if ($data['BeforeBaht'] != 0) {
                     $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
@@ -593,6 +600,8 @@ class MBIController extends Controller {
                 $DataSummary['SummaryValue'] = $DataSummary['SummaryValue'] + $data['CurrentBaht'];
             }
 
+            $TotalLine['RegionName'] = 'รวม';
+            array_push($DataList, $TotalLine);
             // $curMonth++;
             // exit;
 
@@ -633,7 +642,7 @@ class MBIController extends Controller {
 
             $DataList = [];
             $DataSummary = [];
-
+            $TotalLine = [];
 
             foreach ($regions as $key => $value) {
 
@@ -654,7 +663,7 @@ class MBIController extends Controller {
 
                 $data['CurrentAmount'] = floatval($Current['sum_amount']);
                 $data['CurrentBaht'] = floatval($Current['sum_baht']);
-
+                $TotalLine['CurrentBaht'] = $TotalLine['CurrentBaht'] + $data['CurrentBaht'];
                 // Before year
 
                 $ymTo = ($years - 1) . '-' . str_pad($monthTo, 2, "0", STR_PAD_LEFT);
@@ -664,6 +673,7 @@ class MBIController extends Controller {
                 $Before = MBIService::getListMBI($fromTime, $toTime, $region);
                 $data['BeforeAmount'] = floatval($Before['sum_amount']);
                 $data['BeforeBaht'] = floatval($Before['sum_baht']);
+                $TotalLine['BeforeBaht'] = $TotalLine['BeforeBaht'] + $data['BeforeBaht'];
 
                 $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
                 $data['DiffAmount'] = $DiffAmount;
@@ -677,6 +687,7 @@ class MBIController extends Controller {
 
                 $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
                 $data['DiffBaht'] = $DiffBaht;
+                $TotalLine['DiffBaht'] = $TotalLine['DiffBaht'] + $data['DiffBaht'];
 
                 if ($data['BeforeBaht'] != 0) {
                     $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
@@ -694,6 +705,9 @@ class MBIController extends Controller {
                 $DataSummary['SummaryAmount'] = $DataSummary['SummaryAmount'] + $data['CurrentAmount'];
                 $DataSummary['SummaryValue'] = $DataSummary['SummaryValue'] + $data['CurrentBaht'];
             }
+
+            $TotalLine['RegionName'] = 'รวม';
+            array_push($DataList, $TotalLine);
 
             // $curMonth++;
             // exit;

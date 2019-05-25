@@ -13,7 +13,7 @@ app.config(function($controllerProvider, $compileProvider, $filterProvider, $pro
   };
 });
 
-angular.module('e-homework').controller('AppController', ['$cookies','$scope', '$filter', '$uibModal','IndexOverlayFactory', function($cookies, $scope, $filter, $uibModal, IndexOverlayFactory) {
+angular.module('e-homework').controller('AppController', ['$cookies','$scope', '$filter', '$uibModal','IndexOverlayFactory', 'HTTPService', function($cookies, $scope, $filter, $uibModal, IndexOverlayFactory, HTTPService) {
 	$scope.overlay = IndexOverlayFactory;
 	$scope.overlayShow = false;
 	$scope.currentUser = null;
@@ -30,6 +30,18 @@ angular.module('e-homework').controller('AppController', ['$cookies','$scope', '
             window.location.replace('#/guest/logon');    
         },500);
         
+    }
+
+    $scope.getGoalByMenu = function(menu_type, years, months){
+        var params = {'menu_type' : menu_type, 'years': years, 'months': months};
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('goal-mission/menu', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.Goal = result.data.DATA;
+                // console.log($scope.UserList);
+            }
+            IndexOverlayFactory.overlayHide();
+        });
     }
 
 }]);

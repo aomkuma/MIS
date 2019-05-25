@@ -1,7 +1,7 @@
-angular.module('e-homework').controller('MainMSIController', function($scope, $cookies, $filter, $state, $uibModal, HTTPService, IndexOverlayFactory) {
+angular.module('e-homework').controller('MainCGFController', function($scope, $cookies, $filter, $state, $uibModal, HTTPService, IndexOverlayFactory) {
     //console.log('Hello !');
     $scope.DEFAULT_LANGUAGE = 'TH';
-    $scope.menu_selected = 'industry';
+    $scope.menu_selected = 'dairyfarming';
     var $user_session = sessionStorage.getItem('user_session');
     
     if($user_session != null){
@@ -13,7 +13,7 @@ angular.module('e-homework').controller('MainMSIController', function($scope, $c
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));    
     $scope.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));   
 
-    $scope.page_type = 'milk-sale-info';
+    $scope.page_type = 'cow-group-father';
     $scope.getMenu = function(action, menu_type){
         var params = {'menu_type' : menu_type};
         HTTPService.clientRequest(action, params).then(function(result){
@@ -22,7 +22,7 @@ angular.module('e-homework').controller('MainMSIController', function($scope, $c
             IndexOverlayFactory.overlayHide();
         });
     }
-    $scope.getMenu('menu/get/type' ,$scope.page_type); 
+    $scope.getMenu('menu/get/type' ,$scope.page_type);
 
     $scope.getUserRole = function(){
         var params = {'UserID' : $scope.currentUser.UserID};
@@ -47,7 +47,7 @@ angular.module('e-homework').controller('MainMSIController', function($scope, $c
     $scope.loadApproveList = function(){
         
       //  IndexOverlayFactory.overlayShow();
-        HTTPService.clientRequest('travel/list/approve', null).then(function(result){
+        HTTPService.clientRequest('cow-group-father/list/approve', null).then(function(result){
             if(result.data.STATUS == 'OK'){
                 $scope.ApproveList = result.data.DATA.DataList;
                 // console.log($scope.List);
@@ -96,17 +96,8 @@ angular.module('e-homework').controller('MainMSIController', function($scope, $c
     }
 
     $scope.loadList = function(action){
-
-        if($scope.condition.DisplayType == 'monthly'){
-            action = 'msi/list/milk-sale-info/month';
-        }else if($scope.condition.DisplayType == 'quarter'){
-            action = 'msi/list/milk-sale-info/quarter';
-        }else if($scope.condition.DisplayType == 'annually'){
-            action = 'msi/list/milk-sale-info/year';
-        }
         $scope.CurYear = $scope.condition.YearTo + 543;
         $scope.LastYear = $scope.CurYear - 1;
-        console.log($scope.condition.DisplayType, $scope.CurYear, $scope.LastYear);
         var params = {
             'condition' : $scope.condition
             , 'region' : $scope.PersonRegion
@@ -114,71 +105,9 @@ angular.module('e-homework').controller('MainMSIController', function($scope, $c
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest(action, params).then(function(result){
             if(result.data.STATUS == 'OK'){
-                $scope.List = result.data.DATA.List;
+                $scope.List = result.data.DATA.DataList;
                 $scope.SummaryData = result.data.DATA.Summary;
                 console.log($scope.List);
-            }
-            IndexOverlayFactory.overlayHide();
-        });
-    }
-
-    $scope.loadListDetail = function(action, data){
-        $scope.CurYear = $scope.condition.YearTo + 543;
-        $scope.LastYear = $scope.CurYear - 1;
-        var params = {
-            'condition' : data
-            , 'region' : $scope.PersonRegion
-        };
-        IndexOverlayFactory.overlayShow();
-        HTTPService.clientRequest(action, params).then(function(result){
-            if(result.data.STATUS == 'OK'){
-                $scope.DetailList = result.data.DATA.List;
-                $scope.DetailSummary =  result.data.DATA.Summary;
-                console.log($scope.DetailList);
-            }
-            IndexOverlayFactory.overlayHide();
-        });
-    }
-
-    $scope.loadListMOU = function(action){
-
-        // if($scope.condition.DisplayType == 'monthly'){
-        //     action = 'msi/list/milk-sale-info/mou/month';
-        // }else if($scope.condition.DisplayType == 'quarter'){
-        //     action = 'msi/list/milk-sale-info/mou/month/quarter';
-        // }else if($scope.condition.DisplayType == 'annually'){
-        //     action = 'msi/list/milk-sale-info/mou/month/year';
-        // }
-
-        $scope.CurYear = $scope.condition.YearTo + 543;
-        $scope.LastYear = $scope.CurYear - 1;
-        var params = {
-            'condition' : $scope.condition
-            , 'region' : $scope.PersonRegion
-        };
-        IndexOverlayFactory.overlayShow();
-        HTTPService.clientRequest(action, params).then(function(result){
-            if(result.data.STATUS == 'OK'){
-                $scope.MOUList = result.data.DATA.List;
-                console.log($scope.DetailList);
-            }
-            IndexOverlayFactory.overlayHide();
-        });
-    }
-
-    $scope.loadListMOUDetail = function(action, condition){
-        $scope.CurYear = $scope.condition.YearTo + 543;
-        $scope.LastYear = $scope.CurYear - 1;
-        var params = {
-            'condition' : condition
-            , 'region' : $scope.PersonRegion
-        };
-        IndexOverlayFactory.overlayShow();
-        HTTPService.clientRequest(action, params).then(function(result){
-            if(result.data.STATUS == 'OK'){
-                $scope.MOUDetailList = result.data.DATA.List;
-                
-                console.log($scope.MOUDetailList);
             }
             IndexOverlayFactory.overlayHide();
         });
@@ -189,37 +118,20 @@ angular.module('e-homework').controller('MainMSIController', function($scope, $c
         return convertDateToFullThaiDateIgnoreTime(new Date(date));
     }
 
-    $scope.getMonthName = function(month){
-        return getThaiMonthInt(month);
-    }
-
     $scope.goUpdate = function(id){
-        window.location.href = '#/travel/update/' + id;
+        window.location.href = '#/cow-group-father/update/' + id;
     }
 
     $scope.goSearch = function(){
         $scope.ViewType = 'MAIN';
-         $scope.loadList('msi/list/milk-sale-info');
+        $scope.loadList('cow-group-father/list/main');
     }
 
 
-    $scope.viewDetail = function(RegionName, data){
-        $scope.RegionName = RegionName;
+    $scope.viewDetail = function(){
         $scope.ViewType = 'DETAIL';
-        $scope.loadListDetail('msi/list/milk-sale-info/detail', data);
-        // console.log($scope.DetailList);
+        console.log($scope.DetailList);
     }
-
-    $scope.viewMOU = function(){
-        $scope.ViewType = 'MOU';
-        $scope.loadListMOU('msi/list/milk-sale-info/mou');
-    }
-
-    $scope.viewMOUDetail = function(condition){
-        $scope.ViewType = 'MOU-DETAIL';
-        $scope.loadListMOUDetail('msi/list/milk-sale-info/mou/detail', condition);
-    }
-
     $scope.exportReport = function(data,condition){
        // console.log(DetailList, $scope.data_description);
         // return;
@@ -229,14 +141,13 @@ angular.module('e-homework').controller('MainMSIController', function($scope, $c
            , 'condition' : condition
         }; 
         IndexOverlayFactory.overlayShow();
-        HTTPService.clientRequest('travel/report', params).then(function(result){
+        HTTPService.clientRequest('cow-group-father/report', params).then(function(result){
             if(result.data.STATUS == 'OK'){
                 window.location.href="../" + result.data.DATA;
             }
             IndexOverlayFactory.overlayHide();
         });
     }
-
 
     $scope.getRegionName = function(region_id){
         switch(region_id){
@@ -271,8 +182,8 @@ angular.module('e-homework').controller('MainMSIController', function($scope, $c
     $scope.MonthList = getMonthList();
     var curDate = new Date();
     $scope.condition = {
-                        'Region':null
-                        ,'DisplayType':'monthly'
+                        'Region':$scope.PersonRegion[0].RegionID
+                        , 'DisplayType' : 'monthly'
                         ,'MonthFrom' : curDate.getMonth() + 1
                         ,'YearFrom': curDate.getFullYear()
                         ,'MonthTo' : curDate.getMonth() + 1
@@ -293,105 +204,141 @@ angular.module('e-homework').controller('MainMSIController', function($scope, $c
                 ,{'years' : (curDate.getFullYear() + 543) - 1}
             ];
 
-    // $scope.loadList('travel/list', '');
+    // $scope.loadList('cow-group-father/list', '');
     IndexOverlayFactory.overlayHide();
 
     // Dummy Data
     $scope.List = [
         {
-            'RegionName':'ฝ.สส'
-            ,'SpermName':'บุคคลทั่วไป (ผู้ใหญ่)'
-            ,'CurrentAmount':2000
-            ,'CurrentBaht':2000000
-            ,'BeforeAmount':1980
-            ,'BeforeBaht':1920000
-            ,'DiffAmount':20
-            ,'DiffAmountPercentage':2
-            ,'DiffBaht':800000
-            ,'DiffBahtPercentage':2
+            'MainItem':'ฝูงโคต้นงวด'
+            ,'SubItem':[
+                {
+                    'SubItem':'ฝูงโคฟาร์มโคนม 1962'
+                    ,'CurrentUnit':2000
+                    ,'CurrentPercentage':32
+                    ,'BeforeUnit':1980
+                    ,'BeforePercentage':30
+                    ,'DiffUnit':20
+                    ,'DiffPercentage':2
+                },
+                {
+                    'SubItem':'ฝูงโคฟาร์มโคเพศเมีย(โคทดแทน)'
+                    ,'CurrentUnit':2000
+                    ,'CurrentPercentage':32
+                    ,'BeforeUnit':1980
+                    ,'BeforePercentage':30
+                    ,'DiffUnit':20
+                    ,'DiffPercentage':2
+                },
+                {
+                    'SubItem':'ฝูงโคฝึกอมรม(โคนมอินทรี)'
+                    ,'CurrentUnit':2000
+                    ,'CurrentPercentage':32
+                    ,'BeforeUnit':1980
+                    ,'BeforePercentage':30
+                    ,'DiffUnit':20
+                    ,'DiffPercentage':2
+                }
+                ,
+                {
+                    'SubItem':'ฝูงโคทั้งหมด'
+                    ,'CurrentUnit':6000
+                    ,'CurrentPercentage':32
+                    ,'BeforeUnit':5940
+                    ,'BeforePercentage':30
+                    ,'DiffUnit':60
+                    ,'DiffPercentage':2
+                }
+            ]
         },
         {
-            'RegionName':'สภต.'
-            ,'SpermName':'บุคคลทั่วไป (เด็ก)'
-            ,'CurrentAmount':3000
-            ,'CurrentBaht':3000000
-            ,'BeforeAmount':2970
-            ,'BeforeBaht':2920000
-            ,'DiffAmount':30
-            ,'DiffAmountPercentage':2.1
-            ,'DiffBaht':900000
-            ,'DiffBahtPercentage':2
+            'MainItem':'ฝูงโคปลายงวด'
+            ,'SubItem':[
+                {
+                    'SubItem':'ฝูงโคฟาร์มโคนม 1962'
+                    ,'CurrentUnit':2000
+                    ,'CurrentPercentage':32
+                    ,'BeforeUnit':1980
+                    ,'BeforePercentage':30
+                    ,'DiffUnit':20
+                    ,'DiffPercentage':2
+                },
+                {
+                    'SubItem':'ฝูงโคฟาร์มโคเพศเมีย(โคทดแทน)'
+                    ,'CurrentUnit':2000
+                    ,'CurrentPercentage':32
+                    ,'BeforeUnit':1980
+                    ,'BeforePercentage':30
+                    ,'DiffUnit':20
+                    ,'DiffPercentage':2
+                },
+                {
+                    'SubItem':'ฝูงโคฝึกอมรม(โคนมอินทรี)'
+                    ,'CurrentUnit':2000
+                    ,'CurrentPercentage':32
+                    ,'BeforeUnit':1980
+                    ,'BeforePercentage':30
+                    ,'DiffUnit':20
+                    ,'DiffPercentage':2
+                }
+                ,
+                {
+                    'SubItem':'ฝูงโคทั้งหมด'
+                    ,'CurrentUnit':6000
+                    ,'CurrentPercentage':32
+                    ,'BeforeUnit':5940
+                    ,'BeforePercentage':30
+                    ,'DiffUnit':60
+                    ,'DiffPercentage':2
+                }
+            ]
         },
-        {
-            'RegionName':'สภต.'
-            ,'SpermName':'นักศึกษา '
-            ,'CurrentAmount':3000
-            ,'CurrentBaht':3000000
-            ,'BeforeAmount':2970
-            ,'BeforeBaht':2920000
-            ,'DiffAmount':30
-            ,'DiffAmountPercentage':2.1
-            ,'DiffBaht':900000
-            ,'DiffBahtPercentage':2
-        }
     ];
 
     $scope.Item = [
         {
-            'label':'จำนวนผู้เข้าชม (คน)'
+            'label':'จำหน่ายน้ำแช่แข็งผ่านกระบวนการ'
             ,'unit' : [
                     {'label':''}
-                    ,{'label':''}
                     ,{'label':''}
                 ]
         }
         ,{
-            'label':'ราคาต่อหน่วย (บาท)'
+            'label':'จำหน่ายน้ำแช่แข็งไม่ผ่านกระบวนการ'
             ,'unit' : [
                     {'label':''}
-                    ,{'label':''}
                     ,{'label':''}
                 ]
         }
         ,{
-            'label':'รวม (บาท)'
+            'label':'จำหน่ายไนโตรเจนเหลว'
             ,'unit' : [
                     {'label':''}
-                    ,{'label':''}
                     ,{'label':''}
                 ]
         }
         ,{
-            'label':'จำนวนผู้เข้าชมที่ยกเว้น'
+            'label':'จำหน่ายวัสดุผสมเทียมและอื่นๆ'
             ,'unit' : [
                     {'label':''}
-                    ,{'label':''}
-                    ,{'label':''}
                 ]
         }
     ];
 
     $scope.ItemUnit = [
-        {'label':'ผู้ใหญ่'}
-        ,{'label':'เด็ก'}
-        ,{'label':'นักศึกษา'}
-        ,{'label':'ผู้ใหญ่'}
-        ,{'label':'เด็ก'}
-        ,{'label':'นักศึกษา'}
-        ,{'label':'ผู้ใหญ่'}
-        ,{'label':'เด็ก'}
-        ,{'label':'นักศึกษา'}
-        ,{'label':'ผู้ใหญ่'}
-        ,{'label':'เด็ก'}
-        ,{'label':'นักศึกษา'}
+        {'label':'หลอด'}
+        ,{'label':'มูลค่า (บาท)'}
+        ,{'label':'หลอด'}
+        ,{'label':'มูลค่า (บาท)'}
+        ,{'label':'หลอด'}
+        ,{'label':'มูลค่า (บาท)'}
+        ,{'label':'บาท'}
         
     ];
 
     $scope.DetailList = [
         {
-            'TravelDate':'2018-09-11'
-            ,'Organization':'โรงเรียนสวนกุหลาบ'
-            ,'Discount':'0'
+            'RegionName':'มิตรภาพ'
             ,'ValueList':[
                 {'values':'0'}
                 ,{'values':'0'}
@@ -400,17 +347,10 @@ angular.module('e-homework').controller('MainMSIController', function($scope, $c
                 ,{'values':'10'}
                 ,{'values':'2400'}
                 ,{'values':'50500'}
-                ,{'values':'0'}
-                ,{'values':'0'}
-                ,{'values':'0'}
-                ,{'values':'0'}
-                ,{'values':'0'}
             ]
         },
         {
-            'TravelDate':'2018-09-11'
-            ,'Organization':'โรงเรียนสวนกุหลาบ'
-            ,'Discount':'0'
+            'RegionName':'บกระดาน'
             ,'ValueList':[
                 {'values':'2'}
                 ,{'values':'4800'}
@@ -419,18 +359,11 @@ angular.module('e-homework').controller('MainMSIController', function($scope, $c
                 ,{'values':'10'}
                 ,{'values':'2400'}
                 ,{'values':'50500'}
-                ,{'values':'0'}
-                ,{'values':'0'}
-                ,{'values':'0'}
-                ,{'values':'0'}
-                ,{'values':'0'}
             ]
         }
         ,
         {
-            'TravelDate':'2018-09-11'
-            ,'Organization':'โรงเรียนสวนกุหลาบ'
-            ,'Discount':'0'
+            'RegionName':'ลำพญาลาง'
             ,'ValueList':[
                 {'values':'2'}
                 ,{'values':'4800'}
@@ -439,31 +372,19 @@ angular.module('e-homework').controller('MainMSIController', function($scope, $c
                 ,{'values':'10'}
                 ,{'values':'2400'}
                 ,{'values':'50500'}
-                ,{'values':'0'}
-                ,{'values':'0'}
-                ,{'values':'0'}
-                ,{'values':'0'}
-                ,{'values':'0'}
             ]
         }
     ];
 
     $scope.DetailSummary = [
-        {'values':''}
-        ,{'values':'2'}
+        {'values':'4'}
+        ,{'values':'9600'}
         ,{'values':'3'}
         ,{'values':'36000'}
         ,{'values':'30'}
         ,{'values':'7200'}
         ,{'values':'151500'}
-        ,{'values':'0'}
-        ,{'values':'0'}
-        ,{'values':'0'}
-        ,{'values':'0'}
-        ,{'values':'0'}
-        ,{'values':'0'}
-        ,{'values':'0'}
     ];
-    $scope.loadList('msi/list/milk-sale-info');
+    $scope.loadList('cow-group-father/list/main');
 
 });

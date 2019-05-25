@@ -178,7 +178,7 @@ angular.module('e-homework').controller('UpdateCMController', function($scope, $
         $scope.SpermDetailList = [];
         // $scope.setSperm();
         $scope.loadData('cooperative-milk/get');
-        
+        $scope.$parent.getGoalByMenu('สหกรณ์และปริมาณน้ำนม', $scope.Sperm.years, $scope.Sperm.months);
         // $scope.SpermDetailList = [
         //     {
         //         'id':''

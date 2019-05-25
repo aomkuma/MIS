@@ -580,14 +580,14 @@ class TravelController extends Controller {
             $params = $request->getParsedBody();
 
             $id = $params['obj']['id'];
-
+            $days = $params['obj']['days'];
             $months = $params['obj']['months'];
             $years = $params['obj']['years'];
 
             if (!empty($id)) {
                 $_Data = TravelService::getDataByID($id);
             } else {
-                $_Data = TravelService::getData($months, $years);
+                $_Data = TravelService::getData($days, $months, $years);
             }
             // print_r($_Data['travelDetail']);
             // get item

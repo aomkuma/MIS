@@ -60,6 +60,11 @@ angular.module('e-homework').controller('UpdateMGController', function($scope, $
         }   
     }
 
+    $scope.filterSubType = function(menu_type, type){
+        console.log(menu_type, type);
+        return menu_type === type;
+    }
+
     $scope.Data = {
         'id':''
         , 'goal_type':''
@@ -76,6 +81,8 @@ angular.module('e-homework').controller('UpdateMGController', function($scope, $
                         ,{'type':'แร่ธาตุ พรีมิกซ์ และอาหาร','name':'อาหาร'}
                         ,{'type':'ข้อมูลฝูงโค','name':'โคเพิ่ม'}
                         ,{'type':'ข้อมูลฝูงโค','name':'โคลด'}
+                        ,{'type':'ข้อมูลฝูงโคพ่อพันธุ์','name':'โคเพิ่ม'}
+                        ,{'type':'ข้อมูลฝูงโคพ่อพันธุ์','name':'โคลด'}
                     ];
 
     $scope.SubGoalTypeList1 = [{'type':'ข้อมูลฝูงโค','name':'โคเพิ่ม'}
@@ -94,6 +101,7 @@ angular.module('e-homework').controller('UpdateMGController', function($scope, $
                             ,{'type':'DBI', 'value':'ท่องเที่ยว', 'name' : 'ท่องเที่ยว'}
                             ,{'type':'DBI', 'value':'สหกรณ์และปริมาณน้ำนม', 'name' : 'สหกรณ์และปริมาณน้ำนม'}
                             ,{'type':'DBI', 'value':'ข้อมูลฝูงโค', 'name' : 'ข้อมูลฝูงโค'}
+                            ,{'type':'DBI', 'value':'ข้อมูลฝูงโคพ่อพันธุ์', 'name' : 'ข้อมูลฝูงโคพ่อพันธุ์'}
                             ,{'type':'II', 'value':'ข้อมูลการผลิต', 'name' : 'ข้อมูลการผลิต'}
                             ,{'type':'II', 'value':'ข้อมูลการขาย', 'name' : 'ข้อมูลการขาย'}
                             ,{'type':'II', 'value':'ข้อมูลรับซื้อน้ำนม', 'name' : 'ข้อมูลรับซื้อน้ำนม'}

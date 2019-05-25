@@ -160,13 +160,13 @@
 				<td>{{numberFormatComma(data.DiffBaht)}}</td>
 				<td>{{numberFormatComma(data.DiffBahtPercentage)}}</td>
 				<td>
-					<button class="btn btn-info" ng-click="viewMOU()">
+					<button class="btn btn-info" ng-click="viewMOU()" ng-show="($index + 1) < List.length">
 						<span class="glyphicon glyphicon-zoom-in"></span> 
 						MOU
 					</button>
 				</td>
 				<td>
-					<button class="btn btn-success" ng-click="viewDetail(data.Description)">
+					<button class="btn btn-success" ng-click="viewDetail(data.RegionName, data.Description)"  ng-show="($index + 1) < List.length">
 						<span class="glyphicon glyphicon-zoom-in"></span> 
 						รายละเอียด
 					</button>
@@ -219,13 +219,13 @@
 				<td>{{numberFormatComma(data.DiffBaht)}}</td>
 				<td>{{numberFormatComma(data.DiffBahtPercentage)}}</td>
 				<td>
-					<button class="btn btn-info" ng-click="viewMOU()">
+					<button class="btn btn-info" ng-click="viewMOU()" ng-show="($index + 1) < List.length">
 						<span class="glyphicon glyphicon-zoom-in"></span> 
 						MOU
 					</button>
 				</td>
 				<td>
-					<button class="btn btn-success" ng-click="viewDetail(data.Description)">
+					<button class="btn btn-success" ng-click="viewDetail(data.RegionName, data.Description)" ng-show="($index + 1) < List.length">
 						<span class="glyphicon glyphicon-zoom-in"></span> 
 						รายละเอียด
 					</button>
@@ -276,13 +276,13 @@
 				<td>{{numberFormatComma(data.DiffBaht)}}</td>
 				<td>{{numberFormatComma(data.DiffBahtPercentage)}}</td>
 				<td>
-					<button class="btn btn-info" ng-click="viewMOU()">
+					<button class="btn btn-info" ng-click="viewMOU()" ng-show="($index + 1) < List.length">
 						<span class="glyphicon glyphicon-zoom-in"></span> 
 						MOU
 					</button>
 				</td>
 				<td>
-					<button class="btn btn-success" ng-click="viewDetail(data.Description)">
+					<button class="btn btn-success" ng-click="viewDetail(data.RegionName, data.Description)" ng-show="($index + 1) < List.length">
 						<span class="glyphicon glyphicon-zoom-in"></span> 
 						รายละเอียด
 					</button>
@@ -296,7 +296,8 @@
 	
 	<table class="table table-bordered table-striped">
 		<caption>
-			<button class="btn btn-default" ng-click="ViewType = 'MAIN'"><span class="glyphicon glyphicon-arrow-left"></span></button>
+			<button class="btn btn-default" ng-click="ViewType = 'MAIN'"><span class="glyphicon glyphicon-arrow-left"></span></button> 
+			<h3>{{RegionName}}</h3>
 		</caption>
 		<thead style="background-color: #BD1212; color: #FFF;">
 			<tr>

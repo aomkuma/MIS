@@ -184,7 +184,7 @@ angular.module('e-homework').controller('UpdateMNController', function($scope, $
         $scope.MineralDetailList = [];
         // $scope.setMineral();
         $scope.loadData('mineral/get');
-        
+        $scope.$parent.getGoalByMenu('แร่ธาตุ พรีมิกซ์ และอาหาร', $scope.Mineral.years, $scope.Mineral.months);
         // $scope.MineralDetailList = [
         //     {
         //         'id':''

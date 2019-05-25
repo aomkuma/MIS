@@ -467,7 +467,7 @@ class ProductionInfoController extends Controller {
         $GrandTotal_BeforeBaht = 0;
 
         // get ProductMilkService
-        $ProducMilkList = ProductMilkService::getList('', '', [], $factory_id);
+        $ProducMilkList = ProductMilkService::getList('Y', '', [], $factory_id);
 
         // get Factory
         // $FactoryList = FactoryService::getList($RegionList, $factory_id);
@@ -741,7 +741,7 @@ class ProductionInfoController extends Controller {
         $GrandTotal_BeforeBaht = 0;
 
         // get ProductMilkService
-        $ProducMilkList = ProductMilkService::getList('', '', [], $factory_id);
+        $ProducMilkList = ProductMilkService::getList('Y', '', [], $factory_id);
 
         for ($i = 0; $i < $loop; $i++) {
 
@@ -1003,7 +1003,7 @@ class ProductionInfoController extends Controller {
         $GrandTotal_BeforeBaht = 0;
 
         // get ProductMilkService
-        $ProducMilkList = ProductMilkService::getList('', '', [], $factory_id);
+        $ProducMilkList = ProductMilkService::getList('Y', '', [], $factory_id);
 
         for ($i = 0; $i < $loop; $i++) {
 
@@ -1277,7 +1277,7 @@ class ProductionInfoController extends Controller {
             $GrandTotal_BeforeBaht = 0;
 
             // get ProductMilkService
-            $ProducMilkList = ProductMilkService::getList('', '', [], $factory_id);
+            $ProducMilkList = ProductMilkService::getList('Y', '', [], $factory_id);
 
             // get Factory
             $FactoryList = FactoryService::getData($factory_id);
@@ -1758,7 +1758,7 @@ class ProductionInfoController extends Controller {
             foreach ($FactoryList as $key1 => $value1) {
                 // get ProductMilkService
                 // $ProducMilkList = ProductMilkService::getList('', '', '', $value1['id']);
-                $ProducMilkList = ProductMilkService::getList('', '', '', '');
+                $ProducMilkList = ProductMilkService::getList('Y', '', '', '');
 
                 $DataList['factory_name'] = $value1['factory_name'];
                 $DataList['product'] = [];
@@ -1909,7 +1909,7 @@ class ProductionInfoController extends Controller {
             foreach ($FactoryList as $key1 => $value1) {
                 // get ProductMilkService
                 // $ProducMilkList = ProductMilkService::getList('', '', '', $value1['id']);
-                $ProducMilkList = ProductMilkService::getList('', '', '', '');
+                $ProducMilkList = ProductMilkService::getList('Y', '', '', '');
 
                 $DataList['factory_name'] = $value1['factory_name'];
                 $DataList['product'] = [];

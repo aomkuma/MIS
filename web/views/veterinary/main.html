@@ -167,9 +167,9 @@
 			<tr>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">ภูมิภาค</th>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">เดือน</th>
-				<th colspan="2" style="text-align: center; vertical-align: middle;">{{CurYear}}</th>
-				<th colspan="2" style="text-align: center; vertical-align: middle;">{{LastYear}}</th>
-				<th colspan="4" style="text-align: center;">ผลต่าง</th>
+				<th colspan="4" style="text-align: center; vertical-align: middle;">{{CurYear}}</th>
+				<th colspan="4" style="text-align: center; vertical-align: middle;">{{LastYear}}</th>
+				<th colspan="8" style="text-align: center;">ผลต่าง</th>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">วันที่บันทึกข้อมูล</th>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">วันที่อนุมัติ</th>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">สถานะ</th>
@@ -178,11 +178,19 @@
 			<tr>
 				<th style="text-align: center;">โคที่รับบริการ (ตัว)</th>
 				<th style="text-align: center;">รายได้ค่าบริการ (บาท)</th>
+				<th style="text-align: center;">โคที่รับผสมเทียม (ตัว)</th>
+				<th style="text-align: center;">รายได้ค่าผสมเทียม (บาท)</th>
 				<th style="text-align: center;">โคที่รับบริการ (ตัว)</th>
 				<th style="text-align: center;">รายได้ค่าบริการ (บาท)</th>
+				<th style="text-align: center;">โคที่รับผสมเทียม (ตัว)</th>
+				<th style="text-align: center;">รายได้ค่าผสมเทียม (บาท)</th>
 				<th style="text-align: center;">โคที่รับบริการ (ตัว)</th>
 				<th style="text-align: center;">% เพิ่ม / ลด</th>
 				<th style="text-align: center;">รายได้ค่าบริการ (บาท)</th>
+				<th style="text-align: center;">% เพิ่ม / ลด</th>
+				<th style="text-align: center;">โคที่รับผสมเทียม (ตัว)</th>
+				<th style="text-align: center;">% เพิ่ม / ลด</th>
+				<th style="text-align: center;">รายได้ค่าผสมเทียม (บาท)</th>
 				<th style="text-align: center;">% เพิ่ม / ลด</th>
 			</tr>
 		</thead>
@@ -195,12 +203,20 @@
 				<td>{{data.Month}}</td>
 				<td>{{numberFormat(data.CurrentCowData)}}</td>
 				<td>{{numberFormatComma(data.CurrentServiceData)}}</td>
+				<td>{{numberFormat(data.CurrentCowInsData)}}</td>
+				<td>{{numberFormatComma(data.CurrentServiceInsData)}}</td>
 				<td>{{numberFormat(data.BeforeCowData)}}</td>
 				<td>{{numberFormatComma(data.BeforeServiceData)}}</td>
+				<td>{{numberFormat(data.BeforeCowInsData)}}</td>
+				<td>{{numberFormatComma(data.BeforeServiceInsData)}}</td>
 				<td>{{numberFormat(data.DiffCowData)}}</td>
 				<td>{{numberFormatComma(data.DiffCowDataPercentage)}}</td>
 				<td>{{numberFormatComma(data.DiffServiceData)}}</td>
 				<td>{{numberFormatComma(data.DiffServiceDataPercentage)}}</td>
+				<td>{{numberFormat(data.DiffCowInsData)}}</td>
+				<td>{{numberFormatComma(data.DiffCowInsDataPercentage)}}</td>
+				<td>{{numberFormatComma(data.DiffServiceInsData)}}</td>
+				<td>{{numberFormatComma(data.DiffServiceInsDataPercentage)}}</td>
 				<td>{{data.CreateDate}}</td>
 				<td>{{data.ApproveDate}}</td>
 				<td>{{data.Status}}</td>

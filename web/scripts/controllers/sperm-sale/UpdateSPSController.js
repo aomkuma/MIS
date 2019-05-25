@@ -191,7 +191,7 @@ angular.module('e-homework').controller('UpdateSPSController', function($scope, 
         $scope.SpermDetailList = [];
         // $scope.setSperm();
         $scope.loadData('sperm-sale/get');
-        
+        $scope.$parent.getGoalByMenu('จำหน่ายน้ำเชื้อแช่แข็ง', $scope.Sperm.years, $scope.Sperm.months);
         // $scope.SpermDetailList = [
         //     {
         //         'id':''

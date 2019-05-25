@@ -78,7 +78,7 @@ angular.module('e-homework').controller('UpdatePFController', function($scope, $
 
     $scope.loadDefaultProductMilk = function(){
         IndexOverlayFactory.overlayShow();
-        var params = {'facid':$scope.Data.factory_id};
+        var params = {'actives':'Y', 'facid':$scope.Data.factory_id};
         console.log(params);
         HTTPService.clientRequest('product-milk/list/all', params).then(function(result){
             if(result.data.STATUS == 'OK'){
@@ -113,7 +113,7 @@ angular.module('e-homework').controller('UpdatePFController', function($scope, $
     $scope.ProductMilkList = [];
     $scope.loadProductMilk = function(index){
 
-        var params = {'facid':$scope.Data.factory_id};
+        var params = {'actives':'Y', 'facid':$scope.Data.factory_id};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('product-milk/list', params).then(function(result){
             if(result.data.STATUS == 'OK'){

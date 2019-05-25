@@ -14,6 +14,54 @@
             $this->db = $db;
         }
 
+        
+        public function getGoalByMenuType($request, $response, $args){
+            try{
+                $params = $request->getParsedBody();
+                $user_session = $params['user_session'];
+                $menu_type = $params['obj']['menu_type'];
+                $years = $params['obj']['years'];
+                $months = $params['obj']['months'];
+
+                // Get goal in years
+                $goal_year = GoalMissionService::getGoalMissionYear($menu_type, $years);
+                $goal_months = GoalMissionService::getMenuTotal($menu_type, $years, $months);
+
+                $years = $years - 1;
+                $cur_month = date('m');
+                if($cur_month < 10){
+                    $loop = 3 + $months;
+                }else{
+                    switch ($cur_month) {
+                        case 10:$loop = 1;break;
+                        case 11:$loop = 2;break;
+                        case 12:$loop = 3;break;
+                    }
+                }
+
+                $start_month = 10;
+                for($i = 0; $i < $loop; $i++){
+                    if($start_month > 12){
+                        $start_month = 1;
+                        $years += 1;
+                    }
+                    $goal_total += GoalMissionService::getMenuTotal($menu_type, $years, $start_month);
+                    $start_month++;
+                }
+                
+
+                $this->data_result['DATA']['goal_year'] = $goal_year;
+                $this->data_result['DATA']['goal_total'] = $goal_total;
+                $this->data_result['DATA']['goal_months'] = $goal_months;
+
+                return $this->returnResponse(200, $this->data_result, $response, false);
+                
+            }catch(\Exception $e){
+                return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+            }
+        }
+
+
         public function getList($request, $response, $args){
             try{
                 $params = $request->getParsedBody();

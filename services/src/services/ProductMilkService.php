@@ -24,6 +24,11 @@ class ProductMilkService {
                                 $query->where('factory_id', $factory_id);
                             }
                         })
+                        ->where(function($query) use ($actives) {
+                            if (!empty($actives)) {
+                                $query->where('actives', $actives);
+                            }
+                        })
                         ->orderBy("product_milk.id", 'DESC')
                         ->get()->toArray();
     }

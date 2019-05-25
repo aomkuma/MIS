@@ -43,12 +43,31 @@
 	<hr>
 	<div ng-show="Search || SpermDetailList.length > 0">
 		<div class="row form-group">
-			<label class="col-lg-12 form-control-static">
-				 เดือน : {{MonthName}}
-			</label>
-			<label class="col-lg-12 form-control-static">
-				ปี : {{YearName}}
-			</label>
+			<div class="col-lg-6">
+				<div class="row form-group">
+					<div class="row form-group">
+						<label class="col-lg-12 form-control-static">
+							 เดือน : {{MonthName}}
+						</label>
+						<label class="col-lg-12 form-control-static">
+							ปี : {{YearName}}
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<div class="row form-group">
+					<label class="col-lg-12 form-control-static">
+						เป้าหมายประจำปี : {{Goal.goal_year.price_value}} บาท
+					</label>
+					<label class="col-lg-12 form-control-static">
+						 เป้าหมายสะสม : {{Goal.goal_total}} บาท
+					</label>
+					<label class="col-lg-12 form-control-static">
+						เป้าหมายประจำเดือน : {{Goal.goal_months}} บาท
+					</label>
+				</div>
+			</div>
 		</div>
 		<div class="row form-group">
 			<div class="col-lg-12">

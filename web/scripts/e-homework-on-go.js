@@ -864,6 +864,30 @@ angular.module('e-homework').config(function ($routeProvider, $locationProvider)
                         }]
                 }
             })
+
+            .when("/cow-group-father", {
+                templateUrl: "views/cow-group-father/main.html",
+                controller: "MainCGFController",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load({
+                                files: ["scripts/controllers/cow-group-father/MainCGFController.js"]
+                            });
+                        }]
+                }
+            })
+
+            .when("/cow-group-father/update/:id?", {
+                templateUrl: "views/cow-group-father/update.html",
+                controller: "UpdateCGFController",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load({
+                                files: ["scripts/controllers/cow-group-father/UpdateCGFController.js"]
+                            });
+                        }]
+                }
+            })
             ;
 
 

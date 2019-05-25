@@ -180,7 +180,7 @@ angular.module('e-homework').controller('UpdateTCBController', function($scope, 
         $scope.SpermDetailList = [];
         // $scope.setSperm();
         $scope.loadData('training-cowbreed/get');
-        
+        $scope.$parent.getGoalByMenu('ฝึกอบรม', $scope.Sperm.years, $scope.Sperm.months);
         // $scope.SpermDetailList = [
         //     {
         //         'id':''

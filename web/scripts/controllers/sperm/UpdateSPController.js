@@ -189,7 +189,7 @@ angular.module('e-homework').controller('UpdateSPController', function($scope, $
         $scope.SpermDetailList = [];
         // $scope.setSperm();
         $scope.loadData('sperm/get');
-        
+        $scope.$parent.getGoalByMenu('ผลิตน้ำเชื้อแช่แข็ง', $scope.Sperm.years, $scope.Sperm.months);
         // $scope.SpermDetailList = [
         //     {
         //         'id':''

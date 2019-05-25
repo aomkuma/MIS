@@ -189,7 +189,7 @@ angular.module('e-homework').controller('UpdateMTController', function($scope, $
         $scope.SpermDetailList = [];
         // $scope.setSperm();
         $scope.loadData('material/get');
-        
+        $scope.$parent.getGoalByMenu('วัสดุผสมเทียมและอื่นๆ', $scope.Sperm.years, $scope.Sperm.months);
         // $scope.SpermDetailList = [
         //     {
         //         'id':''

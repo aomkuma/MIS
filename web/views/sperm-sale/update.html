@@ -43,15 +43,32 @@
 	<hr>
 	<div ng-show="Search || SpermDetailList.length > 0">
 		<div class="row form-group">
-			<label class="col-lg-12 form-control-static">
-				สหกรณ์ : {{CooperativeName}}
-			</label>
-			<label class="col-lg-12 form-control-static">
-				 เดือน : {{MonthName}}
-			</label>
-			<label class="col-lg-12 form-control-static">
-				ปี : {{YearName}}
-			</label>
+			<div class="col-lg-6">
+				<div class="row form-group">
+					<label class="col-lg-12 form-control-static">
+						สหกรณ์ : {{CooperativeName}}
+					</label>
+					<label class="col-lg-12 form-control-static">
+						 เดือน : {{MonthName}}
+					</label>
+					<label class="col-lg-12 form-control-static">
+						ปี : {{YearName}}
+					</label>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<div class="row form-group">
+					<label class="col-lg-12 form-control-static">
+						เป้าหมายประจำปี : {{Goal.goal_year.price_value}} บาท
+					</label>
+					<label class="col-lg-12 form-control-static">
+						 เป้าหมายสะสม : {{Goal.goal_total}} บาท
+					</label>
+					<label class="col-lg-12 form-control-static">
+						เป้าหมายประจำเดือน : {{Goal.goal_months}} บาท
+					</label>
+				</div>
+			</div>
 		</div>
 		<div class="row form-group">
 			<div class="col-lg-12">
@@ -62,9 +79,10 @@
 			</div>
 		</div>
 		<div>
-			<fieldset style="border: 1px solid #999; padding: 10px; margin-top: 10px;">
+			
 			<div ng-form="sub_form_data">
 				<div class="row form-group" ng-repeat="SpermDetail in SpermDetailList" ng-init="parentIndex = $index">
+					<fieldset style="border: 1px solid #999; padding: 10px; margin-top: 10px;">
 					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 						วันที่แก้ไขล่าสุด {{getThaiDateTimeFromString(SpermDetail.update_date)}}
 					</div>
@@ -107,6 +125,7 @@
 							</div>
 						</div>
 					</div>
+					</fieldset>
 				</div>
 				<!--<div class="row form-group">
 					<div class="col-lg-12">
@@ -118,7 +137,7 @@
 				</div>-->
 			</div>
 			<br><br>
-			</fieldset>
+			
 		</div>
 		<br><br>
 		<div class="row form-group">

@@ -25,7 +25,8 @@
 //                $condition = $params['obj']['condition'];
                 
                 $facid=$params['obj']['facid'];
-                $_ProductMilkList = ProductMilkService::getList('','','',$facid);
+                $actives=$params['obj']['actives'];
+                $_ProductMilkList = ProductMilkService::getList($actives,'','',$facid);
 
                 $ProductMilkList = [];
                 
@@ -96,9 +97,10 @@
 //                $menu_type = $params['obj']['menu_type'];
 //                $condition = $params['obj']['condition'];
                 $facid=$params['obj']['facid'];
+                $actives=$params['obj']['actives'];
 //print_r($params);
 //        die();
-                $_List = ProductMilkService::getList('','','',$facid);
+                $_List = ProductMilkService::getList($actives,'','',$facid);
 
                 $this->data_result['DATA']['List'] = $_List;
 

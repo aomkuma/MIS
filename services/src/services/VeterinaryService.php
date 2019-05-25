@@ -27,7 +27,7 @@ class VeterinaryService {
                         ->get();
     }
 
-    public static function getMainList($years, $months, $region_id, $farm_type, $item_type) {
+    public static function getMainList($years, $months, $region_id, $farm_type, $item_type, $dairy_farming_id = '') {
 
         return Veterinary::select(DB::raw("SUM(mis_veterinary_item.item_amount) AS sum_amount")
                                 , "veterinary.update_date"
@@ -42,12 +42,19 @@ class VeterinaryService {
                         ->where("region_id", $region_id)
                         ->where("farm_type", $farm_type)
                         ->where('veterinary_item.item_type', $item_type)
+                        ->where(function($query) use ($dairy_farming_id) {
+                            if (!empty($dairy_farming_id)) {
+                                $query->where('dairy_farming_id', $dairy_farming_id);
+                            }else{
+                                $query->where('dairy_farming_id', '<>', '17');
+                            }
+                        })
                         ->orderBy('update_date', 'DESC')
                         ->first()
                         ->toArray();
     }
 
-    public static function getDetailList($years, $months, $region_id, $cooperative_id, $item_type, $dairy_farming_id, $sub_dairy_farming_id = '') {
+    public static function getDetailList($years, $months, $region_id, $cooperative_id, $item_type, $dairy_farming_id = '', $sub_dairy_farming_id = '') {
         return Veterinary::select(DB::raw("SUM(mis_veterinary_item.item_amount) AS sum_amount")
                                 , "veterinary.update_date")
                         ->join("veterinary_detail", 'veterinary_detail.veterinary_id', '=', 'veterinary.id')

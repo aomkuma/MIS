@@ -50,8 +50,9 @@ class TravelService {
                         ->first();
     }
 
-    public static function getData($months, $years) {
-        return Travel::where('months', $months)
+    public static function getData($days, $months, $years) {
+        return Travel::where('days', $days)
+                        ->where('months', $months)
                         ->where('years', $years)
                         //->with('mouHistories')
                         ->with(array('travelDetail' => function($query) {
