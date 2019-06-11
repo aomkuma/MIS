@@ -9,6 +9,7 @@ class ProductMilk extends \Illuminate\Database\Eloquent\Model {
     public $timestamps = false;
     protected $fillable = array('id'
         , 'name'
+        , 'agent'
         , 'actives'
         , 'editable'
         , 'create_date'

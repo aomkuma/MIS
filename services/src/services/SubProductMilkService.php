@@ -7,6 +7,13 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class SubProductMilkService {
 
+    public static function getIDByName($name, $product_milk_id) {
+        $res = SubProductMilk::where('product_milk_id', $product_milk_id)
+                        ->where('name', $name)
+                        ->first();
+        return empty($res->id)?0:$res->id;
+    }
+
     public static function checkDuplicate($subid, $name, $id) {
         return SubProductMilk::where('subproduct_milk.id', '<>', $subid)
                         ->join('product_milk', 'product_milk.id', '=', 'subproduct_milk.product_milk_id')

@@ -66,7 +66,9 @@ class TravelService {
                         , "master_goal.goal_name"
                     )
                     ->leftJoin("master_goal", "master_goal.id", '=', 'travel_item.goal_id')
-                    ->where('travel_detail_id', $travel_detail_id)->get();
+                    ->where('travel_detail_id', $travel_detail_id)
+                    ->orderBy('goal_id', 'DESC')
+                    ->get();
     }
 
     public static function updateData($obj) {
@@ -112,7 +114,7 @@ class TravelService {
     }
 
     public static function removeDetailData($id) {
-
+        TravelItem::where('travel_detail_id' , $id)->delete();
         return TravelDetail::find($id)->delete();
     }
 

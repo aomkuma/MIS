@@ -83,6 +83,8 @@ angular.module('e-homework').controller('UpdateMGController', function($scope, $
                         ,{'type':'ข้อมูลฝูงโค','name':'โคลด'}
                         ,{'type':'ข้อมูลฝูงโคพ่อพันธุ์','name':'โคเพิ่ม'}
                         ,{'type':'ข้อมูลฝูงโคพ่อพันธุ์','name':'โคลด'}
+                        ,{'type':'การสูญเสียในกระบวนการ','name':'น้ำนมที่รวบรวม'}
+                        ,{'type':'การสูญเสียในกระบวนการ','name':'การแปรรูปน้ำนม'}
                     ];
 
     $scope.SubGoalTypeList1 = [{'type':'ข้อมูลฝูงโค','name':'โคเพิ่ม'}

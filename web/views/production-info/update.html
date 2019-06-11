@@ -59,10 +59,57 @@
 				<span class="glyphicon glyphicon-plus"></span> 
 				เพิ่ม
 			</button>
+			<button class="btn btn-primary  pull-right" ng-click="switchDetailType()" ng-show="DETAIL_TYPE == 'MANUAL'" ><!--ng-disabled="!form_data.$valid"-->
+				อัพโหลดไฟล์
+			</button>
+			<button class="btn btn-primary  pull-right" ng-click="switchDetailType()" ng-show="DETAIL_TYPE == 'UPLOAD'" ><!--ng-disabled="!form_data.$valid"-->
+				กรอกข้อมูล
+			</button>
 			</div>
 		</div>
 		<div>
-			<fieldset style="border: 1px solid #999; padding: 10px; margin-top: 10px;">
+			<fieldset style="border: 1px solid #999; padding: 10px; margin-top: 10px;" ng-show="DETAIL_TYPE == 'UPLOAD'">
+				<div class="row form-group">
+					<label class="form-control-static col-lg-2">
+						ข้อมูล ณ วันที่ 
+					</label>
+					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" >
+		                <p class="input-group">
+		                    <input type="text" class="form-control" ng-model="Data.date" uib-datepicker-popup="yyyy-MM-dd" is-open="popup1.opened">
+		                    <span class="input-group-btn">
+		                        <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+		                    </span>
+		                </p>
+		            </div>
+				</div>
+				<div class="row form-group">
+		            <label class="col-lg-2 form-control-static">
+		                แนบไฟล์
+		            </label>
+		            <div class="col-lg-6" >
+		                <p class="input-group">
+		                    <input type="text" readonly="true" class="form-control" ng-model="AttachFile.name" />
+		                    <span class="input-group-btn">
+		                        <button class="btn btn-default" ngf-select ng-model="AttachFile" ngf-max-size="25MB"  ngf-model-invalid="AttachFile.invalidFile" >แนบไฟล์</button>
+		                    </span>
+		                </p>
+		            </div>
+		            <div class="col-lg-2">
+		                <div class="file-alert" ng-show="fle.attachFile.invalidFile.$error === 'maxSize'">ขนาดไฟล์ต้องไม่เกิน : {{AttachFile.invalidFile.$errorParam}}</div>
+		            </div>
+		            <div class="col-lg-4">
+		                <a  href="../files/files/download/MIS_การผลิต.xlsx" target="_self" download="MIS_การผลิต.xlsx"><span class="glyphicon glyphicon-download"></span> Template สำหรับนำเข้า</a>
+		            </div>
+
+		        </div>
+		        <div class="row form-group">
+		        	<div class="col-lg-12 text-center">
+			            <button class="btn btn-primary" ng-click="updateData(Data, AttachFile)">อัพโหลด</button>
+			        </div>
+		        </div>
+			</fieldset>
+
+			<fieldset style="border: 1px solid #999; padding: 10px; margin-top: 10px;" ng-show="DETAIL_TYPE == 'MANUAL'">
 			<div ng-form="sub_form_data">
 				<div class="row form-group" ng-repeat="DataDetail in DataDetailList" ng-init="parentIndex = $index">
 					<div class="col-lg-12">
@@ -137,7 +184,7 @@
 			</fieldset>
 		</div>
 		<br><br>
-		<div class="row form-group">
+		<div class="row form-group" ng-show="DETAIL_TYPE == 'MANUAL'">
 			<label class="form-control-static col-lg-1">
 				หมายเหตุ 
 			</label>
@@ -147,7 +194,7 @@
 		</div>
 	</div>
 	<hr>
-	<div class="row form-group">
+	<div class="row form-group" ng-show="DETAIL_TYPE == 'MANUAL'">
 		<div class="col-lg-12 text-center">
 			<button class="btn btn-default" ng-click="cancelUpdate()">
 				<span class="glyphicon glyphicon-arrow-left"></span> 

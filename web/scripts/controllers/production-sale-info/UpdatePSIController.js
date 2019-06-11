@@ -426,6 +426,37 @@ angular.module('e-homework').controller('UpdatePSIController', function($scope, 
         $scope.popup2.opened = true;
     };
 
+    $scope.switchDetailType = function(){
+        if($scope.DETAIL_TYPE == 'MANUAL'){
+            $scope.DETAIL_TYPE = 'UPLOAD';
+            $scope.AttachFile = null;
+        }else{
+            $scope.DETAIL_TYPE = 'MANUAL';
+        }
+    }
+    $scope.DETAIL_TYPE = 'MANUAL';
+
+    $scope.uploadFile = function(Data, AttachFile ){
+        // var FileDate = '';
+        // if($scope.FileDate != null && $scope.FileDate != undefined && $scope.FileDate != ''){
+        //     FileDate = makeDate($scope.FileDate);
+        // }
+        var params = {'Data' : Data, 'AttachFile' : AttachFile, 'menu_type' : 'production-sale-info', 'FileDate' : $scope.FileDate};
+            HTTPService.uploadRequest('production-sale-info/upload', params).then(function(result){
+                console.log(result);
+                if(result.data.STATUS == 'OK'){
+                    alert('อัพโหลดสำเร็จ');
+                    window.location.href = '#/production-sale-info';///update/' + Data.id;
+                }else{
+                    alert(result.data.DATA);
+                }
+                IndexOverlayFactory.overlayHide();
+            });
+    }
+
+
+    $scope.FileDate = null;
+
     $scope.setData();
     $scope.loadFactoryList();
     $scope.loadProductMilk(0);

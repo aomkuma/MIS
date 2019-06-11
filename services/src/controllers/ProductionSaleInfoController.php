@@ -9,6 +9,7 @@ use App\Service\SubProductMilkService;
 use App\Service\ProductMilkDetailService;
 use App\Service\FactoryService;
 use App\Service\GoalMissionService;
+use App\Service\UploadLogService;
 
 class ProductionSaleInfoController extends Controller {
 
@@ -1258,6 +1259,123 @@ class ProductionSaleInfoController extends Controller {
             return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
         }
     }
+
+    public function uploadData($request, $response, $args) {
+        // error_reporting(E_ERROR);
+        //     error_reporting(E_ALL);
+        //     ini_set('display_errors','On');
+        $_WEB_FILE_PATH = 'files/files';
+        try {
+            $params = $request->getParsedBody();
+            $_Data = $params['obj']['Data'];
+            $_FileDate = $params['obj']['FileDate'];
+
+            $user_session = $params['user_session'];
+
+            $id = ProductionSaleInfoService::updateData($_Data);
+
+            $files = $request->getUploadedFiles();
+            $f = $files['obj']['AttachFile'];
+            $_UploadFile = [];
+            if($f != null){
+                if($f->getClientFilename() != ''){
+                    // Unset old image if exist
+                    
+                    $ext = pathinfo($f->getClientFilename(), PATHINFO_EXTENSION);
+                    $FileName = date('YmdHis').'_'.rand(100000,999999). '.'.$ext;
+                    $FilePath = $_WEB_FILE_PATH . '/upload/'.$FileName;
+                    
+                    $_UploadFile['file_name'] = $f->getClientFilename();
+                    $_UploadFile['file_path'] = $FilePath;
+                    
+                    $f->moveTo('../../' . $FilePath);
+                }        
+            }
+
+            // read file 
+            $file = '../../' . $FilePath;
+            $_Detail = $this->readExcelFile($file, $id);
+
+            // print_r($_Detail);
+            // exit;
+            foreach ($_Detail as $key => $value) {
+
+                $data = [];
+                $data['id'] = '';
+                $data['production_sale_info_id'] = $value['production_sale_info_id'];
+                $data['production_sale_info_type1'] = $this->getProductInfoType1($value['product_milk'], $_Data['factory_id']);
+                $data['production_sale_info_type2'] = $this->getProductInfoType2($value['sub_product_milk'], $data['production_sale_info_type1']);
+                $data['production_sale_info_type3'] = $this->getProductInfoType3($value['product_milk_detail'], $data['production_sale_info_type2']);
+                $data['amount'] = empty($value['result_amount'])?0:$value['result_amount'];
+                $data['price_value'] = empty($value['result_thb'])?0:$value['result_thb'];
+                
+                ProductionSaleInfoService::updateDetailData($data);
+            }
+
+            // add log
+            $_UploadFile['menu_type'] = 'production_sale_info';
+            $_UploadFile['file_date'] = $_FileDate;
+            UploadLogService::updateLog($_UploadFile);
+
+            //           
+            $this->data_result['DATA']['id'] = $id;
+
+            return $this->returnResponse(200, $this->data_result, $response, false);
+        } catch (\Exception $e) {
+            return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+        }
+    }
+
+    private function getProductInfoType1($product_milk, $factory_id){
+        return ProductMilkService::getIDByName($product_milk, $factory_id);
+    }
+
+    private function getProductInfoType2($sub_product_milk, $production_sale_info_type1){
+        return SubProductMilkService::getIDByName($sub_product_milk, $production_sale_info_type1);
+    }
+
+    private function getProductInfoType3($product_milk_detail, $production_sale_info_type2){
+        return ProductMilkDetailService::getIDByName($product_milk_detail, $production_sale_info_type2);
+    }
+
+    private function readExcelFile($file, $production_sale_info_id){
+
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file);
+            $sheetData = $spreadsheet->getActiveSheet()->toArray();
+
+            $field_array = ['agent', 'customer_name', 'product_milk', 'sub_product_milk', 'product_milk_detail', 'goal_year_amount', 'goal_year_addon', 'goal_year_thb',  'goal_month_amount', 'goal_month_addon', 'goal_month_thb', 'result_amount', 'result_addon', 'result_thb'];
+            $cnt_row = 1;
+
+            $ItemList = [];
+            foreach ($sheetData as $key => $value) {
+                
+                if($cnt_row >= 4){
+                    
+                    $cnt_col = 0;
+                    $cnt_field = 0;
+                    $Item = [];
+                    $Item[ 'production_sale_info_id' ] = $production_sale_info_id;
+
+                    foreach ($value as $k => $v) {
+                        // if($cnt_col >= 1 && $cnt_col <= 7){
+                            
+                            $Item[ $field_array[$cnt_field] ] = $v;
+                            $cnt_field++;
+                            
+                        // }
+                        $cnt_col++;
+                    }
+                    
+                    array_push($ItemList, $Item);
+                    
+                }
+
+                $cnt_row++;
+
+            }
+            
+            return $ItemList;
+        }
 
     public function removeDetailData($request, $response, $args) {
         try {

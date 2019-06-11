@@ -142,8 +142,8 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
 
     $scope.save = function(Sperm, SpermDetailList){
         for(var i =0; i < SpermDetailList.length; i++){
-            if(SpermDetailList.travel_date != null && SpermDetailList.travel_date != undefined && SpermDetailList.travel_date != ''){
-                SpermDetailList.travel_date = makeSQLDate(SpermDetailList.travel_date);
+            if(SpermDetailList[i].travel_date != null && SpermDetailList[i].travel_date != undefined && SpermDetailList[i].travel_date != ''){
+                SpermDetailList[i].travel_date = makeSQLDate(SpermDetailList[i].travel_date);
             }
         }
         var params = {'Data' : Sperm, 'Detail' : SpermDetailList};
@@ -220,7 +220,7 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
 
     $scope.addSpermDetail = function(){
 
-        console.log($scope.SpermDetailList);
+        // console.log($scope.SpermDetailList);
         var detail = {
                 'id':''
                 ,'travel_id':''
@@ -251,7 +251,7 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
 
           for(var i = 0 ; i < $scope.MasterGoalList.length; i++){
               // console.log($scope.MasterGoalList[i]);
-              var goal = $scope.MasterGoalList[i];
+              var goal = angular.copy($scope.MasterGoalList[i]);
               goal['goal_id'] = $scope.MasterGoalList[i].id;
               goal['id'] = '';
               goal['total_person_pay'] = 0;
@@ -263,7 +263,7 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
           console.log(detail);
           // return ;
         $scope.SpermDetailList.push(detail);
-        console.log($scope.SpermDetailList);
+        // console.log($scope.SpermDetailList);
     }
 
     $scope.removeDetail = function(id, index){

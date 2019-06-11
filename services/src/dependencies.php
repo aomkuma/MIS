@@ -194,3 +194,7 @@ $container['ProductMilkDetailController'] = function ($c) {
 $container['CowgroupFatherController'] = function ($c) {
     return new \App\Controller\CowgroupFatherController($c->get('logger'), $c->get('db'));
 };
+
+$container['UploadLogController'] = function ($c) {
+    return new \App\Controller\UploadLogController($c->get('logger'), $c->get('db'));
+};

@@ -888,6 +888,42 @@ angular.module('e-homework').config(function ($routeProvider, $locationProvider)
                         }]
                 }
             })
+
+            .when("/loss-manage", {
+                templateUrl: "views/loss-manage/main.html",
+                controller: "MainLMController",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load({
+                                files: ["scripts/controllers/loss-manage/MainLMController.js"]
+                            });
+                        }]
+                }
+            })
+
+            .when("/loss-manage/update/:id?", {
+                templateUrl: "views/loss-manage/update.html",
+                controller: "UpdateLMController",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load({
+                                files: ["scripts/controllers/loss-manage/UpdateLMController.js"]
+                            });
+                        }]
+                }
+            })
+
+            .when("/loss-mapping", {
+                templateUrl: "views/loss-manage/mapping.html",
+                controller: "MainLMPController",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load({
+                                files: ["scripts/controllers/loss-manage/MainLMPController.js"]
+                            });
+                        }]
+                }
+            })
             ;
 
 

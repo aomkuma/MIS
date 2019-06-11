@@ -10,6 +10,7 @@ class SubProductMilk extends \Illuminate\Database\Eloquent\Model {
     protected $fillable = array('id'
         ,'product_milk_id'
         , 'name'
+        , 'agent'
         , 'actives'
         , 'create_date'
         , 'update_date'

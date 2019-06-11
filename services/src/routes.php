@@ -146,7 +146,7 @@ $app->post('/travel/delete/detail/', 'TravelController:removeDetailData');
 $app->post('/travel/report/', 'ReportController:exportTravelExcel');
 $app->post('/travel/update/approve/', 'TravelController:updateDataApprove');
 $app->post('/travel/list/approve/', 'TravelController:loadDataApprove');
-$app->post('/travel/list/detail/', 'TravelController:loadDetailList');
+$app->post('/travel/list/detail/', 'TravelController:getMainList');
 
 
 $app->post('/cooperative-milk/list/main/', 'CooperativeMilkController:getMainList');
@@ -250,8 +250,12 @@ $app->post('/production-sale-info/update/', 'ProductionSaleInfoController:update
 $app->post('/production-sale-info/delete/detail/', 'ProductionSaleInfoController:removeDetailData');
 $app->post('/production-sale-info/update/approve/', 'ProductionSaleInfoController:updateDataApprove');
 $app->post('/production-sale-info/list/approve/', 'ProductionSaleInfoController:loadDataApprove');
+$app->post('/production-sale-info/upload/', 'ProductionSaleInfoController:uploadData');
 
 $app->post('/factory/list/', 'FactoryController:getList');
+
+$app->post('/upload-log/list/', 'UploadLogController:getList');
+$app->post('/upload-log/update/', 'UploadLogController:updateLog');
 
 // Default action
 $app->get('/[{name}]', function ($request, $response, $args) {

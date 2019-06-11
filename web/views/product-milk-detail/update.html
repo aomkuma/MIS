@@ -23,6 +23,17 @@
     </div>
     <div class="row form-group">
         <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            ตัวแทนจำหน่าย
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <select name="Year" class="form-control" ng-model="Subdata.agent">
+                <option value="">กรุณาเลือก..</option>
+                <option value="ขายนมโรงเรียน (ขนส่ง)">ขายนมโรงเรียน (ขนส่ง)</option>
+            </select>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
             รายการ
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
@@ -38,6 +49,22 @@
                 <label class="btn btn-default btn-checkbox" ng-model="Subdata.actives" uib-btn-radio="'Y'" >ใช้</label>
                 <label class="btn btn-default btn-checkbox" ng-model="Subdata.actives" uib-btn-radio="'N'" >ไม่ใช้</label>
             </div>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            จำนวนต่อ 1 ลัง
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <input type="text" class="form-control" ng-model="Subdata.number_of_package" maxlength="255">
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            ปริมาณ
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <input type="text" class="form-control" ng-model="Subdata.amount" maxlength="255" >
         </div>
     </div>
     <hr>

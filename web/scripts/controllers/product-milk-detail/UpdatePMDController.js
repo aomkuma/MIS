@@ -27,7 +27,9 @@ angular.module('e-homework').controller('UpdatePMDController', function ($scope,
                     'id': result.data.DATA.Data.id
                     , 'name': result.data.DATA.Data.name
                     , 'sub_product_milk_id': result.data.DATA.Data.subid
-
+                    , 'agent' : result.data.DATA.Data.agent
+                    , 'number_of_package' : result.data.DATA.Data.number_of_package
+                    , 'amount' : result.data.DATA.Data.amount
                     , 'actives': 'Y'
 
                 };

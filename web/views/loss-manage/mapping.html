@@ -1,0 +1,129 @@
+<div ng-include src="'views/header.html'"></div>
+<div class="page-header">
+	<h3>บริหารจัดการข้อมูล > จับคู่ข้อมูลสูญเสีย</h3>
+</div>
+<div class="col-lg-10 col-lg-offset-1" ng-form="form_data">
+	
+	<div class="row form-group">
+		<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+			ประเภทรายงานสูญเสีย
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+			<select class="form-control">
+				<option value="สูญเสียหลังกระบวนการผลิต">สูญเสียหลังกระบวนการผลิต</option>
+				<option value="สูญเสียระหว่างรอจำหน่าย">สูญเสียระหว่างรอจำหน่าย</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="row form-group">
+		<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+			หมวดรายงานสูญเสีย
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+			<select class="form-control">
+				<option value="ตัวอย่างตรวจคุณภาพ">ตัวอย่างตรวจคุณภาพ</option>
+				<option value="แปรสภาพ, ชำรุด">แปรสภาพ, ชำรุด</option>
+				<option value="คัดเบอร์ลัง">คัดเบอร์ลัง</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="row form-group">
+		<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+			ตราผลิตภัณฑ์
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+			<select class="form-control">
+				<option value="นมโรงเรียน">นมโรงเรียน</option>
+				<option value="นมพาณิชย์">นมพาณิชย์</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="row form-group">
+		<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+			หัวข้อการผลิต
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+			<select class="form-control">
+				<option value="นม ยู.เอช.ที">นม ยู.เอช.ที</option>
+				<option value="นมพาสเจอร์ไรส์">นมพาสเจอร์ไรส์</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="row form-group">
+		<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+			รายการผลิต
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+			<select class="form-control">
+				<option value="(บรรจุถุง) ขนาด 200 ซีซี - รสจืด">(บรรจุถุง) ขนาด 200 ซีซี</option>
+				<option value="ขนาด 200 ซีซี (1x36) - รสจืด">ขนาด 200 ซีซี (1x36)</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="row form-group">
+		<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+			รสชาติ
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+			<select class="form-control">
+				<option value="รสจืด">รสจืด</option>
+				<option value="ชอคโกแลต">ชอคโกแลต</option>
+			</select>
+		</div>
+	</div>
+	
+	<hr>
+	<div class="row form-group">
+		<div class="col-lg-12 text-center">
+			<button class="btn btn-primary" ng-click="save(Data)" ng-disabled="!form_data.$valid">
+				<span class="glyphicon glyphicon-floppy-save"></span> 
+				บันทึก
+			</button>
+			<button class="btn btn-default" ng-click="cancelUpdate()">
+				<span class="glyphicon glyphicon-arrow-left"></span> 
+				กลับหน้าหลัก
+			</button>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-8 col-lg-offset-2">
+			<table class="table table-bordered table-striped">
+				<thead>
+					<tr>	
+						<td>รายการ</td>
+						<td>จัดการ</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>นมโรงเรียน</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td>นมพาสเจอร์ไรส์</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td>ขนาด 200 ซีซี (1x36)</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td>รสจืด</td>
+						<td>
+							<button class="btn btn-danger">ลบรายการ</button>
+						</td>
+					</tr>
+					
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+	
+</div>

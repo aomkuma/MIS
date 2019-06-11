@@ -8,8 +8,11 @@ class ProductMilkDetail extends \Illuminate\Database\Eloquent\Model {
     protected $primaryKey = 'id';
     public $timestamps = false;
     protected $fillable = array('id'
-        ,'sub_product_milk_id'
+        , 'sub_product_milk_id'
         , 'name'
+        , 'agent'
+        , 'number_of_package'
+        , 'amount'
         , 'actives'
         , 'create_date'
         , 'update_date'

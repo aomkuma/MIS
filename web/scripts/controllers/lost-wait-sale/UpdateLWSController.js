@@ -361,9 +361,19 @@ angular.module('e-homework').controller('UpdateLWSController', function($scope, 
         $scope.popup2.opened = true;
     };
 
+    $scope.switchDetailType = function(){
+        if($scope.DETAIL_TYPE == 'MANUAL'){
+            $scope.DETAIL_TYPE = 'UPLOAD';
+            $scope.AttachFile = null;
+        }else{
+            $scope.DETAIL_TYPE = 'MANUAL';
+        }
+    }
+    
     $scope.setData();
     $scope.loadFactoryList();
     $scope.loadMasterGoalList();
+    $scope.DETAIL_TYPE = 'MANUAL';
 
     // $scope.loadDairyFarming('MAIN', '');
     // $scope.loadDairyFarming('CHILD', '');
