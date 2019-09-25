@@ -13,15 +13,19 @@ angular.module('e-homework').controller('MainLMPController', function($scope, $c
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));    
     console.log($scope.$parent.Menu);
 
-    $scope.loadData = function(action, id){
+    $scope.loadData = function(){
         var params = {
-            'id' : id
+            'factory_id' : $scope.Data.factory_id
+            , 'loss_type' : $scope.Data.loss_type
+            , 'loss_id' : $scope.Data.loss_id
+            , 'product_milk_id' : $scope.Data.product_milk_id
+            , 'subproduct_milk_id' : $scope.Data.subproduct_milk_id
         };
         IndexOverlayFactory.overlayShow();
-        HTTPService.clientRequest(action, params).then(function(result){
+        HTTPService.clientRequest('loss-manage/mapping/list', params).then(function(result){
             if(result.data.STATUS == 'OK'){
-                $scope.Data = result.data.DATA.Data;
-                $scope.changeGoalType();
+                $scope.HistoryList = result.data.DATA.Data;
+                // $scope.changeGoalType();
             }
             IndexOverlayFactory.overlayHide();
         });
@@ -31,13 +35,13 @@ angular.module('e-homework').controller('MainLMPController', function($scope, $c
         console.log(Data);
         var params = {'Data' : Data};
         IndexOverlayFactory.overlayShow();
-        HTTPService.clientRequest('master-goal/update', params).then(function(result){
+        HTTPService.clientRequest('loss-manage/mapping/update', params).then(function(result){
             if(result.data.STATUS == 'OK'){
                 // if($scope.ID !== undefined && $scope.ID !== null){
                     // window.location.href = '#/master-goal/update/' + result.data.DATA.id;
-                    window.location.href = '#/master-goal';
+                    // window.location.href = '#/loss-mapping';
                 // }else{
-                //     location.reload();    
+                    location.reload();    
                 // }
                 
             }else{
@@ -51,70 +55,102 @@ angular.module('e-homework').controller('MainLMPController', function($scope, $c
         window.location.href = '#/loss-manage';
     }
 
-    $scope.changeGoalType = function(){
-        $scope.MenuType = [];
-        for(var i = 0; i < $scope.MenuTypeList.length; i++){
-            if($scope.Data.goal_type == $scope.MenuTypeList[i].type){
-                $scope.MenuType.push($scope.MenuTypeList[i]);
+    $scope.loadMasterLoss = function(){
+        var params = {'actives' : 'Y'};
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('loss-manage/list', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.MasterLossList = result.data.DATA.List;
+            }else{
+                alert(result.data.DATA);
             }
-        }   
+            IndexOverlayFactory.overlayHide();
+        });
     }
 
-    $scope.filterSubType = function(menu_type, type){
-        console.log(menu_type, type);
-        return menu_type === type;
+    $scope.loadFactoryList = function(){
+      var params = {'region' : $scope.PersonRegion};
+        HTTPService.clientRequest('factory/list', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.FactoryList = result.data.DATA.DataList;
+
+            }
+            IndexOverlayFactory.overlayHide();
+        });
     }
 
-    $scope.Data = {
-        'id':''
-        , 'goal_type':''
-        , 'sub_goal_type':''
-        , 'menu_type':null
-        , 'goal_name':''
-        , 'actives':'Y'
-        , 'create_date':''
-        , 'update_date':''
-    };
-
-    $scope.SubGoalTypeList = [{'type':'แร่ธาตุ พรีมิกซ์ และอาหาร','name':'แร่ธาตุ'}
-                        ,{'type':'แร่ธาตุ พรีมิกซ์ และอาหาร','name':'พรีมิกซ์'}
-                        ,{'type':'แร่ธาตุ พรีมิกซ์ และอาหาร','name':'อาหาร'}
-                        ,{'type':'ข้อมูลฝูงโค','name':'โคเพิ่ม'}
-                        ,{'type':'ข้อมูลฝูงโค','name':'โคลด'}
-                        ,{'type':'ข้อมูลฝูงโคพ่อพันธุ์','name':'โคเพิ่ม'}
-                        ,{'type':'ข้อมูลฝูงโคพ่อพันธุ์','name':'โคลด'}
-                        ,{'type':'การสูญเสียในกระบวนการ','name':'น้ำนมที่รวบรวม'}
-                        ,{'type':'การสูญเสียในกระบวนการ','name':'การแปรรูปน้ำนม'}
-                    ];
-
-    $scope.SubGoalTypeList1 = [{'type':'ข้อมูลฝูงโค','name':'โคเพิ่ม'}
-                        ,{'type':'ข้อมูลฝูงโค','name':'โคลด'}
-                        
-                    ];
-
-    $scope.MenuTypeList = [{'type':'DBI', 'value':'บริการสัตวแพทย์', 'name' : 'บริการสัตวแพทย์'}
-                            ,{'type':'DBI', 'value':'ผสมเทียม', 'name' : 'ผสมเทียม'}
-                            ,{'type':'DBI', 'value':'แร่ธาตุ พรีมิกซ์ และอาหาร', 'name' : 'แร่ธาตุ พรีมิกซ์ และอาหาร'}
-                            ,{'type':'DBI', 'value':'ผลิตน้ำเชื้อแช่แข็ง', 'name' : 'ผลิตน้ำเชื้อแช่แข็ง'}
-                            ,{'type':'DBI', 'value':'จำหน่ายน้ำเชื้อแช่แข็ง', 'name' : 'จำหน่ายน้ำเชื้อแช่แข็ง'}
-                            ,{'type':'DBI', 'value':'วัสดุผสมเทียมและอื่นๆ', 'name' : 'วัสดุผสมเทียมและอื่นๆ'}
-                            ,{'type':'DBI', 'value':'ปัจจัยการเลี้ยงโค', 'name' : 'ปัจจัยการเลี้ยงโค'}
-                            ,{'type':'DBI', 'value':'ฝึกอบรม', 'name' : 'ฝึกอบรม'}
-                            ,{'type':'DBI', 'value':'ท่องเที่ยว', 'name' : 'ท่องเที่ยว'}
-                            ,{'type':'DBI', 'value':'สหกรณ์และปริมาณน้ำนม', 'name' : 'สหกรณ์และปริมาณน้ำนม'}
-                            ,{'type':'DBI', 'value':'ข้อมูลฝูงโค', 'name' : 'ข้อมูลฝูงโค'}
-                            ,{'type':'DBI', 'value':'ข้อมูลฝูงโคพ่อพันธุ์', 'name' : 'ข้อมูลฝูงโคพ่อพันธุ์'}
-                            ,{'type':'II', 'value':'ข้อมูลการผลิต', 'name' : 'ข้อมูลการผลิต'}
-                            ,{'type':'II', 'value':'ข้อมูลการขาย', 'name' : 'ข้อมูลการขาย'}
-                            ,{'type':'II', 'value':'ข้อมูลรับซื้อน้ำนม', 'name' : 'ข้อมูลรับซื้อน้ำนม'}
-                            ,{'type':'II', 'value':'ข้อมูลจำหน่ายน้ำนม', 'name' : 'ข้อมูลจำหน่ายน้ำนม'}
-                            ,{'type':'II', 'value':'การสูญเสียในกระบวนการ', 'name' : 'การสูญเสียในกระบวนการ'}
-                            ,{'type':'II', 'value':'การสูญเสียหลังกระบวนการ', 'name' : 'การสูญเสียหลังกระบวนการ'}
-                            ,{'type':'II', 'value':'การสูญเสียรอจำหน่าย', 'name' : 'การสูญเสียรอจำหน่าย'}
-                            ,{'type':'II', 'value':'การสูญเสียในกระบวนการขนส่ง', 'name' : 'การสูญเสียในกระบวนการขนส่ง'}
-                        ];
-    if($scope.ID !== undefined && $scope.ID !== null){
-        $scope.loadData('master-goal/get', $scope.ID);
+    $scope.ProductMilkList = [];
+    $scope.loadProductMilk = function(index){
+        // var params = {'actives':'Y', 'menu_type' : 'การสูญเสียในกระบวนการ'};
+        var params = {'actives':'Y', 'facid':$scope.Data.factory_id};
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('product-milk/list', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.ProductMilkList = result.data.DATA.List;
+                IndexOverlayFactory.overlayHide();
+            }
+        });
     }
+
+    $scope.SubProductMilkList = [];
+    $scope.loadSubProductMilk = function(product_milk_id){
+        var params = {'product_milk_id':product_milk_id};
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('subproduct-milk/list/byparent', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.SubProductMilkList = result.data.DATA.List;
+                IndexOverlayFactory.overlayHide();
+            }
+        });
+    }
+
+    $scope.ProductMilkDetailList = [];
+    $scope.loadProductMilkDetail = function(subproduct_milk_id){
+        var params = {'sub_product_milk_id':subproduct_milk_id};
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('product-milk-detail/list/byparent', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.ProductMilkDetailList = result.data.DATA.List;
+                IndexOverlayFactory.overlayHide();
+            }
+        });
+    }
+
+    $scope.removeData = function(id){
+        $scope.alertMessage = 'ต้องการลบข้อมูลนี้ ใช่หรือไม่ ?';
+        var modalInstance = $uibModal.open({
+            animation : true,
+            templateUrl : 'views/dialog_confirm.html',
+            size : 'sm',
+            scope : $scope,
+            backdrop : 'static',
+            controller : 'ModalDialogCtrl',
+            resolve : {
+                params : function() {
+                    return {};
+                } 
+            },
+        });
+
+        modalInstance.result.then(function (valResult) {
+            IndexOverlayFactory.overlayShow();
+            var params = {'id' : id};
+            HTTPService.clientRequest('loss-manage/mapping/delete', params).then(function(result){
+                // $scope.load('Datas');
+                if(result.data.STATUS == 'OK'){
+                    location.reload();
+                }
+                IndexOverlayFactory.overlayHide();
+            });
+        });
+        
+    }
+
+    $scope.Data = {'factory_id' : null, 'loss_id' : null, 'loss_type' : '', 'product_milk_id' : null, 'subproduct_milk_id' : null};
+
+    $scope.loadData();
+    $scope.loadFactoryList();
+    $scope.loadMasterLoss();
+    
 
 });

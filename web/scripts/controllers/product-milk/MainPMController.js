@@ -66,4 +66,56 @@ angular.module('e-homework').controller('MainPMController', function ($scope, $c
     $scope.loadList('product-milk/list', '');
 
 
+    $scope.showSaleChanel = function(){
+        $scope.SaleChanel = {'id':'', 'chanel_name' : '', 'actives' : 'Y'};
+        var params = {};
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('product-milk/sale-chanel/list', params).then(function (result) {
+            if (result.data.STATUS == 'OK') {
+                $scope.SaleChanelList = result.data.DATA.List;
+                var modalInstance = $uibModal.open({
+                    animation : false,
+                    templateUrl : 'sale_chanel.html',
+                    size : 'md',
+                    scope : $scope,
+                    backdrop : 'static',
+                    controller : 'ModalDialogReturnFromOKBtnCtrl',
+                    resolve : {
+                        params : function() {
+                            return {};
+                        } 
+                    },
+                });
+
+                modalInstance.result.then(function (valResult) {
+
+                    
+                });
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+       
+    }
+
+    $scope.goUpdateSaleChanel = function(Data){
+        $scope.SaleChanel = angular.copy(Data);
+    }
+
+    $scope.saveSaleChanel = function(Data){
+        var params = {'Data' : Data};
+        HTTPService.uploadRequest('product-milk/sale-chanel/update', params).then(function(result){
+            console.log(result);
+            if(result.data.STATUS == 'OK'){
+               HTTPService.clientRequest('product-milk/sale-chanel/list', params).then(function (result) {
+                    if (result.data.STATUS == 'OK') {
+                        $scope.SaleChanel = {'id':'', 'chanel_name' : '', 'actives' : 'Y'};
+                        $scope.SaleChanelList = result.data.DATA.List;
+                    }
+                });
+            }else{
+                alert(result.data.DATA);
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+    }
 });

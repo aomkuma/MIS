@@ -165,16 +165,19 @@ angular.module('e-homework').controller('UpdatePFController', function($scope, $
                 $scope.Data = result.data.DATA.Data;
                 $scope.Data.factory_id = parseInt($scope.Data.factory_id);
                 $scope.DataDetailList = $scope.Data.production_info_detail;
-                console.log($scope.Data);
-                $scope.ProductMilkList = [$scope.DataDetailList.length];
-                $scope.SubProductMilkList = [$scope.DataDetailList.length];
-                $scope.ProductMilkDetailList = [$scope.DataDetailList.length];
-                // load sub dar=iry farming
-                for(var i =0; i < $scope.DataDetailList.length; i++){
-                   $scope.loadProductMilk(i);
-                    $scope.loadSubProductMilk($scope.DataDetailList[i].production_info_type1, i);
-                    $scope.loadProductMilkDetail($scope.DataDetailList[i].production_info_type2, i);
-                }
+
+                $scope.getUploadLogList();
+                
+                // console.log($scope.Data);
+                // $scope.ProductMilkList = [$scope.DataDetailList.length];
+                // $scope.SubProductMilkList = [$scope.DataDetailList.length];
+                // $scope.ProductMilkDetailList = [$scope.DataDetailList.length];
+                // // load sub dar=iry farming
+                // for(var i =0; i < $scope.DataDetailList.length; i++){
+                //    $scope.loadProductMilk(i);
+                //     $scope.loadSubProductMilk($scope.DataDetailList[i].production_info_type1, i);
+                //     $scope.loadProductMilkDetail($scope.DataDetailList[i].production_info_type2, i);
+                // }
                 IndexOverlayFactory.overlayHide();
             }else{
                 if($scope.Data.id != ''){
@@ -335,6 +338,7 @@ angular.module('e-homework').controller('UpdatePFController', function($scope, $
             'id':''
             , 'cooperative_id':1
             , 'region_id':$scope.PersonRegion[0].RegionID
+            , 'factory_id' : $scope.PersonRegion[0].FactoryID
             , 'months':curDate.getMonth() + 1
             , 'years':curDate.getFullYear()
             , 'create_date':''
@@ -438,13 +442,81 @@ angular.module('e-homework').controller('UpdatePFController', function($scope, $
         if($scope.DETAIL_TYPE == 'MANUAL'){
             $scope.DETAIL_TYPE = 'UPLOAD';
             $scope.AttachFile = null;
+            $scope.getUploadLogList();
         }else{
             $scope.DETAIL_TYPE = 'MANUAL';
         }
     }
-    $scope.DETAIL_TYPE = 'MANUAL';
+    $scope.DETAIL_TYPE = 'UPLOAD';
 
+    $scope.getUploadLogList = function(){
+        var params = {'id' : $scope.Data.id, 'menu_type' : 'production-info'};
+        HTTPService.clientRequest('upload-log/list', params).then(function(result){
+            console.log(result);
+            $scope.UploadLogList = result.data.DATA.List;
+            IndexOverlayFactory.overlayHide();
+        });
+    }
 
+    $scope.uploadFile = function(Data, AttachFile ){
+        // var FileDate = '';
+        if($scope.FileDate != null && $scope.FileDate != undefined && $scope.FileDate != ''){
+            $scope.FileDate = makeSQLDate($scope.FileDate);
+        }
+        IndexOverlayFactory.overlayShow();
+        var params = {'Data' : Data, 'AttachFile' : AttachFile, 'menu_type' : 'production-info', 'FileDate' : $scope.FileDate};
+            HTTPService.uploadRequest('production-info/upload', params).then(function(result){
+                console.log(result);
+                if(result.data.STATUS == 'OK'){
+                    alert('อัพโหลดสำเร็จ');
+                    window.location.href = '#/production-info';///update/' + Data.id;
+                }else{
+                    alert(result.data.DATA);
+                }
+                IndexOverlayFactory.overlayHide();
+            });
+    }
+
+    $scope.exportTemplate = function(){
+       // console.log(DetailList, $scope.data_description);
+        // return;
+        IndexOverlayFactory.overlayHide();
+        var params = {
+            'factory_id' : $scope.Data.factory_id
+           , 'years' : $scope.Data.years
+           , 'months' : $scope.Data.months
+        }; 
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('production-info/load/template', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                window.location.href="../" + result.data.DATA;
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+
+    $scope.calcLitre = function(ProductMilkDetailList, Data){
+        // console.log(ProductMilkDetailList);
+        // console.log(Data);
+
+        var index = $filter('FindDataByID')(ProductMilkDetailList, Data.id);
+        var data_detail = ProductMilkDetailList[index];
+        console.log(data_detail);
+        if(data_detail.unit == 'ซีซี' || data_detail.unit == 'มิลลิลิตร'){
+            var box = 0;
+            var amount_data = Data.package_amount.split('.');
+            var amount = parseInt(amount_data[0]);
+            if(amount_data.length > 1){
+                box = parseInt(amount_data[1]);
+            }
+            console.log("((("+amount+" * "+data_detail.amount+") + "+box+") * "+data_detail.number_of_package+") / 1000;");
+            var res = (((amount * data_detail.amount) + box) * data_detail.number_of_package) / 1000;
+            Data.amount = res;
+        }
+        // Data.amount = 123;
+    }
+
+    // console.log($scope.PersonRegion);
     $scope.setData();
     $scope.loadFactoryList();
     $scope.loadProductMilk(0);

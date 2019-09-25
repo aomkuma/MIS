@@ -131,5 +131,10 @@
 
             return LostInProcess::where('id', $id)->update($obj);
         }
+
+        public static function removeDetailDataByParent($id){
+            
+            return LostInProcessDetail::where('lost_in_process_id', $id)->delete();
+        }
         
     }

@@ -31,11 +31,11 @@ angular.module('e-homework').controller('UpdateLMController', function($scope, $
         console.log(Data);
         var params = {'Data' : Data};
         IndexOverlayFactory.overlayShow();
-        HTTPService.clientRequest('master-goal/update', params).then(function(result){
+        HTTPService.clientRequest('loss-manage/update', params).then(function(result){
             if(result.data.STATUS == 'OK'){
                 // if($scope.ID !== undefined && $scope.ID !== null){
                     // window.location.href = '#/master-goal/update/' + result.data.DATA.id;
-                    window.location.href = '#/master-goal';
+                    window.location.href = '#/loss-manage';
                 // }else{
                 //     location.reload();    
                 // }
@@ -114,7 +114,7 @@ angular.module('e-homework').controller('UpdateLMController', function($scope, $
                             ,{'type':'II', 'value':'การสูญเสียในกระบวนการขนส่ง', 'name' : 'การสูญเสียในกระบวนการขนส่ง'}
                         ];
     if($scope.ID !== undefined && $scope.ID !== null){
-        $scope.loadData('master-goal/get', $scope.ID);
+        $scope.loadData('loss-manage/get', $scope.ID);
     }
 
 });

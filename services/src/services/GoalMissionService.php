@@ -22,6 +22,25 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class GoalMissionService {
 
+    public static function getGoalMissionByGoalName($menu_type, $goal_name, $factory_id, $years, $chanel_id = '') {
+        return GoalMission::select('goal_mission.id',DB::raw("SUM(amount) AS total_amount")
+                                , DB::raw("SUM(price_value) AS price_value")
+                                , DB::raw("SUM(addon_amount) AS addon_amount")
+                                )
+                        ->join('master_goal', 'goal_mission.goal_id', '=', 'master_goal.id')
+                        ->where('goal_mission.menu_type', $menu_type)
+                        ->where('goal_mission.years', $years)
+                        ->where('goal_mission.factory_id', $factory_id)
+                        ->where('goal_mission.goal_id', trim($goal_name))
+                        // ->where(function($query) use ($chanel_id) {
+                        //     if (!empty($chanel_id)) {
+                        //         $query->where('sale_chanel', $chanel_id);
+                        //     }
+                        // })
+                        // ->toSql();
+                        ->first();
+    }
+
     public static function getGoalMissionYear($menu_type, $years) {
         return GoalMission::select(DB::raw("SUM(amount) AS total_amount")
                                 , DB::raw("SUM(price_value) AS price_value")
@@ -227,7 +246,11 @@ class GoalMissionService {
     
 
     public static function getList($condition, $UserID, $RegionList) {
-        return GoalMission::where(function($query) use ($condition) {
+        return GoalMission::select("goal_mission.*"
+                                    , "region.RegionName"
+                                    , "master_goal.goal_name"
+                                )
+                        ->where(function($query) use ($condition) {
                             if (!empty($condition['Year']['yearText'])) {
                                 $query->where('years', $condition['Year']['yearText']);
                             }
@@ -237,17 +260,25 @@ class GoalMissionService {
                             if (!empty($condition['Goal']['id'])) {
                                 $query->where('goal_id', $condition['Goal']['id']);
                             }
+                            if (!empty($condition['goal_type'])) {
+                                $query->where('goal_mission.goal_type', $condition['goal_type']);
+                            }
+                            if (!empty($condition['menu_type'])) {
+                                $query->where('goal_mission.menu_type', $condition['menu_type']);
+                            }
                         })
+        
                         ->where(function($query) use ($UserID) {
 
-                            $query->where('create_by', $UserID);
-                            $query->orWhere('update_by', $UserID);
-                            $query->orWhere('dep_approve_id', $UserID);
-                            $query->orWhere('division_approve_id', $UserID);
-                            $query->orWhere('office_approve_id', $UserID);
+                            // $query->where('create_by', $UserID);
+                            // $query->orWhere('update_by', $UserID);
+                            // $query->orWhere('dep_approve_id', $UserID);
+                            // $query->orWhere('division_approve_id', $UserID);
+                            // $query->orWhere('office_approve_id', $UserID);
                         })
-                        ->whereIn('goal_mission.region_id', $RegionList)
+                        // ->whereIn('goal_mission.region_id', $RegionList)
                         ->join('region', 'region.RegionID', '=', 'goal_mission.region_id')
+                        ->join('master_goal', 'master_goal.id', '=', 'goal_mission.goal_id')
                         ->orderBy("update_date", 'DESC')
                         ->get();
     }
@@ -279,6 +310,12 @@ class GoalMissionService {
                         ->orderBy('id', 'ASC')
                         ->get()
                         ->toArray();
+    }
+
+    public static function getAvgMonth($goal_mission_id, $avgDate) {
+        return GoalMissionAvg::where('goal_mission_id', $goal_mission_id)
+                        ->where('avg_date', $avgDate)
+                        ->first();
     }
 
     public static function updateData($obj) {

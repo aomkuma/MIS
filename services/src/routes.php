@@ -202,6 +202,8 @@ $app->post('/product-milk/list/', 'ProductMilkController:getList');
 $app->post('/product-milk/get/', 'ProductMilkController:getData');
 $app->post('/product-milk/update/', 'ProductMilkController:updateData');
 $app->post('/product-milk/list/all/', 'ProductMilkController:getListAll');
+$app->post('/product-milk/sale-chanel/list/', 'ProductMilkController:getSaleChanelList');
+$app->post('/product-milk/sale-chanel/update/', 'ProductMilkController:updateSaleChanelData');
 
 $app->post('/subproduct-milk/list/', 'SubProductMilkController:getList');
 $app->post('/subproduct-milk/list/byparent/', 'SubProductMilkController:getListByParent');
@@ -220,6 +222,8 @@ $app->post('/lost-in-process/update/', 'LostInProcessController:updateData');
 $app->post('/lost-in-process/delete/detail/', 'LostInProcessController:removeDetailData');
 $app->post('/lost-in-process/update/approve/', 'LostInProcessController:updateDataApprove');
 $app->post('/lost-in-process/list/approve/', 'LostInProcessController:loadDataApprove');
+$app->post('/lost-in-process/upload/', 'LostInProcessController:uploadData');
+$app->post('/lost-in-process/load/template/', 'LostInProcessController:getExcelTemplate');
 
 $app->post('/lost-out-process/list/main/', 'LostOutProcessController:getMainList');
 $app->post('/lost-out-process/get/', 'LostOutProcessController:getData');
@@ -227,6 +231,8 @@ $app->post('/lost-out-process/update/', 'LostOutProcessController:updateData');
 $app->post('/lost-out-process/delete/detail/', 'LostOutProcessController:removeDetailData');
 $app->post('/lost-out-process/update/approve/', 'LostOutProcessController:updateDataApprove');
 $app->post('/lost-out-process/list/approve/', 'LostOutProcessController:loadDataApprove');
+$app->post('/lost-out-process/upload/', 'LostOutProcessController:uploadData');
+$app->post('/lost-out-process/load/template/', 'LostOutProcessController:getExcelTemplate');
 
 $app->post('/lost-wait-sale/list/main/', 'LostWaitSaleController:getMainList');
 $app->post('/lost-wait-sale/get/', 'LostWaitSaleController:getData');
@@ -234,6 +240,8 @@ $app->post('/lost-wait-sale/update/', 'LostWaitSaleController:updateData');
 $app->post('/lost-wait-sale/delete/detail/', 'LostWaitSaleController:removeDetailData');
 $app->post('/lost-wait-sale/update/approve/', 'LostWaitSaleController:updateDataApprove');
 $app->post('/lost-wait-sale/list/approve/', 'LostWaitSaleController:loadDataApprove');
+$app->post('/lost-wait-sale/upload/', 'LostWaitSaleController:uploadData');
+$app->post('/lost-wait-sale/load/template/', 'LostWaitSaleController:getExcelTemplate');
 
 $app->post('/production-info/list/main/', 'ProductionInfoController:getMainList');
 $app->post('/production-info/list/detail/', 'ProductionInfoController:getMainListDetail');
@@ -242,6 +250,8 @@ $app->post('/production-info/update/', 'ProductionInfoController:updateData');
 $app->post('/production-info/delete/detail/', 'ProductionInfoController:removeDetailData');
 $app->post('/production-info/update/approve/', 'ProductionInfoController:updateDataApprove');
 $app->post('/production-info/list/approve/', 'ProductionInfoController:loadDataApprove');
+$app->post('/production-info/upload/', 'ProductionInfoController:uploadData');
+$app->post('/production-info/load/template/', 'ProductionInfoController:getExcelTemplate');
 
 $app->post('/production-sale-info/list/main/', 'ProductionSaleInfoController:getMainList');
 $app->post('/production-sale-info/list/detail/', 'ProductionSaleInfoController:getMainListDetail');
@@ -251,11 +261,27 @@ $app->post('/production-sale-info/delete/detail/', 'ProductionSaleInfoController
 $app->post('/production-sale-info/update/approve/', 'ProductionSaleInfoController:updateDataApprove');
 $app->post('/production-sale-info/list/approve/', 'ProductionSaleInfoController:loadDataApprove');
 $app->post('/production-sale-info/upload/', 'ProductionSaleInfoController:uploadData');
+$app->post('/production-sale-info/load/template/', 'ProductionSaleInfoController:getExcelTemplate');
+$app->get('/production-sale-info/read/productmilk/', 'ProductionSaleInfoController:readProductMilkFile');
+$app->get('/production-sale-info/read/productmilk/master/', 'ProductionSaleInfoController:readProductMilkFileToMaster');
+
 
 $app->post('/factory/list/', 'FactoryController:getList');
 
 $app->post('/upload-log/list/', 'UploadLogController:getList');
 $app->post('/upload-log/update/', 'UploadLogController:updateLog');
+
+$app->post('/loss-manage/list/', 'MasterLossController:getList');
+$app->post('/loss-manage/get/', 'MasterLossController:getData');
+$app->post('/loss-manage/update/', 'MasterLossController:updateData');
+$app->post('/loss-manage/mapping/list/', 'MasterLossController:getMappingList');
+$app->post('/loss-manage/mapping/update/', 'MasterLossController:updateMappingData');
+$app->post('/loss-manage/mapping/delete/', 'MasterLossController:deleteMappingData');
+
+$app->post('/dip/list/', 'DIPController:getList');
+$app->post('/dip/get/', 'DIPController:getData');
+$app->post('/dip/update/', 'DIPController:updateData');
+$app->post('/dip/delete/', 'DIPController:removeData');
 
 // Default action
 $app->get('/[{name}]', function ($request, $response, $args) {

@@ -23,6 +23,20 @@
 				</select>
 		  	</div>
 		  	<div class="form-group">
+			    <label for="exampleInputName2">&nbsp; ด้านกิจการ : </label>
+			    &nbsp; <select class="form-control" ng-model="condition.goal_type" ng-change="changeGoalType(condition.goal_type)">
+				<option value="">กรุณาเลือก..</option>
+				<option value="DBI">ข้อมูลกิจการโคนม</option>
+				<option value="II">ข้อมูลอุตสาหกรรม</option>
+			</select>
+		  	</div>
+		  	<div class="form-group">
+			    <label for="exampleInputName2">&nbsp; ข้อมูล : </label>
+			    &nbsp; <select class="form-control" ng-model="condition.menu_type" ng-change="changeGoalType(condition.goal_type)" ng-options="data.value as data.name for data in MenuType">
+				<option value="">กรุณาเลือก..</option>
+			</select>
+		  	</div>
+		  	<div class="form-group">
 			    <label for="exampleInputName2">&nbsp; รายการ : </label>
 			    &nbsp; <select name="Year" class="form-control" ng-model="condition.Goal" ng-options="goal.goal_name for goal in MasterGoalList track by goal.id">
 					<option value="">กรุณาเลือก</option>
@@ -52,7 +66,7 @@
 				<tr>
 					<th rowspan="2">Last Update</th>
 					<th rowspan="2">ปีงบประมาณ</th>
-					<th rowspan="2">พื้นที่รับผิดชอบ</th>
+					<th rowspan="2">สำนักงาน</th>
 					<th rowspan="2">ด้านกิจการ</th>
 					<th rowspan="2">รายการ</th>
 					<th rowspan="2">ปริมาณ / หน่วย</th>
@@ -71,8 +85,8 @@
 					<td>{{data.update_date}}</td>
 					<td>{{data.years + 543}}</td>
 					<td>{{(data.RegionName)}}</td>
-					<td>{{findGoalType(data.goal_id)}}</td>
-					<td>{{getGoalName(data.goal_id)}}</td>
+					<td>{{getGoalType(data.goal_type) + ' - ' + data.menu_type}}</td>
+					<td >{{data.goal_name}}</td><!-- bind-html-compile="getGoalName(data.goal_id)"-->
 					<td>{{numberFormatComma(data.amount)}} {{data.unit}}</td>
 					<td>{{numberFormatComma(data.price_value)}}</td>
 					<td align="center"><span class="glyphicon glyphicon-check" style="color: green;" ng-show="data.dep_approve_date != null && (data.dep_approve_comment == null || data.dep_approve_comment == '')"></span> 

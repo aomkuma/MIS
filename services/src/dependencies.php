@@ -198,3 +198,11 @@ $container['CowgroupFatherController'] = function ($c) {
 $container['UploadLogController'] = function ($c) {
     return new \App\Controller\UploadLogController($c->get('logger'), $c->get('db'));
 };
+
+$container['MasterLossController'] = function ($c) {
+    return new \App\Controller\MasterLossController($c->get('logger'), $c->get('db'));
+};
+
+$container['DIPController'] = function ($c) {
+    return new \App\Controller\DIPController($c->get('logger'), $c->get('db'));
+};

@@ -83,7 +83,7 @@ class SubProductMilkController extends Controller {
 //                 die();
             // // Update to none role
             
-            $result = SubProductMilkService::checkDuplicate($_Data['id'], $_Data['name'],$_Data['product_milk_id']);
+            $result = SubProductMilkService::checkDuplicate($_Data['id'], $_Data,$_Data['product_milk_id']);
 
             if (empty($result)) {
 
@@ -98,11 +98,11 @@ class SubProductMilkController extends Controller {
                 foreach ($ProductMilkDetail as $key1 => $value1) {
                     
                     // find master goal by name
-                    $old_goal_name = $OldData['proname'] . ' - ' . $OldData['subname'] . ' - ' . $value1['name'];
+                    $old_goal_name = $OldData['proname'] . ' - ' . $OldData['product_character'] . ' ' . $OldData['subname'] . ' - ' . $value1['name']  . ' ' . $value1['number_of_package'] . ' ' . $value1['unit'] . ' ' . $value1['amount'] . ' ' . $value1['amount_unit'] . ' ' . $value1['taste'];
                     $MasterGoal = MasterGoalService::getDataByName($old_goal_name);
                     // Add master goal
                     if(!empty($MasterGoal)){
-                        $MasterGoal['goal_name'] = $OldData['proname'] . ' - ' . $_Data['name'] . ' - ' . $value1['name'];
+                        $MasterGoal['goal_name'] = $OldData['proname'] . ' - ' . $_Data['product_character'] . ' ' . $_Data['name'] . ' - ' . $value1['name']  . ' ' . $value1['number_of_package'] . ' ' . $value1['unit'] . ' ' . (empty($value1['amount'])?'0.00':$value1['amount']) . ' ' . $value1['amount_unit'] . ' ' . $value1['taste'];
                         MasterGoalService::updateData($MasterGoal);
                     }
 

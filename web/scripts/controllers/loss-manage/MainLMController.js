@@ -18,7 +18,7 @@ angular.module('e-homework').controller('MainLMController', function($scope, $co
                         ,{'id':2, 'name' : 'แปรสภาพ, ชำรุด'}
                         ,{'id':3, 'name' : 'คัดเบอร์ลัง'}
                     ];
-        return;
+        // return;
         var params = {'condition' : $scope.condition};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest(action, params).then(function(result){

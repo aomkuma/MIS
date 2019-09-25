@@ -67,6 +67,17 @@
 	</div>
 	<div class="row form-group">
 		<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+			สำนักงาน
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+			<select class="form-control" ng-model="Data.factory_id" ng-options="data.id as data.factory_name for data in FactoryList">
+				<option value="">กรุณาเลือก..</option>
+			</select>
+		</div>
+	</div>
+	
+	<div class="row form-group">
+		<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 			สถานะ
 		</div>
 		<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">

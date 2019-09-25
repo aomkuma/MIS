@@ -105,6 +105,7 @@ angular.module('e-homework').controller('UpdateLWSController', function($scope, 
                 $scope.Data = result.data.DATA.Data;
                 $scope.Data.factory_id = parseInt($scope.Data.factory_id);
                 $scope.DataDetailList = $scope.Data.lost_wait_sale_detail;
+                $scope.getUploadLogList();
                 // load sub dar=iry farming
                 // for(var i =0; i < $scope.DataDetailList.length; i++){
                 //     $scope.loadDairyFarming('CHILD', $scope.DataDetailList[i].dairy_farming_id);
@@ -262,6 +263,7 @@ angular.module('e-homework').controller('UpdateLWSController', function($scope, 
             'id':''
             , 'cooperative_id':null
             , 'region_id':$scope.PersonRegion[0].RegionID
+            , 'factory_id' : $scope.PersonRegion[0].FactoryID
             , 'months':curDate.getMonth() + 1
             , 'years':curDate.getFullYear()
             , 'create_date':''
@@ -365,15 +367,64 @@ angular.module('e-homework').controller('UpdateLWSController', function($scope, 
         if($scope.DETAIL_TYPE == 'MANUAL'){
             $scope.DETAIL_TYPE = 'UPLOAD';
             $scope.AttachFile = null;
+            $scope.getUploadLogList();
         }else{
             $scope.DETAIL_TYPE = 'MANUAL';
         }
+    }
+    $scope.DETAIL_TYPE = 'MANUAL';
+
+    $scope.getUploadLogList = function(){
+        var params = {'id' : $scope.Data.id, 'menu_type' : 'lost-wait-sale'};
+        HTTPService.clientRequest('upload-log/list', params).then(function(result){
+            console.log(result);
+            $scope.UploadLogList = result.data.DATA.List;
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+
+    $scope.uploadFile = function(Data, AttachFile ){
+        // var FileDate = '';
+        if($scope.FileDate != null && $scope.FileDate != undefined && $scope.FileDate != ''){
+            $scope.FileDate = makeSQLDate($scope.FileDate);
+        }
+        IndexOverlayFactory.overlayShow();
+        var params = {'Data' : Data, 'AttachFile' : AttachFile, 'menu_type' : 'lost-wait-sale', 'FileDate' : $scope.FileDate};
+            HTTPService.uploadRequest('lost-wait-sale/upload', params).then(function(result){
+                console.log(result);
+                if(result.data.STATUS == 'OK'){
+                    alert('อัพโหลดสำเร็จ');
+                    window.location.href = '#/lost-wait-sale';///update/' + Data.id;
+                }else{
+                    alert(result.data.DATA);
+                }
+                IndexOverlayFactory.overlayHide();
+            });
+    }
+
+    $scope.exportTemplate = function(){
+       // console.log(DetailList, $scope.data_description);
+        // return;
+        IndexOverlayFactory.overlayHide();
+        var params = {
+            'factory_id' : $scope.Data.factory_id
+           , 'years' : $scope.Data.years
+           , 'months' : $scope.Data.months
+        }; 
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('lost-wait-sale/load/template', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                window.location.href="../" + result.data.DATA;
+            }
+            IndexOverlayFactory.overlayHide();
+        });
     }
     
     $scope.setData();
     $scope.loadFactoryList();
     $scope.loadMasterGoalList();
-    $scope.DETAIL_TYPE = 'MANUAL';
+    $scope.Search = false;
+    $scope.DETAIL_TYPE = 'UPLOAD';
 
     // $scope.loadDairyFarming('MAIN', '');
     // $scope.loadDairyFarming('CHILD', '');

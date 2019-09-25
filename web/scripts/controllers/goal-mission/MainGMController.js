@@ -48,8 +48,17 @@ angular.module('e-homework').controller('MainGMController', function($scope, $co
     }
     $scope.Maker = false;
 
-    $scope.loadMasterGoalList = function(action){
-        var params = {'actives' : 'Y'};
+    $scope.changeGoalType = function(){
+        $scope.MenuType = [];
+        for(var i = 0; i < $scope.MenuTypeList.length; i++){
+            if($scope.condition.goal_type == $scope.MenuTypeList[i].type){
+                $scope.MenuType.push($scope.MenuTypeList[i]);
+            }
+        }   
+    }
+
+    $scope.loadMasterGoalList = function(action, goal_type){
+        var params = {'actives' : 'Y', 'goal_type': goal_type, 'condition' : $scope.condition, 'htmlcode':''};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest(action, params).then(function(result){
             if(result.data.STATUS == 'OK'){
@@ -143,14 +152,48 @@ angular.module('e-homework').controller('MainGMController', function($scope, $co
         return parseFloat(num).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
+    $scope.changeGoalType = function(goal_type){
+        $scope.MenuType = [];
+        for(var i = 0; i < $scope.MenuTypeList.length; i++){
+            if($scope.condition.goal_type == $scope.MenuTypeList[i].type){
+                $scope.MenuType.push($scope.MenuTypeList[i]);
+            }
+        }   
+        $scope.loadMasterGoalList('master-goal/list', goal_type); 
+    }
+
+    $scope.MenuTypeList = [{'type':'DBI', 'value':'บริการสัตวแพทย์', 'name' : 'บริการสัตวแพทย์'}
+                            ,{'type':'DBI', 'value':'ผสมเทียม', 'name' : 'ผสมเทียม'}
+                            ,{'type':'DBI', 'value':'แร่ธาตุ พรีมิกซ์ และอาหาร', 'name' : 'แร่ธาตุ พรีมิกซ์ และอาหาร'}
+                            ,{'type':'DBI', 'value':'ผลิตน้ำเชื้อแช่แข็ง', 'name' : 'ผลิตน้ำเชื้อแช่แข็ง'}
+                            ,{'type':'DBI', 'value':'จำหน่ายน้ำเชื้อแช่แข็ง', 'name' : 'จำหน่ายน้ำเชื้อแช่แข็ง'}
+                            ,{'type':'DBI', 'value':'วัสดุผสมเทียมและอื่นๆ', 'name' : 'วัสดุผสมเทียมและอื่นๆ'}
+                            ,{'type':'DBI', 'value':'ปัจจัยการเลี้ยงโค', 'name' : 'ปัจจัยการเลี้ยงโค'}
+                            ,{'type':'DBI', 'value':'ฝึกอบรม', 'name' : 'ฝึกอบรม'}
+                            ,{'type':'DBI', 'value':'ท่องเที่ยว', 'name' : 'ท่องเที่ยว'}
+                            ,{'type':'DBI', 'value':'สหกรณ์และปริมาณน้ำนม', 'name' : 'สหกรณ์และปริมาณน้ำนม'}
+                            ,{'type':'DBI', 'value':'ข้อมูลฝูงโค', 'name' : 'ข้อมูลฝูงโค'}
+                            ,{'type':'DBI', 'value':'ข้อมูลฝูงโคพ่อพันธุ์', 'name' : 'ข้อมูลฝูงโคพ่อพันธุ์'}
+                            ,{'type':'II', 'value':'ข้อมูลการผลิต', 'name' : 'ข้อมูลการผลิต'}
+                            ,{'type':'II', 'value':'ข้อมูลการขาย', 'name' : 'ข้อมูลการขาย'}
+                            ,{'type':'II', 'value':'ข้อมูลรับซื้อน้ำนม', 'name' : 'ข้อมูลรับซื้อน้ำนม'}
+                            ,{'type':'II', 'value':'ข้อมูลจำหน่ายน้ำนม', 'name' : 'ข้อมูลจำหน่ายน้ำนม'}
+                            ,{'type':'II', 'value':'การสูญเสียในกระบวนการ', 'name' : 'การสูญเสียในกระบวนการ'}
+                            ,{'type':'II', 'value':'การสูญเสียหลังกระบวนการ', 'name' : 'การสูญเสียหลังกระบวนการ'}
+                            ,{'type':'II', 'value':'การสูญเสียรอจำหน่าย', 'name' : 'การสูญเสียรอจำหน่าย'}
+                            // ,{'type':'II', 'value':'การสูญเสียในกระบวนการขนส่ง', 'name' : 'การสูญเสียในกระบวนการขนส่ง'}
+                        ];
+
     // $scope.condition = {'Year' : ''
     //                     , 'Region' : ''
     //                     , 'Goal' : ''
     //                 };
+    $scope.condition = {'goal_type' : ''};
     $scope.YearList = getYearList(20);
     $scope.getUserRole();
-    $scope.loadMasterGoalList('master-goal/list');
+    $scope.loadList('goal-mission/list');
+    // $scope.loadMasterGoalList('master-goal/list');
     
-
+// $scope.loadList('goal-mission/list');
     // console.log($scope.$parent.PersonRegion);
 });

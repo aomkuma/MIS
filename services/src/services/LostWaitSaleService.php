@@ -132,4 +132,8 @@
             return LostWaitSale::where('id', $id)->update($obj);
         }
         
+        public static function removeDetailDataByParent($id){
+            
+            return LostWaitSaleDetail::where('lost_wait_sale_id', $id)->delete();
+        }
     }

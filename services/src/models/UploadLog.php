@@ -7,6 +7,7 @@ class UploadLog extends \Illuminate\Database\Eloquent\Model {
   	public $timestamps = false;
   	protected $fillable = array('id'
   								, 'menu_type'
+                  , 'data_id'
   								, 'file_date'
   								, 'file_name'
   								, 'file_path'

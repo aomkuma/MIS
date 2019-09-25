@@ -9,6 +9,8 @@ use App\Service\ProductMilkService;
 use App\Service\SubProductMilkService;
 use App\Service\ProductMilkDetailService;
 use App\Service\FactoryService;
+use App\Service\UploadLogService;
+use PHPExcel;
 
 class ProductionInfoController extends Controller {
 
@@ -501,7 +503,7 @@ class ProductionInfoController extends Controller {
                 // $data['ProductionInfoName'] = $value1['factory_name'];
                 // array_push($DataList, $data);
                 // get SubProductMilkService
-                $SubProductMilkList = SubProductMilkService::getListByProductMilk($value['id']);
+                $SubProductMilkList = SubProductMilkService::getListByProductMilk($value['id'], 'Y');
 
                 // Prepare condition
 
@@ -512,6 +514,12 @@ class ProductionInfoController extends Controller {
 
                 // $factory_id = $value1['id'];
 
+                $TotalData = [];
+                $TotalData['SummaryAmount'] = 0;
+                $TotalData['SummaryBaht'] = 0;
+                $TotalData['SummaryBeforeAmount'] = 0;
+                $TotalData['SummaryBeforeBaht'] = 0;
+
                 foreach ($SubProductMilkList as $k => $v) {
 
                     $master_type_id = $v['id'];
@@ -520,7 +528,7 @@ class ProductionInfoController extends Controller {
 
                     $data = [];
                     // $data['RegionName'] = $value['RegionName'];
-                    $data['ProductionInfoName'] = $v['name'];
+                    $data['ProductionInfoName'] = $v['product_character'] . ' ' . $v['name'];
                     $data['Month'] = $monthName;
 
                     // get cooperative type
@@ -625,28 +633,28 @@ class ProductionInfoController extends Controller {
                     // }
                     // array_push($DataList, $data);
                 }
-                // $data = [];
-                // $data['bg_color'] = '#A0DEFD';
-                // $data['ProductionInfoName'] = 'รวมทั้งสิ้น';
-                // $data['CurrentAmount'] = $Total_CurrentAmount;
-                // $data['CurrentBaht'] = $Total_CurrentBaht;
-                // $data['BeforeAmount'] = $Total_BeforeAmount;
-                // $data['BeforeBaht'] = $Total_BeforeBaht;
-                // $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
-                // $data['DiffAmount'] = $DiffAmount;
-                // if ($data['BeforeAmount'] != 0) {
-                //     $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
-                // } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
-                //     $data['DiffAmountPercentage'] = 100;
-                // }
-                // $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
-                // $data['DiffBaht'] = $DiffBaht;
-                // if ($data['BeforeBaht'] != 0) {
-                //     $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
-                // } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
-                //     $data['DiffBahtPercentage'] = 100;
-                // }
-                // array_push($DataList, $data);
+                $data = [];
+                $data['bg_color'] = '#A0DEFD';
+                $data['ProductionInfoName'] = 'รวมทั้งสิ้น';
+                $data['CurrentAmount'] = $Total_CurrentAmount;
+                $data['CurrentBaht'] = $Total_CurrentBaht;
+                $data['BeforeAmount'] = $Total_BeforeAmount;
+                $data['BeforeBaht'] = $Total_BeforeBaht;
+                $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+                $data['DiffAmount'] = $DiffAmount;
+                if ($data['BeforeAmount'] != 0) {
+                    $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
+                    $data['DiffAmountPercentage'] = 100;
+                }
+                $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                $data['DiffBaht'] = $DiffBaht;
+                if ($data['BeforeBaht'] != 0) {
+                    $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
+                } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
+                    $data['DiffBahtPercentage'] = 100;
+                }
+                array_push($DataList, $data);
             }
 
             $curMonth++;
@@ -787,7 +795,7 @@ class ProductionInfoController extends Controller {
                 // $data['ProductionInfoName'] = $value1['factory_name'];
                 // array_push($DataList, $data);
                 // get SubProductMilkService
-                $SubProductMilkList = SubProductMilkService::getListByProductMilk($value['id']);
+                $SubProductMilkList = SubProductMilkService::getListByProductMilk($value['id'], 'Y');
 
                 // Prepare condition
 
@@ -839,7 +847,7 @@ class ProductionInfoController extends Controller {
 
                     $data = [];
                     // $data['RegionName'] = $value['RegionName'];
-                    $data['ProductionInfoName'] = $v['name'];
+                    $data['ProductionInfoName'] = $v['product_character'] . ' ' . $v['name'];
                     $data['Quarter'] = $curQuarter;
 
                     $data['CurrentAmount'] = $SumCurrentAmount;
@@ -906,39 +914,63 @@ class ProductionInfoController extends Controller {
                     $GrandTotal_BeforeBaht += $data['BeforeBaht'];
                     // }
 
-                    $data = [];
-                    $data['bg_color'] = '#AFE1FA';
-                    $data['ProductionInfoName'] = 'รวม';
+                    // $data = [];
+                    // $data['bg_color'] = '#AFE1FA';
+                    // $data['ProductionInfoName'] = 'รวม';
 
-                    $data['CurrentAmount'] = $Sum_CurrentAmount;
-                    $data['CurrentBaht'] = $Sum_CurrentBaht;
+                    // $data['CurrentAmount'] = $Sum_CurrentAmount;
+                    // $data['CurrentBaht'] = $Sum_CurrentBaht;
 
-                    $data['BeforeAmount'] = $Sum_BeforeAmount;
-                    $data['BeforeBaht'] = $Sum_BeforeBaht;
+                    // $data['BeforeAmount'] = $Sum_BeforeAmount;
+                    // $data['BeforeBaht'] = $Sum_BeforeBaht;
 
-                    $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
-                    $data['DiffAmount'] = $DiffAmount;
-                    if ($data['BeforeAmount'] != 0) {
-                        $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
-                    } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
-                        $data['DiffAmountPercentage'] = 100;
-                    } else {
-                        $data['DiffAmountPercentage'] = 0;
-                    }
+                    // $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+                    // $data['DiffAmount'] = $DiffAmount;
+                    // if ($data['BeforeAmount'] != 0) {
+                    //     $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                    // } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
+                    //     $data['DiffAmountPercentage'] = 100;
+                    // } else {
+                    //     $data['DiffAmountPercentage'] = 0;
+                    // }
 
 
-                    $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
-                    $data['DiffBaht'] = $DiffBaht;
+                    // $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                    // $data['DiffBaht'] = $DiffBaht;
 
-                    if ($data['BeforeBaht'] != 0) {
-                        $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
-                    } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
-                        $data['DiffBahtPercentage'] = 100;
-                    } else {
-                        $data['DiffBahtPercentage'] = 0;
-                    }
-                    array_push($DataList, $data);
+                    // if ($data['BeforeBaht'] != 0) {
+                    //     $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
+                    // } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
+                    //     $data['DiffBahtPercentage'] = 100;
+                    // } else {
+                    //     $data['DiffBahtPercentage'] = 0;
+                    // }
+                    // array_push($DataList, $data);
                 }
+
+                $data = [];
+                $data['bg_color'] = '#A0DEFD';
+                $data['ProductionInfoName'] = 'รวมทั้งสิ้น';
+                $data['CurrentAmount'] = $Total_CurrentAmount;
+                $data['CurrentBaht'] = $Total_CurrentBaht;
+                $data['BeforeAmount'] = $Total_BeforeAmount;
+                $data['BeforeBaht'] = $Total_BeforeBaht;
+                $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+                $data['DiffAmount'] = $DiffAmount;
+                if ($data['BeforeAmount'] != 0) {
+                    $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
+                    $data['DiffAmountPercentage'] = 100;
+                }
+                $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                $data['DiffBaht'] = $DiffBaht;
+                if ($data['BeforeBaht'] != 0) {
+                    $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
+                } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
+                    $data['DiffBahtPercentage'] = 100;
+                }
+                array_push($DataList, $data);
+
             }
 
             $curMonth++;
@@ -1032,7 +1064,7 @@ class ProductionInfoController extends Controller {
                 // $data['ProductionInfoName'] = $value1['factory_name'];
                 // array_push($DataList, $data);
                 // get SubProductMilkService
-                $SubProductMilkList = SubProductMilkService::getListByProductMilk($value['id']);
+                $SubProductMilkList = SubProductMilkService::getListByProductMilk($value['id'], 'Y');
 
                 // Prepare condition
 
@@ -1084,7 +1116,7 @@ class ProductionInfoController extends Controller {
 
                     $data = [];
                     // $data['RegionName'] = $value['RegionName'];
-                    $data['ProductionInfoName'] = $v['name'];
+                    $data['ProductionInfoName'] = $v['product_character'] . ' ' . $v['name'];
                     // $data['Quarter'] = $curQuarter;
 
                     $data['CurrentAmount'] = $SumCurrentAmount;
@@ -1151,39 +1183,62 @@ class ProductionInfoController extends Controller {
                     $GrandTotal_BeforeBaht += $data['BeforeBaht'];
                     // }
 
-                    $data = [];
-                    $data['bg_color'] = '#AFE1FA';
-                    $data['ProductionInfoName'] = 'รวม';
+                    // $data = [];
+                    // $data['bg_color'] = '#AFE1FA';
+                    // $data['ProductionInfoName'] = 'รวม';
 
-                    $data['CurrentAmount'] = $Sum_CurrentAmount;
-                    $data['CurrentBaht'] = $Sum_CurrentBaht;
+                    // $data['CurrentAmount'] = $Sum_CurrentAmount;
+                    // $data['CurrentBaht'] = $Sum_CurrentBaht;
 
-                    $data['BeforeAmount'] = $Sum_BeforeAmount;
-                    $data['BeforeBaht'] = $Sum_BeforeBaht;
+                    // $data['BeforeAmount'] = $Sum_BeforeAmount;
+                    // $data['BeforeBaht'] = $Sum_BeforeBaht;
 
-                    $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
-                    $data['DiffAmount'] = $DiffAmount;
-                    if ($data['BeforeAmount'] != 0) {
-                        $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
-                    } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
-                        $data['DiffAmountPercentage'] = 100;
-                    } else {
-                        $data['DiffAmountPercentage'] = 0;
-                    }
+                    // $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+                    // $data['DiffAmount'] = $DiffAmount;
+                    // if ($data['BeforeAmount'] != 0) {
+                    //     $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                    // } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
+                    //     $data['DiffAmountPercentage'] = 100;
+                    // } else {
+                    //     $data['DiffAmountPercentage'] = 0;
+                    // }
 
 
-                    $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
-                    $data['DiffBaht'] = $DiffBaht;
+                    // $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                    // $data['DiffBaht'] = $DiffBaht;
 
-                    if ($data['BeforeBaht'] != 0) {
-                        $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
-                    } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
-                        $data['DiffBahtPercentage'] = 100;
-                    } else {
-                        $data['DiffBahtPercentage'] = 0;
-                    }
-                    array_push($DataList, $data);
+                    // if ($data['BeforeBaht'] != 0) {
+                    //     $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
+                    // } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
+                    //     $data['DiffBahtPercentage'] = 100;
+                    // } else {
+                    //     $data['DiffBahtPercentage'] = 0;
+                    // }
+                    // array_push($DataList, $data);
                 }
+
+                $data = [];
+                $data['bg_color'] = '#A0DEFD';
+                $data['ProductionInfoName'] = 'รวมทั้งสิ้น';
+                $data['CurrentAmount'] = $Total_CurrentAmount;
+                $data['CurrentBaht'] = $Total_CurrentBaht;
+                $data['BeforeAmount'] = $Total_BeforeAmount;
+                $data['BeforeBaht'] = $Total_BeforeBaht;
+                $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+                $data['DiffAmount'] = $DiffAmount;
+                if ($data['BeforeAmount'] != 0) {
+                    $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
+                    $data['DiffAmountPercentage'] = 100;
+                }
+                $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                $data['DiffBaht'] = $DiffBaht;
+                if ($data['BeforeBaht'] != 0) {
+                    $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
+                } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
+                    $data['DiffBahtPercentage'] = 100;
+                }
+                array_push($DataList, $data);
             }
 
             $curMonth++;
@@ -1322,7 +1377,7 @@ class ProductionInfoController extends Controller {
 
                         $data = [];
                         $data['bg_color'] = '#ccc';
-                        $data['ProductionInfoName'] = $v['name'];
+                        $data['ProductionInfoName'] = $v['product_character'] . ' ' . $v['name'];
                         array_push($DataList, $data);
 
                         // get ProductMilkDetailService
@@ -1353,7 +1408,7 @@ class ProductionInfoController extends Controller {
 
                             $data = [];
                             // $data['RegionName'] = $value['RegionName'];
-                            $data['ProductionInfoName'] = $v1['name'];
+                            $data['ProductionInfoName'] = $v1['name'] . ' ' . $v1['number_of_package'] . ' ' . $v1['unit'] . ' ' . $v1['amount'] . ' ' . $v1['amount_unit'] . ' ' . $v1['taste'];
                             $data['Month'] = $monthName;
                             $data['Quarter'] = $curQuarter;
                             $data['Year'] = ($curYear + 543);
@@ -2005,6 +2060,333 @@ class ProductionInfoController extends Controller {
         }
 
         return ['DataList' => $DataList];
+    }
+
+    public function getExcelTemplate($request, $response, $args) {
+        try {
+
+            $params = $request->getParsedBody();
+            // $condition = $params['obj']['condition'];
+
+            $factory_id = $params['obj']['factory_id'];
+            $years = $params['obj']['years'];
+            $months = $params['obj']['months'];
+            $menu_type = 'ข้อมูลการผลิต';
+
+            $con_year = $years;
+            if($months > 9){
+                $con_year = $years - 1;
+            }
+            $avgDate = $con_year . '-'. ($months<10?'0'.$months:$months) . '-01';
+            
+            $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_in_memory_gzip;
+            $catch_result = \PHPExcel_Settings::setCacheStorageMethod($cacheMethod);
+
+            $objPHPExcel = new PHPExcel();
+
+            $objPHPExcel->getActiveSheet()->setCellValue('A1', 'ประเภทของนม');
+            $objPHPExcel->getActiveSheet()->setCellValue('B1', 'ชื่อผลิตภัณฑ์');
+            $objPHPExcel->getActiveSheet()->setCellValue('C1', 'ชนิดผลิตภัณฑ์');
+            $objPHPExcel->getActiveSheet()->setCellValue('D1', 'เป้าหมายทั้งปี');
+            $objPHPExcel->getActiveSheet()->setCellValue('F1', 'เป้าหมายเดือน');
+            $objPHPExcel->getActiveSheet()->setCellValue('H1', 'ผลดำเนินงาน');
+
+            $objPHPExcel->getActiveSheet()->setCellValue('D2', 'ลิตร');
+            $objPHPExcel->getActiveSheet()->setCellValue('E2', 'บาท');
+
+            $objPHPExcel->getActiveSheet()->setCellValue('F2', 'ลิตร');
+            $objPHPExcel->getActiveSheet()->setCellValue('G2', 'บาท');
+
+            $objPHPExcel->getActiveSheet()->setCellValue('H2', 'ปริมาณการผลิต (หีบ : กล่อง / ลิตร)');
+            $objPHPExcel->getActiveSheet()->setCellValue('I2', 'ลิตร');
+            $objPHPExcel->getActiveSheet()->setCellValue('J2', 'บาท');
+
+            $objPHPExcel->getActiveSheet()->mergeCells('A1:A2');
+            $objPHPExcel->getActiveSheet()->mergeCells('B1:B2');
+            $objPHPExcel->getActiveSheet()->mergeCells('C1:C2');
+            $objPHPExcel->getActiveSheet()->mergeCells('D1:E1');
+            $objPHPExcel->getActiveSheet()->mergeCells('F1:G1');
+            $objPHPExcel->getActiveSheet()->mergeCells('H1:J1');
+
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+
+            $item_cnt = 3;
+            // Gen item
+
+            // load goal mission
+            // GoalMissionService::
+
+            // load product milk
+            $ProductMilk = ProductMilkService::getList('Y', '', [], $factory_id);
+            // print_r($ProductMilk);exit;
+            foreach ($ProductMilk as $key => $value) {
+                
+                $product_milk_id = $value['id'];
+                $product_milk_name = $value['name'];
+                
+                $SubProductMilk = SubProductMilkService::getListByProductMilk($product_milk_id, 'Y');
+                // print_r($SubProductMilk);exit;
+                foreach ($SubProductMilk as $key1 => $value1) {
+                    $subproduct_milk_id = $value1['id'];
+                    $subproduct_milk_name = $value1['product_character'] . ' ' . $value1['name'];
+
+                    $ProductMilkDetail = ProductMilkDetailService::getListByParent($subproduct_milk_id, 'Y');
+                    foreach ($ProductMilkDetail as $key2 => $value2) {
+
+                        $product_milk_detail_name = $value2['name'] . ' ' .$value2['number_of_package'] . ' ' . $value2['unit'] . ' ' . $value2['amount'] . ' ' . $value2['amount_unit'] . ' ' . $value2['taste'];
+
+                        // find goal values from name
+                        $goal_name = $product_milk_name . ' - ' .  $subproduct_milk_name . ' - ' . $product_milk_detail_name;
+
+                        // get goal id by goal name
+
+                        $_MasterGoal = MasterGoalService::getGoalIDByName($goal_name, $menu_type, $factory_id);
+
+                        $GoalMissionData = GoalMissionService::getGoalMissionByGoalName($menu_type, $_MasterGoal['id'], $factory_id, $years);
+
+                        // get goal mission in month
+                        // echo $GoalMissionData['id'];exit;
+                        $GoalMissionMonthData = GoalMissionService::getAvgMonth($GoalMissionData['id'], $avgDate);
+                        // print_r($GoalMissionData);
+                        // exit;
+
+                        $objPHPExcel->getActiveSheet()->setCellValue('A' .$item_cnt, $product_milk_name);
+                        $objPHPExcel->getActiveSheet()->setCellValue('B' .$item_cnt, $subproduct_milk_name);
+                        $objPHPExcel->getActiveSheet()->setCellValue('C' .$item_cnt, $product_milk_detail_name);
+                        $objPHPExcel->getActiveSheet()->setCellValue('D' .$item_cnt, $GoalMissionData['total_amount']);
+                        $objPHPExcel->getActiveSheet()->setCellValue('E' .$item_cnt, $GoalMissionData['price_value']);
+                        $objPHPExcel->getActiveSheet()->setCellValue('F' .$item_cnt, $GoalMissionMonthData['amount']);
+                        $objPHPExcel->getActiveSheet()->setCellValue('G' .$item_cnt, $GoalMissionMonthData['price_value']);
+                        $objPHPExcel->getActiveSheet()->getStyle('H' . $item_cnt)->getNumberFormat()->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_TEXT);
+                        $objPHPExcel->getActiveSheet()->setCellValue('H' .$item_cnt, '');
+                        $objPHPExcel->getActiveSheet()->setCellValue('I' .$item_cnt, '');
+                        $objPHPExcel->getActiveSheet()->setCellValue('J' .$item_cnt, '');
+                        // $objPHPExcel->getActiveSheet()->setCellValue('K' .$item_cnt, $goal_name);
+                        // $objPHPExcel->getActiveSheet()->setCellValue('L' .$item_cnt, $GoalMissionData['id'] . ' - ' .  $avgDate);
+                        // $objPHPExcel->getActiveSheet()->setCellValue('M' .$item_cnt, $menu_type .' - ' . $_MasterGoal['id'].' - ' .  $factory_id.' - ' .  $years);
+                        $item_cnt++;
+                    }
+                }
+
+            }
+
+            $objPHPExcel->getActiveSheet()->getStyle('H3:H' . $objPHPExcel->getActiveSheet()->getHighestRow())->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+            $objPHPExcel->getActiveSheet()->getStyle('A1:J2' . $highestRow)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+            $objPHPExcel->getActiveSheet()
+            ->getStyle("A1:J" . $objPHPExcel->getActiveSheet()->getHighestRow())
+            ->applyFromArray($this->getDefaultStyle());
+
+            // exit;
+            $filename = 'TEMPLATE__production-info_' . date('YmdHis') . '.xlsx';
+            $filepath = '../../files/files/download/' . $filename;
+
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+
+            $objWriter->setPreCalculateFormulas();
+            $objWriter->save($filepath);
+
+            $this->data_result['DATA'] = 'files/files/download/' . $filename;
+
+            return $this->returnResponse(200, $this->data_result, $response, false);
+        } catch (\Exception $e) {
+            return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+        }
+    }
+
+    private function getDefaultStyle(){
+        return 
+                array(
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => (\PHPExcel_Style_Border::BORDER_THIN)
+                        )
+                    )
+                    // ,
+                    // 'font' => array(
+                    //     'name' => 'AngsanaUPC'
+                    // )
+                );
+    }
+
+    public function uploadData($request, $response, $args) {
+        // error_reporting(E_ERROR);
+        //     error_reporting(E_ALL);
+        //     ini_set('display_errors','On');
+        $_WEB_FILE_PATH = 'files/files';
+        try {
+            $params = $request->getParsedBody();
+            $_Data = $params['obj']['Data'];
+
+            foreach ($_Data as $key => $value) {
+                if($value == 'null'){
+                    $_Data[$key] = '';
+                }
+            }
+
+            $_FileDate = $params['obj']['FileDate'];
+
+            $user_session = $params['user_session'];
+
+            $id = ProductionInfoService::updateData($_Data);
+
+            // clear item
+            ProductionInfoService::removeDetailDataByParent($id);            
+
+            $files = $request->getUploadedFiles();
+            $f = $files['obj']['AttachFile'];
+            $_UploadFile = [];
+            if($f != null){
+                if($f->getClientFilename() != ''){
+                    // Unset old image if exist
+                    
+                    $ext = pathinfo($f->getClientFilename(), PATHINFO_EXTENSION);
+                    $FileName = date('YmdHis').'_'.rand(100000,999999). '.'.$ext;
+                    $FilePath = $_WEB_FILE_PATH . '/upload/'.$FileName;
+                    
+                    $_UploadFile['file_name'] = $f->getClientFilename();
+                    $_UploadFile['file_path'] = $FilePath;
+                    
+                    $f->moveTo('../../' . $FilePath);
+                }        
+            }
+
+            // read file 
+            $file = '../../' . $FilePath;
+            $_Detail = $this->readExcelFile($file, $id);
+
+            // print_r($_Detail);
+            // exit;
+            foreach ($_Detail as $key => $value) {
+
+                $data = [];
+                
+                $data['production_info_id'] = $value['production_info_id'];
+                $data['production_info_type1'] = $this->getProductInfoType1($value['product_milk'], $_Data['factory_id']);
+                $data['production_info_type2'] = $this->getProductInfoType2($value['sub_product_milk'], $data['production_info_type1']);
+                $data['production_info_type3'] = $this->getProductInfoType3($value['product_milk_detail'], $data['production_info_type2']);
+
+                $value['result_package_amount'] = str_replace(',', '', $value['result_package_amount']);
+                $value['result_amount'] = str_replace(',', '', $value['result_amount']);
+                $value['result_thb'] = str_replace(',', '', $value['result_thb']);
+                $data['package_amount'] = empty($value['result_package_amount'])?0:$value['result_package_amount'];
+
+                // Get product milk detail data
+                $ProductMilkDetailData = ProductMilkDetailService::getData($data['production_info_type3']);
+                // print_r($ProductMilkDetailData);
+                // exit;
+                // Calc litre
+                // (((3*48)+5)*125)/1,000
+                
+                if(!empty($value['result_package_amount']) && ($ProductMilkDetailData['unit'] == 'ซีซี' || $ProductMilkDetailData['unit'] == 'มิลลิลิตร')){
+
+                    // $data['amount'] = empty($value['result_amount'])?0:$value['result_amount'];
+                    $box = 0;
+                    $amount_data = explode('.', ''.$value['result_package_amount']);
+                    $amount = $amount_data[0];
+                    if(!empty($amount_data[1])){
+                        $box = $amount_data[1];
+                    }
+                    
+                    $data['amount'] = ((($amount * $ProductMilkDetailData['amount']) + $box) * $ProductMilkDetailData['number_of_package']) / 1000;
+                }else{
+                    $data['amount'] = empty($value['result_amount'])?0:$value['result_amount'];
+                
+                }     
+                // exit;
+                
+                $data['price_value'] = empty($value['result_thb'])?0:$value['result_thb'];
+                $data['id'] = '';
+
+                // $data_detail = ProductionInfoService::findIDWithProductTypeID($data['production_info_type1'], $data['production_info_type2'], $data['production_info_type3']);
+
+                // if(empty($data_detail)){
+                //     $data['amount'] = empty($value['result_amount'])?0:$value['result_amount'] + $value['result_addon'];
+                //     $data['price_value'] = empty($value['result_thb'])?0:$value['result_thb'];
+                //     $data['id'] = '';
+                // }else{
+                //     $data['amount'] = empty($value['result_amount'])?0:$value['result_amount'] + $value['result_addon'] + $data_detail['amount'];
+                //     $data['price_value'] = empty($value['result_thb'])?0:$value['result_thb'] + $data_detail['price_value'];
+                //     $data['id'] = $data_detail['id'];
+                // }
+
+                ProductionInfoService::updateDetailData($data);
+            }
+
+            // add log
+            $_UploadFile['menu_type'] = 'production-info';
+            $_UploadFile['file_date'] = $_FileDate;
+            $_UploadFile['data_id'] = $id;
+            UploadLogService::updateLog($_UploadFile);
+
+            //           
+            $this->data_result['DATA']['id'] = $id;
+
+            return $this->returnResponse(200, $this->data_result, $response, false);
+        } catch (\Exception $e) {
+            return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+        }
+    }
+
+    private function getProductInfoType1($product_milk, $factory_id){
+        return ProductMilkService::getIDByName($product_milk, $factory_id);
+    }
+
+    private function getProductInfoType2($sub_product_milk, $production_sale_info_type1){
+        return SubProductMilkService::getIDByName($sub_product_milk, $production_sale_info_type1);
+    }
+
+    private function getProductInfoType3($product_milk_detail, $production_sale_info_type2){
+        return ProductMilkDetailService::getIDByName($product_milk_detail, $production_sale_info_type2);
+    }
+
+    private function readExcelFile($file, $production_info_id){
+
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file);
+        $sheetData = $spreadsheet->getActiveSheet()->toArray();
+
+        $field_array = ['product_milk', 'sub_product_milk', 'product_milk_detail', 'goal_year_amount', 'goal_year_thb',  'goal_month_amount', 'goal_month_thb', 'result_package_amount', 'result_amount', 'result_thb'];
+        $cnt_row = 1;
+
+        $ItemList = [];
+        foreach ($sheetData as $key => $value) {
+            
+            if($cnt_row >= 3){
+                
+                $cnt_col = 0;
+                $cnt_field = 0;
+                $Item = [];
+                $Item[ 'production_info_id' ] = $production_info_id;
+
+                foreach ($value as $k => $v) {
+                    // if($cnt_col >= 1 && $cnt_col <= 7){
+                        
+                        $Item[ $field_array[$cnt_field] ] = $v;
+                        $cnt_field++;
+                        
+                    // }
+                    $cnt_col++;
+                }
+                
+                array_push($ItemList, $Item);
+                
+            }
+
+            $cnt_row++;
+
+        }
+        
+        return $ItemList;
     }
 
 }

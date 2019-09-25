@@ -14,6 +14,26 @@
             $this->db = $db;
         }
 
+        public function getFactoryID($regionID) {
+        switch ($regionID) {
+            case 1 : $monthTxt = 1;
+                break;
+            case 2 : $monthTxt = 1;
+                break;
+            case 3 : $monthTxt = 1;
+                break;
+            case 4 : $monthTxt = 2;
+                break;
+            case 5 : $monthTxt = 3;
+                break;
+            case 6 : $monthTxt = 4;
+                break;
+            case 7 : $monthTxt = 5;
+                break;
+        }
+        return $monthTxt;
+    }
+
         
         public function getGoalByMenuType($request, $response, $args){
             try{
@@ -268,6 +288,8 @@
                     }
                 }
 
+                $_Data['factory_id'] = GoalMissionController::getFactoryID($_Data['region_id']);
+
                 // Check duplicate data
                 $GoalMission = GoalMissionService::checkDuplicate($_Data['id'], $_Data['years'], $_Data['goal_id'], $_Data['region_id']);
                 if(!empty($GoalMission)){
@@ -318,7 +340,7 @@
                 $AvgList = GoalMissionService::getAvgList($id);
                 $cnt = 0;
                 foreach ($AvgList as $key => $value) {
-                    if($value['amount'] != $_AvgData[$cnt]['amount']){
+                    if($value['amount'] != $_AvgData[$cnt]['amount'] || $value['addon_amount'] != $_AvgData[$cnt]['addon_amount']){
                         // Save to history
                         $HistoryData = $_AvgData[$cnt];
                         unset($HistoryData['id']);

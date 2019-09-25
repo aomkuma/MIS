@@ -194,6 +194,18 @@ angular.module('e-homework').config(function ($routeProvider, $locationProvider)
                 }
             })
 
+            .when("/mou/ex/update/:id?", {
+                templateUrl: "views/mou/update-ex.html",
+                controller: "UpdateMOUExController",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load({
+                                files: ["scripts/controllers/mou/UpdateMOUExController.js"]
+                            });
+                        }]
+                }
+            })
+
             .when("/dairy-farming", {
                 templateUrl: "views/dairy-farming/main.html",
                 controller: "MainDFController",
@@ -920,6 +932,30 @@ angular.module('e-homework').config(function ($routeProvider, $locationProvider)
                     loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                             return $ocLazyLoad.load({
                                 files: ["scripts/controllers/loss-manage/MainLMPController.js"]
+                            });
+                        }]
+                }
+            })
+
+            .when("/page/dip", {
+                templateUrl: "views/dip/main.html",
+                controller: "MainDIPController",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load({
+                                files: ["scripts/controllers/dip/MainDIPController.js"]
+                            });
+                        }]
+                }
+            })
+
+            .when("/dip/update/:id?", {
+                templateUrl: "views/dip/update.html",
+                controller: "UpdateDIPController",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load({
+                                files: ["scripts/controllers/dip/UpdateDIPController.js"]
                             });
                         }]
                 }

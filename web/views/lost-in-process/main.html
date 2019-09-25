@@ -213,14 +213,14 @@
 			<tr ng-repeat="data in List" style="background-color: {{data.bg_color}};">
 				<td>{{data.LostInProcessName}}</td>
 				<td>{{data.Quarter}}</td>
-				<td>{{data.CurrentAmount}}</td>
-				<td>{{data.CurrentBaht}}</td>
-				<td>{{data.BeforeAmount}}</td>
-				<td>{{data.BeforeBaht}}</td>
-				<td>{{data.DiffAmount}}</td>
-				<td>{{data.DiffAmountPercentage}}</td>
-				<td>{{data.DiffBaht}}</td>
-				<td>{{data.DiffBahtPercentage}}</td>
+				<td>{{numberFormatComma(data.CurrentAmount)}}</td>
+				<td>{{numberFormatComma(data.CurrentBaht)}}</td>
+				<td>{{numberFormatComma(data.BeforeAmount)}}</td>
+				<td>{{numberFormatComma(data.BeforeBaht)}}</td>
+				<td>{{numberFormatComma(data.DiffAmount)}}</td>
+				<td>{{numberFormatComma(data.DiffAmountPercentage)}}</td>
+				<td>{{numberFormatComma(data.DiffBaht)}}</td>
+				<td>{{numberFormatComma(data.DiffBahtPercentage)}}</td>
 				
 			</tr>
 		</tbody>
@@ -254,12 +254,12 @@
 			<tr ng-repeat="data in List" style="background-color: {{data.bg_color}};">
 				<td>{{data.LostInProcessName}}</td>
 				<td>{{data.Year}}</td>
-				<td>{{data.CurrentAmount}}</td>
-				<td>{{data.CurrentBaht}}</td>
-				<td>{{data.DiffAmount}}</td>
-				<td>{{data.DiffAmountPercentage}}</td>
-				<td>{{data.DiffBaht}}</td>
-				<td>{{data.DiffBahtPercentage}}</td>
+				<td>{{numberFormatComma(data.CurrentAmount)}}</td>
+				<td>{{numberFormatComma(data.CurrentBaht)}}</td>
+				<td>{{numberFormatComma(data.DiffAmount)}}</td>
+				<td>{{numberFormatComma(data.DiffAmountPercentage)}}</td>
+				<td>{{numberFormatComma(data.DiffBaht)}}</td>
+				<td>{{numberFormatComma(data.DiffBahtPercentage)}}</td>
 				
 			</tr>
 		</tbody>

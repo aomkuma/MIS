@@ -3,7 +3,15 @@
     <h3>บริหารจัดการข้อมูล > บริหารจัดการรายการผลิตภัณฑ์นม</h3>
 </div>
 <div class="col-lg-10 col-lg-offset-1" ng-form="form_data">
+    <div class="row form-group">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            สำนักงาน
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            {{Data.factory_name}}
+        </div>
 
+    </div>
     <div class="row form-group">
         <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
             ประเภทหลัก
@@ -15,13 +23,30 @@
     </div>
     <div class="row form-group">
         <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-            ประเภทย่อย
+            ลักษณะผลิตภัณฑ์
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <select name="Year" class="form-control" ng-model="Subdata.product_character">
+                <option value="">กรุณาเลือก..</option>
+                <option value="นม">นม</option>
+                <option value="โยเกิร์ตพร้อมดื่ม">โยเกิร์ตพร้อมดื่ม</option>
+                <option value="โยเกิร์ต">โยเกิร์ต</option>
+                <option value="ไอศกรีม">ไอศกรีม</option>
+                <option value="ครีม">ครีม</option>
+                <option value="น้ำดื่ม">น้ำดื่ม</option>
+                <option value="ซอฟเสริฟ">ซอฟเสริฟ</option>
+            </select>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            ประเภทผลิตภัณฑ์หลัก
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <input type="text" class="form-control" ng-model="Subdata.name" maxlength="255" required="required">
         </div>
     </div>
-    <div class="row form-group">
+    <!-- <div class="row form-group">
         <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
             ตัวแทนจำหน่าย
         </div>
@@ -30,7 +55,7 @@
                 <option value="">ขายนมโรงเรียน (ขนส่ง)</option>
             </select>
         </div>
-    </div>
+    </div> -->
     <div class="row form-group">
         <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
             สถานะ
@@ -66,7 +91,7 @@
 
                         <th>จัดการ</th>
                         <th>ประเภทหลัก</th>
-                        <th>ประเภทย่อย</th>
+                        <th>ลักษณะผลิตภัณฑ์ / ประเภทผลิตภัณฑ์หลัก</th>
                         <th>สถานะ</th>
                         <!--<th>แก้ไข</th>-->
                     </tr>
@@ -86,7 +111,7 @@
                             </button>
                         </td>
                         <td style="text-align: center;">{{data.proname}}</td>
-                        <td style="text-align: center;">{{data.name}}</td>
+                        <td style="text-align: center;">{{(data.product_character!=null?data.product_character:'') + ' ' + data.name}}</td>
                         <td style="text-align: center;" ng-class="{'inactive-text':data.actives == 'N'}">{{data.actives=='Y'?'ใช้งาน':'ไม่ใช้งาน'}}</td>
                         <!--					<td>
                                                                         <button class="btn btn-success" ng-click="goUpdate(data.id)">
@@ -101,3 +126,9 @@
     </div>
 
 </div>
+
+<style type="text/css">
+    .inactive-text{
+        color: red;
+    }
+</style>

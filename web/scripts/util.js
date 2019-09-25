@@ -696,13 +696,13 @@ app.filter('FindDevice', function () {
     };
 });
 
-app.filter('FindFood', function () {
+app.filter('FindDataByID', function () {
     return function (input, val) {
         if (input !== undefined && input !== null) {
             var i = 0, len = input.length;
             for (; i < len; i++) {
                 //console.log(input[i].UserID, '==' ,val);
-                if (input[i].FoodID == val) {
+                if (input[i].id == val) {
                     return i;
                 }
             }

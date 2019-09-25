@@ -44,6 +44,10 @@ angular.module('e-homework').controller('MainMOUController', function($scope, $c
         window.location.href = '#/mou/update/' + id;
     }
 
+    $scope.goUpdateMOU = function(id){
+        window.location.href = '#/mou/ex/update/' + id;
+    }
+
     $scope.getRegionName = function(region_id){
         switch(region_id){
             case 1 : return 'อ.ส.ค. สำนักงานใหญ่ มวกเหล็ก';

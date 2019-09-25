@@ -21,12 +21,16 @@
                     <span class="glyphicon glyphicon-plus"></span> 
                     เพิ่มรายการ
                 </button>
+                <button class="btn btn-primary pull-right" ng-click="showSaleChanel()">
+                    <span class="glyphicon glyphicon-plus"></span> 
+                    ข้อมูลช่องทางการขาย
+                </button>
             </caption>
             <thead>
                 <tr>
 
                     <th>จัดการ</th>
-                    <th>โรงงาน</th>
+                    <th>สำนักงาน</th>
                     <th>ประเภทหลัก</th>
                     <th>สถานะ</th>
                     <!--<th>แก้ไข</th>-->
@@ -64,3 +68,67 @@
                 color: red;
         }
 </style>-->
+<script type="text/ng-template" id="sale_chanel.html">
+    <div class="modal-header">
+        <h5 class="modal-title">ข้อมูลช่องทางการจำหน่าย</h5>
+    </div>
+    <div class="modal-body">
+        <div class="row form-group">
+            <div class="col-lg-10 col-lg-offset-1">
+                <table class="table  table-bordered table-striped">
+                    <caption>
+                        <div class="row form-group">
+                            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                หัวข้อ
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                <input type="text" class="form-control" ng-model="SaleChanel.chanel_name">
+                            </div>
+                            
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                สถานะ
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                <div class="btn-group">
+                                    <label class="btn btn-default btn-checkbox" ng-model="SaleChanel.actives" uib-btn-radio="'Y'" >ใช้</label>
+                                    <label class="btn btn-default btn-checkbox" ng-model="SaleChanel.actives" uib-btn-radio="'N'" >ไม่ใช้</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-6">
+                                <button class="btn btn-primary" ng-click="saveSaleChanel(SaleChanel)" ng-disabled="SaleChanel.chanel_name == null || SaleChanel.chanel_name == ''">
+                                    <span class="glyphicon glyphicon-plus"></span> 
+                                    บันทึก
+                                </button>
+                            </div>
+                        </div>
+                    </caption>
+                    <thead>
+                        <tr>
+
+                            <th>หัวข้อ</th>
+                            <!--<th>สถานะ</th>-->
+                            <th>แก้ไข</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="data in SaleChanelList">
+                            <td style="text-align: center;">{{data.chanel_name}}</td>
+                            <!--<td style="text-align: center;" ng-class="{'inactive-text':data.actives == 'N'}">{{data.actives=='Y'?'ใช้งาน':'ไม่ใช้งาน'}}</td>-->
+                            <td style="text-align: center;">
+                                <button class="btn btn-success" ng-click="goUpdateSaleChanel(data)">
+                                    แก้ไข
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+    <button class="btn btn-default" ng-click="ok(ApproveComment)">OK</button>
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+</script>

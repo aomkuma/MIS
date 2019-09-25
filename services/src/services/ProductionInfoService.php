@@ -39,9 +39,10 @@ class ProductionInfoService {
                         ->where("months", $months)
                         ->where("factory_id", $factory_id)
                         ->where("production_info_type2", $master_type_id)
+                        ->groupBy('production_info.id')
                         ->orderBy('update_date', 'DESC')
-                        ->first()
-                        ->toArray();
+                        ->first();
+                        // ->toArray();
     }
 
     public static function getDetailList($years, $months, $factory_id, $master_type_id) {
@@ -53,9 +54,10 @@ class ProductionInfoService {
                         ->where("months", $months)
                         ->where("factory_id", $factory_id)
                         ->where("production_info_type3", $master_type_id)
+                        ->groupBy('production_info.id')
                         ->orderBy('production_info.update_date', 'DESC')
-                        ->first()
-                        ->toArray();
+                        ->first();
+                        // ->toArray();
     }
 
     public static function getDetailList2($years, $months) {
@@ -89,7 +91,7 @@ class ProductionInfoService {
         return ProductionInfo::where('id', $id)
                         //->with('mouHistories')
                         ->with(array('productionInfoDetail' => function($query) {
-                                $query->orderBy('update_date', 'DESC');
+                                $query->orderBy('id', 'ASC');
                             }))
                         ->first();
     }
@@ -106,7 +108,7 @@ class ProductionInfoService {
                         ->where('years', $years)
                         //->with('mouHistories')
                         ->with(array('productionInfoDetail' => function($query) {
-                                $query->orderBy('update_date', 'DESC');
+                                $query->orderBy('id', 'ASC');
                             }))
                         ->first();
     }
@@ -151,6 +153,11 @@ class ProductionInfoService {
     public static function updateDataApprove($id, $obj) {
 
         return ProductionInfo::where('id', $id)->update($obj);
+    }
+
+    public static function removeDetailDataByParent($id){
+            
+        return ProductionInfoDetail::where('production_info_id', $id)->delete();
     }
 
 }

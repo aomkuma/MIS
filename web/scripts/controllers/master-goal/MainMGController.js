@@ -12,8 +12,26 @@ angular.module('e-homework').controller('MainMGController', function($scope, $co
 
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));    
 
+    $scope.loadFactoryList = function () {
+
+        //  IndexOverlayFactory.overlayShow();
+        var params = {'region': $scope.PersonRegion};
+        HTTPService.clientRequest('factory/list', params).then(function (result) {
+            if (result.data.STATUS == 'OK') {
+              
+              
+                $scope.FactoryList = result.data.DATA.DataList;
+                 
+                // console.log($scope.List);
+              //  $scope.Data.factory_id = $scope.FactoryList[0].id;
+
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+
     $scope.loadList = function(action){
-        var params = {'condition' : $scope.condition};
+        var params = {'condition' : $scope.condition, 'htmlcode':'Y'};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest(action, params).then(function(result){
             if(result.data.STATUS == 'OK'){
@@ -50,8 +68,8 @@ angular.module('e-homework').controller('MainMGController', function($scope, $co
         }   
     }
 
-    $scope.MenuTypeList = [{'type':'DBI', 'value':'บริการสัตวแพทย์', 'name' : 'บริการสัตวแพทย์'}
-                            ,{'type':'DBI', 'value':'ผสมเทียม', 'name' : 'ผสมเทียม'}
+    $scope.MenuTypeList = [{'type':'DBI', 'value':'บริการสัตวแพทย์', 'name' : 'บริการสัตวแพทย์และผสมเทียม'}
+                            // ,{'type':'DBI', 'value':'ผสมเทียม', 'name' : 'ผสมเทียม'}
                             ,{'type':'DBI', 'value':'แร่ธาตุ พรีมิกซ์ และอาหาร', 'name' : 'แร่ธาตุ พรีมิกซ์ และอาหาร'}
                             ,{'type':'DBI', 'value':'ผลิตน้ำเชื้อแช่แข็ง', 'name' : 'ผลิตน้ำเชื้อแช่แข็ง'}
                             ,{'type':'DBI', 'value':'จำหน่ายน้ำเชื้อแช่แข็ง', 'name' : 'จำหน่ายน้ำเชื้อแช่แข็ง'}
@@ -69,8 +87,10 @@ angular.module('e-homework').controller('MainMGController', function($scope, $co
                             ,{'type':'II', 'value':'การสูญเสียในกระบวนการ', 'name' : 'การสูญเสียในกระบวนการ'}
                             ,{'type':'II', 'value':'การสูญเสียหลังกระบวนการ', 'name' : 'การสูญเสียหลังกระบวนการ'}
                             ,{'type':'II', 'value':'การสูญเสียรอจำหน่าย', 'name' : 'การสูญเสียรอจำหน่าย'}
-                            ,{'type':'II', 'value':'การสูญเสียในกระบวนการขนส่ง', 'name' : 'การสูญเสียในกระบวนการขนส่ง'}
+                            // ,{'type':'II', 'value':'การสูญเสียในกระบวนการขนส่ง', 'name' : 'การสูญเสียในกระบวนการขนส่ง'}
                         ];
+
+    $scope.loadFactoryList();
     $scope.loadList('master-goal/list', '');
 
 

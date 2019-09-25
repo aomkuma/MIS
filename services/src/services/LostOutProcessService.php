@@ -131,5 +131,10 @@
 
             return LostOutProcess::where('id', $id)->update($obj);
         }
+
+        public static function removeDetailDataByParent($id){
+            
+            return LostOutProcessDetail::where('lost_out_process_id', $id)->delete();
+        }
         
     }

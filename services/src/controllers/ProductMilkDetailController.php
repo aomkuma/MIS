@@ -100,8 +100,8 @@ class ProductMilkDetailController extends Controller {
             $_Data = $params['obj']['Subdata'];
             //  print_r($_Data);die();
             // // Update to none role
-            $result = ProductMilkDetailService::checkDuplicate($_Data['id'], $_Data['name'], $_Data['sub_product_milk_id']);
-
+            $result = ProductMilkDetailService::checkDuplicate($_Data['id'], $_Data, $_Data['sub_product_milk_id']);
+            // print_r($result);exit;
             if (empty($result)) {
 
                 // Get old data
@@ -112,25 +112,32 @@ class ProductMilkDetailController extends Controller {
 
                 // get product milk name & sub product milk name
                 $SubProductMilk = SubProductMilkService::getData($_Data['sub_product_milk_id']);
+                $fac_id = $SubProductMilk['fac_id'];
                 $ProductMilkName = $SubProductMilk['proname'];
-                $SubProductMilkName = $SubProductMilk['subname'];
+                $SubProductMilkName = $SubProductMilk['product_character'] . ' ' . $SubProductMilk['subname'];
                 
-                // find master goal by name
-                $old_goal_name = $ProductMilkName . ' - ' . $SubProductMilkName . ' - ' . $OldData['name'];
-                $MasterGoal = MasterGoalService::getDataByName($old_goal_name);
-                // Add master goal
-                if(empty($MasterGoal)){
-                    
-                    $MasterGoal['id'] = '';
-                    $MasterGoal['goal_type'] = 'II';
-                    $MasterGoal['menu_type'] = 'ข้อมูลการผลิต';
-                    $MasterGoal['actives'] = 'Y';    
-                    $MasterGoal['goal_name'] = $ProductMilkName . ' - ' . $SubProductMilkName . ' - ' . $_Data['name'];
-                }else{
-                    $MasterGoal['goal_name'] = $ProductMilkName . ' - ' . $SubProductMilkName . ' - ' . $_Data['name'];
-                }
+                // find master goal by name  , ' ' , number_of_package , ' ' , unit , ' ' , amount , ' ' , amount_unit , ' ' , taste
+                $old_goal_name = $ProductMilkName . ' - ' . $SubProductMilkName . ' - ' . $OldData['name']  . ' ' . $OldData['number_of_package'] . ' ' . $OldData['unit'] . ' ' . $OldData['amount'] . ' ' . $OldData['amount_unit'] . ' ' . $OldData['taste'];
 
-                MasterGoalService::updateData($MasterGoal);
+                $menuTypeList = ['ข้อมูลการผลิต', 'ข้อมูลการขาย', 'การสูญเสียในกระบวนการ'/*, 'การสูญเสียหลังกระบวนการ', 'การสูญเสียรอจำหน่าย'*/];
+
+                foreach ($menuTypeList as $key1 => $value1) {
+                    $MasterGoal = MasterGoalService::getDataByName($old_goal_name, $value1, $fac_id);
+                    // Add master goal
+                    if(empty($MasterGoal)){
+                        
+                        $MasterGoal['id'] = '';
+                        $MasterGoal['goal_type'] = 'II';
+                        $MasterGoal['menu_type'] = $value1/*'ข้อมูลการผลิต'*/;
+                        $MasterGoal['actives'] = 'Y';    
+                        $MasterGoal['factory_id'] = $fac_id;
+                        $MasterGoal['goal_name'] = $ProductMilkName . ' - ' . $SubProductMilkName . ' - ' . $_Data['name']  . ' ' . $_Data['number_of_package'] . ' ' . $_Data['unit'] . ' ' . (empty($_Data['amount'])?'0.00':$_Data['amount']). ' ' . $_Data['amount_unit'] . ' ' . $_Data['taste'];
+                    }else{
+                        $MasterGoal['goal_name'] = $ProductMilkName . ' - ' . $SubProductMilkName . ' - ' . $_Data['name']  . ' ' . $_Data['number_of_package'] . ' ' . $_Data['unit'] . ' ' . (empty($_Data['amount'])?'0.00':$_Data['amount']) . ' ' . $_Data['amount_unit'] . ' ' . $_Data['taste'];
+                    }
+
+                    MasterGoalService::updateData($MasterGoal);
+                }
 
             } else {
                 // print_r($result);exit;

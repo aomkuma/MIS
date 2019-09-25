@@ -49,6 +49,11 @@ angular.module('e-homework').controller('UpdateMOUController', function($scope, 
                 $scope.Data.end_date = makeDate($scope.Data.end_date);
 
                 $scope.HistoryList = $scope.Data.mou_histories;
+
+                for(var i = 0; i < $scope.avgList.length; i++){
+                    $scope.avgIDList.push({'id':$scope.avgList[i].id});
+
+                }
             }
             IndexOverlayFactory.overlayHide();
         });
@@ -82,6 +87,64 @@ angular.module('e-homework').controller('UpdateMOUController', function($scope, 
         });
     }
 
+    $scope.avgData = function(Data){
+        $scope.AVGAction = true;
+        
+        $scope.avgList = [];
+        $scope.totalAmount = 0;
+        var avgAmount = parseFloat(Data.amount) / 12;
+        avgAmount = parseFloat(avgAmount.toFixed(2));
+        var month = 10;
+        var year = parseInt(Data.years) - 1;
+        for(var i = 0; i < 12; i++){
+
+            // Create Date from years
+            if(month > 12){
+                month = 1;
+                year += 1;
+            }
+            var dateStr = year + '-' + padLeft(""+(month), '00') + '-01';
+            // console.log(dateStr);
+            // var curDate = new Date(dateStr);
+            
+            var avgData = {
+                'id':($scope.avgIDList[i] === undefined?'':$scope.avgIDList[i].id)
+                , 'mou_id':''
+                , 'amount' : ''
+                , 'avg_date':dateStr
+            };
+
+            $scope.avgList.push(avgData);
+            month++;
+            $scope.totalAmount += avgAmount;
+        }
+
+        $scope.totalAmount = 0;//parseFloat($scope.totalAmount.toFixed(2));
+        
+        // console.log($scope.avgList);
+    }
+
+    $scope.reCalcAmount = function(){
+        $scope.totalAmount = 0;
+        var loop = $scope.avgList.length;
+        for(var i = 0; i < loop; i++){
+            if($scope.avgList[i].amount != null){
+                $scope.totalAmount += $scope.avgList[i].amount;
+            }
+        }
+        $scope.totalAmount = parseFloat($scope.totalAmount.toFixed(2));
+        console.log('Total amount : ', $scope.totalAmount);
+    }
+
+    $scope.getMonthYearText = function(dateStr){
+        if(dateStr != null && dateStr != '' && dateStr != '0000-00-00'){
+            return getMonthYearText(dateStr);
+        }else{
+            return '';
+        }
+        
+    }
+
     $scope.cancelUpdate = function(){
         window.location.href = '#/mou';
     }
@@ -96,17 +159,20 @@ angular.module('e-homework').controller('UpdateMOUController', function($scope, 
         return convertDateToFullThaiDate(new Date(date));
     }
 
+    var curDate = new Date();
 
     $scope.Data = {
         'id':''
         , 'cooperative_id':null
-        , 'years':null
+        , 'years':curDate.getFullYear()
         , 'mou_amount':''
         , 'start_date':''
         , 'end_date':''
         , 'create_date':''
         , 'update_date':''
     };
+    $scope.avgList = [];
+    $scope.avgIDList = [];
 
     $scope.YearList = getYearList(20);
 
@@ -124,6 +190,7 @@ angular.module('e-homework').controller('UpdateMOUController', function($scope, 
         $scope.popup2.opened = true;
     };
 
+    $scope.avgData($scope.Data);
     $scope.loadCooperative();
     if($scope.ID !== undefined && $scope.ID !== null){
         $scope.loadData('mou/get', $scope.ID);

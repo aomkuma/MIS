@@ -55,7 +55,7 @@ angular.module('e-homework').controller('UpdateSPMController', function ($scope,
                     'id': result.data.DATA.Data.subid
                     , 'name': result.data.DATA.Data.subname
                     , 'product_milk_id': result.data.DATA.Data.proid
-
+                    , 'product_character': result.data.DATA.Data.product_character
                     , 'actives': 'Y'
                     , 'create_date': ''
                     , 'update_date': ''

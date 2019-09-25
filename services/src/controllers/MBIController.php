@@ -51,20 +51,26 @@ class MBIController extends Controller {
 
     public function checkRegion($regionID) {
         switch ($regionID) {
+            case '1':
+                return 'สำนักงาน อ.ส.ค. ภาคกลาง';
+                break;
+            case '2':
+                return 'สำนักงาน อ.ส.ค. ภาคกลาง';
+                break;
             case '3':
-                return 'สำนักงานภาคมวกเหล็ก';
+                return 'สำนักงาน อ.ส.ค. ภาคกลาง';
                 break;
             case '4':
-                return 'สำนักงานภาคปราณบุรี';
+                return 'สำนักงาน อ.ส.ค. ภาคใต้';
                 break;
             case '5':
-                return 'สำนักงานภาคขอนแก่น';
+                return 'สำนักงาน อ.ส.ค. ภาคตะวันออกเฉียงเหนือ';
                 break;
             case '6':
-                return 'สำนักงานภาคสุโขทัย';
+                return 'สำนักงาน อ.ส.ค. ภาคเหนือตอนล่าง';
                 break;
             case '7':
-                return 'สำนักงานภาคเชียงใหม่';
+                return 'สำนักงาน อ.ส.ค. ภาคเหนือตอนบน';
                 break;
             default: break;
         }
@@ -73,6 +79,9 @@ class MBIController extends Controller {
     public function checkProvince($regionID) {
         switch ($regionID) {
             case '1':
+                return 'จังหวัดสระบุรี';
+                break;
+            case '2':
                 return 'จังหวัดสระบุรี';
                 break;
             case '3':
@@ -982,7 +991,7 @@ class MBIController extends Controller {
             foreach ($regions as $key => $value) {
 
                 $monthName = MBIController::getMonthName($curMonth);
-                $region = MBIController::checkRegion($value['RegionID']);
+                $region = MBIController::checkProvince($value['RegionID']);//checkRegion($value['RegionID']);
                 $region_id = $value['RegionID'];
 
                 $data = [];

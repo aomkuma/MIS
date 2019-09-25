@@ -12,7 +12,7 @@ angular.module('e-homework').controller('MainCMController', function($scope, $co
 
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));    
     $scope.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));   
-
+    console.log($scope.PersonRegion);
     $scope.page_type = 'cooperative-milk';
     $scope.getMenu = function(action, menu_type){
         var params = {'menu_type' : menu_type};

@@ -9,6 +9,19 @@
     
     class ProductionSaleInfoService {
 
+        public static function findIDWithProductTypeID($production_sale_info_type1, $production_sale_info_type2, $production_sale_info_type3, $sale_chanel_id){
+            return ProductionSaleInfoDetail::where('production_sale_info_type1', $production_sale_info_type1)
+                    ->where('production_sale_info_type2', $production_sale_info_type2)
+                    ->where('production_sale_info_type3', $production_sale_info_type3)
+                    ->where('sale_chanel_id', $sale_chanel_id)
+                    ->first();  
+            // if(empty($data)){
+            //     return '';
+            // }else{
+            //     return $data->id;
+            // }
+        }
+
         public static function loadDataApprove($UserID){
             return ProductionSaleInfo::select("production_sale_info.*", 'factory.factory_name')
                             ->join('factory', 'factory.id', '=', 'production_sale_info.factory_id')
@@ -92,7 +105,7 @@
             return ProductionSaleInfo::where('id', $id)
                     //->with('mouHistories')
                     ->with(array('productionSaleInfoDetail' => function($query){
-                        $query->orderBy('update_date', 'DESC');
+                        $query->orderBy('id', 'ASC');
                     }))
                     ->first();      
         }
@@ -109,7 +122,7 @@
                     ->where('years', $years)
                     //->with('mouHistories')
                     ->with(array('productionSaleInfoDetail' => function($query){
-                        $query->orderBy('update_date', 'DESC');
+                        $query->orderBy('id', 'ASC');
                     }))
                     ->first();      
         }
@@ -149,6 +162,11 @@
         public static function removeDetailData($id){
             
             return ProductionSaleInfoDetail::find($id)->delete();
+        }
+
+        public static function removeDetailDataByParent($id){
+            
+            return ProductionSaleInfoDetail::where('production_sale_info_id', $id)->delete();
         }
 
         public static function updateDataApprove($id, $obj) {

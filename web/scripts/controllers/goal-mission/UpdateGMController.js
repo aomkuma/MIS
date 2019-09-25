@@ -46,8 +46,11 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
     $scope.Maker = false;
     $scope.getUserRole();
 
-    $scope.loadMasterGoalList = function(action, menu_type){
-        var params = {'actives' : 'Y', 'menu_type' : menu_type};
+    $scope.loadMasterGoalList = function(action, menu_type, factory_id){
+        if($scope.Data.goal_type == 'DBI'){
+            factory_id = '';
+        }
+        var params = {'actives' : 'Y', 'menu_type' : menu_type, 'factory_id' : factory_id};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest(action, params).then(function(result){
             if(result.data.STATUS == 'OK'){
@@ -73,20 +76,25 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
                 $scope.Data = result.data.DATA.Data;
                 $scope.avgList = $scope.Data.goal_mission_avg;
                 $scope.totalAmount = 0;
+                $scope.totalAddonAmount = 0;
                 $scope.totalPriceValue = 0;
                 for(var i = 0; i < $scope.avgList.length; i++){
                     $scope.avgIDList.push({'id':$scope.avgList[i].id});
                     $scope.avgList[i].amount = parseFloat($scope.avgList[i].amount);
+                    $scope.avgList[i].addon_amount = parseFloat($scope.avgList[i].addon_amount);
                     $scope.avgList[i].price_value = parseFloat($scope.avgList[i].price_value);
                     $scope.totalAmount += $scope.avgList[i].amount;
+                    $scope.totalAddonAmount += $scope.avgList[i].addon_amount;
                     $scope.totalPriceValue += $scope.avgList[i].price_value;
                 }
                 $scope.totalAmount = parseFloat($scope.totalAmount.toFixed(2));
+                $scope.totalAddonAmount = parseFloat($scope.totalAddonAmount.toFixed(2));
                 $scope.totalPriceValue = parseFloat($scope.totalPriceValue.toFixed(2));
                 
                 $scope.historyList = $scope.Data.goal_mission_history;
 
                 $scope.Data.amount = parseFloat($scope.Data.amount);
+                $scope.Data.addon_amount = parseFloat($scope.Data.addon_amount);
                 $scope.Data.price_value = parseFloat($scope.Data.price_value);
                 
                 $scope.changeGoalType();
@@ -221,6 +229,19 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
         $scope.totalAmount = parseFloat($scope.totalAmount.toFixed(2));
         console.log('Total amount : ', $scope.totalAmount);
     }
+
+    $scope.reCalcAddonAmount = function(){
+        $scope.totalAddonAmount = 0;
+        var loop = $scope.avgList.length;
+        for(var i = 0; i < loop; i++){
+            if($scope.avgList[i].addon_amount != null){
+                $scope.totalAddonAmount += $scope.avgList[i].addon_amount;
+            }
+        }
+        $scope.totalAddonAmount = parseFloat($scope.totalAddonAmount.toFixed(2));
+        console.log('Total amount : ', $scope.totalAddonAmount);
+    }
+
     $scope.reCalcPrice = function(){
         $scope.totalPriceValue = 0;
         var loop = $scope.avgList.length;
@@ -260,6 +281,7 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
                 , 'goal_mission_id':''
                 , 'avg_date':dateStr
                 , 'amount':0//avgAmount
+                , 'addon_amount':0//avgAddonAmount
                 , 'price_value':0//avgPriceValue
             };
 
@@ -317,8 +339,8 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
     $scope.avgIDList = [];
     $scope.historyList = [];
 
-    $scope.MenuTypeList = [{'type':'DBI', 'value':'บริการสัตวแพทย์', 'name' : 'บริการสัตวแพทย์'}
-                            ,{'type':'DBI', 'value':'ผสมเทียม', 'name' : 'ผสมเทียม'}
+    $scope.MenuTypeList = [{'type':'DBI', 'value':'บริการสัตวแพทย์', 'name' : 'บริการสัตวแพทย์และผสมเทียม'}
+                            // ,{'type':'DBI', 'value':'ผสมเทียม', 'name' : 'ผสมเทียม'}
                             ,{'type':'DBI', 'value':'แร่ธาตุ พรีมิกซ์ และอาหาร', 'name' : 'แร่ธาตุ พรีมิกซ์ และอาหาร'}
                             ,{'type':'DBI', 'value':'ผลิตน้ำเชื้อแช่แข็ง', 'name' : 'ผลิตน้ำเชื้อแช่แข็ง'}
                             ,{'type':'DBI', 'value':'จำหน่ายน้ำเชื้อแช่แข็ง', 'name' : 'จำหน่ายน้ำเชื้อแช่แข็ง'}
@@ -336,12 +358,26 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
                             ,{'type':'II', 'value':'การสูญเสียในกระบวนการ', 'name' : 'การสูญเสียในกระบวนการ'}
                             ,{'type':'II', 'value':'การสูญเสียหลังกระบวนการ', 'name' : 'การสูญเสียหลังกระบวนการ'}
                             ,{'type':'II', 'value':'การสูญเสียรอจำหน่าย', 'name' : 'การสูญเสียรอจำหน่าย'}
-                            ,{'type':'II', 'value':'การสูญเสียในกระบวนการขนส่ง', 'name' : 'การสูญเสียในกระบวนการขนส่ง'}
+                            // ,{'type':'II', 'value':'การสูญเสียในกระบวนการขนส่ง', 'name' : 'การสูญเสียในกระบวนการขนส่ง'}
                         ];
     // 
     if($scope.ID != null){
         $scope.loadMasterGoalList('master-goal/list', '');
         $scope.loadData('goal-mission/get', $scope.ID);
     }
+
+    $scope.loadSaleChanel = function(){
+        var params = {'actives' : 'Y'};
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('product-milk/sale-chanel/list', params).then(function (result) {
+            if (result.data.STATUS == 'OK') {
+                $scope.SaleChanelList = result.data.DATA.List;
+                
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+
+    $scope.loadSaleChanel();
 
 });

@@ -27,8 +27,8 @@ th{
 	background-color: #FFFFFF;
 	color:#000;
 	border: none;
-	border-top: 5px solid #BD1212;
-	border-bottom: 5px solid #BD1212;
+	border-top: 5px solid #1E02BE;
+	border-bottom: 5px solid #1E02BE;
 }
 
 .navbar-inverse .navbar-nav > li > a{
@@ -41,11 +41,11 @@ th{
 }
 
 .navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:focus, .navbar-inverse .navbar-nav>.active>a:hover{
-	background-color: #BD1212;
+	background-color: #1E02BE;
 }
 
 .navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:focus, .navbar-inverse .navbar-nav>.open>a:hover{
-	background-color: #BD1212;
+	background-color: #1E02BE;
 }
 
 .navbar-nav{
@@ -76,7 +76,7 @@ th{
 	/*box-shadow: 3px 3px #000;*/
 }
 thead{
-	background-color: #BD1212; color: #FFF;
+	background-color: #1E02BE; color: #FFF;
 }
 .form-control{
 	font-size: 1em;
@@ -90,3 +90,13 @@ thead{
 	font-size: 1em;
 }
 
+.background_color{
+	background-color:  #1E02BE;
+}
+
+.btn-danger{
+	/*background-color: #d9534f;
+    border-color: #d43f3a;*/
+    background-color: #1E02BE;
+    border-color: #1E02BE;
+}

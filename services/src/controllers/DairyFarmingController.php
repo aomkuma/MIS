@@ -129,8 +129,8 @@
                     // MasterGoalService::updateData($MasterGoal);
                 }else{
                     $MasterGoal['id'] = '';
-                    $MasterGoal['goal_type'] = '';
-                    $MasterGoal['menu_type'] = '';
+                    $MasterGoal['goal_type'] = 'DBI';
+                    $MasterGoal['menu_type'] = 'บริการสัตวแพทย์';
                     $MasterGoal['actives'] = 'Y';    
                     $MasterGoal['goal_name'] = $ParentDataName . $OldData['dairy_farming_name'];
                 }

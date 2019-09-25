@@ -19,9 +19,10 @@
                 $params = $request->getParsedBody();
                 $user_session = $params['user_session'];
                 $menu_type = $params['obj']['menu_type'];
+                $data_id = $params['obj']['id'];
 
-                $List = UploadLogService::loadList($menu_type);
-
+                $List = UploadLogService::loadList($menu_type, $data_id);
+                
                 $this->data_result['DATA']['List'] = $List;
 
                 return $this->returnResponse(200, $this->data_result, $response, false);

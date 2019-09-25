@@ -10,12 +10,20 @@
 <div class="col-lg-10 col-lg-offset-1" ng-form="form_data">
 	<div class="row form-group">
 		<div class="field-label col-lg-1 col-md-1 col-sm-12 col-xs-12">
-			โรงงาน
+			สำนักงาน
 		</div>
 		<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 			<select class="form-control" ng-model="Data.factory_id" ng-options="data.id as data.factory_name for data in FactoryList" required="required">
 				<option value="">กรุณาเลือก..</option>
 			</select>
+		</div>
+		<div class="field-label col-lg-1 col-md-1 col-sm-12 col-xs-12">
+			ปีงบประมาณ
+		</div>
+		<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+			<select name="Year" class="form-control" ng-model="Data.years" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
+					<option value="">กรุณาเลือก..</option>
+				</select>
 		</div>
 		<div class="field-label col-lg-1 col-md-1 col-sm-12 col-xs-12">
 			เดือน
@@ -25,14 +33,7 @@
 					<option value="">กรุณาเลือก..</option>
 				</select>
 		</div>
-		<div class="field-label col-lg-1 col-md-1 col-sm-12 col-xs-12">
-			ปี
-		</div>
-		<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-			<select name="Year" class="form-control" ng-model="Data.years" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
-					<option value="">กรุณาเลือก..</option>
-				</select>
-		</div>
+		
 		<div class="field-label col-lg-1 col-md-1 col-sm-12 col-xs-12">
 			<button class="btn btn-info" ng-click="goSearch(Data)" ng-disabled="!form_data.$valid">
 				<span class="glyphicon glyphicon-search"></span> 
@@ -50,26 +51,26 @@
 				 เดือน : {{MonthName}}
 			</label>
 			<label class="col-lg-12 form-control-static">
-				ปี : {{YearName}}
+				ปีงบประมาณ : {{YearName}}
 			</label>
 		</div>
 		<div class="row form-group">
 			<div class="col-lg-12">
-				<button class="btn btn-danger  pull-right" ng-click="addDataDetail()" ><!--ng-disabled="!form_data.$valid"-->
+				<!-- <button class="btn btn-danger  pull-right" ng-click="addDataDetail()" >
 				<span class="glyphicon glyphicon-plus"></span> 
 				เพิ่ม
-			</button>
+			</button> -->
 			<button class="btn btn-primary  pull-right" ng-click="switchDetailType()" ng-show="DETAIL_TYPE == 'MANUAL'" ><!--ng-disabled="!form_data.$valid"-->
 				อัพโหลดไฟล์
 			</button>
-			<button class="btn btn-primary  pull-right" ng-click="switchDetailType()" ng-show="DETAIL_TYPE == 'UPLOAD'" ><!--ng-disabled="!form_data.$valid"-->
+			<!-- <button class="btn btn-primary  pull-right" ng-click="switchDetailType()" ng-show="DETAIL_TYPE == 'UPLOAD'" >
 				กรอกข้อมูล
-			</button>
+			</button> -->
 			</div>
 		</div>
 		<div>
 			<fieldset style="border: 1px solid #999; padding: 10px; margin-top: 10px;" ng-show="DETAIL_TYPE == 'UPLOAD'">
-				<div class="row form-group">
+				<!-- <div class="row form-group">
 					<label class="form-control-static col-lg-2">
 						ข้อมูล ณ วันที่ 
 					</label>
@@ -81,7 +82,7 @@
 		                    </span>
 		                </p>
 		            </div>
-				</div>
+				</div> -->
 				<div class="row form-group">
 		            <label class="col-lg-2 form-control-static">
 		                แนบไฟล์
@@ -98,7 +99,8 @@
 		                <div class="file-alert" ng-show="fle.attachFile.invalidFile.$error === 'maxSize'">ขนาดไฟล์ต้องไม่เกิน : {{AttachFile.invalidFile.$errorParam}}</div>
 		            </div>
 		            <div class="col-lg-4">
-		                <a  href="../files/files/download/MIS_การขาย.xlsx" target="_self" download="MIS_การขาย.xlsx"><span class="glyphicon glyphicon-download"></span> Template สำหรับนำเข้า</a>
+		                <!-- <a  href="../files/files/download/MIS_การขาย.xlsx" target="_self" download="MIS_การขาย.xlsx"><span class="glyphicon glyphicon-download"></span> Template สำหรับนำเข้า</a> -->
+		                <a ng-click="exportTemplate()" target="_self" ><span class="glyphicon glyphicon-download"></span> Template สำหรับนำเข้า</a>
 		            </div>
 
 		        </div>
@@ -106,6 +108,23 @@
 		        	<div class="col-lg-12 text-center">
 			            <button class="btn btn-primary" ng-click="uploadFile(Data, AttachFile)">อัพโหลด</button>
 			        </div>
+		        </div>
+
+		        <div class="row form-group">
+		        	<div class="col-lg-12 table-responsive">
+		        		<table class="table table-striped">
+		        			<tr>
+		        				<th>บันทึกข้อมูลล่าสุด</th>
+		        				<th>ข้อมูล ณ วันที่</th>
+		        				<th>ไฟล์</th>
+		        			</tr>
+		        			<tr ng-repeat="data in UploadLogList">
+		        				<td>{{data.create_date}}</td>
+		        				<td>{{data.file_date}}</td>
+		        				<td><a href="../{{data.file_path}}" download="{{data.file_name}}">{{data.file_name}}</a></td>
+		        			</tr>
+		        		</table>
+		        	</div>
 		        </div>
 			</fieldset>
 
@@ -115,7 +134,7 @@
 					<div class="col-lg-12">
 						<div class="row form-group">
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-								วันที่แก้ไขล่าสุด {{getThaiDateTimeFromString(DataDetail.update_date)}}
+								({{parentIndex + 1}}) วันที่แก้ไขล่าสุด {{getThaiDateTimeFromString(DataDetail.update_date)}}
 							</div>
 						</div>
 
@@ -131,10 +150,28 @@
 						</div>
 						<div class="row form-group">
 							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+								ช่องทางการจำหน่าย
+							</div>
+							<div class="col-lg-11 col-md-11 col-sm-12 col-xs-12">
+								<select class="form-control" ng-model="DataDetail.sale_chanel_id" ng-options="data.id as data.chanel_name for data in SaleChanelList[parentIndex]"><!--ng-change="loadDairyFarming('CHILD', DataDetail.dairy_farming_id)" -->
+									<option value="">กรุณาเลือก..</option>
+								</select>
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+								ลูกค้า
+							</div>
+							<div class="col-lg-11 col-md-11 col-sm-12 col-xs-12">
+								<input type="text" class="form-control" ng-model="DataDetail.customer_name">
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 								ประเภทย่อย
 							</div>
 							<div class="col-lg-11 col-md-11 col-sm-12 col-xs-12">
-								<select class="form-control" ng-model="DataDetail.production_sale_info_type2" ng-options="data.id as data.name for data in SubProductMilkList[parentIndex]" ng-change="loadProductMilkDetail(DataDetail.production_sale_info_type2, parentIndex)"><!--ng-change="loadDairyFarming('CHILD', DataDetail.dairy_farming_id)" -->
+								<select class="form-control" ng-model="DataDetail.production_sale_info_type2" ng-options="data.id as (data.product_character + ' ' + data.name) for data in SubProductMilkList[parentIndex]" ng-change="loadProductMilkDetail(DataDetail.production_sale_info_type2, parentIndex)"><!--ng-change="loadDairyFarming('CHILD', DataDetail.dairy_farming_id)" -->
 									<option value="">กรุณาเลือก..</option>
 								</select>
 							</div>
@@ -144,7 +181,7 @@
 								รายการ
 							</div>
 							<div class="col-lg-11 col-md-11 col-sm-12 col-xs-12">
-								<select class="form-control" ng-model="DataDetail.production_sale_info_type3" ng-options="data.id as data.name for data in ProductMilkDetailList[parentIndex]" ><!--ng-change="loadDairyFarming('CHILD', DataDetail.dairy_farming_id)" -->
+								<select class="form-control" ng-model="DataDetail.production_sale_info_type3" ng-options="data.id as (data.name + ' ' + data.number_of_package + ' ' + data.unit + ' ' + data.amount + ' ' + data.amount_unit + ' ' + data.taste) for data in ProductMilkDetailList[parentIndex]" ><!--ng-change="loadDairyFarming('CHILD', DataDetail.dairy_farming_id)" -->
 									<option value="">กรุณาเลือก..</option>
 								</select>
 							</div>
@@ -157,13 +194,19 @@
 								<input type="text" class="form-control" ng-model="DataDetail.amount">
 							</div>
 							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+								แถม
+							</div>
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input type="text" class="form-control" ng-model="DataDetail.addon">
+							</div>
+							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 								มูลค่า (บาท)
 							</div>
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 								<input type="text" class="form-control" ng-model="DataDetail.price_value">
 							</div>
 							
-							<div class="col-lg-1 col-md-1">
+							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 								<button class="btn btn-danger" ng-click="removeDetail(DataDetail.id, parentIndex)">
 									<span class="glyphicon glyphicon-trash"></span> 
 									
@@ -195,13 +238,13 @@
 		</div>
 	</div>
 	<hr>
-	<div class="row form-group"  ng-show="DETAIL_TYPE == 'MANUAL'">
+	<div class="row form-group" >
 		<div class="col-lg-12 text-center">
 			<button class="btn btn-default" ng-click="cancelUpdate()">
 				<span class="glyphicon glyphicon-arrow-left"></span> 
 				กลับหน้าหลัก
 			</button>
-			<button class="btn btn-primary" ng-click="save(Data, DataDetailList)" ng-disabled="!form_data.$valid" ng-show="Maker">
+			<button class="btn btn-primary" ng-click="save(Data, DataDetailList)" ng-disabled="!form_data.$valid" ng-show="Maker && DETAIL_TYPE == 'MANUAL'">
 				<span class="glyphicon glyphicon-floppy-save"></span> 
 				บันทึก
 			</button>

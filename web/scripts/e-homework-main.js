@@ -1,5 +1,5 @@
 var serviceUrl = '../services/public/';
-var serviceLoginUrl = '../../dportal/dpo/public/';//'http://127.0.0.1/dportal/dpo/public/';
+var serviceLoginUrl = '../../dportal/dpo/public/';//'http://172.23.10.224/dportal/dpo/public/';
 
 var app = angular.module('e-homework', ['ui.bootstrap' , 'ngRoute' , 'ngAnimate', 'ngCookies', 'ui.router', 'oc.lazyLoad', 'ngFileUpload', 'angular-bind-html-compile']);
 

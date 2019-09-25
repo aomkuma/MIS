@@ -19,7 +19,7 @@
                     <th>จัดการ</th>
                     <th>โรงงาน</th>
                     <th>ประเภทหลัก</th>
-                    <th>ประเภทย่อย</th>
+                    <th>ลักษณะผลิตภัณฑ์ / ประเภทผลิตภัณฑ์หลัก</th>
                     <th>สถานะ</th>
                     <!--<th>แก้ไข</th>-->
                 </tr>
@@ -40,7 +40,7 @@
                     </td>
                     <td style="text-align: center;">{{data.factory_name}}</td>
                     <td style="text-align: center;">{{data.proname}}</td>
-                    <td style="text-align: center;">{{data.name}}</td>
+                    <td style="text-align: center;">{{(data.product_character!=null?data.product_character:'') + ' ' + data.name}}</td>
                     <td style="text-align: center;" ng-class="{'inactive-text':data.actives == 'N'}">{{data.actives=='Y'?'ใช้งาน':'ไม่ใช้งาน'}}</td>
                     <!--					<td>
                                                                     <button class="btn btn-success" ng-click="goUpdate(data.id)">

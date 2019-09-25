@@ -10,6 +10,7 @@ class ProductionInfoDetail extends \Illuminate\Database\Eloquent\Model {
                   , 'production_info_type1'
                   , 'production_info_type2'
                   , 'production_info_type3'
+                  , 'package_amount'
                   , 'amount'
                   , 'price_value'
                   , 'create_date'

@@ -8,6 +8,7 @@ class LostInProcessDetail extends \Illuminate\Database\Eloquent\Model {
   	protected $fillable = array('id'
   								, 'lost_in_process_id'
   								, 'lost_in_process_type'
+                  , 'package_amount'
   								, 'amount'
   								, 'price_value'
                   , 'create_date'

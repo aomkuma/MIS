@@ -99,14 +99,47 @@ angular.module('e-homework').controller('UpdatePSIController', function($scope, 
                                                 , 'production_sale_info_type3' : result.data.DATA[i].ProductMilkDetail.DEFAULT
                                             });
 
-                    console.log(result.data.DATA[i].ProductMilk);
+                    // console.log(result.data.DATA[i].ProductMilk);
                     $scope.ProductMilkList[i] = result.data.DATA[i].ProductMilk.DATA;
                     $scope.SubProductMilkList[i] = result.data.DATA[i].SubProductMilk.DATA;
                     $scope.ProductMilkDetailList[i] = result.data.DATA[i].ProductMilkDetail.DATA;
                 }
+
+                $scope.loadSaleChanel();
                 IndexOverlayFactory.overlayHide();
             }
         });
+    }
+
+    $scope.loadSaleChanelDefault = function(){
+        // var params = {'actives':'Y', 'menu_type' : 'การสูญเสียในกระบวนการ'};
+        var params = {'actives':'Y'};
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('product-milk/sale-chanel/list', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.SaleChanelListDefault = result.data.DATA.List;
+                IndexOverlayFactory.overlayHide();
+                console.log($scope.SaleChanelListDefault);
+            }
+        });
+    }
+
+    $scope.SaleChanelList = [];
+    $scope.loadSaleChanel = function(index){
+        // var params = {'actives':'Y', 'menu_type' : 'การสูญเสียในกระบวนการ'};
+        // var params = {'actives':'Y'};
+        // IndexOverlayFactory.overlayShow();
+        // HTTPService.clientRequest('product-milk/sale-chanel/list', params).then(function(result){
+        //     if(result.data.STATUS == 'OK'){
+        //         $scope.SaleChanelList[index] = result.data.DATA.List;
+        //         IndexOverlayFactory.overlayHide();
+        //     }
+        // });
+        $scope.SaleChanelList = [$scope.DataDetailList.length];
+        for(var i = 0; i < $scope.DataDetailList.length; i++){
+            $scope.SaleChanelList[i] = angular.copy($scope.SaleChanelListDefault);
+            console.log($scope.SaleChanelList);
+        }
     }
 
     $scope.ProductMilkList = [];
@@ -148,6 +181,7 @@ angular.module('e-homework').controller('UpdatePSIController', function($scope, 
 
     $scope.loadData = function(action, id){
 
+        $scope.loadSaleChanelDefault();
         
         var params = {
             'factory_id' : $scope.Data.factory_id
@@ -165,15 +199,18 @@ angular.module('e-homework').controller('UpdatePSIController', function($scope, 
                 $scope.Data.factory_id = parseInt($scope.Data.factory_id);
                 $scope.DataDetailList = $scope.Data.production_sale_info_detail;
                 console.log($scope.Data);
-                $scope.ProductMilkList = [$scope.DataDetailList.length];
+
+                $scope.getUploadLogList();
+                /*$scope.ProductMilkList = [$scope.DataDetailList.length];
                 $scope.SubProductMilkList = [$scope.DataDetailList.length];
                 $scope.ProductMilkDetailList = [$scope.DataDetailList.length];
                 // load sub dar=iry farming
                 for(var i =0; i < $scope.DataDetailList.length; i++){
+                    $scope.loadSaleChanel(i);
                     $scope.loadProductMilk(i);
                     $scope.loadSubProductMilk($scope.DataDetailList[i].production_sale_info_type1, i);
                     $scope.loadProductMilkDetail($scope.DataDetailList[i].production_sale_info_type2, i);
-                }
+                }*/
                 IndexOverlayFactory.overlayHide();
             }else{
                 if($scope.Data.id != ''){
@@ -181,6 +218,7 @@ angular.module('e-homework').controller('UpdatePSIController', function($scope, 
                 }
 
                 $scope.loadDefaultProductMilk();
+
             }
             $scope.FactoryName = '';
             $scope.MonthName = '';
@@ -327,6 +365,7 @@ angular.module('e-homework').controller('UpdatePSIController', function($scope, 
             'id':''
             , 'cooperative_id':null
             , 'region_id':$scope.PersonRegion[0].RegionID
+            , 'factory_id' : $scope.PersonRegion[0].FactoryID
             , 'months':curDate.getMonth() + 1
             , 'years':curDate.getFullYear()
             , 'create_date':''
@@ -430,17 +469,28 @@ angular.module('e-homework').controller('UpdatePSIController', function($scope, 
         if($scope.DETAIL_TYPE == 'MANUAL'){
             $scope.DETAIL_TYPE = 'UPLOAD';
             $scope.AttachFile = null;
+            $scope.getUploadLogList();
         }else{
             $scope.DETAIL_TYPE = 'MANUAL';
         }
     }
-    $scope.DETAIL_TYPE = 'MANUAL';
+    $scope.DETAIL_TYPE = 'UPLOAD';
+
+    $scope.getUploadLogList = function(){
+        var params = {'id' : $scope.Data.id, 'menu_type' : 'production-sale-info'};
+        HTTPService.clientRequest('upload-log/list', params).then(function(result){
+            console.log(result);
+            $scope.UploadLogList = result.data.DATA.List;
+            IndexOverlayFactory.overlayHide();
+        });
+    }
 
     $scope.uploadFile = function(Data, AttachFile ){
         // var FileDate = '';
-        // if($scope.FileDate != null && $scope.FileDate != undefined && $scope.FileDate != ''){
-        //     FileDate = makeDate($scope.FileDate);
-        // }
+        if($scope.FileDate != null && $scope.FileDate != undefined && $scope.FileDate != ''){
+            $scope.FileDate = makeSQLDate($scope.FileDate);
+        }
+        IndexOverlayFactory.overlayShow();
         var params = {'Data' : Data, 'AttachFile' : AttachFile, 'menu_type' : 'production-sale-info', 'FileDate' : $scope.FileDate};
             HTTPService.uploadRequest('production-sale-info/upload', params).then(function(result){
                 console.log(result);
@@ -452,6 +502,24 @@ angular.module('e-homework').controller('UpdatePSIController', function($scope, 
                 }
                 IndexOverlayFactory.overlayHide();
             });
+    }
+
+    $scope.exportTemplate = function(){
+       // console.log(DetailList, $scope.data_description);
+        // return;
+        IndexOverlayFactory.overlayHide();
+        var params = {
+            'factory_id' : $scope.Data.factory_id
+           , 'years' : $scope.Data.years
+           , 'months' : $scope.Data.months
+        }; 
+        IndexOverlayFactory.overlayShow();
+        HTTPService.clientRequest('production-sale-info/load/template', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                window.location.href="../" + result.data.DATA;
+            }
+            IndexOverlayFactory.overlayHide();
+        });
     }
 
 

@@ -62,7 +62,8 @@
 
         public static function getData($id){
             return DairyFarming::where('id', $id)
-                    ->first()->toArray();      
+                    ->first();
+                    //->toArray();      
         }
         
         public static function updateData($obj){

@@ -25,7 +25,7 @@
 	  		
 		  	<div ng-show="condition.DisplayType == 'monthly'">
 		  		<div class="form-group">
-				    <label for="exampleInputName2">&nbsp; ภูมิภาค : </label>
+				    <label for="exampleInputName2">&nbsp; สำนักงาน : </label>
 				    &nbsp; <select name="Year" class="form-control" ng-model="condition.Region" ng-options="region.RegionID as region.RegionName for region in PersonRegion" required="required">
 				    	<option value="">กรุณาเลือก..</option>
 					</select>
@@ -70,7 +70,7 @@
 			</div>
 			<div ng-show="condition.DisplayType == 'quarter'">
 				<div class="form-group">
-				    <label for="exampleInputName2">&nbsp; ภูมิภาค : </label>
+				    <label for="exampleInputName2">&nbsp; สำนักงาน : </label>
 				    &nbsp; <select name="Year" class="form-control" ng-model="condition.Region" ng-options="region.RegionID as region.RegionName for region in PersonRegion" required="required">
 				    	<option value="">กรุณาเลือก..</option>
 					</select>
@@ -123,7 +123,7 @@
 			</div>
 			<div ng-show="condition.DisplayType == 'annually'">
 				<div class="form-group">
-				    <label for="exampleInputName2">&nbsp; ภูมิภาค : </label>
+				    <label for="exampleInputName2">&nbsp; สำนักงาน : </label>
 				    &nbsp; <select name="Year" class="form-control" ng-model="condition.Region" ng-options="region.RegionID as region.RegionName for region in PersonRegion" required="required">
 				    	<option value="">กรุณาเลือก..</option>
 					</select>
@@ -185,7 +185,7 @@
 		</caption>
 		<thead style="background-color: #BD1212; color: #FFF;">
 			<tr>
-				<th rowspan="2" style="text-align: center; vertical-align: middle;">ภูมิภาค</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">สำนักงาน</th>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">เดือน</th>
 				<th colspan="2" style="text-align: center; vertical-align: middle;">{{CurYear}}</th>
 				<th colspan="2" style="text-align: center; vertical-align: middle;">{{LastYear}}</th>
@@ -235,7 +235,7 @@
 		</caption>
 		<thead style="background-color: #BD1212; color: #FFF;">
 			<tr>
-				<th rowspan="2" style="text-align: center; vertical-align: middle;">ภูมิภาค</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">สำนักงาน</th>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">ไตรมาส</th>
 				<th colspan="2" style="text-align: center; vertical-align: middle;">{{CurYear}}</th>
 				<th colspan="2" style="text-align: center; vertical-align: middle;">{{LastYear}}</th>
@@ -279,7 +279,7 @@
 		</caption>
 		<thead style="background-color: #BD1212; color: #FFF;">
 			<tr>
-				<th rowspan="2" style="text-align: center; vertical-align: middle;">ภูมิภาค</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">สำนักงาน</th>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">ปี</th>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">ปริมาณ (หลอด)</th>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">มูลค่า (บาท)</th>

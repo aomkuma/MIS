@@ -4,6 +4,9 @@ namespace App\Controller;
 
 use App\Service\LostInProcessService;
 use App\Service\MasterGoalService;
+use App\Service\UploadLogService;
+use App\Service\GoalMissionService;
+use PHPExcel;
 
 class LostInProcessController extends Controller {
 
@@ -46,6 +49,26 @@ class LostInProcessController extends Controller {
             case 11 : $monthTxt = 'พฤศจิกายน';
                 break;
             case 12 : $monthTxt = 'ธันวาคม';
+                break;
+        }
+        return $monthTxt;
+    }
+
+    public function getFactoryID($regionID) {
+        switch ($regionID) {
+            case 1 : $monthTxt = 1;
+                break;
+            case 2 : $monthTxt = 1;
+                break;
+            case 3 : $monthTxt = 1;
+                break;
+            case 4 : $monthTxt = 2;
+                break;
+            case 5 : $monthTxt = 3;
+                break;
+            case 6 : $monthTxt = 4;
+                break;
+            case 7 : $monthTxt = 5;
                 break;
         }
         return $monthTxt;
@@ -120,49 +143,129 @@ class LostInProcessController extends Controller {
         $DataList = [];
         $DataSummary = [];
 
-        // get master goal
-        $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียในกระบวนการ');
-
+        $TotalGroupData = [];
         $Sum_CurrentAmount = 0;
         $Sum_CurrentBaht = 0;
         $Sum_BeforeAmount = 0;
         $Sum_BeforeBaht = 0;
 
-        for ($i = 0; $i < $diffMonth; $i++) {
+        // get sub type list
+        $SubTypeList = MasterGoalService::getSubTypeList('การสูญเสียในกระบวนการ');
+        // print_r($SubTypeList);exit;
+        foreach($SubTypeList as $_k => $_v){
+            $data = [];
+            // $data['RegionName'] = $value['RegionName'];
+            $data['bg_color'] = '#7adcde';
+            $data['LostInProcessName'] = $_v['sub_goal_type'];
+            array_push($DataList, $data);
 
-            // Prepare condition
-            $curYear = $condition['YearTo'];
-            $beforeYear = $condition['YearTo'] - 1;
+            // get master goal
+            $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียในกระบวนการ', [], $_v['sub_goal_type'],$factory_id);
 
-            foreach ($MasterGoalList as $k => $v) {
+            
 
-                $master_type_id = $v['id'];
+            // for ($i = 0; $i < $diffMonth; $i++) {
 
-                $monthName = LostInProcessController::getMonthName($curMonth);
+                // Prepare condition
+                $curYear = $condition['YearTo'];
+                $beforeYear = $condition['YearTo'] - 1;
+
+                $TotalData = [];
+                $TotalData['SummaryAmount'] = 0;
+                $TotalData['SummaryBaht'] = 0;
+                $TotalData['SummaryBeforeAmount'] = 0;
+                $TotalData['SummaryBeforeBaht'] = 0;
+                foreach ($MasterGoalList as $k => $v) {
+
+                    $master_type_id = $v['id'];
+
+                    $monthName = LostInProcessController::getMonthName($curMonth);
+
+                    $data = [];
+                    // $data['RegionName'] = $value['RegionName'];
+                    $data['LostInProcessName'] = $v['goal_name'];
+                    $data['master_type_id'] = $master_type_id;
+                    $data['Month'] = $monthName;
+
+                    // get cooperative type
+                    $Current = LostInProcessService::getMainList($curYear, $curMonth, $factory_id, $master_type_id);
+                    // print_r($Current);exit;
+                    $data['CurrentAmount'] = floatval($Current['sum_amount']);
+                    $data['CurrentBaht'] = floatval($Current['sum_baht']);
+
+                    $Before = LostInProcessService::getMainList($beforeYear, $curMonth, $factory_id, $master_type_id);
+                    $data['BeforeAmount'] = floatval($Before['sum_amount']);
+                    $data['BeforeBaht'] = floatval($Before['sum_baht']);
+
+                    $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+                    $data['DiffAmount'] = $DiffAmount;
+                    if ($data['BeforeAmount'] != 0) {
+                        $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+                    } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
+                        $data['DiffAmountPercentage'] = 100;
+                    }
+
+
+                    $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+                    $data['DiffBaht'] = $DiffBaht;
+
+                    if ($data['BeforeBaht'] != 0) {
+                        $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
+                    } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
+                        $data['DiffBahtPercentage'] = 100;
+                    }
+
+                    $data['CreateDate'] = $Current['update_date'];
+                    $data['ApproveDate'] = $Current['office_approve_date'];
+                    if (!empty($Current['office_approve_id'])) {
+                        if (empty($Current['office_approve_comment'])) {
+                            $data['Status'] = 'อนุมัติ';
+                        } else {
+                            $data['Status'] = 'ไม่อนุมัติ';
+                        }
+                    }
+                    $data['Description'] = ['months' => $curMonth
+                        , 'years' => $curYear
+                        , 'factory_id' => $factory_id
+                    ];
+
+                    array_push($DataList, $data);
+
+                    // $TotalData = [];
+
+                    $TotalData['SummaryAmount'] = $TotalData['SummaryAmount'] + $data['CurrentAmount'];
+                    $TotalData['SummaryBaht'] = $TotalData['SummaryBaht'] + $data['CurrentBaht'];
+                    $TotalData['SummaryBeforeAmount'] = $TotalData['SummaryBeforeAmount'] + $data['BeforeAmount'];
+                    $TotalData['SummaryBeforeBaht'] = $TotalData['SummaryBeforeBaht'] + $data['BeforeBaht'];
+
+                    $DataSummary['SummaryAmount'] = $DataSummary['SummaryAmount'] + $data['CurrentAmount'];
+                    $DataSummary['SummaryBaht'] = $DataSummary['SummaryBaht'] + $data['CurrentBaht'];
+                    $DataSummary['SummaryBeforeAmount'] = $DataSummary['SummaryBeforeAmount'] + $data['BeforeAmount'];
+                    $DataSummary['SummaryBeforeBaht'] = $DataSummary['SummaryBeforeBaht'] + $data['BeforeBaht'];
+
+                    $Sum_CurrentAmount += $data['CurrentAmount'];
+                    $Sum_CurrentBaht += $data['CurrentBaht'];
+                    $Sum_BeforeAmount += $data['BeforeAmount'];
+                    $Sum_BeforeBaht += $data['BeforeBaht'];
+
+                }
 
                 $data = [];
-                // $data['RegionName'] = $value['RegionName'];
-                $data['LostInProcessName'] = $v['goal_name'];
-                $data['Month'] = $monthName;
-
-                // get cooperative type
-                $Current = LostInProcessService::getMainList($curYear, $curMonth, $factory_id, $master_type_id);
-                // print_r($Current);exit;
-                $data['CurrentAmount'] = floatval($Current['sum_amount']);
-                $data['CurrentBaht'] = floatval($Current['sum_baht']);
-
-                $Before = LostInProcessService::getMainList($beforeYear, $curMonth, $factory_id, $master_type_id);
-                $data['BeforeAmount'] = floatval($Before['sum_amount']);
-                $data['BeforeBaht'] = floatval($Before['sum_baht']);
+                $data['bg_color'] = '#92deb8';
+                $data['Month'] = 'รวม ' . $_v['sub_goal_type'];
+                $data['CurrentAmount'] = $TotalData['SummaryAmount'];
+                $data['CurrentBaht'] = $TotalData['SummaryBaht'];
+                $data['BeforeAmount'] = $TotalData['SummaryBeforeAmount'];
+                $data['BeforeBaht'] = $TotalData['SummaryBeforeBaht'];
 
                 $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+                
                 $data['DiffAmount'] = $DiffAmount;
                 if ($data['BeforeAmount'] != 0) {
                     $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
                 } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
                     $data['DiffAmountPercentage'] = 100;
                 }
-
 
                 $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
                 $data['DiffBaht'] = $DiffBaht;
@@ -172,45 +275,53 @@ class LostInProcessController extends Controller {
                 } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
                     $data['DiffBahtPercentage'] = 100;
                 }
-
-                $data['CreateDate'] = $Current['update_date'];
-                $data['ApproveDate'] = $Current['office_approve_date'];
-                if (!empty($Current['office_approve_id'])) {
-                    if (empty($Current['office_approve_comment'])) {
-                        $data['Status'] = 'อนุมัติ';
-                    } else {
-                        $data['Status'] = 'ไม่อนุมัติ';
-                    }
-                }
-                $data['Description'] = ['months' => $curMonth
-                    , 'years' => $curYear
-                    , 'factory_id' => $factory_id
-                ];
+                $data['DiffBaht'] = $DiffBaht;
 
                 array_push($DataList, $data);
 
-                $DataSummary['SummaryAmount'] = $DataSummary['SummaryAmount'] + $data['CurrentAmount'];
-                $DataSummary['SummaryBaht'] = $DataSummary['SummaryBaht'] + $data['CurrentBaht'];
-                $DataSummary['SummaryBeforeAmount'] = $DataSummary['SummaryBeforeAmount'] + $data['BeforeAmount'];
-                $DataSummary['SummaryBeforeBaht'] = $DataSummary['SummaryBeforeBaht'] + $data['BeforeBaht'];
-
-                $Sum_CurrentAmount += $data['CurrentAmount'];
-                $Sum_CurrentBaht += $data['CurrentBaht'];
-                $Sum_BeforeAmount += $data['BeforeAmount'];
-                $Sum_BeforeBaht += $data['BeforeBaht'];
-            }
-
-            $curMonth++;
+                array_push($TotalGroupData, $data);
+                // $curMonth++;
+            // }
         }
 
+        // $data = [];
+        // // $data['RegionName'] = $value['RegionName'];
+        // $data['bg_color'] = '#ccc';
+        // $data['Month'] = 'รวม';
+        // $data['CurrentAmount'] = $Sum_CurrentAmount;
+        // $data['CurrentBaht'] = $Sum_CurrentBaht;
+        // $data['BeforeAmount'] = $Sum_BeforeAmount;
+        // $data['BeforeBaht'] = $Sum_BeforeBaht;
+
+        // $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+        // $data['DiffAmount'] = $DiffAmount;
+        // if ($data['BeforeAmount'] != 0) {
+        //     $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+        // } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
+        //     $data['DiffAmountPercentage'] = 100;
+        // }
+
+
+        // $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+        // $data['DiffBaht'] = $DiffBaht;
+
+        // if ($data['BeforeBaht'] != 0) {
+        //     $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
+        // } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
+        //     $data['DiffBahtPercentage'] = 100;
+        // }
+        // $data['DiffBaht'] = $DiffBaht;
+
+        // array_push($DataList, $data);
+
         $data = [];
-        // $data['RegionName'] = $value['RegionName'];
-        $data['bg_color'] = '#ccc';
+        
+        $data['bg_color'] = '#999';
         $data['Month'] = 'รวม';
-        $data['CurrentAmount'] = $Sum_CurrentAmount;
-        $data['CurrentBaht'] = $Sum_CurrentBaht;
-        $data['BeforeAmount'] = $Sum_BeforeAmount;
-        $data['BeforeBaht'] = $Sum_BeforeBaht;
+        $data['CurrentAmount'] = $TotalGroupData[0]['CurrentAmount'] - $TotalGroupData[1]['CurrentAmount'];
+        $data['CurrentBaht'] = $TotalGroupData[0]['CurrentBaht'] - $TotalGroupData[1]['CurrentBaht'];
+        $data['BeforeAmount'] = $TotalGroupData[0]['BeforeAmount'] - $TotalGroupData[1]['BeforeAmount'];
+        $data['BeforeBaht'] = $TotalGroupData[0]['BeforeBaht'] - $TotalGroupData[1]['BeforeBaht'];
 
         $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
         $data['DiffAmount'] = $DiffAmount;
@@ -232,6 +343,9 @@ class LostInProcessController extends Controller {
         $data['DiffBaht'] = $DiffBaht;
 
         array_push($DataList, $data);
+
+        $DataSummary['SummaryAmount'] = $data['CurrentAmount'];
+        $DataSummary['SummaryBaht'] = $data['CurrentBaht'];
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
@@ -347,15 +461,33 @@ class LostInProcessController extends Controller {
 
         $DataList = [];
         $DataSummary = [];
-
-        // get master goal
-        $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียในกระบวนการ');
+        $TotalGroupData = [];
         $Sum_CurrentAmount = 0;
         $Sum_CurrentBaht = 0;
         $Sum_BeforeAmount = 0;
         $Sum_BeforeBaht = 0;
 
-        for ($i = 0; $i < $loop; $i++) {
+        // get sub type list
+        $SubTypeList = MasterGoalService::getSubTypeList('การสูญเสียในกระบวนการ');
+        // print_r($SubTypeList);exit;
+        foreach($SubTypeList as $_k => $_v){
+
+            $data = [];
+            // $data['RegionName'] = $value['RegionName'];
+            $data['bg_color'] = '#7adcde';
+            $data['LostInProcessName'] = $_v['sub_goal_type'];
+            array_push($DataList, $data);
+
+            // get master goal
+            $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียในกระบวนการ', [], $_v['sub_goal_type'],$factory_id);
+            // get master goal
+            // $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียในกระบวนการ');
+            $Sum_CurrentAmount = 0;
+            $Sum_CurrentBaht = 0;
+            $Sum_BeforeAmount = 0;
+            $Sum_BeforeBaht = 0;
+
+        // for ($i = 0; $i < $loop; $i++) {
 
             if ($i > 0 && $curQuarter == 2) {
                 $curYear++;
@@ -373,7 +505,12 @@ class LostInProcessController extends Controller {
                 $monthList = [7, 8, 9];
             }
 
-
+            $TotalData = [];
+            $TotalData['SummaryAmount'] = 0;
+            $TotalData['SummaryBaht'] = 0;
+            $TotalData['SummaryBeforeAmount'] = 0;
+            $TotalData['SummaryBeforeBaht'] = 0;
+            
             foreach ($MasterGoalList as $k => $v) {
 
                 $master_type_id = $v['id'];
@@ -454,25 +591,94 @@ class LostInProcessController extends Controller {
 
                 array_push($DataList, $data);
 
+                $TotalData['SummaryAmount'] = $TotalData['SummaryAmount'] + $data['CurrentAmount'];
+                $TotalData['SummaryBaht'] = $TotalData['SummaryBaht'] + $data['CurrentBaht'];
+                $TotalData['SummaryBeforeAmount'] = $TotalData['SummaryBeforeAmount'] + $data['BeforeAmount'];
+                $TotalData['SummaryBeforeBaht'] = $TotalData['SummaryBeforeBaht'] + $data['BeforeBaht'];
+
                 $DataSummary['SummaryAmount'] = $DataSummary['SummaryAmount'] + $data['CurrentAmount'];
                 $DataSummary['SummaryBaht'] = $DataSummary['SummaryBaht'] + $data['CurrentBaht'];
+                $DataSummary['SummaryBeforeAmount'] = $DataSummary['SummaryBeforeAmount'] + $data['BeforeAmount'];
+                $DataSummary['SummaryBeforeBaht'] = $DataSummary['SummaryBeforeBaht'] + $data['BeforeBaht'];
+
 
                 $Sum_CurrentAmount += $data['CurrentAmount'];
                 $Sum_CurrentBaht += $data['CurrentBaht'];
                 $Sum_BeforeAmount += $data['BeforeAmount'];
                 $Sum_BeforeBaht += $data['BeforeBaht'];
             }
+
+            $data = [];
+            $data['bg_color'] = '#92deb8';
+            $data['Month'] = 'รวม ' . $_v['sub_goal_type'];
+            $data['CurrentAmount'] = $TotalData['SummaryAmount'];
+            $data['CurrentBaht'] = $TotalData['SummaryBaht'];
+            $data['BeforeAmount'] = $TotalData['SummaryBeforeAmount'];
+            $data['BeforeBaht'] = $TotalData['SummaryBeforeBaht'];
+
+            $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+            
+            $data['DiffAmount'] = $DiffAmount;
+            if ($data['BeforeAmount'] != 0) {
+                $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+            } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
+                $data['DiffAmountPercentage'] = 100;
+            }
+
+            $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+            $data['DiffBaht'] = $DiffBaht;
+
+            if ($data['BeforeBaht'] != 0) {
+                $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
+            } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
+                $data['DiffBahtPercentage'] = 100;
+            }
+            $data['DiffBaht'] = $DiffBaht;
+
+            array_push($DataList, $data);
+
+            array_push($TotalGroupData, $data);
         }
 
-        $data = [];
-        // $data['RegionName'] = $value['RegionName'];
-        $data['bg_color'] = '#ccc';
-        $data['Month'] = 'รวม';
-        $data['CurrentAmount'] = $Sum_CurrentAmount;
-        $data['CurrentBaht'] = $Sum_CurrentBaht;
+        // $data = [];
+        // // $data['RegionName'] = $value['RegionName'];
+        // $data['bg_color'] = '#ccc';
+        // $data['Month'] = 'รวม';
+        // $data['CurrentAmount'] = $Sum_CurrentAmount;
+        // $data['CurrentBaht'] = $Sum_CurrentBaht;
 
-        $data['BeforeAmount'] = $Sum_BeforeAmount;
-        $data['BeforeBaht'] = $Sum_BeforeBaht;
+        // $data['BeforeAmount'] = $Sum_BeforeAmount;
+        // $data['BeforeBaht'] = $Sum_BeforeBaht;
+
+        // $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+        // $data['DiffAmount'] = $DiffAmount;
+        // if ($data['BeforeAmount'] != 0) {
+        //     $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+        // } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
+        //     $data['DiffAmountPercentage'] = 100;
+        // }
+
+
+        // $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+        // $data['DiffBaht'] = $DiffBaht;
+
+        // if ($data['BeforeBaht'] != 0) {
+        //     $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
+        // } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
+        //     $data['DiffBahtPercentage'] = 100;
+        // }
+        // $data['DiffBaht'] = $DiffBaht;
+
+        // array_push($DataList, $data);
+
+        $data = [];
+        
+        $data['bg_color'] = '#999';
+        $data['Quarter'] = 'รวม';
+        $data['CurrentAmount'] = $TotalGroupData[0]['CurrentAmount'] - $TotalGroupData[1]['CurrentAmount'];
+        $data['CurrentBaht'] = $TotalGroupData[0]['CurrentBaht'] - $TotalGroupData[1]['CurrentBaht'];
+        $data['BeforeAmount'] = $TotalGroupData[0]['BeforeAmount'] - $TotalGroupData[1]['BeforeAmount'];
+        $data['BeforeBaht'] = $TotalGroupData[0]['BeforeBaht'] - $TotalGroupData[1]['BeforeBaht'];
 
         $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
         $data['DiffAmount'] = $DiffAmount;
@@ -495,6 +701,9 @@ class LostInProcessController extends Controller {
 
         array_push($DataList, $data);
 
+        $DataSummary['SummaryAmount'] = $data['CurrentAmount'];
+        $DataSummary['SummaryBaht'] = $data['CurrentBaht'];
+
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
 
@@ -512,15 +721,39 @@ class LostInProcessController extends Controller {
         $DataSummary = [];
         $curYear = $condition['YearTo'];
 
-        // get master goal
-        $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียในกระบวนการ');
+        $TotalGroupData = [];
         $Sum_CurrentAmount = 0;
         $Sum_CurrentBaht = 0;
         $Sum_BeforeAmount = 0;
         $Sum_BeforeBaht = 0;
 
-        for ($i = 0; $i < $loop; $i++) {
+        // get sub type list
+        $SubTypeList = MasterGoalService::getSubTypeList('การสูญเสียในกระบวนการ');
+        // print_r($SubTypeList);exit;
+        foreach($SubTypeList as $_k => $_v){
+            $data = [];
+            // $data['RegionName'] = $value['RegionName'];
+            $data['bg_color'] = '#7adcde';
+            $data['LostInProcessName'] = $_v['sub_goal_type'];
+            array_push($DataList, $data);
 
+            // get master goal
+            $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียในกระบวนการ', [], $_v['sub_goal_type'],$factory_id);
+            // get master goal
+            // $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียในกระบวนการ');
+            $Sum_CurrentAmount = 0;
+            $Sum_CurrentBaht = 0;
+            $Sum_BeforeAmount = 0;
+            $Sum_BeforeBaht = 0;
+
+
+        // for ($i = 0; $i < $loop; $i++) {
+            $TotalData = [];
+            $TotalData['SummaryAmount'] = 0;
+            $TotalData['SummaryBaht'] = 0;
+            $TotalData['SummaryBeforeAmount'] = 0;
+            $TotalData['SummaryBeforeBaht'] = 0;
+            
             foreach ($MasterGoalList as $k => $v) {
 
                 $master_type_id = $v['id'];
@@ -604,26 +837,97 @@ class LostInProcessController extends Controller {
 
                 array_push($DataList, $data);
 
+                $TotalData['SummaryAmount'] = $TotalData['SummaryAmount'] + $data['CurrentAmount'];
+                $TotalData['SummaryBaht'] = $TotalData['SummaryBaht'] + $data['CurrentBaht'];
+                $TotalData['SummaryBeforeAmount'] = $TotalData['SummaryBeforeAmount'] + $data['BeforeAmount'];
+                $TotalData['SummaryBeforeBaht'] = $TotalData['SummaryBeforeBaht'] + $data['BeforeBaht'];
+
                 $DataSummary['SummaryAmount'] = $DataSummary['SummaryAmount'] + $data['CurrentAmount'];
                 $DataSummary['SummaryBaht'] = $DataSummary['SummaryBaht'] + $data['CurrentBaht'];
+                $DataSummary['SummaryBeforeAmount'] = $DataSummary['SummaryBeforeAmount'] + $data['BeforeAmount'];
+                $DataSummary['SummaryBeforeBaht'] = $DataSummary['SummaryBeforeBaht'] + $data['BeforeBaht'];
 
                 $Sum_CurrentAmount += $data['CurrentAmount'];
                 $Sum_CurrentBaht += $data['CurrentBaht'];
                 $Sum_BeforeAmount += $data['BeforeAmount'];
                 $Sum_BeforeBaht += $data['BeforeBaht'];
             }
+
+            $data = [];
+            $data['bg_color'] = '#92deb8';
+            $data['Year'] = 'รวม ' . $_v['sub_goal_type'];
+            $data['CurrentAmount'] = $TotalData['SummaryAmount'];
+            $data['CurrentBaht'] = $TotalData['SummaryBaht'];
+            $data['BeforeAmount'] = $TotalData['SummaryBeforeAmount'];
+            $data['BeforeBaht'] = $TotalData['SummaryBeforeBaht'];
+
+            $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+            
+            $data['DiffAmount'] = $DiffAmount;
+            if ($data['BeforeAmount'] != 0) {
+                $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+            } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
+                $data['DiffAmountPercentage'] = 100;
+            }
+
+            $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+            $data['DiffBaht'] = $DiffBaht;
+
+            if ($data['BeforeBaht'] != 0) {
+                $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
+            } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
+                $data['DiffBahtPercentage'] = 100;
+            }
+            $data['DiffBaht'] = $DiffBaht;
+
+            array_push($DataList, $data);
+
+            array_push($TotalGroupData, $data);
         }
 
+        // $data = [];
+        // // $data['RegionName'] = $value['RegionName'];
+        // $data['bg_color'] = '#ccc';
+        // $data['Month'] = 'รวม';
+        // $data['CurrentAmount'] = $Sum_CurrentAmount;
+        // $data['CurrentBaht'] = $Sum_CurrentBaht;
+
+        // $data['BeforeAmount'] = $Sum_BeforeAmount;
+        // $data['BeforeBaht'] = $Sum_BeforeBaht;
+
+        // $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
+        // $data['DiffAmount'] = $DiffAmount;
+        // if ($data['BeforeAmount'] != 0) {
+        //     $data['DiffAmountPercentage'] = (($data['CurrentAmount'] - $data['BeforeAmount']) / $data['BeforeAmount']) * 100;
+        // } else if (empty($data['BeforeAmount']) && !empty($data['CurrentAmount'])) {
+        //     $data['DiffAmountPercentage'] = 100;
+        // }
+
+
+        // $DiffBaht = $data['CurrentBaht'] - $data['BeforeBaht'];
+        // $data['DiffBaht'] = $DiffBaht;
+
+        // if ($data['BeforeBaht'] != 0) {
+        //     $data['DiffBahtPercentage'] = (($data['CurrentBaht'] - $data['BeforeBaht']) / $data['BeforeBaht']) * 100;
+        // } else if (empty($data['BeforeBaht']) && !empty($data['CurrentBaht'])) {
+        //     $data['DiffBahtPercentage'] = 100;
+        // }
+        // $data['DiffBaht'] = $DiffBaht;
+
+        // array_push($DataList, $data);
+
         $data = [];
-        // $data['RegionName'] = $value['RegionName'];
-        $data['bg_color'] = '#ccc';
+        
+        $data['bg_color'] = '#999';
         $data['Month'] = 'รวม';
-        $data['CurrentAmount'] = $Sum_CurrentAmount;
-        $data['CurrentBaht'] = $Sum_CurrentBaht;
+        $data['CurrentAmount'] = $TotalGroupData[0]['CurrentAmount'] - $TotalGroupData[1]['CurrentAmount'];
+        $data['CurrentBaht'] = $TotalGroupData[0]['CurrentBaht'] - $TotalGroupData[1]['CurrentBaht'];
+        $data['BeforeAmount'] = $TotalGroupData[0]['BeforeAmount'] - $TotalGroupData[1]['BeforeAmount'];
+        $data['BeforeBaht'] = $TotalGroupData[0]['BeforeBaht'] - $TotalGroupData[1]['BeforeBaht'];
 
-        $data['BeforeAmount'] = $Sum_BeforeAmount;
-        $data['BeforeBaht'] = $Sum_BeforeBaht;
-
+        $DataSummary['SummaryAmount'] = $data['CurrentAmount'];
+        $DataSummary['SummaryBaht'] = $data['CurrentBaht'];
+        
         $DiffAmount = $data['CurrentAmount'] - $data['BeforeAmount'];
         $data['DiffAmount'] = $DiffAmount;
         if ($data['BeforeAmount'] != 0) {
@@ -644,6 +948,8 @@ class LostInProcessController extends Controller {
         $data['DiffBaht'] = $DiffBaht;
 
         array_push($DataList, $data);
+
+
 
         return ['DataList' => $DataList, 'Summary' => $DataSummary];
     }
@@ -841,6 +1147,242 @@ class LostInProcessController extends Controller {
         }
 
         return $response;
+    }
+
+    public function getExcelTemplate($request, $response, $args) {
+        try {
+
+            error_reporting(E_ERROR);
+            error_reporting(E_ALL);
+            ini_set('display_errors','On');
+
+            $params = $request->getParsedBody();
+            // $condition = $params['obj']['condition'];
+
+            $factory_id = $params['obj']['factory_id'];
+            $years = $params['obj']['years'];
+            $months = $params['obj']['months'];
+            $menu_type = 'การสูญเสียในกระบวนการ';
+            $con_year = $years;
+            if($months > 9){
+                $con_year = $years - 1;
+            }
+            $avgDate = $con_year . '-'. ($months<10?'0'.$months:$months) . '-01';
+            
+            $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_in_memory_gzip;
+            $catch_result = \PHPExcel_Settings::setCacheStorageMethod($cacheMethod);
+
+            $objPHPExcel = new PHPExcel();
+
+            $objPHPExcel->getActiveSheet()->setCellValue('A1', 'รายการน้ำนม');
+            $objPHPExcel->getActiveSheet()->setCellValue('B1', 'รายการการสูญเสียในกระบวนการผลิต');
+            $objPHPExcel->getActiveSheet()->setCellValue('C1', 'เป้ารายปี');
+            $objPHPExcel->getActiveSheet()->setCellValue('D1', 'เป้ารายเดือน');
+            $objPHPExcel->getActiveSheet()->setCellValue('E1', 'ปริมาณน้ำนม (ลิตร)');
+            $objPHPExcel->getActiveSheet()->setCellValue('F1', 'มูลค่า (บาท)');
+
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+            
+            $item_cnt = 2;
+            // Gen item
+
+            // load goal mission
+            // GoalMissionService::
+
+            // load Master goal
+            $MasterGoalList = MasterGoalService::getListOrderByName('Y', 'การสูญเสียในกระบวนการ', [], '', $factory_id);
+            // print_r($ProductMilk);exit;
+            
+            foreach ($MasterGoalList as $key2 => $value2) {
+
+                $goal_name = $value2['goal_name'];
+                
+                $_MasterGoal = MasterGoalService::getGoalIDByName($goal_name, $menu_type, $factory_id);
+
+                $GoalMissionData = GoalMissionService::getGoalMissionByGoalName($menu_type, $_MasterGoal['id'], $factory_id, $years);
+                // get goal mission in month
+                // echo $GoalMissionData['id'];exit;
+                $GoalMissionMonthData = GoalMissionService::getAvgMonth($GoalMissionData['id'], $avgDate);
+
+                $objPHPExcel->getActiveSheet()->setCellValue('A' .$item_cnt, $value2['sub_goal_type']);
+                $objPHPExcel->getActiveSheet()->setCellValue('B' .$item_cnt, $value2['goal_name']);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' .$item_cnt, $GoalMissionData['total_amount']);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' .$item_cnt, $GoalMissionMonthData['amount']);
+                $objPHPExcel->getActiveSheet()->setCellValue('E' .$item_cnt, '');
+                $objPHPExcel->getActiveSheet()->setCellValue('F' .$item_cnt, '');
+                
+                $item_cnt++;
+            }
+             
+
+           
+
+            $objPHPExcel->getActiveSheet()->getStyle('A1:F1')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+            $objPHPExcel->getActiveSheet()->getStyle('A1:A' . ($item_cnt - 1))->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+            $objPHPExcel->getActiveSheet()->getStyle('C2:F' . ($item_cnt - 1))->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+            $objPHPExcel->getActiveSheet()
+            ->getStyle("A1:F" . $objPHPExcel->getActiveSheet()->getHighestRow())
+            ->applyFromArray($this->getDefaultStyle());
+
+            // exit;
+            $filename = 'TEMPLATE__lost-in-process_' . date('YmdHis') . '.xlsx';
+            $filepath = '../../files/files/download/' . $filename;
+
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+
+            $objWriter->setPreCalculateFormulas();
+            $objWriter->save($filepath);
+
+            $this->data_result['DATA'] = 'files/files/download/' . $filename;
+
+            return $this->returnResponse(200, $this->data_result, $response, false);
+        } catch (\Exception $e) {
+            return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+        }
+    }
+
+    private function getDefaultStyle(){
+        return 
+                array(
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => (\PHPExcel_Style_Border::BORDER_THIN)
+                        )
+                    )
+                    // ,
+                    // 'font' => array(
+                    //     'name' => 'AngsanaUPC'
+                    // )
+                );
+    }
+
+    public function uploadData($request, $response, $args) {
+        // error_reporting(E_ERROR);
+        //     error_reporting(E_ALL);
+        //     ini_set('display_errors','On');
+        $_WEB_FILE_PATH = 'files/files';
+        try {
+            $params = $request->getParsedBody();
+            $_Data = $params['obj']['Data'];
+
+            foreach ($_Data as $key => $value) {
+                if($value == 'null'){
+                    $_Data[$key] = '';
+                }
+            }
+
+            $_FileDate = $params['obj']['FileDate'];
+
+            $user_session = $params['user_session'];
+
+            $id = LostInProcessService::updateData($_Data);
+
+            // clear item
+            LostInProcessService::removeDetailDataByParent($id);            
+
+            $files = $request->getUploadedFiles();
+            $f = $files['obj']['AttachFile'];
+            $_UploadFile = [];
+            if($f != null){
+                if($f->getClientFilename() != ''){
+                    // Unset old image if exist
+                    
+                    $ext = pathinfo($f->getClientFilename(), PATHINFO_EXTENSION);
+                    $FileName = date('YmdHis').'_'.rand(100000,999999). '.'.$ext;
+                    $FilePath = $_WEB_FILE_PATH . '/upload/'.$FileName;
+                    
+                    $_UploadFile['file_name'] = $f->getClientFilename();
+                    $_UploadFile['file_path'] = $FilePath;
+                    
+                    $f->moveTo('../../' . $FilePath);
+                }        
+            }
+
+            // read file 
+            $file = '../../' . $FilePath;
+            $_Detail = $this->readExcelFile($file, $id);
+
+            // print_r($_Detail);
+            // exit;
+            foreach ($_Detail as $key => $value) {
+
+                $data = [];
+                
+                $data['lost_in_process_id'] = $value['lost_in_process_id'];
+                $data['lost_in_process_type'] = $this->getMasterGoal($value['goal_name'], $_Data['factory_id']);
+                
+                $data['amount'] = empty($value['result_amount'])?0:$value['result_amount'];
+                $data['price_value'] = empty($value['result_thb'])?0:$value['result_thb'];
+                $data['id'] = '';
+
+                LostInProcessService::updateDetailData($data);
+            }
+
+            // add log
+            $_UploadFile['menu_type'] = 'lost-in-process';
+            $_UploadFile['file_date'] = $_FileDate;
+            $_UploadFile['data_id'] = $id;
+            UploadLogService::updateLog($_UploadFile);
+
+            //           
+            $this->data_result['DATA']['id'] = $id;
+
+            return $this->returnResponse(200, $this->data_result, $response, false);
+        } catch (\Exception $e) {
+            return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+        }
+    }
+
+    private function getMasterGoal($goal_name, $factory_id){
+        return MasterGoalService::getIDByName($goal_name, $factory_id);
+    }
+
+
+    private function readExcelFile($file, $lost_in_process_id){
+
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file);
+        $sheetData = $spreadsheet->getActiveSheet()->toArray();
+
+        $field_array = ['sub_goal_type', 'goal_name', 'goal_year_amount',  'goal_month_amount'/*, 'result_package_amount'*/, 'result_amount', 'result_thb'];
+        $cnt_row = 1;
+
+        $ItemList = [];
+        foreach ($sheetData as $key => $value) {
+            
+            if($cnt_row > 1){
+                
+                $cnt_col = 0;
+                $cnt_field = 0;
+                $Item = [];
+                $Item[ 'lost_in_process_id' ] = $lost_in_process_id;
+
+                foreach ($value as $k => $v) {
+                    // if($cnt_col >= 1 && $cnt_col <= 7){
+                        
+                        $Item[ $field_array[$cnt_field] ] = $v;
+                        $cnt_field++;
+                        
+                    // }
+                    $cnt_col++;
+                }
+                
+                array_push($ItemList, $Item);
+                
+            }
+
+            $cnt_row++;
+
+        }
+        
+        return $ItemList;
     }
 
 }

@@ -4,6 +4,14 @@ namespace App\Controller;
 
 use App\Service\LostWaitSaleService;
 use App\Service\MasterGoalService;
+use App\Service\MasterLossService;
+use App\Service\GoalMissionService;
+use App\Service\ProductMilkService;
+use App\Service\SubProductMilkService;
+use App\Service\ProductMilkDetailService;
+use App\Service\UploadLogService;
+
+use PHPExcel;
 
 class LostWaitSaleController extends Controller {
 
@@ -120,8 +128,9 @@ class LostWaitSaleController extends Controller {
         $DataSummary = [];
 
         // get master goal
-        $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียรอจำหน่าย');
-
+        $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียรอจำหน่าย', [], '', $factory_id);
+        // echo count($MasterGoalList);
+        // exit;
         $Sum_CurrentAmount = 0;
         $Sum_CurrentBaht = 0;
         $Sum_BeforeAmount = 0;
@@ -254,7 +263,7 @@ class LostWaitSaleController extends Controller {
         $DataSummary = [];
 
         // get master goal
-        $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียรอจำหน่าย');
+        $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียรอจำหน่าย', [], '', $factory_id);
 
 
         $Sum_CurrentAmount = 0;
@@ -273,7 +282,7 @@ class LostWaitSaleController extends Controller {
 
                 //$data = [];
                 // $data['RegionName'] = $value['RegionName'];
-                $data['LostOutProcessName'] = $v['goal_name'];
+                $data['LostWaitSaleName'] = $v['goal_name'];
                 $data['Month'] = $monthName;
 
                 // get cooperative type
@@ -401,7 +410,7 @@ class LostWaitSaleController extends Controller {
         $DataSummary = [];
 
         // get master goal
-        $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียรอจำหน่าย');
+        $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียรอจำหน่าย', [], '', $factory_id);
         $Sum_CurrentAmount = 0;
         $Sum_CurrentBaht = 0;
         $Sum_BeforeAmount = 0;
@@ -565,7 +574,7 @@ class LostWaitSaleController extends Controller {
         $curYear = $condition['YearTo'];
 
         // get master goal
-        $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียรอจำหน่าย');
+        $MasterGoalList = MasterGoalService::getList('Y', 'การสูญเสียรอจำหน่าย', [], '', $factory_id);
         $Sum_CurrentAmount = 0;
         $Sum_CurrentBaht = 0;
         $Sum_BeforeAmount = 0;
@@ -893,6 +902,343 @@ class LostWaitSaleController extends Controller {
         }
 
         return $response;
+    }
+
+    public function getExcelTemplate($request, $response, $args) {
+        // error_reporting(E_ERROR);
+        //     error_reporting(E_ALL);
+        //     ini_set('display_errors','On');
+        try {
+
+            $params = $request->getParsedBody();
+            // $condition = $params['obj']['condition'];
+
+            $factory_id = $params['obj']['factory_id'];
+            $years = $params['obj']['years'];
+            $months = $params['obj']['months'];
+            $menu_type = 'การสูญเสียรอจำหน่าย';
+
+            $con_year = $years;
+            if($months > 9){
+                $con_year = $years - 1;
+            }
+            $avgDate = $con_year . '-'. ($months<10?'0'.$months:$months) . '-01';
+            
+            $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_in_memory_gzip;
+            $catch_result = \PHPExcel_Settings::setCacheStorageMethod($cacheMethod);
+
+            $objPHPExcel = new PHPExcel();
+
+            $objPHPExcel->getActiveSheet()->setCellValue('A1', 'รายการสูญเสียหลังผลิต');
+            $objPHPExcel->getActiveSheet()->setCellValue('B1', 'ประเภทของนม');
+            $objPHPExcel->getActiveSheet()->setCellValue('C1', 'ชื่อผลิตภัณฑ์');
+            $objPHPExcel->getActiveSheet()->setCellValue('D1', 'ชนิดผลิตภัณฑ์');
+            $objPHPExcel->getActiveSheet()->setCellValue('E1', 'เป้าหมายทั้งปี');
+            $objPHPExcel->getActiveSheet()->setCellValue('G1', 'เป้าหมายเดือน');
+            $objPHPExcel->getActiveSheet()->setCellValue('I1', 'การดำเนินงานรายเดือน');
+
+            $objPHPExcel->getActiveSheet()->setCellValue('E2', 'จำนวนหีบ / กล่อง');
+            $objPHPExcel->getActiveSheet()->setCellValue('F2', 'บาท');
+
+            $objPHPExcel->getActiveSheet()->setCellValue('G2', 'จำนวนหีบ / กล่อง');
+            $objPHPExcel->getActiveSheet()->setCellValue('H2', 'บาท');
+
+            $objPHPExcel->getActiveSheet()->setCellValue('I2', 'จำนวนหีบ / กล่อง');
+            $objPHPExcel->getActiveSheet()->setCellValue('J2', 'ลิตร');
+            $objPHPExcel->getActiveSheet()->setCellValue('K2', 'บาท');
+
+            $objPHPExcel->getActiveSheet()->mergeCells('A1:A2');
+            $objPHPExcel->getActiveSheet()->mergeCells('B1:B2');
+            $objPHPExcel->getActiveSheet()->mergeCells('C1:C2');
+            $objPHPExcel->getActiveSheet()->mergeCells('D1:D2');
+            $objPHPExcel->getActiveSheet()->mergeCells('E1:F1');
+            $objPHPExcel->getActiveSheet()->mergeCells('G1:H1');
+            $objPHPExcel->getActiveSheet()->mergeCells('I1:K1');
+
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+
+            $item_cnt = 3;
+            // Gen item
+
+            // load loss mapping
+            $LossMappingList = MasterLossService::getMappingList($factory_id, $menu_type);
+            // print_r($LossMappingList);exit;
+            foreach ($LossMappingList as $loss_key => $loss_value) {
+                $loss_id = $loss_value['loss_id'];
+                $loss_name = $loss_value['name'];
+                // load product milk
+                $ProductMilk = MasterLossService::getProductMilkList($factory_id, $loss_id, $menu_type);
+                // print_r($ProductMilk);exit;
+                foreach ($ProductMilk as $key => $value) {
+                    
+                    $product_milk_id = $value['product_milk_id'];
+                    $product_milk_name = $value['name'];
+                    
+                    $SubProductMilk = MasterLossService::getSubProductMilkList($product_milk_id, $factory_id, $loss_id, $menu_type);
+                    // print_r($SubProductMilk);exit;
+                    foreach ($SubProductMilk as $key1 => $value1) {
+                        $subproduct_milk_id = $value1['subproduct_milk_id'];
+                        $subproduct_milk_name = $value1['product_character'] . ' ' . $value1['name'];
+
+                        $ProductMilkDetail = MasterLossService::getProductMilkDetailList($subproduct_milk_id, $factory_id, $loss_id, $product_milk_id, $menu_type);
+                        // print_r($ProductMilkDetail);exit;
+                        foreach ($ProductMilkDetail as $key2 => $value2) {
+
+                            $product_milk_detail_name = $value2['name'] . ' ' .$value2['number_of_package'] . ' ' . $value2['unit'] . ' ' . $value2['amount'] . ' ' . $value2['amount_unit'] . ' ' . $value2['taste'];
+
+                            // find goal values from name
+                            $goal_name = $loss_name . ' - ' . $product_milk_name . ' - ' .  $subproduct_milk_name . ' - ' . $product_milk_detail_name;
+
+                            // get goal id by goal name
+
+                            $_MasterGoal = MasterGoalService::getGoalIDByName($goal_name, $menu_type, $factory_id);
+
+                            $GoalMissionData = GoalMissionService::getGoalMissionByGoalName($menu_type, $_MasterGoal['id'], $factory_id, $years);
+
+                            // get goal mission in month
+                            // echo $GoalMissionData['id'];exit;
+                            $GoalMissionMonthData = GoalMissionService::getAvgMonth($GoalMissionData['id'], $avgDate);
+                            // print_r($GoalMissionData);
+                            // exit;
+                            $objPHPExcel->getActiveSheet()->setCellValue('A' .$item_cnt, $loss_name);
+                            $objPHPExcel->getActiveSheet()->setCellValue('B' .$item_cnt, $product_milk_name);
+                            $objPHPExcel->getActiveSheet()->setCellValue('C' .$item_cnt, $subproduct_milk_name);
+                            $objPHPExcel->getActiveSheet()->setCellValue('D' .$item_cnt, $product_milk_detail_name);
+                            $objPHPExcel->getActiveSheet()->setCellValue('E' .$item_cnt, $GoalMissionData['total_amount']);
+                            $objPHPExcel->getActiveSheet()->setCellValue('F' .$item_cnt, $GoalMissionData['price_value']);
+                            
+                            $objPHPExcel->getActiveSheet()->setCellValue('G' .$item_cnt, $GoalMissionMonthData['amount']);
+                            $objPHPExcel->getActiveSheet()->setCellValue('H' .$item_cnt, $GoalMissionMonthData['price_value']);
+                            
+                            $objPHPExcel->getActiveSheet()->setCellValue('I' .$item_cnt, '');
+                            $objPHPExcel->getActiveSheet()->setCellValue('J' .$item_cnt, '');
+                            $objPHPExcel->getActiveSheet()->setCellValue('K' .$item_cnt, '');
+                            // $objPHPExcel->getActiveSheet()->setCellValue('K' .$item_cnt, $goal_name);
+                            // $objPHPExcel->getActiveSheet()->setCellValue('L' .$item_cnt, $GoalMissionData['id'] . ' - ' .  $avgDate);
+                            // $objPHPExcel->getActiveSheet()->setCellValue('M' .$item_cnt, $menu_type .' - ' . $_MasterGoal['id'].' - ' .  $factory_id.' - ' .  $years);
+                            $item_cnt++;
+                        }
+                    }
+
+                }
+            }
+           
+
+            $objPHPExcel->getActiveSheet()->getStyle('A1:K2' . $highestRow)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+            $objPHPExcel->getActiveSheet()
+            ->getStyle("A1:K" . $objPHPExcel->getActiveSheet()->getHighestRow())
+            ->applyFromArray($this->getDefaultStyle());
+
+            // exit;
+            $filename = 'TEMPLATE__loss-wait-sale_' . date('YmdHis') . '.xlsx';
+            $filepath = '../../files/files/download/' . $filename;
+
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+
+            $objWriter->setPreCalculateFormulas();
+            $objWriter->save($filepath);
+            // exit;
+            $this->data_result['DATA'] = 'files/files/download/' . $filename;
+
+            return $this->returnResponse(200, $this->data_result, $response, false);
+        } catch (\Exception $e) {
+            return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+        }
+    }
+
+    private function getDefaultStyle(){
+        return 
+                array(
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => (\PHPExcel_Style_Border::BORDER_THIN)
+                        )
+                    )
+                    // ,
+                    // 'font' => array(
+                    //     'name' => 'AngsanaUPC'
+                    // )
+                );
+    }
+
+    public function uploadData($request, $response, $args) {
+        // error_reporting(E_ERROR);
+        //     error_reporting(E_ALL);
+        //     ini_set('display_errors','On');
+        $_WEB_FILE_PATH = 'files/files';
+        try {
+            $params = $request->getParsedBody();
+            $_Data = $params['obj']['Data'];
+            $factory_id = $_Data['factory_id'];
+            foreach ($_Data as $key => $value) {
+                if($value == 'null'){
+                    $_Data[$key] = '';
+                }
+            }
+
+            $_FileDate = $params['obj']['FileDate'];
+
+            $user_session = $params['user_session'];
+
+            $id = LostWaitSaleService::updateData($_Data);
+
+            // clear item
+            LostWaitSaleService::removeDetailDataByParent($id);            
+
+            $files = $request->getUploadedFiles();
+            $f = $files['obj']['AttachFile'];
+            $_UploadFile = [];
+            if($f != null){
+                if($f->getClientFilename() != ''){
+                    // Unset old image if exist
+                    
+                    $ext = pathinfo($f->getClientFilename(), PATHINFO_EXTENSION);
+                    $FileName = date('YmdHis').'_'.rand(100000,999999). '.'.$ext;
+                    $FilePath = $_WEB_FILE_PATH . '/upload/'.$FileName;
+                    
+                    $_UploadFile['file_name'] = $f->getClientFilename();
+                    $_UploadFile['file_path'] = $FilePath;
+                    
+                    $f->moveTo('../../' . $FilePath);
+                }        
+            }
+
+            // read file 
+            $file = '../../' . $FilePath;
+            $_Detail = $this->readExcelFile($file, $id);
+
+            // print_r($_Detail);
+            // exit;
+            foreach ($_Detail as $key => $value) {
+            //     print_r($value);
+            // exit;
+                $data = [];
+                
+                $data['lost_wait_sale_id'] = $value['lost_wait_sale_id'];
+
+                $goal_name = $value['loss_name'] . ' - ' . $value['product_milk'] . ' - ' .  $value['sub_product_milk'] . ' - ' . $value['product_milk_detail'];
+
+                $product_milk_id = $this->getProductInfoType1($value['product_milk'], $factory_id);
+                $subproduct_milk_id = $this->getProductInfoType2($value['sub_product_milk'], $product_milk_id);
+                $productmilk_detail_id = $this->getProductInfoType3($value['product_milk_detail'], $subproduct_milk_id);
+
+                // echo "$goal_name, $factory_id";exit;
+                $data['lost_wait_sale_type'] = $this->getLostWaitSaleType($goal_name, $factory_id );
+                $data['package_amount'] = str_replace(',', '', $value['result_package_amount']);
+                // exit;
+                $value['result_package_amount'] = str_replace(',', '', $value['result_package_amount']);
+                $value['result_thb'] = str_replace(',', '', $value['result_thb']);
+
+                // Get product milk detail data
+                $ProductMilkDetailData = ProductMilkDetailService::getData($productmilk_detail_id);
+                // print_r($ProductMilkDetailData);
+                // exit;
+                // Calc litre
+                // (((3*48)+5)*125)/1,000
+                
+                if(!empty($value['result_package_amount']) && ($ProductMilkDetailData['unit'] == 'ซีซี' || $ProductMilkDetailData['unit'] == 'มิลลิลิตร')){
+
+                    // $data['amount'] = empty($value['result_amount'])?0:$value['result_amount'];
+                    $box = 0;
+                    $amount_data = explode('.', ''.$value['result_package_amount']);
+                    $amount = $amount_data[0];
+                    if(!empty($amount_data[1])){
+                        $box = $amount_data[1];
+                    }
+                    
+                    $data['amount'] = ((($amount * $ProductMilkDetailData['amount']) + $box) * $ProductMilkDetailData['number_of_package']) / 1000;
+                }else{
+                    $data['amount'] = empty($value['result_amount'])?0:$value['result_amount'];
+                
+                }     
+                // exit;
+                
+                $data['price_value'] = empty($value['result_thb'])?0:$value['result_thb'];
+                $data['id'] = '';
+
+                LostWaitSaleService::updateDetailData($data);
+            }
+
+            // add log
+            $_UploadFile['menu_type'] = 'lost-wait-sale';
+            $_UploadFile['file_date'] = $_FileDate;
+            $_UploadFile['data_id'] = $id;
+            UploadLogService::updateLog($_UploadFile);
+
+            //           
+            $this->data_result['DATA']['id'] = $id;
+
+            return $this->returnResponse(200, $this->data_result, $response, false);
+        } catch (\Exception $e) {
+            return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+        }
+    }
+
+    private function getLostWaitSaleType($goal_name, $factory_id){
+        $data = MasterGoalService::getGoalIDByName($goal_name, 'การสูญเสียรอจำหน่าย', $factory_id);
+        return $data['id'];
+    }
+
+    private function getProductInfoType1($product_milk, $factory_id){
+        return ProductMilkService::getIDByName($product_milk, $factory_id);
+    }
+
+    private function getProductInfoType2($sub_product_milk, $production_sale_info_type1){
+        return SubProductMilkService::getIDByName($sub_product_milk, $production_sale_info_type1);
+    }
+
+    private function getProductInfoType3($product_milk_detail, $production_sale_info_type2){
+        return ProductMilkDetailService::getIDByName($product_milk_detail, $production_sale_info_type2);
+    }
+
+    private function readExcelFile($file, $lost_wait_sale_id){
+
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file);
+        $sheetData = $spreadsheet->getActiveSheet()->toArray();
+
+        $field_array = ['loss_name', 'product_milk', 'sub_product_milk', 'product_milk_detail', 'goal_year_amount', 'goal_year_thb',  'goal_month_amount', 'goal_month_thb', 'result_package_amount', 'result_amount', 'result_thb'];
+        $cnt_row = 1;
+
+        $ItemList = [];
+        foreach ($sheetData as $key => $value) {
+            
+            if($cnt_row > 2){
+                
+                $cnt_col = 0;
+                $cnt_field = 0;
+                $Item = [];
+                $Item[ 'lost_wait_sale_id' ] = $lost_wait_sale_id;
+
+                foreach ($value as $k => $v) {
+                    // if($cnt_col >= 1 && $cnt_col <= 7){
+                        
+                        $Item[ $field_array[$cnt_field] ] = $v;
+                        $cnt_field++;
+                        
+                    // }
+                    $cnt_col++;
+                }
+                
+                array_push($ItemList, $Item);
+                
+            }
+
+            $cnt_row++;
+
+        }
+        
+        return $ItemList;
     }
 
 }

@@ -13,6 +13,17 @@ angular.module('e-homework').controller('UpdateMGController', function($scope, $
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));    
     console.log($scope.$parent.Menu);
 
+    $scope.loadFactoryList = function(){
+      var params = {'region' : $scope.PersonRegion};
+        HTTPService.clientRequest('factory/list', params).then(function(result){
+            if(result.data.STATUS == 'OK'){
+                $scope.FactoryList = result.data.DATA.DataList;
+
+            }
+            IndexOverlayFactory.overlayHide();
+        });
+    }
+
     $scope.loadData = function(action, id){
         var params = {
             'id' : id
@@ -72,6 +83,7 @@ angular.module('e-homework').controller('UpdateMGController', function($scope, $
         , 'menu_type':null
         , 'goal_name':''
         , 'actives':'Y'
+        , 'factory_id':null
         , 'create_date':''
         , 'update_date':''
     };
@@ -83,8 +95,8 @@ angular.module('e-homework').controller('UpdateMGController', function($scope, $
                         ,{'type':'ข้อมูลฝูงโค','name':'โคลด'}
                         ,{'type':'ข้อมูลฝูงโคพ่อพันธุ์','name':'โคเพิ่ม'}
                         ,{'type':'ข้อมูลฝูงโคพ่อพันธุ์','name':'โคลด'}
-                        ,{'type':'การสูญเสียในกระบวนการ','name':'น้ำนมที่รวบรวม'}
-                        ,{'type':'การสูญเสียในกระบวนการ','name':'การแปรรูปน้ำนม'}
+                        ,{'type':'การสูญเสียในกระบวนการ','name':'การแปรรูปน้ำนม (รวบรวม)'}
+                        ,{'type':'การสูญเสียในกระบวนการ','name':'การแปรรูปน้ำนม (หักลบ)'}
                     ];
 
     $scope.SubGoalTypeList1 = [{'type':'ข้อมูลฝูงโค','name':'โคเพิ่ม'}
@@ -92,8 +104,8 @@ angular.module('e-homework').controller('UpdateMGController', function($scope, $
                         
                     ];
 
-    $scope.MenuTypeList = [{'type':'DBI', 'value':'บริการสัตวแพทย์', 'name' : 'บริการสัตวแพทย์'}
-                            ,{'type':'DBI', 'value':'ผสมเทียม', 'name' : 'ผสมเทียม'}
+    $scope.MenuTypeList = [{'type':'DBI', 'value':'บริการสัตวแพทย์', 'name' : 'บริการสัตวแพทย์และผสมเทียม'}
+                            // ,{'type':'DBI', 'value':'ผสมเทียม', 'name' : 'ผสมเทียม'}
                             ,{'type':'DBI', 'value':'แร่ธาตุ พรีมิกซ์ และอาหาร', 'name' : 'แร่ธาตุ พรีมิกซ์ และอาหาร'}
                             ,{'type':'DBI', 'value':'ผลิตน้ำเชื้อแช่แข็ง', 'name' : 'ผลิตน้ำเชื้อแช่แข็ง'}
                             ,{'type':'DBI', 'value':'จำหน่ายน้ำเชื้อแช่แข็ง', 'name' : 'จำหน่ายน้ำเชื้อแช่แข็ง'}
@@ -111,9 +123,12 @@ angular.module('e-homework').controller('UpdateMGController', function($scope, $
                             ,{'type':'II', 'value':'การสูญเสียในกระบวนการ', 'name' : 'การสูญเสียในกระบวนการ'}
                             ,{'type':'II', 'value':'การสูญเสียหลังกระบวนการ', 'name' : 'การสูญเสียหลังกระบวนการ'}
                             ,{'type':'II', 'value':'การสูญเสียรอจำหน่าย', 'name' : 'การสูญเสียรอจำหน่าย'}
-                            ,{'type':'II', 'value':'การสูญเสียในกระบวนการขนส่ง', 'name' : 'การสูญเสียในกระบวนการขนส่ง'}
+                            // ,{'type':'II', 'value':'การสูญเสียในกระบวนการขนส่ง', 'name' : 'การสูญเสียในกระบวนการขนส่ง'}
                         ];
+
+    $scope.loadFactoryList();
     if($scope.ID !== undefined && $scope.ID !== null){
+
         $scope.loadData('master-goal/get', $scope.ID);
     }
 

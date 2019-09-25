@@ -19,4 +19,9 @@ class ProductMilk extends \Illuminate\Database\Eloquent\Model {
         , 'factory_id'
     );
 
+    public function subProductMilkDetail()
+    {
+        return $this->hasMany('App\Model\SubProductMilk', 'product_milk_id');
+    }
+
 }

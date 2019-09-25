@@ -12,6 +12,7 @@ class MasterGoal extends \Illuminate\Database\Eloquent\Model {
         , 'sub_goal_type'
         , 'menu_type'
         , 'goal_name'
+        , 'factory_id'
         , 'actives'
         , 'create_date'
         , 'update_date'

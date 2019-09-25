@@ -30,6 +30,10 @@ angular.module('e-homework').controller('UpdatePMDController', function ($scope,
                     , 'agent' : result.data.DATA.Data.agent
                     , 'number_of_package' : result.data.DATA.Data.number_of_package
                     , 'amount' : result.data.DATA.Data.amount
+                    , 'amount_unit' : result.data.DATA.Data.amount_unit
+                    , 'unit' : result.data.DATA.Data.unit
+                    , 'taste' : result.data.DATA.Data.taste
+                    
                     , 'actives': 'Y'
 
                 };
@@ -76,7 +80,13 @@ angular.module('e-homework').controller('UpdatePMDController', function ($scope,
     }
 
     $scope.cancelUpdate = function () {
-        window.location.href = '#/product-milk-detail';
+        if($scope.Data.product_milk_id != undefined && $scope.Data.product_milk_id != null && $scope.Data.product_milk_id != ''){
+            window.location.href = '#/subproduct-milk/update/' + $scope.Data.product_milk_id;//'#/product-milk-detail';
+        }else{
+            // window.location.href = '#/subproduct-milk/update/' + $scope.ID;//'#/product-milk-detail';   
+            history.back(); 
+        }
+        
     }
 
 

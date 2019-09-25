@@ -1,7 +1,7 @@
 <?php
- //error_reporting(E_ERROR);
-    // error_reporting(E_ALL);
-    // ini_set('display_errors','On');
+ // error_reporting(E_ERROR);
+ //    error_reporting(E_ALL);
+ //    ini_set('display_errors','On');
 date_default_timezone_set("Asia/Bangkok");
 if (PHP_SAPI == 'cli-server') {
     // To help the built-in PHP dev server, check if the request was actually for

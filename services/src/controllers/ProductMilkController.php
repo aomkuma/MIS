@@ -32,12 +32,12 @@
                 
                 foreach ($_ProductMilkList as $k1 => $v1) {
                     // get all sub product milk by product milk id
-                    $_SubProductMilk = SubProductMilkService::getListByProductMilk($v1['id']);
+                    $_SubProductMilk = SubProductMilkService::getListByProductMilk($v1['id'], $actives);
                     $SubProductMilkList = [];
                     
                     foreach ($_SubProductMilk as $k2 => $v2) {
                         // get all product milk detail by sub product milk id
-                        $_ProductMilkDetail = ProductMilkDetailService::getListByParent($v2['id']);
+                        $_ProductMilkDetail = ProductMilkDetailService::getListByParent($v2['id'], $actives);
                         
                         foreach ($_ProductMilkDetail as $k3 => $v3) {
                             $arr = [];
@@ -180,4 +180,37 @@
                 return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
             }
         }
+
+        public function getSaleChanelList($request, $response, $args){
+            try{
+                $params = $request->getParsedBody();
+                $actives = $params['obj']['actives'];
+                
+                $_Data = ProductMilkService::getSaleChanelList($actives);
+
+                $this->data_result['DATA']['List'] = $_Data;
+                
+                return $this->returnResponse(200, $this->data_result, $response, false);
+                
+            }catch(\Exception $e){
+                return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+            }
+        }
+
+        public function updateSaleChanelData($request, $response, $args){
+            try{
+                $params = $request->getParsedBody();
+                $_Data = $params['obj']['Data'];
+                
+                $id = ProductMilkService::updateSaleChanelData($_Data);
+
+                $this->data_result['DATA']['Data'] = $id;
+                
+                return $this->returnResponse(200, $this->data_result, $response, false);
+                
+            }catch(\Exception $e){
+                return $this->returnSystemErrorResponse($this->logger, $this->data_result, $e, $response);
+            }
+        }
+
     }
