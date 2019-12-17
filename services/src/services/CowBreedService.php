@@ -59,12 +59,12 @@ class CowBreedService {
                         ->where("months", $months)
                         ->where("region_id", $region)
                         ->where("cow_breed_type_id", $type_id)
-                        ->where('office_approve_id', !$ckid)
+                        /*->where('office_approve_id', !$ckid)
                         ->where(function($query) use ($ckid) {
 
                             $query->where('office_approve_comment', $ckid);
                             $query->orWhere('office_approve_comment', '');
-                        })
+                        })*/
                         ->first()
                         ->toArray();
     }

@@ -13,7 +13,7 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session')); 
     $scope.$parent.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));      
     // console.log($scope.$parent.Menu);
-
+    console.log($scope.$parent.Menu);
 
     $scope.page_type = 'goal-mission';
     $scope.getMenu = function(action, menu_type){
@@ -98,6 +98,8 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
                 $scope.Data.price_value = parseFloat($scope.Data.price_value);
                 
                 $scope.changeGoalType();
+
+                $scope.checkMenu();
                 //find goal type
                 // $scope.findGoalType($scope.Data.goal_id);
             }
@@ -106,7 +108,7 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
 
     }
 
-    $scope.save = function(Data, AvgList){
+    $scope.save = function(Data, AvgList, SaveStatus){
         if($scope.totalAmount != $scope.Data.amount){
             alert('ผลรวมของจำนวนเฉลี่ยไม่เท่ากับจำนวนเป้ารายปี กรุณาตรวจสอบข้อมูล');
             return false;
@@ -115,7 +117,7 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
             alert('ผลรวมของมูลค่าเฉลี่ยไม่เท่ากับมูลค่าเป้ารายปี กรุณาตรวจสอบข้อมูล');
             return false;
         }
-        var params = {'Data' : Data, 'AvgList' : AvgList};
+        var params = {'Data' : Data, 'AvgList' : AvgList, 'SaveStatus' : SaveStatus};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('goal-mission/update', params).then(function(result){
             if(result.data.STATUS == 'OK'){
@@ -224,6 +226,8 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
         for(var i = 0; i < loop; i++){
             if($scope.avgList[i].amount != null){
                 $scope.totalAmount += $scope.avgList[i].amount;
+            }else{
+                $scope.avgList[i].amount = 0;
             }
         }
         $scope.totalAmount = parseFloat($scope.totalAmount.toFixed(2));
@@ -236,6 +240,8 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
         for(var i = 0; i < loop; i++){
             if($scope.avgList[i].addon_amount != null){
                 $scope.totalAddonAmount += $scope.avgList[i].addon_amount;
+            }else{
+                $scope.avgList[i].addon_amount = 0;
             }
         }
         $scope.totalAddonAmount = parseFloat($scope.totalAddonAmount.toFixed(2));
@@ -248,6 +254,8 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
         for(var i = 0; i < loop; i++){
             if($scope.avgList[i].price_value != null){
                 $scope.totalPriceValue += $scope.avgList[i].price_value;    
+            }else{
+                $scope.avgList[i].price_value = 0;
             }
         }
         $scope.totalPriceValue = parseFloat($scope.totalPriceValue.toFixed(2));
@@ -297,6 +305,16 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
         // console.log($scope.avgList);
     }
 
+    // $scope. checkZero = function(data){
+    //     console.log(data);
+    //     if(data == 0){
+    //         data = null;
+    //     }else{
+    //         data = 0;
+    //     }
+    //     // data == 0? data = null: data = data;
+    // }
+
     $scope.getMonthYearText = function(dateStr){
         if(dateStr != null && dateStr != '' && dateStr != '0000-00-00'){
             return getMonthYearText(dateStr);
@@ -313,6 +331,29 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
                 $scope.MenuType.push($scope.MenuTypeList[i]);
             }
         }   
+    }
+
+    $scope.checkMenu = function(){
+        $scope.MenuType = [];
+        console.log($scope.Data.goal_type);
+        for(var i = 0; i < $scope.$parent.Menu.length; i++){
+            if($scope.$parent.Menu[i].menu_name_th == 'ข้อมูลกิจการโคนม' && $scope.Data.goal_type == 'DBI'){
+                for(var j = 0; j < $scope.$parent.Menu[i].sub_menu.length; j++){
+                    console.log($scope.$parent.Menu[i].sub_menu[j].menu_name_th);
+                    console.log($filter('MenuTypeFilter')($scope.MenuTypeList, $scope.$parent.Menu[i].sub_menu[j].menu_name_th));
+                    if($filter('MenuTypeFilter')($scope.MenuTypeList, $scope.$parent.Menu[i].sub_menu[j].menu_name_th)){
+                        $scope.MenuType.push({'type':'DBI', 'value':$scope.$parent.Menu[i].sub_menu[j].menu_name_th, 'name' : $scope.$parent.Menu[i].sub_menu[j].menu_name_th});
+                    }
+                }
+            }
+            else if($scope.$parent.Menu[i].menu_name_th == 'ข้อมูลอุตสาหกรรม' && $scope.Data.goal_type == 'II'){
+                for(var j = 0; j < $scope.$parent.Menu[i].sub_menu.length; j++){
+                    if($filter('MenuTypeFilter')($scope.MenuTypeList, $scope.$parent.Menu[i].sub_menu[j].menu_name_th)){
+                        $scope.MenuType.push({'type':'II', 'value':$scope.$parent.Menu[i].sub_menu[j].menu_name_th, 'name' : $scope.$parent.Menu[i].sub_menu[j].menu_name_th});
+                    }
+                }
+            }
+        }
     }
 
     var curDate = new Date();
@@ -339,6 +380,7 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
     $scope.avgIDList = [];
     $scope.historyList = [];
 
+    $scope.ShowMenuTypeList = [];
     $scope.MenuTypeList = [{'type':'DBI', 'value':'บริการสัตวแพทย์', 'name' : 'บริการสัตวแพทย์และผสมเทียม'}
                             // ,{'type':'DBI', 'value':'ผสมเทียม', 'name' : 'ผสมเทียม'}
                             ,{'type':'DBI', 'value':'แร่ธาตุ พรีมิกซ์ และอาหาร', 'name' : 'แร่ธาตุ พรีมิกซ์ และอาหาร'}
@@ -379,5 +421,6 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
     }
 
     $scope.loadSaleChanel();
+    $scope.checkMenu();
 
 });

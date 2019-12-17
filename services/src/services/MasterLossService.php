@@ -117,6 +117,19 @@ class MasterLossService {
                         ->get();
     }
 
+    public static function loadListByName($factory_id, $loss_id = '') {
+        return MasterLoss::join('loss_mapping', 'loss_mapping.loss_id', '=', 'master_loss.id')
+                        ->where('loss_mapping.factory_id', $factory_id)
+                        ->where(function($query) use ($loss_id) {
+                            if (!empty($loss_id)) {
+                                $query->where('loss_mapping.loss_id', $loss_id);
+                            }
+                        })
+                        ->groupBy('loss_mapping.loss_id')
+                        ->orderBy("master_loss.update_date", 'DESC')
+                        ->get();
+    }
+
     public static function getMappingList($factory_id, $menu_type = '') {
         return LossMapping::select("loss_mapping.*", 'master_loss.name')
                         ->join('master_loss', 'loss_mapping.loss_id', '=', 'master_loss.id')

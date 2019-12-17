@@ -17,7 +17,7 @@
 				<option value="">กรุณาเลือก..</option>
 				<option value="ฝูงโค 1962">ฝูงโค 1962</option>
 				<option value="ฝูงโคฟาร์ม 3 (ฝึกอบรม)">ฝูงโคฟาร์ม 3 (ฝึกอบรม)</option>
-				<option value="ฝูงโคพ่อพันธุ์">ฝูงโคพ่อพันธุ์</option>
+				<!-- <option value="ฝูงโคพ่อพันธุ์">ฝูงโคพ่อพันธุ์</option> -->
 			</select>
 		</div>
 		<div class="field-label col-lg-1 col-md-1 col-sm-12 col-xs-12">
@@ -37,7 +37,7 @@
 				</select>
 		</div>
 		<div class="field-label col-lg-1 col-md-1 col-sm-12 col-xs-12">
-			ปี
+			ปีงบประมาณ
 		</div>
 		<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 			<select name="Year" class="form-control" ng-model="Sperm.years" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
@@ -54,6 +54,7 @@
 			</button>
 		</div>
 	</div>
+</div>
 	<hr>
 	<div ng-show="Search || SpermDetailList.length > 0">
 		<div class="row form-group">

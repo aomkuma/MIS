@@ -94,11 +94,11 @@
 				<td rowspan="{{$index==0?4:0}}" ng-show="$index==0">{{data.MainItem}}</td>
 				<td>{{sub_data.SubItem}}</td>
 				<td>{{sub_data.CurrentUnit}}</td>
-				<td>{{numberFormatComma(sub_data.CurrentPercentage)}}</td>
-				<td>{{sub_data.BeforeUnit}}</td>
-				<td>{{numberFormatComma(sub_data.BeforePercentage)}}</td>
-				<td>{{sub_data.DiffUnit}}</td>
-				<td>{{numberFormatComma(sub_data.DiffPercentage)}}</td>
+				<td class="text-right">{{numberFormatComma(sub_data.CurrentPercentage)}}</td>
+				<td class="text-right">{{sub_data.BeforeUnit}}</td>
+				<td class="text-right">{{numberFormatComma(sub_data.BeforePercentage)}}</td>
+				<td class="text-right">{{sub_data.DiffUnit}}</td>
+				<td class="text-right">{{numberFormatComma(sub_data.DiffPercentage)}}</td>
 				<td>{{data.CreateDate}}</td>
 				<td>{{data.ApproveDate}}</td>
 				<td>{{data.Status}}</td>

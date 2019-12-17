@@ -106,55 +106,62 @@
 				<h3>{{main_data.factory_name}}</h3>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-lg-8 col-lg-offset-2">
-				<table class="table table-bordered table-striped">
-					<thead>
-						<tr>	
-							<td>รายการ</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="data in main_data.ProductMilkList">
-							<td>
-								{{data.name}}<br>
-								<table  class="table" ng-repeat="data1 in data.SubProductMilkList">
-									<tr>
-										<td colspan="2">
-											&nbsp;&nbsp;&nbsp;{{data1.product_character + ' ' + data1.name}}<br>
-											<table class="table" ng-repeat="data2 in data1.ProductMilkDetailList">
-												<tr>
-													<td>
-														&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{data2.name + ' ' + data2.number_of_package + ' ' + data2.unit + ' ' + data2.amount + ' ' + data2.amount_unit + ' ' + data2.taste}}<br>
-													</td>
-													<td>
-														<button class="btn btn-danger" ng-click="removeData(data2.id)">ลบรายการ</button>
-													</td>
-												</tr>
-											</table>
-										</td>
-										<td>&nbsp;</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<!-- <tr>
-							<td>นมพาสเจอร์ไรส์</td>
-							<td>&nbsp;</td>
-						</tr>
-						<tr>
-							<td>ขนาด 200 ซีซี (1x36)</td>
-							<td>&nbsp;</td>
-						</tr>
-						<tr>
-							<td>รสจืด</td>
-							<td>
-								<button class="btn btn-danger">ลบรายการ</button>
-							</td>
-						</tr> -->
-						
-					</tbody>
-				</table>
+		<div  ng-repeat="loss_data in main_data.MasterLossList">
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<h4>{{loss_data.name}}</h4>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>	
+								<td>รายการ</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="data in loss_data.ProductMilkList">
+								<td>
+									{{data.name}}<br>
+									<table  class="table" ng-repeat="data1 in data.SubProductMilkList">
+										<tr>
+											<td colspan="2">
+												&nbsp;&nbsp;&nbsp;{{data1.product_character + ' ' + data1.name}}<br>
+												<table class="table" ng-repeat="data2 in data1.ProductMilkDetailList">
+													<tr>
+														<td>
+															&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{data2.name + ' ' + data2.number_of_package + ' ' + data2.unit + ' ' + data2.amount + ' ' + data2.amount_unit + ' ' + data2.taste}}<br>
+														</td>
+														<td>
+															<button class="btn btn-danger" ng-click="removeData(data2.id)">ลบรายการ</button>
+														</td>
+													</tr>
+												</table>
+											</td>
+											<td>&nbsp;</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<!-- <tr>
+								<td>นมพาสเจอร์ไรส์</td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>ขนาด 200 ซีซี (1x36)</td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>รสจืด</td>
+								<td>
+									<button class="btn btn-danger">ลบรายการ</button>
+								</td>
+							</tr> -->
+							
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -56,7 +56,7 @@
 				ด้านกิจการ
 			</div>
 			<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-				<select class="form-control" ng-model="Data.goal_type" ng-change="changeGoalType()">
+				<select class="form-control" ng-model="Data.goal_type" ng-change="checkMenu()">
 					<option value="">กรุณาเลือก..</option>
 					<option value="DBI">ข้อมูลกิจการโคนม</option>
 					<option value="II">ข้อมูลอุตสาหกรรม</option>
@@ -190,13 +190,13 @@
 					<span class="pull-right">{{getMonthYearText(data.avg_date)}}</span>
 				</div>
 				<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-					<input type="number" class="form-control" ng-model="data.amount" required="required" ng-keyup="reCalcAmount()">
+					<input type="number" class="form-control" ng-model="data.amount" required="required" ng-keyup="reCalcAmount()" ng-focus="data.amount == 0? data.amount = null: data.amount" ng-blur="data.amount == 0? data.amount = null: data.amount">
 				</div>
 				<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" ng-show="Data.menu_type == 'ข้อมูลการขาย'">
-					<input type="number" class="form-control" ng-model="data.addon_amount" required="required" ng-keyup="reCalcAddonAmount()">
+					<input type="number" class="form-control" ng-model="data.addon_amount" required="required" ng-keyup="reCalcAddonAmount()" ng-focus="data.addon_amount == 0? data.addon_amount = null: data.addon_amount" ng-blur="data.addon_amount == 0? data.addon_amount = null: data.addon_amount">
 				</div>
 				<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-					<input type="number" class="form-control" ng-model="data.price_value" required="required" ng-keyup="reCalcPrice()">
+					<input type="number" class="form-control" ng-model="data.price_value" required="required" ng-keyup="reCalcPrice()" ng-focus="data.price_value == 0? data.price_value = null: data.price_value" ng-blur="data.price_value == 0? data.price_value = null: data.price_value">
 				</div>
 			</div>
 			<div class="row form-group">
@@ -222,9 +222,13 @@
 					<span class="glyphicon glyphicon-arrow-left"></span> 
 					กลับหน้าหลัก
 				</button>
-				<button class="btn btn-primary" ng-click="save(Data, avgList)" ng-disabled="!form_data.$valid || Data.editable == 'N'"><!-- || !AVGAction-->
+				<button class="btn btn-primary" ng-click="save(Data, avgList, 'DRAFT')" ng-disabled="!form_data.$valid || Data.editable == 'N'"><!-- || !AVGAction-->
 					<span class="glyphicon glyphicon-floppy-save"></span> 
 					บันทึก
+				</button>
+				<button class="btn btn-info" ng-click="save(Data, avgList, 'SEND')" ng-disabled="!form_data.$valid || Data.editable == 'N'"><!-- || !AVGAction-->
+					<span class="glyphicon glyphicon-floppy-save"></span> 
+					ยืนยันข้อมูล
 				</button>
 
 				<button class="btn btn-success" ng-click="approve(Data, 'dep')" 

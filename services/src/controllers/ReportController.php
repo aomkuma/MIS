@@ -61,6 +61,7 @@ class ReportController extends Controller {
             $catch_result = \PHPExcel_Settings::setCacheStorageMethod($cacheMethod);
 
             $objPHPExcel = new PHPExcel();
+            $commentarr = [];
 
             switch ($condition['DisplayType']) {
                 case 'annually' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม ปี ' . ($condition['YearFrom'] + 543);
@@ -168,6 +169,7 @@ class ReportController extends Controller {
                             $sum[$key] += $itemdata['Amount'];
                         }
                     }
+
                     $objPHPExcel->getActiveSheet()->setCellValue($highestColumm . $con_row, $item['Summary']);
                     if ($item['Unit'] == 'บาท') {
 
@@ -214,6 +216,7 @@ class ReportController extends Controller {
                 'name' => 'AngsanaUPC',
                 'size' => '16'
         ));
+
 //        $objPHPExcel->getDefaultStyle()
 //                ->applyFromArray($styleArray);
         // header style
@@ -233,8 +236,10 @@ class ReportController extends Controller {
         $objPHPExcel->getActiveSheet()->getStyle('D3:' . $highestColumm . '3')->getFont()->setSize(12);
 
         $objPHPExcel->getActiveSheet()->getStyle('D3:' . $highestColumm . '3')->getAlignment()->setWrapText(true);
+
         $objPHPExcel->getActiveSheet()->getStyle('B3:' . $highestColumm . $con_row)->getFont()->setSize(12);
         $objPHPExcel->getActiveSheet()->getStyle($highestColumm . '3')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
         $objPHPExcel->getActiveSheet()
                 ->getStyle("A2:" . $highestColumm . "3")
                 ->applyFromArray(array(
@@ -248,7 +253,8 @@ class ReportController extends Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(5);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(5);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D:' . $highestColumm)->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
+        // exit;
         $objPHPExcel->getActiveSheet()->getStyle('A1:' . $highestColumm . '3')->applyFromArray(
                 array(
                     'fill' => array(
@@ -257,9 +263,11 @@ class ReportController extends Controller {
                     )
                 )
         );
+
         $objPHPExcel->getActiveSheet()->getStyle('A1:' . $highestColumm . ($con_row - 1))
                 ->getNumberFormat()
                 ->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+
         $objPHPExcel->getActiveSheet()->getStyle('A1:' . $highestColumm . ($con_row - 1))->applyFromArray(
                 array(
                     'borders' => array(
@@ -275,6 +283,7 @@ class ReportController extends Controller {
         $row = $con_row + 1;
         $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), 'หมายเหตุ :');
         $row++;
+
         foreach ($comment as $item) {
             foreach ($item as $com) {
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . ($row), ($com['cooperative_name']));
@@ -293,6 +302,7 @@ class ReportController extends Controller {
                 $row++;
             }
         }
+
         return $objPHPExcel;
     }
 

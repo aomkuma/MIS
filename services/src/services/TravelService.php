@@ -124,7 +124,7 @@ class TravelService {
 
     public static function getDetailmonth($years, $month, $id) {
         $ckid = null;
-        return Travel::select(DB::raw("SUM(adult_pay) AS apay")
+        return Travel::select(/*DB::raw("SUM(adult_pay) AS apay")
                                 , DB::raw("SUM(`child_pay`) AS cpay")
                                 , DB::raw("SUM(`student_pay`) AS spay")
                                 , DB::raw("SUM(`adult_price`) AS p_adult")
@@ -132,22 +132,25 @@ class TravelService {
                                 , DB::raw("SUM(`student_price`) AS p_student")
                                 , DB::raw("SUM(`adult_except`) AS a_except")
                                 , DB::raw("SUM(`child_except`) AS c_except")
-                                , DB::raw("SUM(`student_except`) AS s_except"))
+                                , DB::raw("SUM(`student_except`) AS s_except")*/
+                                DB::raw("SUM(`total_person_pay`) AS amount")
+                            )
                         ->join("travel_detail", 'travel_detail.travel_id', '=', 'travel.id')
+                        ->join("travel_item", 'travel_item.travel_detail_id', '=', 'travel_detail.id')
                         ->where("years", $years)
-                        ->where('office_approve_id', !$ckid)
+                        /*->where('office_approve_id', !$ckid)
                         ->where(function($query) use ($ckid) {
 
                             $query->where('office_approve_comment', $ckid);
                             $query->orWhere('office_approve_comment', '');
-                        })
+                        })*/
                         ->where("months", $month)
                         ->first()
                         ->toArray();
     }
 
     public static function getDetailyear($years, $region) {
-        return Travel::select(DB::raw("SUM(adult_pay) AS apay")
+        return Travel::select(/*DB::raw("SUM(adult_pay) AS apay")
                                 , DB::raw("SUM(`child_pay`) AS cpay")
                                 , DB::raw("SUM(`student_pay`) AS spay")
                                 , DB::raw("SUM(`adult_price`) AS p_adult")
@@ -155,10 +158,13 @@ class TravelService {
                                 , DB::raw("SUM(`student_price`) AS p_student")
                                 , DB::raw("SUM(`adult_except`) AS a_except")
                                 , DB::raw("SUM(`child_except`) AS c_except")
-                                , DB::raw("SUM(`student_except`) AS s_except"))
+                                , DB::raw("SUM(`student_except`) AS s_except")*/
+                            DB::raw("SUM(`total_person_pay`) AS amount")
+                        )
                         ->join("travel_detail", 'travel_detail.travel_id', '=', 'travel.id')
+                        ->join("travel_item", 'travel_item.travel_detail_id', '=', 'travel_detail.id')
                         ->where("years", $years)
-                        ->where("region_id", $region)
+                        // ->where("region_id", $region)
                         ->first()
                         ->toArray();
     }

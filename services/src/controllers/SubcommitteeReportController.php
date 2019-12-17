@@ -23,6 +23,7 @@ use App\Service\LostInProcessService;
 use App\Service\LostOutProcessService;
 use App\Service\LostWaitSaleService;
 use App\Service\FactoryService;
+use App\Service\MaterialService;
 use PHPExcel;
 
 class SubcommitteeReportController extends Controller {
@@ -153,7 +154,9 @@ class SubcommitteeReportController extends Controller {
     private function generatesheet1($objPHPExcel, $condition, $header) {
         $objPHPExcel->getActiveSheet()->setTitle("สรุป");
 
-        $mastername = ['บริการสัตวแพทย์', 'ผสมเทียม', 'ผลิตน้ำนม', 'ผลิตน้ำเชื้อแช่แข็ง', 'แร่ธาตุ พรีมิกซ์ และอาหาร', 'ปัจจัยการเลี้ยงโค', 'ฝึกอบรม', 'จำหน่ายน้ำเชื้อแช่แข็ง', 'ข้อมูลการผลิต', 'ข้อมูลการขาย', 'ข้อมูลรับซื้อน้ำนม', 'ข้อมูลจำหน่ายน้ำนม'];
+        // $mastername = ['การบริการสัตวแพทย์', 'การบริการผสมเทียม', 'รายได้จากน้ำเชื้อแช่แข็ง', 'ผลิตน้ำเชื้อแช่แข็ง', 'ปริมาณการจำหน่ายแร่ธาตุ', 'ปัจจัยการเลี้ยงโค', 'การฝึกอบรม'/*, 'รายได้จากน้ำเชื้อแช่แข็ง'*/, 'ข้อมูลการผลิต', 'ข้อมูลการขาย', 'ปริมาณการรับซื้อน้ำนม', 'ข้อมูลการจำหน่ายน้ำนม'];
+
+        $mastername = ['การบริการสัตวแพทย์', 'การบริการผสมเทียม', 'การผลิตน้ำนมของฟาร์ม อ.ส.ค.', 'ปริมาณการจำหน่ายแร่ธาตุ', 'ปริมาณการจำหน่ายอาหารสัตว์อื่นๆ', 'การฝึกอบรม', 'รายได้จากน้ำเชื้อแช่แข็ง', 'รายได้อื่นๆ จากการจำหน่ายไนโตรเจนเหลวและปัจจัยการเลี้ยงโคนม', 'บริการชมฟาร์มโคนมฯ', 'ปริมาณการรับซื้อน้ำนม', 'ปริมาณน้ำนมดิบเข้ากระบวนการผลิต', 'ปริมาณการผลิตผลิตภัณฑ์นม', 'ปริมาณการจำหน่าย'];
 
 
 
@@ -178,7 +181,48 @@ class SubcommitteeReportController extends Controller {
             $data = [];
 
             foreach ($mastername as $item) {
-                $mastes = MasterGoalService::getList('Y', $item);
+                /*'การบริการสัตวแพทย์', 'การบริการผสมเทียม', 'การผลิตน้ำนมของฟาร์ม อ.ส.ค.', 'ปริมาณการจำหน่ายแร่ธาตุ', 'ปริมาณการจำหน่ายอาหารสัตว์อื่นๆ', 'การฝึกอบรม', 'รายได้จากน้ำเชื้อแช่แข็ง', 'รายได้อื่นๆ จากการจำหน่ายไนโตรเจนเหลวและปัจจัยการเลี้ยงโคนม', 'บริการชมฟาร์มโคนมฯ', 'ปริมาณการรับซื้อน้ำนม', 'ปริมาณน้ำนมดิบเข้ากระบวนการผลิต', 'ปริมาณการผลิตผลิตภัณฑ์นม', 'ปริมาณการจำหน่าย'*/
+                if($item == 'การบริการสัตวแพทย์'){
+                    $item_name = 'บริการสัตวแพทย์';
+                }
+                else if($item == 'การบริการผสมเทียม'){
+                    $item_name = 'บริการสัตวแพทย์';
+                }
+                else if($item == 'การผลิตน้ำนมของฟาร์ม อ.ส.ค.'){
+                    $item_name = 'ข้อมูลฝูงโค';
+                }
+                else if($item == 'ปริมาณการจำหน่ายแร่ธาตุ'){
+                    $item_name = 'แร่ธาตุ พรีมิกซ์ และอาหาร';
+                }
+                else if($item == 'ปริมาณการจำหน่ายอาหารสัตว์อื่นๆ'){
+                    $item_name = 'แร่ธาตุ พรีมิกซ์ และอาหาร';
+                }
+                else if($item == 'การฝึกอบรม'){
+                    $item_name = 'ฝึกอบรม';
+                }
+                else if($item == 'รายได้จากน้ำเชื้อแช่แข็ง'){
+                    $item_name = 'จำหน่ายน้ำเชื้อแช่แข็ง';
+                }
+                else if($item == 'รายได้อื่นๆ จากการจำหน่ายไนโตรเจนเหลวและปัจจัยการเลี้ยงโคนม'){
+                    $item_name = 'วัสดุผสมเทียมและอื่นๆ';
+                }
+                else if($item == 'บริการชมฟาร์มโคนมฯ'){
+                    $item_name = 'ท่องเที่ยว';
+                }
+                else if($item == 'ปริมาณการรับซื้อน้ำนม'){
+                    $item_name = 'ข้อมูลรับซื้อน้ำนม';
+                }
+                else if($item == 'ปริมาณน้ำนมดิบเข้ากระบวนการผลิต'){
+                    $item_name = 'ข้อมูลจำหน่ายน้ำนม';
+                }
+                else if($item == 'ปริมาณการผลิตผลิตภัณฑ์นม'){
+                    $item_name = 'ข้อมูลการผลิต';
+                }
+                else if($item == 'ปริมาณการจำหน่าย'){
+                    $item_name = 'ข้อมูลการขาย';
+                }
+
+                $mastes = MasterGoalService::getList('Y', $item_name);
                 $detail['name'] = $item;
 
                 $detail['data'] = [];
@@ -191,10 +235,17 @@ class SubcommitteeReportController extends Controller {
                     foreach ($monthList as $i => $monthloop) {
                         $avg = GoalMissionService::getMissionavg($mission[0]['id'], $year - $yearlist[$i], $monthloop);
                         switch ($itemmaster['menu_type']) {
-                            case 'ผสมเทียม' :
-                                $actually = InseminationService::getDetailmonth($year - $yearlist[$i], $monthloop, 3);
+
+                            case 'รายได้อื่นๆ จากการจำหน่ายไนโตรเจนเหลวและปัจจัยการเลี้ยงโคนม' :
+                                $actually = MaterialService::getDetailmonth($year - $yearlist[$i], $monthloop, 3);
+
+                                $actually_2 = CowBreedService::getDetailmonth($year - $yearlist[$i], $monthloop, $itemmaster['id'], 3);
+                                $actually['amount'] += $actually_2['amount'];
                                 break;
-                            case 'บริการสัตวแพทย์' :
+                            case 'การบริการผสมเทียม' :
+                                $actually = VeterinaryService::getDetailmonthInsemination($year - $yearlist[$i], $monthloop, 3);
+                                break;
+                            case 'การบริการสัตวแพทย์' :
                                 $actually = VeterinaryService::getDetailmonth($year - $yearlist[$i], $monthloop, $itemmaster['id'], 3);
 
                                 break;
@@ -202,7 +253,7 @@ class SubcommitteeReportController extends Controller {
                                 $actually = SpermService::getDetailmonth($year - $yearlist[$i], $monthloop, $itemmaster['id'], 3);
 
                                 break;
-                            case 'ท่องเที่ยว' :
+                            case 'บริการชมฟาร์มโคนมฯ' :
                                 $actually = TravelService::getDetailmonth($year - $yearlist[$i], $monthloop, $itemmaster['id']);
 
                                 break;
@@ -210,29 +261,33 @@ class SubcommitteeReportController extends Controller {
                                 $actually = CowBreedService::getDetailmonth($year - $yearlist[$i], $monthloop, $itemmaster['id'], 3);
 
                                 break;
-                            case 'ข้อมูลฝูงโค' :
+                            case 'การผลิตน้ำนมของฟาร์ม อ.ส.ค.' :
                                 $actually = CowGroupService::getDetailmonth($year - $yearlist[$i], $monthloop, $itemmaster['id'], 3);
                                 break;
-                            case 'ฝึกอบรม' :
+                            case 'การฝึกอบรม' :
                                 $actually = TrainingCowBreedService::getDetailmonth($year - $yearlist[$i], $monthloop, $itemmaster['id'], 3);
                                 break;
-                            case 'แร่ธาตุ พรีมิกซ์ และอาหาร' :
+                            case 'ปริมาณการจำหน่ายแร่ธาตุ' :
                                 $actually = MineralService::getDetailmonth($year - $yearlist[$i], $monthloop, $itemmaster['id'], 3);
 
                                 break;
-                            case 'จำหน่ายน้ำเชื้อแช่แข็ง' :
+                             case 'ปริมาณการจำหน่ายอาหารสัตว์อื่นๆ' :
+                                $actually = MineralService::getDetailmonthFood($year - $yearlist[$i], $monthloop, $itemmaster['id'], 3);
+
+                                break;
+                            case 'รายได้จากน้ำเชื้อแช่แข็ง' :
                                 $actually = SpermSaleService::getDetailmonth($year - $yearlist[$i], $monthloop, $itemmaster['id'], 3);
                                 break;
-                            case 'ข้อมูลการผลิต' :
+                            case 'ปริมาณการผลิตผลิตภัณฑ์นม' :
                                 $actually = ProductionInfoService::getDetailList2($year - $yearlist[$i], $monthloop);
                                 break;
-                            case 'ข้อมูลการขาย' :
+                            case 'ปริมาณการจำหน่าย' :
                                 $actually = ProductionSaleInfoService::getDetailList2($year - $yearlist[$i], $monthloop);
                                 break;
-                            case 'ข้อมูลรับซื้อน้ำนม' :
+                            case 'ปริมาณการรับซื้อน้ำนม' :
                                 $actually = MBIService::getListMBIreoprt2($year - $yearlist[$i], $monthloop);
                                 break;
-                            case 'ข้อมูลจำหน่ายน้ำนม' :
+                            case 'ข้อมูลการจำหน่ายน้ำนม' :
                                 $actually = MSIService::getListMSIreoprt2($year - $yearlist[$i], $monthloop);
                                 break;
 
@@ -240,7 +295,9 @@ class SubcommitteeReportController extends Controller {
                         }
 
                         $detail2['mission'] = $itemmaster['goal_name'];
-                        $detail2['unit'] = $mission[0]['unit'];
+                        if(!empty($mission[0]['unit'])){
+                            $detail2['unit'] = $mission[0]['unit'];
+                        }
                         $detail2['target'] += $avg[0]['amount'];
                         $detail2['actual'] += $actually['amount'];
                         if ($detail2['target'] > 0) {
@@ -271,31 +328,96 @@ class SubcommitteeReportController extends Controller {
 
 
             foreach ($mastername as $key => $item) {
-                $mastes = MasterGoalService::getList('Y', $item);
+
+                $sub_goal_type_arr = [];
+                if($item == 'การบริการสัตวแพทย์'){
+                    $item_name = 'บริการสัตวแพทย์';
+                }
+                else if($item == 'การบริการผสมเทียม'){
+                    $item_name = 'บริการสัตวแพทย์';
+                }
+                else if($item == 'การผลิตน้ำนมของฟาร์ม อ.ส.ค.'){
+                    $item_name = 'ข้อมูลฝูงโค';
+                }
+                else if($item == 'ปริมาณการจำหน่ายแร่ธาตุ'){
+                    $item_name = 'แร่ธาตุ พรีมิกซ์ และอาหาร';
+                    $sub_goal_type_arr = ['พรีมิกซ์','แร่ธาตุ'];
+                }
+                else if($item == 'ปริมาณการจำหน่ายอาหารสัตว์อื่นๆ'){
+                    $item_name = 'แร่ธาตุ พรีมิกซ์ และอาหาร';
+                    $sub_goal_type_arr = ['อาหาร'];
+                }
+                else if($item == 'การฝึกอบรม'){
+                    $item_name = 'ฝึกอบรม';
+                }
+                else if($item == 'รายได้จากน้ำเชื้อแช่แข็ง'){
+                    $item_name = 'จำหน่ายน้ำเชื้อแช่แข็ง';
+                }
+                else if($item == 'รายได้อื่นๆ จากการจำหน่ายไนโตรเจนเหลวและปัจจัยการเลี้ยงโคนม'){
+                    $item_name = 'วัสดุผสมเทียมและอื่นๆ';
+                }
+                else if($item == 'บริการชมฟาร์มโคนมฯ'){
+                    $item_name = 'ท่องเที่ยว';
+                }
+                else if($item == 'ปริมาณการรับซื้อน้ำนม'){
+                    $item_name = 'ข้อมูลรับซื้อน้ำนม';
+                }
+                else if($item == 'ปริมาณน้ำนมดิบเข้ากระบวนการผลิต'){
+                    $item_name = 'ข้อมูลจำหน่ายน้ำนม';
+                }
+                else if($item == 'ปริมาณการผลิตผลิตภัณฑ์นม'){
+                    $item_name = 'ข้อมูลการผลิต';
+                }
+                else if($item == 'ปริมาณการจำหน่าย'){
+                    $item_name = 'ข้อมูลการขาย';
+                }
+
+                $mastes = MasterGoalService::getList('Y', $item_name, [], '', '', $sub_goal_type_arr);
                 // $detail['name'] = $item;
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . (6 + $row), ($position + $key) . '. ' . $item);
                 $objPHPExcel->getActiveSheet()->getStyle('A' . (6 + $row))->getFont()->setSize(14);
                 $objPHPExcel->getActiveSheet()->getStyle('A' . (6 + $row))->getFont()->setBold(true);
                 // $row++;
 //                $detail['data'] = [];
+                $detail2 = [];
+                $actually = [];
                 foreach ($mastes as $keyitem => $itemmaster) {
+
                     $subposition = 1;
                     $mission = GoalMissionService::getMission($itemmaster['id'], 3, $condition['YearTo']);
-
                     $avg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $condition['MonthFrom']);
-                    switch ($itemmaster['menu_type']) {
-                        case 'ผสมเทียม' :
-                            $actually = InseminationService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], 3);
-                            break;
-                        case 'บริการสัตวแพทย์' :
-                            $actually = VeterinaryService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
+                    switch (/*$itemmaster['menu_type']*/$item) {
 
+                        case 'รายได้อื่นๆ จากการจำหน่ายไนโตรเจนเหลวและปัจจัยการเลี้ยงโคนม' :
+                                $actually = MaterialService::getDetailmonth($condition['YearTo'], $condition['MonthFrom']);
+
+                                $actually_2 = CowBreedService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
+                                $actually['amount'] += $actually_2['amount'];
+                                break;
+                        case 'การบริการผสมเทียม' :
+                            if(empty($actually)){
+                                $actually = VeterinaryService::getDetailmonthInsemination($condition['YearTo'], $condition['MonthFrom'], 3);
+                                $this->logger->info('การบริการผสมเทียม');
+                                $this->logger->info($actually['amount']);
+                            }else{
+                                $actually['amount'] = 0;
+                            }
+                            
+                            break;
+                        case 'การบริการสัตวแพทย์' :
+                            if(empty($actually)){
+                                $actually = VeterinaryService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
+                                $this->logger->info('การบริการสัตวแพทย์');
+                                $this->logger->info($actually['amount']);
+                            }else{
+                                $actually['amount'] = 0;
+                            }
                             break;
                         case 'ผลิตน้ำเชื้อแช่แข็ง' :
                             $actually = SpermService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
 
                             break;
-                        case 'ท่องเที่ยว' :
+                        case 'บริการชมฟาร์มโคนมฯ' :
                             $actually = TravelService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id']);
 
                             break;
@@ -303,37 +425,50 @@ class SubcommitteeReportController extends Controller {
                             $actually = CowBreedService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
 
                             break;
-                        case 'ข้อมูลฝูงโค' :
+                        case 'การผลิตน้ำนมของฟาร์ม อ.ส.ค.' :
                             $actually = CowGroupService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
                             break;
-                        case 'ฝึกอบรม' :
+                        case 'การฝึกอบรม' :
                             $actually = TrainingCowBreedService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
                             break;
-                        case 'แร่ธาตุ พรีมิกซ์ และอาหาร' :
-                            $actually = MineralService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
+                        case 'ปริมาณการจำหน่ายแร่ธาตุ' :
+                                $actually = MineralService::getDetailmonth($year - $yearlist[$i], $monthloop, $itemmaster['id'], 3);
+
+                                break;
+                         case 'ปริมาณการจำหน่ายอาหารสัตว์อื่นๆ' :
+                            $actually = MineralService::getDetailmonthFood($year - $yearlist[$i], $monthloop, $itemmaster['id'], 3);
 
                             break;
-                        case 'จำหน่ายน้ำเชื้อแช่แข็ง' :
+                        case 'รายได้จากน้ำเชื้อแช่แข็ง' :
                             $actually = SpermSaleService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
                             break;
-                        case 'ข้อมูลการผลิต' :
+                        case 'ปริมาณการผลิตผลิตภัณฑ์นม' :
                             $actually = ProductionInfoService::getDetailList2($condition['YearTo'], $condition['MonthFrom']);
                             break;
-                        case 'ข้อมูลการขาย' :
+                        case 'ปริมาณการจำหน่าย' :
                             $actually = ProductionSaleInfoService::getDetailList2($condition['YearTo'], $condition['MonthFrom']);
                             break;
-                        case 'ข้อมูลรับซื้อน้ำนม' :
+                        case 'ปริมาณการรับซื้อน้ำนม' :
                             $actually = MBIService::getListMBIreoprt2($condition['YearTo'], $condition['MonthFrom']);
+                            $this->logger->info('ปริมาณการรับซื้อน้ำนม');
+                            $this->logger->info($actually['amount']);
                             break;
-                        case 'ข้อมูลจำหน่ายน้ำนม' :
+                        case 'ปริมาณน้ำนมดิบเข้ากระบวนการผลิต' :
                             $actually = MSIService::getListMSIreoprt2($condition['YearTo'], $condition['MonthFrom']);
+                            $this->logger->info('ปริมาณน้ำนมดิบเข้ากระบวนการผลิต');
+                            $this->logger->info($actually['amount']);
                             break;
 
                         default : $result = null;
-                    }
 
+                        
+                        
+                    }
+                    if(!empty($mission[0]['unit'])){
+                        $detail2['unit'] = $mission[0]['unit'];
+                    }
                     // $detail2['mission'] += $itemmaster['goal_name'];
-                    $detail2['unit'] = $mission[0]['unit'];
+                    
                     $detail2['target'] += $avg[0]['amount'];
                     $detail2['actual'] += $actually['amount'];
 
@@ -388,7 +523,48 @@ class SubcommitteeReportController extends Controller {
             $data = [];
             $type['goal_type'] = DBI;
             foreach ($mastername as $item) {
-                $mastes = MasterGoalService::getList('Y', $item, $type);
+                if($item == 'การบริการสัตวแพทย์'){
+                    $item_name = 'บริการสัตวแพทย์';
+                }
+                else if($item == 'การบริการผสมเทียม'){
+                    $item_name = 'บริการสัตวแพทย์';
+                }
+                else if($item == 'การผลิตน้ำนมของฟาร์ม อ.ส.ค.'){
+                    $item_name = 'ข้อมูลฝูงโค';
+                }
+                else if($item == 'ปริมาณการจำหน่ายแร่ธาตุ'){
+                    $item_name = 'แร่ธาตุ พรีมิกซ์ และอาหาร';
+                }
+                else if($item == 'ปริมาณการจำหน่ายอาหารสัตว์อื่นๆ'){
+                    $item_name = 'แร่ธาตุ พรีมิกซ์ และอาหาร';
+                }
+                else if($item == 'การฝึกอบรม'){
+                    $item_name = 'ฝึกอบรม';
+                }
+                else if($item == 'รายได้จากน้ำเชื้อแช่แข็ง'){
+                    $item_name = 'จำหน่ายน้ำเชื้อแช่แข็ง';
+                }
+                else if($item == 'รายได้อื่นๆ จากการจำหน่ายไนโตรเจนเหลวและปัจจัยการเลี้ยงโคนม'){
+                    $item_name = 'วัสดุผสมเทียมและอื่นๆ';
+                }
+                else if($item == 'บริการชมฟาร์มโคนมฯ'){
+                    $item_name = 'ท่องเที่ยว';
+                }
+                else if($item == 'ปริมาณการรับซื้อน้ำนม'){
+                    $item_name = 'ข้อมูลรับซื้อน้ำนม';
+                }
+                else if($item == 'ปริมาณน้ำนมดิบเข้ากระบวนการผลิต'){
+                    $item_name = 'ข้อมูลจำหน่ายน้ำนม';
+                }
+                else if($item == 'ปริมาณการผลิตผลิตภัณฑ์นม'){
+                    $item_name = 'ข้อมูลการผลิต';
+                }
+                else if($item == 'ปริมาณการจำหน่าย'){
+                    $item_name = 'ข้อมูลการขาย';
+                }
+
+                $mastes = MasterGoalService::getList('Y', $item_name);
+                // $mastes = MasterGoalService::getList('Y', $item, $type);
                 $detail['name'] = $item;
 
                 $detail['data'] = [];
@@ -401,10 +577,18 @@ class SubcommitteeReportController extends Controller {
                     foreach ($monthList as $monthloop) {
                         $avg = GoalMissionService::getMissionavg($mission[0]['id'], $year, $monthloop);
                         switch ($itemmaster['menu_type']) {
-                            case 'ผสมเทียม' :
-                                $actually = InseminationService::getDetailmonth($year, $monthloop, 3);
+
+                            case 'รายได้อื่นๆ จากการจำหน่ายไนโตรเจนเหลวและปัจจัยการเลี้ยงโคนม' :
+                                $actually = MaterialService::getDetailmonth($year, $monthloop);
+
+                                $actually_2 = CowBreedService::getDetailmonth($year, $monthloop, $itemmaster['id'], 3);
+                                $actually['amount'] += $actually_2['amount'];
                                 break;
-                            case 'บริการสัตวแพทย์' :
+
+                            case 'การบริการผสมเทียม' :
+                                $actually = VeterinaryService::getDetailmonthInsemination($year, $monthloop, 3);
+                                break;
+                            case 'การบริการสัตวแพทย์' :
                                 $actually = VeterinaryService::getDetailmonth($year, $monthloop, $itemmaster['id'], 3);
 
                                 break;
@@ -412,7 +596,7 @@ class SubcommitteeReportController extends Controller {
                                 $actually = SpermService::getDetailmonth($year, $monthloop, $itemmaster['id'], 3);
 
                                 break;
-                            case 'ท่องเที่ยว' :
+                            case 'บริการชมฟาร์มโคนมฯ' :
                                 $actually = TravelService::getDetailmonth($year, $monthloop, $itemmaster['id']);
 
                                 break;
@@ -420,29 +604,33 @@ class SubcommitteeReportController extends Controller {
                                 $actually = CowBreedService::getDetailmonth($year, $monthloop, $itemmaster['id'], 3);
 
                                 break;
-                            case 'ข้อมูลฝูงโค' :
+                            case 'การผลิตน้ำนมของฟาร์ม อ.ส.ค.' :
                                 $actually = CowGroupService::getDetailmonth($year, $monthloop, $itemmaster['id'], 3);
                                 break;
-                            case 'ฝึกอบรม' :
+                            case 'การฝึกอบรม' :
                                 $actually = TrainingCowBreedService::getDetailmonth($year, $monthloop, $itemmaster['id'], 3);
                                 break;
-                            case 'แร่ธาตุ พรีมิกซ์ และอาหาร' :
-                                $actually = MineralService::getDetailmonth($year, $monthloop, $itemmaster['id'], 3);
+                            case 'ปริมาณการจำหน่ายแร่ธาตุ' :
+                                $actually = MineralService::getDetailmonth($year - $yearlist[$i], $monthloop, $itemmaster['id'], 3);
 
                                 break;
-                            case 'จำหน่ายน้ำเชื้อแช่แข็ง' :
+                             case 'ปริมาณการจำหน่ายอาหารสัตว์อื่นๆ' :
+                                $actually = MineralService::getDetailmonthFood($year - $yearlist[$i], $monthloop, $itemmaster['id'], 3);
+
+                                break;
+                            case 'รายได้จากน้ำเชื้อแช่แข็ง' :
                                 $actually = SpermSaleService::getDetailmonth($year, $monthloop, $itemmaster['id'], 3);
                                 break;
-                            case 'ข้อมูลการผลิต' :
+                            case 'ปริมาณการผลิตผลิตภัณฑ์นม' :
                                 $actually = ProductionInfoService::getDetailList2($year, $monthloop);
                                 break;
                             case 'ข้อมูลการขาย' :
                                 $actually = ProductionSaleInfoService::getDetailList2($year, $monthloop);
                                 break;
-                            case 'ข้อมูลรับซื้อน้ำนม' :
+                            case 'ปริมาณการรับซื้อน้ำนม' :
                                 $actually = MBIService::getListMBIreoprt2($year, $monthloop);
                                 break;
-                            case 'ข้อมูลจำหน่ายน้ำนม' :
+                            case 'ปริมาณการจำหน่าย' :
                                 $actually = MSIService::getListMSIreoprt2($year, $monthloop);
                                 break;
 
@@ -450,7 +638,9 @@ class SubcommitteeReportController extends Controller {
                         }
 
                         $detail2['mission'] = $itemmaster['goal_name'];
-                        $detail2['unit'] = $mission[0]['unit'];
+                        if(!empty($mission[0]['unit'])){
+                            $detail2['unit'] = $mission[0]['unit'];
+                        }
                         $detail2['target'] += $avg[0]['amount'];
                         $detail2['actual'] += $actually['amount'];
                         if ($detail2['target'] > 0) {
@@ -536,7 +726,7 @@ class SubcommitteeReportController extends Controller {
     }
 
     private function generatesheet2($objPHPExcel, $condition, $header) {
-        $mastername = ['สัตวแพท', 'ผสมเทียม', 'ผลิตน้ำนม', 'ผลิตน้ำเชื้อแช่แข็ง', 'แร่ธาตุ พรีมิกซ์ และอาหาร', 'ปัจจัยการเลี้ยงโค', 'ฝึกอบรม', 'จำหน่ายน้ำเชื้อแช่แข็ง'];
+        $mastername = ['สัตวแพทย์', 'การบริการผสมเทียม', 'รายได้จากน้ำเชื้อแช่แข็ง', 'ผลิตน้ำเชื้อแช่แข็ง', 'ปริมาณการจำหน่ายแร่ธาตุ', 'ปัจจัยการเลี้ยงโค', 'การฝึกอบรม'/*, 'รายได้จากน้ำเชื้อแช่แข็ง'*/];
         $monthList = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
         $yearlist = [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $objPHPExcel->createSheet(1);
@@ -628,12 +818,12 @@ class SubcommitteeReportController extends Controller {
 
                         $avg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearFrom'] - $yearlist[$key], $ml);
                         switch ($itemmaster['menu_type']) {
-                            case 'ผสมเทียม' :
-                                $actually = InseminationService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, 3);
-                                $beforeactually = InseminationService::getDetailmonth(($condition['YearFrom'] - $yearlist[$key]) - 1, $ml, 3);
+                            case 'การบริการผสมเทียม' :
+                                $actually = VeterinaryService::getDetailmonthInsemination($condition['YearFrom'] - $yearlist[$key], $ml, 3);
+                                $beforeactually = VeterinaryService::getDetailmonthInsemination(($condition['YearFrom'] - $yearlist[$key]) - 1, $ml, 3);
 
                                 break;
-                            case 'สัตวแพท' :
+                            case 'สัตวแพทย์' :
                                 $actually = VeterinaryService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
                                 $beforeactually = VeterinaryService::getDetailmonth($condition['YearFrom'] - $yearlist[$key] - 1, $ml, $itemmaster['id'], 3);
 
@@ -653,22 +843,22 @@ class SubcommitteeReportController extends Controller {
                                 $beforeactually = CowBreedService::getDetailmonth($condition['YearFrom'] - $yearlist[$key] - 1, $ml, $itemmaster['id'], 3);
 
                                 break;
-                            case 'ข้อมูลฝูงโค' :
+                            case 'การผลิตน้ำนมของฟาร์ม อ.ส.ค.' :
                                 $actually = CowGroupService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
                                 $beforeactually = CowGroupService::getDetailmonth($condition['YearFrom'] - $yearlist[$key] - 1, $ml, $itemmaster['id'], 3);
 
                                 break;
-                            case 'ฝึกอบรม' :
+                            case 'การฝึกอบรม' :
                                 $actually = TrainingCowBreedService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
                                 $beforeactually = TrainingCowBreedService::getDetailmonth($condition['YearFrom'] - $yearlist[$key] - 1, $ml, $itemmaster['id'], 3);
 
                                 break;
-                            case 'แร่ธาตุ พรีมิกซ์ และอาหาร' :
+                            case 'ปริมาณการจำหน่ายแร่ธาตุ' :
                                 $actually = MineralService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
                                 $beforeactually = MineralService::getDetailmonth($condition['YearFrom'] - $yearlist[$key] - 1, $ml, $itemmaster['id'], 3);
 
                                 break;
-                            case 'จำหน่ายน้ำเชื้อแช่แข็ง' :
+                            case 'รายได้จากน้ำเชื้อแช่แข็ง' :
                                 $actually = SpermSaleService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
                                 $beforeactually = SpermSaleService::getDetailmonth($condition['YearFrom'] - $yearlist[$key] - 1, $ml, $itemmaster['id'], 3);
 
@@ -787,12 +977,12 @@ class SubcommitteeReportController extends Controller {
 
                     $avg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $condition['MonthFrom']);
                     switch ($itemmaster['menu_type']) {
-                        case 'ผสมเทียม' :
-                            $actually = InseminationService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], 3);
-                            $beforeactually = InseminationService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom'], 3);
+                        case 'การบริการผสมเทียม' :
+                            $actually = VeterinaryService::getDetailmonthInsemination($condition['YearTo'], $condition['MonthFrom'], 3);
+                            $beforeactually = VeterinaryService::getDetailmonthInsemination($condition['YearTo'] - 1, $condition['MonthFrom'], 3);
 
                             break;
-                        case 'สัตวแพท' :
+                        case 'สัตวแพทย์' :
                             $actually = VeterinaryService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
                             $beforeactually = VeterinaryService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom'], $itemmaster['id'], 3);
 
@@ -812,22 +1002,22 @@ class SubcommitteeReportController extends Controller {
                             $beforeactually = CowBreedService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom'], $itemmaster['id'], 3);
 
                             break;
-                        case 'ข้อมูลฝูงโค' :
+                        case 'การผลิตน้ำนมของฟาร์ม อ.ส.ค.' :
                             $actually = CowGroupService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
                             $beforeactually = CowGroupService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom'], $itemmaster['id'], 3);
 
                             break;
-                        case 'ฝึกอบรม' :
+                        case 'การฝึกอบรม' :
                             $actually = TrainingCowBreedService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
                             $beforeactually = TrainingCowBreedService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom'], $itemmaster['id'], 3);
 
                             break;
-                        case 'แร่ธาตุ พรีมิกซ์ และอาหาร' :
+                        case 'ปริมาณการจำหน่ายแร่ธาตุ' :
                             $actually = MineralService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
                             $beforeactually = MineralService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom'], $itemmaster['id'], 3);
 
                             break;
-                        case 'จำหน่ายน้ำเชื้อแช่แข็ง' :
+                        case 'รายได้จากน้ำเชื้อแช่แข็ง' :
                             $actually = SpermSaleService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
                             $beforeactually = SpermSaleService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom'], $itemmaster['id'], 3);
 
@@ -875,10 +1065,10 @@ class SubcommitteeReportController extends Controller {
                         $detail['targetoct']['amount'] += $octavg[0]['amount'];
                         $detail['targetoct']['price_value'] += $octavg[0]['price_value'];
                         switch ($itemmaster['menu_type']) {
-                            case 'ผสมเทียม' :
-                                $actually = InseminationService::getDetailmonth($condition['YearTo'] - $yearlist[$key], $ml, 3);
+                            case 'การบริการผสมเทียม' :
+                                $actually = VeterinaryService::getDetailmonthInsemination($condition['YearTo'] - $yearlist[$key], $ml, 3);
                                 break;
-                            case 'สัตวแพท' :
+                            case 'สัตวแพทย์' :
                                 $actually = VeterinaryService::getDetailmonth($condition['YearTo'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
 
                                 break;
@@ -894,17 +1084,17 @@ class SubcommitteeReportController extends Controller {
                                 $actually = CowBreedService::getDetailmonth($condition['YearTo'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
 
                                 break;
-                            case 'ข้อมูลฝูงโค' :
+                            case 'การผลิตน้ำนมของฟาร์ม อ.ส.ค.' :
                                 $actually = CowGroupService::getDetailmonth($condition['YearTo'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
                                 break;
-                            case 'ฝึกอบรม' :
+                            case 'การฝึกอบรม' :
                                 $actually = TrainingCowBreedService::getDetailmonth($condition['YearTo'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
                                 break;
-                            case 'แร่ธาตุ พรีมิกซ์ และอาหาร' :
+                            case 'ปริมาณการจำหน่ายแร่ธาตุ' :
                                 $actually = MineralService::getDetailmonth($condition['YearTo'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
 
                                 break;
-                            case 'จำหน่ายน้ำเชื้อแช่แข็ง' :
+                            case 'รายได้จากน้ำเชื้อแช่แข็ง' :
                                 $actually = SpermSaleService::getDetailmonth($condition['YearTo'] - $yearlist[$key], $condition['MonthFrom'], $itemmaster['id'], 3);
                                 break;
 
@@ -1036,11 +1226,11 @@ class SubcommitteeReportController extends Controller {
                     foreach ($montharr as $ma) {
                         $avg = GoalMissionService::getMissionavg($mission[0]['id'], $year, $ma);
                         switch ($itemmaster['menu_type']) {
-                            case 'ผสมเทียม' :
-                                $actually = InseminationService::getDetailmonth($year, $ma, 3);
-                                $beforeactually = InseminationService::getDetailmonth($year - 1, $ma, 3);
+                            case 'การบริการผสมเทียม' :
+                                $actually = VeterinaryService::getDetailmonthInsemination($year, $ma, 3);
+                                $beforeactually = VeterinaryService::getDetailmonthInsemination($year - 1, $ma, 3);
                                 break;
-                            case 'สัตวแพท' :
+                            case 'สัตวแพทย์' :
                                 $actually = VeterinaryService::getDetailmonth($year, $ma, $itemmaster['id'], 3);
                                 $beforeactually = VeterinaryService::getDetailmonth($year - 1, $ma, $itemmaster['id'], 3);
                                 break;
@@ -1056,20 +1246,20 @@ class SubcommitteeReportController extends Controller {
                                 $actually = CowBreedService::getDetailmonth($year, $ma, $itemmaster['id'], 3);
                                 $beforeactually = CowBreedService::getDetailmonth($year - 1, $ma, $itemmaster['id'], 3);
                                 break;
-                            case 'ข้อมูลฝูงโค' :
+                            case 'การผลิตน้ำนมของฟาร์ม อ.ส.ค.' :
                                 $actually = CowGroupService::getDetailmonth($year, $ma, $itemmaster['id'], 3);
                                 $beforeactually = CowGroupService::getDetailmonth($year - 1, $ma, $itemmaster['id'], 3);
                                 break;
-                            case 'ฝึกอบรม' :
+                            case 'การฝึกอบรม' :
                                 $actually = TrainingCowBreedService::getDetailmonth($year, $ma, $itemmaster['id'], 3);
                                 $beforeactually = TrainingCowBreedService::getDetailmonth($year - 1, $ma, $itemmaster['id'], 3);
                                 break;
-                            case 'แร่ธาตุ พรีมิกซ์ และอาหาร' :
+                            case 'ปริมาณการจำหน่ายแร่ธาตุ' :
                                 $actually = MineralService::getDetailmonth($year, $ma, $itemmaster['id'], 3);
                                 $beforeactually = MineralService::getDetailmonth($year - 1, $ma, $itemmaster['id'], 3);
 
                                 break;
-                            case 'จำหน่ายน้ำเชื้อแช่แข็ง' :
+                            case 'รายได้จากน้ำเชื้อแช่แข็ง' :
                                 $actually = SpermSaleService::getDetailmonth($year, $ma, $itemmaster['id'], 3);
                                 $beforeactually = SpermSaleService::getDetailmonth($year - 1, $ma, $itemmaster['id'], 3);
                                 break;
@@ -1117,10 +1307,10 @@ class SubcommitteeReportController extends Controller {
                             $detail['targetoct']['amount'] += $octavg[0]['amount'];
                             $detail['targetoct']['price_value'] += $octavg[0]['price_value'];
                             switch ($itemmaster['menu_type']) {
-                                case 'ผสมเทียม' :
-                                    $actually = InseminationService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, 3);
+                                case 'การบริการผสมเทียม' :
+                                    $actually = VeterinaryService::getDetailmonthInsemination($condition['YearFrom'] - $yearlist[$key], $ml, 3);
                                     break;
-                                case 'สัตวแพท' :
+                                case 'สัตวแพทย์' :
                                     $actually = VeterinaryService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
 
                                     break;
@@ -1136,17 +1326,17 @@ class SubcommitteeReportController extends Controller {
                                     $actually = CowBreedService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
 
                                     break;
-                                case 'ข้อมูลฝูงโค' :
+                                case 'การผลิตน้ำนมของฟาร์ม อ.ส.ค.' :
                                     $actually = CowGroupService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
                                     break;
-                                case 'ฝึกอบรม' :
+                                case 'การฝึกอบรม' :
                                     $actually = TrainingCowBreedService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
                                     break;
-                                case 'แร่ธาตุ พรีมิกซ์ และอาหาร' :
+                                case 'ปริมาณการจำหน่ายแร่ธาตุ' :
                                     $actually = MineralService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
 
                                     break;
-                                case 'จำหน่ายน้ำเชื้อแช่แข็ง' :
+                                case 'รายได้จากน้ำเชื้อแช่แข็ง' :
                                     $actually = SpermSaleService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $condition['MonthFrom'], $itemmaster['id'], 3);
                                     break;
 
@@ -1349,7 +1539,7 @@ class SubcommitteeReportController extends Controller {
             /////จำหน่าย
             $type['goal_type'] = 'II';
             $type['keyword'] = 'การจำหน่ายน้ำนม';
-            $mastes = MasterGoalService::getList('Y', 'ข้อมูลจำหน่ายน้ำนม', $type);
+            $mastes = MasterGoalService::getList('Y', 'ข้อมูลการจำหน่ายน้ำนม', $type);
             $mission = GoalMissionService::getMission($mastes[0]['id'], 3, $condition['YearTo']);
             $beforeavg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $beforemonth);
             $avg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $condition['MonthFrom']);
@@ -1610,7 +1800,7 @@ class SubcommitteeReportController extends Controller {
             /////จำหน่าย
             $type['goal_type'] = 'II';
             $type['keyword'] = 'การจำหน่ายน้ำนม';
-            $mastes = MasterGoalService::getList('Y', 'ข้อมูลจำหน่ายน้ำนม', $type);
+            $mastes = MasterGoalService::getList('Y', 'ข้อมูลการจำหน่ายน้ำนม', $type);
             $mission = GoalMissionService::getMission($mastes[0]['id'], 3, $condition['YearTo']);
             $beforeavg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $beforemonth);
             $avg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $condition['MonthFrom']);
@@ -1793,8 +1983,8 @@ class SubcommitteeReportController extends Controller {
             $FactoryList = FactoryService::getList();
             $detail = [];
             foreach ($FactoryList as $id) {
-                $data = ProductionInfoController::getMonthreportforsubcom($condition, 1);
-                array_push($detail, $data);
+                $data_fac = ProductionInfoController::getMonthreportforsubcom($condition, 1);
+                array_push($detail, $data_fac);
             }
             //   print_r($detail);
         } else {
@@ -1912,7 +2102,7 @@ class SubcommitteeReportController extends Controller {
             /////จำหน่าย
             $type['goal_type'] = 'II';
             $type['keyword'] = 'การจำหน่ายน้ำนม';
-            $mastes = MasterGoalService::getList('Y', 'ข้อมูลจำหน่ายน้ำนม', $type);
+            $mastes = MasterGoalService::getList('Y', 'ข้อมูลการจำหน่ายน้ำนม', $type);
             $mission = GoalMissionService::getMission($mastes[0]['id'], 3, $condition['YearFrom']);
 
 
@@ -2281,8 +2471,8 @@ class SubcommitteeReportController extends Controller {
             $condition['MonthFrom'] = 10;
             $condition['MonthTo'] = 9;
             foreach ($FactoryList as $id) {
-                $data = ProductionInfoController::getMonthreportforsubcom($condition, $id['id']);
-                array_push($detail, $data);
+                $data_fac = ProductionInfoController::getMonthreportforsubcom($condition, $id['id']);
+                array_push($detail, $data_fac);
                 $data2 = ProductionSaleInfoController::getMonthreportforsubcom($condition, $id['id']);
                 array_push($detail2, $data2);
             }
@@ -2332,8 +2522,8 @@ class SubcommitteeReportController extends Controller {
 
 
             foreach ($FactoryList as $id) {
-                $data = ProductionInfoController::getMonthreportforsubcom($condition, $id['id']);
-                array_push($detail, $data);
+                $data_fac = ProductionInfoController::getMonthreportforsubcom($condition, $id['id']);
+                array_push($detail, $data_fac);
                 $data2 = ProductionSaleInfoController::getMonthreportforsubcom($condition, $id['id']);
                 array_push($detail2, $data2);
             }
@@ -2400,8 +2590,8 @@ class SubcommitteeReportController extends Controller {
 
 
             foreach ($FactoryList as $id) {
-                $data = ProductionInfoController::getQreportforsubcom($condition, $id['id']);
-                array_push($detail, $data);
+                $data_fac = ProductionInfoController::getQreportforsubcom($condition, $id['id']);
+                array_push($detail, $data_fac);
                 $data2 = ProductionSaleInfoController::getQreportforsubcom($condition, $id['id']);
                 array_push($detail2, $data2);
             }

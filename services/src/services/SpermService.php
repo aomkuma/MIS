@@ -60,14 +60,14 @@ class SpermService {
                         ->join("sperm_detail", 'sperm_detail.sperm_id', '=', 'sperm.id')
                         ->where("years", $years)
                         ->where("months", $months)
-                        ->where("region_id", $region)
+                        // ->where("region_id", $region)
                         ->where("sperm_item_id", $sperm_item_id)
-                        ->where('office_approve_id', !$ckid)
+                        /*->where('office_approve_id', !$ckid)
                         ->where(function($query) use ($ckid) {
 
                             $query->where('office_approve_comment', $ckid);
                             $query->orWhere('office_approve_comment', '');
-                        })
+                        })*/
                         ->first()
                         ->toArray();
         ;

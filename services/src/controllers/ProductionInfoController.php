@@ -1813,7 +1813,7 @@ class ProductionInfoController extends Controller {
             foreach ($FactoryList as $key1 => $value1) {
                 // get ProductMilkService
                 // $ProducMilkList = ProductMilkService::getList('', '', '', $value1['id']);
-                $ProducMilkList = ProductMilkService::getList('Y', '', '', '');
+                $ProducMilkList = ProductMilkService::getList('Y', '', '', $factory_id);
 
                 $DataList['factory_name'] = $value1['factory_name'];
                 $DataList['product'] = [];
@@ -1964,7 +1964,7 @@ class ProductionInfoController extends Controller {
             foreach ($FactoryList as $key1 => $value1) {
                 // get ProductMilkService
                 // $ProducMilkList = ProductMilkService::getList('', '', '', $value1['id']);
-                $ProducMilkList = ProductMilkService::getList('Y', '', '', '');
+                $ProducMilkList = ProductMilkService::getList('Y', '', '', $factory_id);
 
                 $DataList['factory_name'] = $value1['factory_name'];
                 $DataList['product'] = [];
@@ -2097,7 +2097,7 @@ class ProductionInfoController extends Controller {
             $objPHPExcel->getActiveSheet()->setCellValue('F2', 'ลิตร');
             $objPHPExcel->getActiveSheet()->setCellValue('G2', 'บาท');
 
-            $objPHPExcel->getActiveSheet()->setCellValue('H2', 'ปริมาณการผลิต (หีบ : กล่อง / ลิตร)');
+            $objPHPExcel->getActiveSheet()->setCellValue('H2', 'หีบ : กล่อง');
             $objPHPExcel->getActiveSheet()->setCellValue('I2', 'ลิตร');
             $objPHPExcel->getActiveSheet()->setCellValue('J2', 'บาท');
 

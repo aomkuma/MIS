@@ -200,14 +200,14 @@
 			<tr ng-repeat="data in List">
 				<td>{{data.RegionName}}</td>
 				<td>{{data.Month}}</td>
-				<td>{{numberFormatComma(data.CurrentWeight)}}</td>
-				<td>{{numberFormatComma(data.CurrentBaht)}}</td>
-				<td>{{numberFormatComma(data.BeforeWeight)}}</td>
-				<td>{{numberFormatComma(data.BeforeBaht)}}</td>
-				<td>{{numberFormatComma(data.DiffWeight)}}</td>
-				<td>{{numberFormatComma(data.DiffWeightPercentage)}}</td>
-				<td>{{numberFormatComma(data.DiffBaht)}}</td>
-				<td>{{numberFormatComma(data.DiffBahtPercentage)}}</td>
+				<td class="text-right">{{numberFormatComma(data.CurrentWeight)}}</td>
+				<td class="text-right">{{numberFormatComma(data.CurrentBaht)}}</td>
+				<td class="text-right">{{numberFormatComma(data.BeforeWeight)}}</td>
+				<td class="text-right">{{numberFormatComma(data.BeforeBaht)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffWeight)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffWeightPercentage)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffBaht)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffBahtPercentage)}}</td>
 				<td>{{data.CreateDate}}</td>
 				<td>{{data.ApproveDate}}</td>
 				<td>{{data.Status}}</td>

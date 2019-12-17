@@ -94,7 +94,7 @@
                 foreach ($PersonRegion as $key => $value) {
                     $RegionList[] = $value['RegionID'];
                 }
-
+                // print_r($RegionList);exit;
                 $_List = GoalMissionService::getList($condition, $UserID, $RegionList);
 
                 $this->data_result['DATA']['List'] = $_List;
@@ -281,6 +281,7 @@
                 $params = $request->getParsedBody();
                 $user_session = $params['user_session'];
                 $_Data = $params['obj']['Data'];
+                $SaveStatus = $params['obj']['SaveStatus'];
 
                 foreach ($_Data as $key => $value) {
                     if($value == 'null'){
@@ -308,31 +309,33 @@
                 unset($_Data['goal_mission_history']);
                 
                 $_Data['update_by'] = $user_session['UserID'];
-                $_Data['editable'] = 'N';
+                $_Data['editable'] = 'Y';
 
-                $HeaderData = $this->do_post_request('http://' . $URL . '/dportal/dpo/public/mis/get/org/header/', "POST", ['OrgID' => $OrgID, 'Type' => 'OWNER']);
-                $HeaderData = json_decode(trim($HeaderData), TRUE);
-                // print_r($HeaderData);exit;
-                if($HeaderData['data']['DATA']['Header']['OrgType'] == 'DEPARTMENT'){
-                    $_Data['dep_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
-                    $_Data['dep_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+                if($SaveStatus == 'SEND'){
+                    $HeaderData = $this->do_post_request('http://' . $URL . '/dportal/dpo/public/mis/get/org/header/', "POST", ['OrgID' => $OrgID, 'Type' => 'OWNER']);
+                    $HeaderData = json_decode(trim($HeaderData), TRUE);
+                    // print_r($HeaderData);exit;
+                    if($HeaderData['data']['DATA']['Header']['OrgType'] == 'DEPARTMENT'){
+                        $_Data['dep_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                        $_Data['dep_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
 
 
-                }else if($HeaderData['data']['DATA']['Header']['OrgType'] == 'DIVISION'){
-                    $_Data['division_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
-                    $_Data['division_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+                    }else if($HeaderData['data']['DATA']['Header']['OrgType'] == 'DIVISION'){
+                        $_Data['division_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                        $_Data['division_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
 
-                }else if($HeaderData['data']['DATA']['Header']['OrgType'] == 'OFFICE'){
-                    $_Data['office_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
-                    $_Data['office_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+                    }else if($HeaderData['data']['DATA']['Header']['OrgType'] == 'OFFICE'){
+                        $_Data['office_approve_id'] = $HeaderData['data']['DATA']['Header']['UserID'];
+                        $_Data['office_approve_name'] = $user_session['FirstName'] . ' ' . $user_session['LastName'];
+                    }
+
+                    $_Data['dep_approve_date'] = NULL;                  
+                    $_Data['dep_approve_comment'] = NULL;
+                    $_Data['division_approve_date'] = NULL;                  
+                    $_Data['division_approve_comment'] = NULL;
+                    $_Data['office_approve_date'] = NULL;                  
+                    $_Data['office_approve_comment'] = NULL;
                 }
-
-                $_Data['dep_approve_date'] = NULL;                  
-                $_Data['dep_approve_comment'] = NULL;
-                $_Data['division_approve_date'] = NULL;                  
-                $_Data['division_approve_comment'] = NULL;
-                $_Data['office_approve_date'] = NULL;                  
-                $_Data['office_approve_comment'] = NULL;
 
                 $id = GoalMissionService::updateData($_Data);
 

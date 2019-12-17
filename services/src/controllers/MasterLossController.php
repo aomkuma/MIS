@@ -52,27 +52,37 @@
                 $DataList = [];
                 foreach ($FactoryList as $f_key => $f_value) {
                  
-                    $ProductMilkList = [];
-                    $_ProductMilkList = MasterLossService::getProductMilkListView($f_value['id'], $loss_id, $loss_type, $_product_milk_id);
-                    foreach ($_ProductMilkList as $key => $value) {
-                        $product_milk_id = $value['product_milk_id'];
+                    // get Master loss list 
+                    $MasterLoss = MasterLossService::loadListByName($f_value['id'], $loss_id);
+
+                    $MasterLossList = [];
+                    foreach ($MasterLoss as $m_key => $m_value) {
                         
-                        $_SubProductMilkList = MasterLossService::getSubProductMilkListView($product_milk_id, $loss_type, $_subproduct_milk_id);
+                        $ProductMilkList = [];
+                        $_ProductMilkList = MasterLossService::getProductMilkListView($f_value['id'], $loss_id, $loss_type, $_product_milk_id);
+                        foreach ($_ProductMilkList as $key => $value) {
+                            $product_milk_id = $value['product_milk_id'];
+                            
+                            $_SubProductMilkList = MasterLossService::getSubProductMilkListView($product_milk_id, $loss_type, $_subproduct_milk_id);
 
-                        $SubProductMilk = [];
-                        foreach ($_SubProductMilkList as $key1 => $value1) {
-                            $subproduct_milk_id = $value1['subproduct_milk_id'];
-                            $_ProductMilkDetailList = MasterLossService::getProductMilkDetailListView($subproduct_milk_id, $loss_type);
+                            $SubProductMilk = [];
+                            foreach ($_SubProductMilkList as $key1 => $value1) {
+                                $subproduct_milk_id = $value1['subproduct_milk_id'];
+                                $_ProductMilkDetailList = MasterLossService::getProductMilkDetailListView($subproduct_milk_id, $loss_type);
 
-                            $value1['ProductMilkDetailList'] = $_ProductMilkDetailList;
-                            array_push($SubProductMilk, $value1);
+                                $value1['ProductMilkDetailList'] = $_ProductMilkDetailList;
+                                array_push($SubProductMilk, $value1);
+                            }
+
+                            $value['SubProductMilkList'] = $SubProductMilk;
+                            array_push($ProductMilkList, $value);
                         }
 
-                        $value['SubProductMilkList'] = $SubProductMilk;
-                        array_push($ProductMilkList, $value);
+                        $m_value['ProductMilkList'] = $ProductMilkList;
+                        array_push($MasterLossList, $m_value);
                     }
 
-                    $f_value['ProductMilkList'] = $ProductMilkList;
+                    $f_value['MasterLossList'] = $MasterLossList;
                     array_push($DataList, $f_value);
                 }
 

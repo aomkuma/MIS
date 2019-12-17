@@ -26,7 +26,7 @@
 				</select>
 		</div>
 		<div class="field-label col-lg-1 col-md-1 col-sm-12 col-xs-12">
-			ปี
+			ปีงบประมาณ
 		</div>
 		<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 			<select name="Year" class="form-control" ng-model="Sperm.years" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
@@ -104,13 +104,13 @@
 								จำนวน (หลอด)
 							</div>
 							<div class="col-lg-2 col-md-1 col-sm-12 col-xs-12">
-								<input type="text" ng-model="SpermDetail.amount" class="form-control">
+								<input type="text" ng-model="SpermDetail.amount" class="form-control" ng-blur="calcTotal()">
 							</div>
 							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 								มูลค่า (บาท)
 							</div>
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<input type="text" ng-model="SpermDetail.price" class="form-control">
+								<input type="text" ng-model="SpermDetail.price" class="form-control" ng-blur="calcTotal()">
 							</div>
 							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 								<button class="btn btn-danger" ng-click="removeDetail(SpermDetail.id, parentIndex)">
@@ -133,6 +133,17 @@
 			</div>
 			<br><br>
 			
+		</div>
+		<div class="row form-group">
+			<label class="form-control-static col-lg-12">
+				รวมจำนวน (หลอด) {{TotalAmount}}
+			</label>
+			
+		</div>
+		<div class="row form-group">
+			<label class="form-control-static col-lg-12">
+				รวมมูลค่า (บาท) : {{TotalValues}}
+			</label>
 		</div>
 		<br><br>
 		<div class="row form-group">

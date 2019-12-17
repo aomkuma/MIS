@@ -37,9 +37,9 @@ class MasterGoalService {
                         ->first();
     }
 
-    public static function getList($actives = '', $menu_type = '', $condition = [], $sub_goal_type= '', $factory_id = '') {
+    public static function getList($actives = '', $menu_type = '', $condition = [], $sub_goal_type= '', $factory_id = '', $sub_goal_type_arr=[]) {
         return MasterGoal::select("master_goal.*", "factory.factory_name")
-                        ->where(function($query) use ($actives, $menu_type, $condition, $sub_goal_type, $factory_id) {
+                        ->where(function($query) use ($actives, $menu_type, $condition, $sub_goal_type, $factory_id, $sub_goal_type_arr) {
                             if (!empty($actives)) {
                                 $query->where('master_goal.actives', $actives);
                             }
@@ -70,6 +70,10 @@ class MasterGoalService {
 
                             if (!empty($factory_id)) {
                                 $query->where('master_goal.factory_id', $factory_id);
+                            }
+
+                            if (!empty($sub_goal_type_arr)) {
+                                $query->whereIn('master_goal.sub_goal_type', $sub_goal_type_arr);
                             }
 
                         })

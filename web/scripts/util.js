@@ -760,6 +760,23 @@ app.filter('MenuFilter', function () {
     };
 });
 
+app.filter('MenuTypeFilter', function () {
+    return function (input, val) {
+        if (input !== undefined && input !== null) {
+            var i = 0, len = input.length;
+            for (; i < len; i++) {
+                console.log(input[i].name, '==' ,val);
+                if (input[i].name == val) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            return false;
+        }
+    };
+});
+
 app.directive('convertToNumber', function() {
   return {
     require: 'ngModel',

@@ -172,18 +172,40 @@ class VeterinaryService {
 
     public static function getDetailmonth($years, $months, $type_id, $region) {
         $ckid = null;
-        return Veterinary::select(DB::raw("SUM(item_amount) AS amount")
+        return Veterinary::select(DB::raw("SUM(mis_veterinary_item.item_amount) AS amount")
                         )
                         ->join("veterinary_detail", 'veterinary_detail.veterinary_id', '=', 'veterinary.id')
+                        ->join("veterinary_item", 'veterinary_item.veterinary_detail_id', '=', 'veterinary_detail.id')
                         ->where("years", $years)
                         ->where("months", $months)
-                        ->where('office_approve_id', !$ckid)
+                        /*->where('office_approve_id', !$ckid)
                         ->where(function($query) use ($ckid) {
 
                             $query->where('office_approve_comment', $ckid);
                             $query->orWhere('office_approve_comment', '');
-                        })
-                        ->where("item_type", $type_id)
+                        })*/
+                        ->where("veterinary_item.item_type", 'โคนม')
+                        ->whereIn("dairy_farming_id", [1,4,20])
+                        ->first()
+                        ->toArray();
+    }
+
+    public static function getDetailmonthInsemination($years, $months, $type_id, $region) {
+        $ckid = null;
+        return Veterinary::select(DB::raw("SUM(mis_veterinary_item.item_amount) AS amount")
+                        )
+                        ->join("veterinary_detail", 'veterinary_detail.veterinary_id', '=', 'veterinary.id')
+                        ->join("veterinary_item", 'veterinary_item.veterinary_detail_id', '=', 'veterinary_detail.id')
+                        ->where("years", $years)
+                        ->where("months", $months)
+                        /*->where('office_approve_id', !$ckid)
+                        ->where(function($query) use ($ckid) {
+
+                            $query->where('office_approve_comment', $ckid);
+                            $query->orWhere('office_approve_comment', '');
+                        })*/
+                        ->where("veterinary_item.item_type", 'โคนม')
+                        ->whereIn("dairy_farming_id", [17,29])
                         ->first()
                         ->toArray();
     }

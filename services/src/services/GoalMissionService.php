@@ -250,12 +250,14 @@ class GoalMissionService {
                                     , "region.RegionName"
                                     , "master_goal.goal_name"
                                 )
-                        ->where(function($query) use ($condition) {
+                        ->where(function($query) use ($condition, $RegionList) {
                             if (!empty($condition['Year']['yearText'])) {
                                 $query->where('years', $condition['Year']['yearText']);
                             }
                             if (!empty($condition['Region']['RegionID'])) {
                                 $query->where('region_id', $condition['Region']['RegionID']);
+                            }else{
+                                $query->whereIn('region.RegionID', $RegionList);
                             }
                             if (!empty($condition['Goal']['id'])) {
                                 $query->where('goal_id', $condition['Goal']['id']);
@@ -382,14 +384,17 @@ class GoalMissionService {
         
         $ckid = null;
         return GoalMission::where('years', $year)
-                        ->where('region_id', $regid)
+                        // ->where('region_id', $regid)
                         ->where('goal_id', $goalid)
-                        ->where('office_approve_id', !($ckid))
+                        ->where('unit', '<>', '')
+                        ->whereNotNull('unit')
+                        
+                        /*->where('office_approve_id', !($ckid))
                         ->where(function($query) use ($ckid) {
 
                             $query->where('office_approve_comment', ($ckid));
                             $query->orWhere('office_approve_comment', '');
-                        })
+                        })*/
                         ->get()
                         ->toArray();
     }
@@ -410,6 +415,9 @@ class GoalMissionService {
     }
 
     public static function getMissionavg($goal_mission_id, $year, $month) {
+        if(strlen($month) == 1){
+            $month = '0'.$month;
+        }
         $date = $year . '-' . $month . '-01';
        
         return GoalMissionAvg::where('goal_mission_id', $goal_mission_id)

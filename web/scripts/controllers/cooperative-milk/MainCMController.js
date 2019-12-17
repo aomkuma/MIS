@@ -12,7 +12,7 @@ angular.module('e-homework').controller('MainCMController', function($scope, $co
 
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));    
     $scope.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));   
-    console.log($scope.PersonRegion);
+    console.log($scope.$parent.Menu);
     $scope.page_type = 'cooperative-milk';
     $scope.getMenu = function(action, menu_type){
         var params = {'menu_type' : menu_type};
@@ -105,6 +105,30 @@ angular.module('e-homework').controller('MainCMController', function($scope, $co
         HTTPService.clientRequest(action, params).then(function(result){
             if(result.data.STATUS == 'OK'){
                 $scope.List = result.data.DATA.DataList;
+
+                $scope.SummaryPerson = 0;
+                $scope.SummaryPersonSent = 0;
+                $scope.SummaryCow = 0;
+                $scope.SummaryCowBeeb = 0;
+                $scope.SummaryMilkAmount = 0;
+                $scope.SummaryValues = 0;
+
+                for(var i = 0; i < $scope.List.length; i++){
+                    $scope.SummaryPerson += parseFloat($scope.List[i].TotalPerson); 
+                    $scope.SummaryPersonSent += parseFloat($scope.List[i].TotalPersonSent); 
+                    $scope.SummaryCow += parseFloat($scope.List[i].TotalCow); 
+                    $scope.SummaryCowBeeb += parseFloat($scope.List[i].TotalCowBeeb); 
+                    $scope.SummaryMilkAmount += parseFloat($scope.List[i].TotalMilkAmount); 
+                    $scope.SummaryValues += parseFloat($scope.List[i].TotalValues); 
+                }
+
+                $scope.SummaryPerson = $scope.SummaryPerson.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+                $scope.SummaryPersonSent = $scope.SummaryPersonSent.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+                $scope.SummaryCow = $scope.SummaryCow.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+                $scope.SummaryCowBeeb = $scope.SummaryCowBeeb.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+                $scope.SummaryMilkAmount = $scope.SummaryMilkAmount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+                $scope.SummaryValues = $scope.SummaryValues.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+
                 $scope.SummaryData = result.data.DATA.Summary;
                 console.log($scope.List);
             }

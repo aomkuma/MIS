@@ -114,6 +114,7 @@ angular.module('e-homework').controller('UpdateSPController', function($scope, $
                 // for(var i =0; i < $scope.SpermDetailList.length; i++){
                 //     $scope.loadDairyFarming('CHILD', $scope.SpermDetailList[i].dairy_farming_id);
                 // }
+                $scope.calcTotal();
                 IndexOverlayFactory.overlayHide();
             }else{
                 if($scope.Sperm.id != ''){
@@ -277,6 +278,8 @@ angular.module('e-homework').controller('UpdateSPController', function($scope, $
                 });
             });
         }
+
+         $scope.calcTotal();
     }
 
     $scope.removeItem = function(id, parent_index, child_index){
@@ -388,6 +391,23 @@ angular.module('e-homework').controller('UpdateSPController', function($scope, $
                 IndexOverlayFactory.overlayHide();
             });
         });
+    }
+
+    $scope.calcTotal = function(){
+        $scope.TotalAmount = 0;
+        $scope.TotalValues = 0;
+
+        for(var i = 0; i < $scope.SpermDetailList.length; i++){
+            if($scope.SpermDetailList[i].amount != undefined && $scope.SpermDetailList[i].amount != null && $scope.SpermDetailList[i].amount != ''){
+                $scope.TotalAmount += parseFloat($scope.SpermDetailList[i].amount);
+            }
+            if($scope.SpermDetailList[i].price != undefined && $scope.SpermDetailList[i].price != null && $scope.SpermDetailList[i].price != ''){
+                $scope.TotalValues += parseFloat($scope.SpermDetailList[i].price);   
+            }
+        }
+
+        $scope.TotalAmount = $scope.TotalAmount.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        $scope.TotalValues = $scope.TotalValues.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
     var curDate = new Date();

@@ -59,7 +59,43 @@
 		</form>
 	</div>
 </div>
-
+<div class="col-lg-8 col-lg-offset-2 table-responsive" ng-show="ViewType == 'MAIN'">
+	<table class="table table-bordered table-striped">
+		<tr>
+			<td colspan="6" class="text-center">
+				ข้อมูลรวมสหกรณ์และปริมาณน้ำนม
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" class="text-center">
+				เกษตรกร / สมาชิก (ราย)
+			</td>
+			<td colspan="2" class="text-center">
+				โค  (ตัว)
+			</td>
+			<td rowspan="2" class="text-center">
+				ปริมาณน้ำนม (กิโลกรัม)
+			</td>
+			<td rowspan="2" class="text-center">
+				มูลค่า (บาท)
+			</td>
+		</tr>
+		<tr>
+			<td class="text-center">ทั้งหมด</td>
+			<td class="text-center">ส่ง</td>
+			<td class="text-center">ทั้งหมด</td>
+			<td class="text-center">รีดนม</td>
+		</tr>
+		<tr>
+			<td class="text-right">{{SummaryPerson}}</td>
+			<td class="text-right">{{SummaryPersonSent}}</td>
+			<td class="text-right">{{SummaryCow}}</td>
+			<td class="text-right">{{SummaryCowBeeb}}</td>
+			<td class="text-right">{{SummaryMilkAmount}}</td>
+			<td class="text-right">{{SummaryValues}}</td>
+		</tr>
+	</table>
+</div>
 <div class="col-lg-12 table-responsive" ng-show="ViewType == 'MAIN'">
 	<table class="table table-bordered table-striped">
 		<caption>
@@ -98,13 +134,13 @@
 			<tr ng-repeat="data in List">
 				<td>{{data.RegionName}}</td>
 				<td>{{data.CooperativeName}}</td>
-				<td>{{numberFormat(data.TotalPerson)}}</td>
-				<td>{{numberFormat(data.TotalPersonSent)}}</td>
-				<td>{{numberFormat(data.TotalCow)}}</td>
-				<td>{{numberFormat(data.TotalCowBeeb)}}</td>
-				<td>{{numberFormatComma(data.TotalMilkAmount)}}</td>
-				<td>{{numberFormatComma(data.TotalValues)}}</td>
-				<td>{{numberFormatComma(data.AverageValues)}}</td>
+				<td class="text-right">{{numberFormat(data.TotalPerson)}}</td>
+				<td class="text-right">{{numberFormat(data.TotalPersonSent)}}</td>
+				<td class="text-right">{{numberFormat(data.TotalCow)}}</td>
+				<td class="text-right">{{numberFormat(data.TotalCowBeeb)}}</td>
+				<td class="text-right">{{numberFormatComma(data.TotalMilkAmount)}}</td>
+				<td class="text-right">{{numberFormatComma(data.TotalValues)}}</td>
+				<td class="text-right">{{numberFormatComma(data.AverageValues)}}</td>
 				<td>{{data.CreateDate}}</td>
 				<td>{{data.ApproveDate}}</td>
 				<td>{{data.Status}}</td>

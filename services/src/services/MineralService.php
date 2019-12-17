@@ -139,15 +139,37 @@ class MineralService {
         return Mineral::select(DB::raw("SUM(amount) AS amount")
                                 , DB::raw("SUM(`values`) AS price"))
                         ->join("mineral_detail", 'mineral_detail.mineral_id', '=', 'mineral.id')
+                        ->join("master_goal", 'mineral_detail.food_id', '=', 'master_goal.id')
                         ->where("years", $years)
                         ->where("months", $months)
-                        ->where('office_approve_id', !$ckid)
+                        /*->where('office_approve_id', !$ckid)
                         ->where(function($query) use ($ckid) {
 
                             $query->where('office_approve_comment', $ckid);
                             $query->orWhere('office_approve_comment', '');
-                        })
+                        })*/
                         ->where("food_id", $type_id)
+                        ->whereIn('master_goal.sub_goal_type', ['พรีมิกซ์','แร่ธาตุ'])
+                        ->first()
+                        ->toArray();
+    }
+
+    public static function getDetailmonthFood($years, $months, $type_id, $region) {
+        $ckid = null;
+        return Mineral::select(DB::raw("SUM(amount) AS amount")
+                                , DB::raw("SUM(`values`) AS price"))
+                        ->join("mineral_detail", 'mineral_detail.mineral_id', '=', 'mineral.id')
+                        ->join("master_goal", 'mineral_detail.food_id', '=', 'master_goal.id')
+                        ->where("years", $years)
+                        ->where("months", $months)
+                        /*->where('office_approve_id', !$ckid)
+                        ->where(function($query) use ($ckid) {
+
+                            $query->where('office_approve_comment', $ckid);
+                            $query->orWhere('office_approve_comment', '');
+                        })*/
+                        ->where("food_id", $type_id)
+                        ->where('master_goal.sub_goal_type', 'อาหาร')
                         ->first()
                         ->toArray();
     }

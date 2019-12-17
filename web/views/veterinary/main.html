@@ -201,22 +201,22 @@
 			<tr ng-repeat="data in List">
 				<td>{{data.RegionName}}</td>
 				<td>{{data.Month}}</td>
-				<td>{{numberFormat(data.CurrentCowData)}}</td>
-				<td>{{numberFormatComma(data.CurrentServiceData)}}</td>
-				<td>{{numberFormat(data.CurrentCowInsData)}}</td>
-				<td>{{numberFormatComma(data.CurrentServiceInsData)}}</td>
-				<td>{{numberFormat(data.BeforeCowData)}}</td>
-				<td>{{numberFormatComma(data.BeforeServiceData)}}</td>
-				<td>{{numberFormat(data.BeforeCowInsData)}}</td>
-				<td>{{numberFormatComma(data.BeforeServiceInsData)}}</td>
-				<td>{{numberFormat(data.DiffCowData)}}</td>
-				<td>{{numberFormatComma(data.DiffCowDataPercentage)}}</td>
-				<td>{{numberFormatComma(data.DiffServiceData)}}</td>
-				<td>{{numberFormatComma(data.DiffServiceDataPercentage)}}</td>
-				<td>{{numberFormat(data.DiffCowInsData)}}</td>
-				<td>{{numberFormatComma(data.DiffCowInsDataPercentage)}}</td>
-				<td>{{numberFormatComma(data.DiffServiceInsData)}}</td>
-				<td>{{numberFormatComma(data.DiffServiceInsDataPercentage)}}</td>
+				<td class="text-right">{{numberFormat(data.CurrentCowData)}}</td>
+				<td class="text-right">{{numberFormatComma(data.CurrentServiceData)}}</td>
+				<td class="text-right">{{numberFormat(data.CurrentCowInsData)}}</td>
+				<td class="text-right">{{numberFormatComma(data.CurrentServiceInsData)}}</td>
+				<td class="text-right">{{numberFormat(data.BeforeCowData)}}</td>
+				<td class="text-right">{{numberFormatComma(data.BeforeServiceData)}}</td>
+				<td class="text-right">{{numberFormat(data.BeforeCowInsData)}}</td>
+				<td class="text-right">{{numberFormatComma(data.BeforeServiceInsData)}}</td>
+				<td class="text-right">{{numberFormat(data.DiffCowData)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffCowDataPercentage)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffServiceData)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffServiceDataPercentage)}}</td>
+				<td class="text-right">{{numberFormat(data.DiffCowInsData)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffCowInsDataPercentage)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffServiceInsData)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffServiceInsDataPercentage)}}</td>
 				<td>{{data.CreateDate}}</td>
 				<td>{{data.ApproveDate}}</td>
 				<td>{{data.Status}}</td>

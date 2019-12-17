@@ -212,14 +212,14 @@
 			<tr ng-repeat="data in List">
 				<td>{{data.RegionName}}</td>
 				<td>{{data.Month}}</td>
-				<td>{{numberFormat(data.CurrentAmount)}}</td>
-				<td>{{numberFormatComma(data.CurrentBaht)}}</td>
-				<td>{{numberFormat(data.BeforeAmount)}}</td>
-				<td>{{numberFormatComma(data.BeforeBaht)}}</td>
-				<td>{{numberFormat(data.DiffAmount)}}</td>
-				<td>{{numberFormatComma(data.DiffAmountPercentage)}}</td>
-				<td>{{numberFormatComma(data.DiffBaht)}}</td>
-				<td>{{numberFormatComma(data.DiffBahtPercentage)}}</td>
+				<td class="text-right">{{numberFormat(data.CurrentAmount)}}</td>
+				<td class="text-right">{{numberFormatComma(data.CurrentBaht)}}</td>
+				<td class="text-right">{{numberFormat(data.BeforeAmount)}}</td>
+				<td class="text-right">{{numberFormatComma(data.BeforeBaht)}}</td>
+				<td class="text-right">{{numberFormat(data.DiffAmount)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffAmountPercentage)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffBaht)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffBahtPercentage)}}</td>
 				<td>{{data.CreateDate}}</td>
 				<td>{{data.ApproveDate}}</td>
 				<td>{{data.Status}}</td>

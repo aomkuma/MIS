@@ -83,12 +83,12 @@
 			<tbody>
 				<tr ng-repeat="data in List">
 					<td>{{data.update_date}}</td>
-					<td>{{data.years + 543}}</td>
+					<td class="text-center">{{data.years + 543}}</td>
 					<td>{{(data.RegionName)}}</td>
 					<td>{{getGoalType(data.goal_type) + ' - ' + data.menu_type}}</td>
 					<td >{{data.goal_name}}</td><!-- bind-html-compile="getGoalName(data.goal_id)"-->
-					<td>{{numberFormatComma(data.amount)}} {{data.unit}}</td>
-					<td>{{numberFormatComma(data.price_value)}}</td>
+					<td class="text-right">{{numberFormatComma(data.amount)}} {{data.unit}}</td>
+					<td class="text-right">{{numberFormatComma(data.price_value)}}</td>
 					<td align="center"><span class="glyphicon glyphicon-check" style="color: green;" ng-show="data.dep_approve_date != null && (data.dep_approve_comment == null || data.dep_approve_comment == '')"></span> 
 						<span class="glyphicon glyphicon-remove" style="color: red;" ng-show="data.dep_approve_comment != null && data.dep_approve_comment != ''"></span> 
 						<br>{{getThaiDate(data.dep_approve_date)}}</td>

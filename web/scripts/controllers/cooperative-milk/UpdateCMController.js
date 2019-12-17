@@ -13,7 +13,7 @@ angular.module('e-homework').controller('UpdateCMController', function($scope, $
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));  
     $scope.PersonRegion = angular.fromJson(sessionStorage.getItem('person_region_session'));     
     // console.log($scope.$parent.Menu);
-
+    
     $scope.page_type = 'cooperative-milk';
     $scope.getMenu = function(action, menu_type){
         var params = {'menu_type' : menu_type};
@@ -199,7 +199,7 @@ angular.module('e-homework').controller('UpdateCMController', function($scope, $
         var detail =
             {
                 'id':''
-                ,'cooperative_id':''
+                ,'cooperative_id':null
                 ,'member_id':''
                 ,'total_person':''
                 ,'total_person_sent':''
@@ -369,6 +369,18 @@ angular.module('e-homework').controller('UpdateCMController', function($scope, $
                 IndexOverlayFactory.overlayHide();
             });
         });
+    }
+
+    $scope.checkDuplicateCo = function(spermDetail, index){
+        if(spermDetail.cooperative_id != null && spermDetail.cooperative_id != ''){
+            for(var i = 0; i < $scope.SpermDetailList.length; i++){
+                spermDetail.cooperative_id == $scope.SpermDetailList[i].cooperative_id
+                if(spermDetail.cooperative_id == $scope.SpermDetailList[i].cooperative_id && index != i){
+                    alert('สหกรณ์ดังกล่าวได้ถูกเลือกไว้แล้ว');
+                    spermDetail.cooperative_id = null;
+                }
+            }
+        }
     }
     
     $scope.currentDay = new Date();

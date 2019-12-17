@@ -1966,7 +1966,7 @@ class ProductionSaleInfoController extends Controller {
             foreach ($FactoryList as $key1 => $value1) {
                 // get ProductMilkService
                 // $ProducMilkList = ProductMilkService::getList('', '', '', $value1['id']);
-                $ProducMilkList = ProductMilkService::getList('Y', '', '', '');
+                $ProducMilkList = ProductMilkService::getList('Y', '', '', $factory_id);
 
                 $DataList['factory_name'] = $value1['factory_name'];
                 $DataList['product'] = [];

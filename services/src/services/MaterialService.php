@@ -103,4 +103,15 @@
 
             return Material::where('id', $id)->update($obj);
         }
+
+        public static function getDetailmonth($years, $months, $type_id, $region) {
+        $ckid = null;
+        return Material::select(DB::raw("SUM(amount) AS amount")
+                                , DB::raw("SUM(`price`) AS price"))
+                        ->join("material_detail", 'material_detail.material_id', '=', 'material.id')
+                        ->where("years", $years)
+                        ->where("months", $months)
+                        ->first()
+                        ->toArray();
+    }
     }
