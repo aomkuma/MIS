@@ -241,17 +241,19 @@ class SubcommitteeReportController extends Controller {
 
                                 $actually_2 = CowBreedService::getDetailmonth($year - $yearlist[$i], $monthloop, $itemmaster['id'], 3);
                                 $actually['amount'] += $actually_2['amount'];
+                                $mission[0]['unit'] = 'ล้านบาท';
                                 break;
                             case 'การบริการผสมเทียม' :
                                 $actually = VeterinaryService::getDetailmonthInsemination($year - $yearlist[$i], $monthloop, 3);
+                                $mission[0]['unit'] = 'ครั้ง';
                                 break;
                             case 'การบริการสัตวแพทย์' :
                                 $actually = VeterinaryService::getDetailmonth($year - $yearlist[$i], $monthloop, $itemmaster['id'], 3);
-
+                                $mission[0]['unit'] = 'ครั้ง';
                                 break;
                             case 'ผลิตน้ำเชื้อแช่แข็ง' :
                                 $actually = SpermService::getDetailmonth($year - $yearlist[$i], $monthloop, $itemmaster['id'], 3);
-
+                                $mission[0]['unit'] = 'ล้านบาท';
                                 break;
                             case 'บริการชมฟาร์มโคนมฯ' :
                                 $actually = TravelService::getDetailmonth($year - $yearlist[$i], $monthloop, $itemmaster['id']);
@@ -263,9 +265,11 @@ class SubcommitteeReportController extends Controller {
                                 break;
                             case 'การผลิตน้ำนมของฟาร์ม อ.ส.ค.' :
                                 $actually = CowGroupService::getDetailmonth($year - $yearlist[$i], $monthloop, $itemmaster['id'], 3);
+                                $mission[0]['unit'] = 'ตัน';
                                 break;
                             case 'การฝึกอบรม' :
                                 $actually = TrainingCowBreedService::getDetailmonth($year - $yearlist[$i], $monthloop, $itemmaster['id'], 3);
+                                $mission[0]['unit'] = 'ราย';
                                 break;
                             case 'ปริมาณการจำหน่ายแร่ธาตุ' :
                                 $actually = MineralService::getDetailmonth($year - $yearlist[$i], $monthloop, $itemmaster['id'], 3);
@@ -393,6 +397,7 @@ class SubcommitteeReportController extends Controller {
 
                                 $actually_2 = CowBreedService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
                                 $actually['amount'] += $actually_2['amount'];
+                                $mission[0]['unit'] = 'ล้านบาท';
                                 break;
                         case 'การบริการผสมเทียม' :
                             if(empty($actually)){
@@ -402,7 +407,7 @@ class SubcommitteeReportController extends Controller {
                             }else{
                                 $actually['amount'] = 0;
                             }
-                            
+                            $mission[0]['unit'] = 'ครั้ง';
                             break;
                         case 'การบริการสัตวแพทย์' :
                             if(empty($actually)){
@@ -412,6 +417,7 @@ class SubcommitteeReportController extends Controller {
                             }else{
                                 $actually['amount'] = 0;
                             }
+                            $mission[0]['unit'] = 'ครั้ง';
                             break;
                         case 'ผลิตน้ำเชื้อแช่แข็ง' :
                             $actually = SpermService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
@@ -419,7 +425,7 @@ class SubcommitteeReportController extends Controller {
                             break;
                         case 'บริการชมฟาร์มโคนมฯ' :
                             $actually = TravelService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id']);
-
+                            $mission[0]['unit'] = 'ราย';
                             break;
                         case 'ปัจจัยการเลี้ยงโค' :
                             $actually = CowBreedService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
@@ -427,36 +433,43 @@ class SubcommitteeReportController extends Controller {
                             break;
                         case 'การผลิตน้ำนมของฟาร์ม อ.ส.ค.' :
                             $actually = CowGroupService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
+                            $mission[0]['unit'] = 'ตัน';
                             break;
                         case 'การฝึกอบรม' :
                             $actually = TrainingCowBreedService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
+                            $mission[0]['unit'] = 'ราย';
                             break;
                         case 'ปริมาณการจำหน่ายแร่ธาตุ' :
                                 $actually = MineralService::getDetailmonth($year - $yearlist[$i], $monthloop, $itemmaster['id'], 3);
-
+                            $mission[0]['unit'] = 'ตัน';
                                 break;
                          case 'ปริมาณการจำหน่ายอาหารสัตว์อื่นๆ' :
                             $actually = MineralService::getDetailmonthFood($year - $yearlist[$i], $monthloop, $itemmaster['id'], 3);
-
+                            $mission[0]['unit'] = 'ตัน';
                             break;
                         case 'รายได้จากน้ำเชื้อแช่แข็ง' :
                             $actually = SpermSaleService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
+                            $mission[0]['unit'] = 'ล้านบาท';
                             break;
                         case 'ปริมาณการผลิตผลิตภัณฑ์นม' :
                             $actually = ProductionInfoService::getDetailList2($condition['YearTo'], $condition['MonthFrom']);
+                            $mission[0]['unit'] = 'ตัน';
                             break;
                         case 'ปริมาณการจำหน่าย' :
                             $actually = ProductionSaleInfoService::getDetailList2($condition['YearTo'], $condition['MonthFrom']);
+                            $mission[0]['unit'] = 'ตัน';
                             break;
                         case 'ปริมาณการรับซื้อน้ำนม' :
                             $actually = MBIService::getListMBIreoprt2($condition['YearTo'], $condition['MonthFrom']);
                             $this->logger->info('ปริมาณการรับซื้อน้ำนม');
                             $this->logger->info($actually['amount']);
+                            $mission[0]['unit'] = 'ตัน';
                             break;
                         case 'ปริมาณน้ำนมดิบเข้ากระบวนการผลิต' :
                             $actually = MSIService::getListMSIreoprt2($condition['YearTo'], $condition['MonthFrom']);
                             $this->logger->info('ปริมาณน้ำนมดิบเข้ากระบวนการผลิต');
                             $this->logger->info($actually['amount']);
+                            $mission[0]['unit'] = 'ตัน';
                             break;
 
                         default : $result = null;
@@ -726,188 +739,48 @@ class SubcommitteeReportController extends Controller {
     }
 
     private function generatesheet2($objPHPExcel, $condition, $header) {
-        $mastername = ['สัตวแพทย์', 'การบริการผสมเทียม', 'รายได้จากน้ำเชื้อแช่แข็ง', 'ผลิตน้ำเชื้อแช่แข็ง', 'ปริมาณการจำหน่ายแร่ธาตุ', 'ปัจจัยการเลี้ยงโค', 'การฝึกอบรม'/*, 'รายได้จากน้ำเชื้อแช่แข็ง'*/];
+        // $mastername = ['สัตวแพทย์', 'การบริการผสมเทียม', 'รายได้จากน้ำเชื้อแช่แข็ง', 'ผลิตน้ำเชื้อแช่แข็ง', 'ปริมาณการจำหน่ายแร่ธาตุ', 'ปัจจัยการเลี้ยงโค', 'การฝึกอบรม'/*, 'รายได้จากน้ำเชื้อแช่แข็ง'*/];
+        $mastername = ['การบริการสัตวแพทย์'
+                , 'การบริการผสมเทียม'
+                , 'การบริการและจัดการฟาร์มสหกรณ์'
+                , 'การผลิตน้ำนมของฟาร์ม อ.ส.ค.'
+                , 'การจำหน่ายอาหารสัตว์'];
+
+
         $monthList = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
         $yearlist = [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $objPHPExcel->createSheet(1);
         $objPHPExcel->setActiveSheetIndex(1);
         $objPHPExcel->getActiveSheet()->setTitle("หน้า 2-3");
         $row = 0;
-        if ($condition['DisplayType'] == 'annually') {
-            $position = 1;
-
-
-            $objPHPExcel->getActiveSheet()->setCellValue('A2', $header);
-            $objPHPExcel->getActiveSheet()->setCellValue('A3', '1.ผลการดำเนินงานด้านกิจการโคนม');
-
-            $objPHPExcel->getActiveSheet()->setCellValue('A4', ($condition['YearFrom'] + 542));
-            $objPHPExcel->getActiveSheet()->mergeCells('A4:A5');
-            $objPHPExcel->getActiveSheet()->setCellValue('B4', 'เป้าหมาย ปี ' . ($condition['YearFrom'] + 543));
-
-            $objPHPExcel->getActiveSheet()->mergeCells('B4:B5');
-            $objPHPExcel->getActiveSheet()->setCellValue('C4', 'ผลการดำเนินงานสะสม');
-            $objPHPExcel->getActiveSheet()->mergeCells('C4:D4');
-            $objPHPExcel->getActiveSheet()->setCellValue('C5', ($condition['YearFrom'] + 543));
-            $objPHPExcel->getActiveSheet()->setCellValue('D5', '%เป้าหมาย ปี' . ($condition['YearFrom'] + 543));
-
-            $objPHPExcel->getActiveSheet()->setCellValue('E4', 'ผลงานปีที่ผ่านมา');
-            $objPHPExcel->getActiveSheet()->mergeCells('E4:F4');
-            $objPHPExcel->getActiveSheet()->setCellValue('E5', ($condition['YearFrom'] + 542));
-            $objPHPExcel->getActiveSheet()->setCellValue('F5', '%เพิ่ม/ลด ' . ($condition['YearFrom'] + 542));
-            $objPHPExcel->getActiveSheet()->setCellValue('G4', 'กิจกรรม ');
-            $objPHPExcel->getActiveSheet()->mergeCells('G4:G5');
-            $objPHPExcel->getActiveSheet()->setCellValue('H4', 'หน่วย ');
-            $objPHPExcel->getActiveSheet()->mergeCells('H4:H5');
-            $objPHPExcel->getActiveSheet()->setCellValue('I4', 'เป้าหมายทั้งปี ');
-            $objPHPExcel->getActiveSheet()->mergeCells('I4:I5');
-            $objPHPExcel->getActiveSheet()->setCellValue('J4', 'เป้าหมาย ' . $this->getMonthName(10) . ' - ' . $this->getMonthName(9) . ' ' . ($condition['YearFrom'] + 543));
-            $objPHPExcel->getActiveSheet()->mergeCells('J4:J5');
-            $objPHPExcel->getActiveSheet()->setCellValue('K4', 'ผลการดำเนินงานสะสม');
-            $objPHPExcel->getActiveSheet()->mergeCells('K4:L4');
-            $objPHPExcel->getActiveSheet()->setCellValue('K5', $this->getMonthName(10) . ' - ' . $this->getMonthName(9) . ' ' . ($condition['YearFrom'] + 543));
-            $objPHPExcel->getActiveSheet()->setCellValue('L5', '%/เป้าหมายสะสม');
-            $data = [];
-            $type['goal_type'] = DBI;
-            foreach ($mastername as $key => $item) {
-                $mastes = MasterGoalService::getList('Y', $item, $type);
-                $detail['name'] = $item;
-
-                $detail['beforemonth']['amount'] = 0;
-                $detail['target']['amount'] = 0;
-                $detail['collectmonth']['amount'] = 0;
-                $detail['permonth']['amount'] = 0;
-                $detail['beforeyear']['amount'] = 0;
-                $detail['perbeforeyear']['amount'] = 0;
-                $detail['yeartarget']['amount'] = 0;
-                $detail['targetoct']['amount'] = 0;
-                $detail['collectoct']['amount'] = 0;
-                $detail['peroct']['amount'] = 0;
-                $detail['beforemonth']['price_value'] = 0;
-                $detail['target']['price_value'] = 0;
-                $detail['collectmonth']['price_value'] = 0;
-                $detail['permonth']['price_value'] = 0;
-                $detail['beforeyear']['price_value'] = 0;
-                $detail['perbeforeyear']['price_value'] = 0;
-                $detail['yeartarget']['price_value'] = 0;
-                $detail['targetoct']['price_value'] = 0;
-                $detail['collectoct']['price_value'] = 0;
-                $detail['peroct']['price_value'] = 0;
-                $detail['unit'] = 0;
-                foreach ($mastes as $keyitem => $itemmaster) {
-
-                    $mission = GoalMissionService::getMission($itemmaster['id'], 3, $condition['YearFrom']);
-                    $detail['unit'] = $mission[0]['unit'];
-                    $detail['yeartarget']['amount'] += $mission[0]['amount'];
-                    $detail['yeartarget']['price_value'] += $mission[0]['price_value'] / 1000000;
-
-                    $detail['targetoct']['amount'] += $mission[0]['amount'];
-                    $detail['targetoct']['price_value'] += $mission[0]['price_value'] / 1000000;
-                    if ($detail['targetoct']['amount'] > 0) {
-                        $detail['peroct']['amount'] += ($detail['collectoct']['amount'] * 100) / $detail['targetoct']['amount'];
-                    } else {
-                        $detail['peroct']['amount'] += 0;
-                    }
-                    if ($detail['targetoct']['price_value'] > 0) {
-                        $detail['peroct']['price_value'] += ($detail['collectoct']['price_value'] * 100) / $detail['targetoct']['price_value'];
-                    } else {
-                        $detail['peroct']['price_value'] += 0;
-                    }
-                    foreach ($monthList as $key => $ml) {
-
-                        $beforeavg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearFrom'] - $yearlist[$key], $ml);
-
-                        $avg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearFrom'] - $yearlist[$key], $ml);
-                        switch ($itemmaster['menu_type']) {
-                            case 'การบริการผสมเทียม' :
-                                $actually = VeterinaryService::getDetailmonthInsemination($condition['YearFrom'] - $yearlist[$key], $ml, 3);
-                                $beforeactually = VeterinaryService::getDetailmonthInsemination(($condition['YearFrom'] - $yearlist[$key]) - 1, $ml, 3);
-
-                                break;
-                            case 'สัตวแพทย์' :
-                                $actually = VeterinaryService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
-                                $beforeactually = VeterinaryService::getDetailmonth($condition['YearFrom'] - $yearlist[$key] - 1, $ml, $itemmaster['id'], 3);
-
-                                break;
-                            case 'ผลิตน้ำเชื้อแช่แข็ง' :
-                                $actually = SpermService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
-                                $beforeactually = SpermService::getDetailmonth($condition['YearFrom'] - $yearlist[$key] - 1, $ml, $itemmaster['id'], 3);
-
-                                break;
-                            case 'ท่องเที่ยว' :
-                                $actually = TravelService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id']);
-                                $beforeactually = TravelService::getDetailmonth($condition['YearFrom'] - $yearlist[$key] - 1, $ml, $itemmaster['id']);
-
-                                break;
-                            case 'ปัจจัยการเลี้ยงโค' :
-                                $actually = CowBreedService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
-                                $beforeactually = CowBreedService::getDetailmonth($condition['YearFrom'] - $yearlist[$key] - 1, $ml, $itemmaster['id'], 3);
-
-                                break;
-                            case 'การผลิตน้ำนมของฟาร์ม อ.ส.ค.' :
-                                $actually = CowGroupService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
-                                $beforeactually = CowGroupService::getDetailmonth($condition['YearFrom'] - $yearlist[$key] - 1, $ml, $itemmaster['id'], 3);
-
-                                break;
-                            case 'การฝึกอบรม' :
-                                $actually = TrainingCowBreedService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
-                                $beforeactually = TrainingCowBreedService::getDetailmonth($condition['YearFrom'] - $yearlist[$key] - 1, $ml, $itemmaster['id'], 3);
-
-                                break;
-                            case 'ปริมาณการจำหน่ายแร่ธาตุ' :
-                                $actually = MineralService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
-                                $beforeactually = MineralService::getDetailmonth($condition['YearFrom'] - $yearlist[$key] - 1, $ml, $itemmaster['id'], 3);
-
-                                break;
-                            case 'รายได้จากน้ำเชื้อแช่แข็ง' :
-                                $actually = SpermSaleService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
-                                $beforeactually = SpermSaleService::getDetailmonth($condition['YearFrom'] - $yearlist[$key] - 1, $ml, $itemmaster['id'], 3);
-
-
-                                break;
-
-                            default : $result = null;
-                        }
-                        $detail['beforemonth']['amount'] += $beforeavg[0]['amount'];
-                        $detail['beforemonth']['price_value'] += $beforeavg[0]['price_value'] / 1000000;
-                        $detail['target']['amount'] += $avg[0]['amount'];
-                        $detail['target']['price_value'] += $avg[0]['price_value'] / 1000000;
-                        $detail['collectmonth']['amount'] += $actually['amount'];
-                        $detail['collectmonth']['price_value'] += $actually['price'] / 1000000;
-                        if ($detail['target']['amount'] > 0) {
-                            $detail['permonth']['amount'] += ($detail['collectmonth']['amount'] * 100) / $detail['target']['amount'];
-                        } else {
-                            $detail['permonth']['amount'] += 0;
-                        }
-                        if ($detail['target']['price_value'] > 0) {
-                            $detail['permonth']['price_value'] += ($detail['collectmonth']['price_value'] * 100) / $detail['target']['price_value'];
-                        } else {
-                            $detail['permonth']['price_value'] += 0;
-                        }
-//
-                        $detail['beforeyear']['amount'] += $beforeactually['amount'];
-                        $detail['beforeyear']['price_value'] += $beforeactually['price'];
-                        if ($detail['beforeyear']['amount'] > 0) {
-                            $detail['perbeforeyear']['amount'] += (($detail['collectmonth']['amount'] - $detail['beforeyear']['amount']) * 100) / $detail['beforeyear']['amount'];
-                        } else {
-                            $detail['perbeforeyear']['amount'] += 0;
-                        }
-                        if ($detail['beforeyear']['price_value'] > 0) {
-                            $detail['perbeforeyear']['price_value'] += (($detail['collectmonth']['price_value'] - $detail['beforeyear']['price_value']) * 100) / $detail['beforeyear']['price_value'];
-                        } else {
-                            $detail['perbeforeyear']['price_value'] += 0;
-                        }
-
-
-                        $detail['collectoct']['amount'] += $actually['amount'];
-                        $detail['collectoct']['price_value'] += $actually['price'] / 1000000;
-                    }
-                }
-                array_push($data, $detail);
-            }
-        } else if ($condition['DisplayType'] == 'monthly') {
+        $data = [];
+        $detail = [];
+        /*$detail['beforemonth']['amount'] = 0;
+        $detail['target']['amount'] = 0;
+        $detail['collectmonth']['amount'] = 0;
+        $detail['permonth']['amount'] = 0;
+        $detail['beforeyear']['amount'] = 0;
+        $detail['perbeforeyear']['amount'] = 0;
+        $detail['yeartarget']['amount'] = 0;
+        $detail['targetoct']['amount'] = 0;
+        $detail['collectoct']['amount'] = 0;
+        $detail['peroct']['amount'] = 0;
+        $detail['beforemonth']['price_value'] = 0;
+        $detail['target']['price_value'] = 0;
+        $detail['collectmonth']['price_value'] = 0;
+        $detail['permonth']['price_value'] = 0;
+        $detail['beforeyear']['price_value'] = 0;
+        $detail['perbeforeyear']['price_value'] = 0;
+        $detail['yeartarget']['price_value'] = 0;
+        $detail['targetoct']['price_value'] = 0;
+        $detail['collectoct']['price_value'] = 0;
+        $detail['peroct']['price_value'] = 0;
+        $detail['unit'] = 0;*/
+        if ($condition['DisplayType'] == 'monthly') {
             $beforemonth = $condition['MonthFrom'];
             if ($condition['MonthFrom'] == 1) {
                 $beforemonth = 12;
+                $beforeYear = $condition['YearTo'] - 1;
             } else {
                 $beforemonth--;
             }
@@ -942,424 +815,55 @@ class SubcommitteeReportController extends Controller {
             $objPHPExcel->getActiveSheet()->mergeCells('K4:L4');
             $objPHPExcel->getActiveSheet()->setCellValue('K5', $this->getMonthName(10) . ' - ' . $this->getMonthName($condition['MonthFrom']) . ' ' . ($condition['YearTo'] + 543));
             $objPHPExcel->getActiveSheet()->setCellValue('L5', '%/เป้าหมายสะสม');
-            $data = [];
-            $type['goal_type'] = DBI;
-            foreach ($mastername as $key => $item) {
-                $mastes = MasterGoalService::getList('Y', $item, $type);
-                $detail['name'] = $item;
+            
+            // การบริการสัตวแพทย์
 
-                $detail['beforemonth']['amount'] = 0;
-                $detail['target']['amount'] = 0;
-                $detail['collectmonth']['amount'] = 0;
-                $detail['permonth']['amount'] = 0;
-                $detail['beforeyear']['amount'] = 0;
-                $detail['perbeforeyear']['amount'] = 0;
-                $detail['yeartarget']['amount'] = 0;
-                $detail['targetoct']['amount'] = 0;
-                $detail['collectoct']['amount'] = 0;
-                $detail['peroct']['amount'] = 0;
-                $detail['beforemonth']['price_value'] = 0;
-                $detail['target']['price_value'] = 0;
-                $detail['collectmonth']['price_value'] = 0;
-                $detail['permonth']['price_value'] = 0;
-                $detail['beforeyear']['price_value'] = 0;
-                $detail['perbeforeyear']['price_value'] = 0;
-                $detail['yeartarget']['price_value'] = 0;
-                $detail['targetoct']['price_value'] = 0;
-                $detail['collectoct']['price_value'] = 0;
-                $detail['peroct']['price_value'] = 0;
-                $detail['unit'] = 0;
-                foreach ($mastes as $keyitem => $itemmaster) {
+            $menu_type = 'บริการสัตวแพทย์';
+            $detail['name'] = 'บริการสัตวแพทย์';
+            // result before selected month 
+            $result = VeterinaryService::getDetailmonth($beforeYear, $beforemonth);
+            $detail['beforemonth']['amount'] = $result['amount'];
+            $result = VeterinaryService::getDetailmonthPrice($beforeYear, $beforemonth);
+            $detail['beforemonth']['price_value'] = $result['amount'];
+            // current month goal 
+            $result = GoalMissionService::getMissionavgByMenuType($menu_type, $condition['YearTo'], $beforemonth);
+            $detail['target']['amount'] = $result['amount'];
+            $detail['target']['price_value'] = $result['price'];
 
-                    $mission = GoalMissionService::getMission($itemmaster['id'], 3, $condition['YearTo']);
+            // result selected month 
+            $result = VeterinaryService::getDetailmonth($condition['YearTo'], $condition['MonthFrom']);
+            $detail['collectmonth']['amount'] = $result['amount'];
+            $result = VeterinaryService::getDetailmonthPrice($condition['YearTo'], $condition['MonthFrom']);
+            $detail['collectmonth']['price_value'] = $result['amount'];
 
-                    $beforeavg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $beforemonth);
+            $detail['permonth']['amount'] = ($detail['collectmonth']['amount'] / $detail['target']['amount']) * 100;
+            $detail['permonth']['price_value'] += ($detail['collectmonth']['price_value'] * 100) / $detail['target']['price_value'];
 
-                    $avg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'], $condition['MonthFrom']);
-                    switch ($itemmaster['menu_type']) {
-                        case 'การบริการผสมเทียม' :
-                            $actually = VeterinaryService::getDetailmonthInsemination($condition['YearTo'], $condition['MonthFrom'], 3);
-                            $beforeactually = VeterinaryService::getDetailmonthInsemination($condition['YearTo'] - 1, $condition['MonthFrom'], 3);
+            $result = VeterinaryService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom']);
+            $detail['beforeyear']['amount'] = $result['amount'];
+            $result = VeterinaryService::getDetailmonthPrice($condition['YearTo'] - 1, $condition['MonthFrom']);
+            $detail['beforeyear']['price_value'] = $result['amount'];
 
-                            break;
-                        case 'สัตวแพทย์' :
-                            $actually = VeterinaryService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
-                            $beforeactually = VeterinaryService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom'], $itemmaster['id'], 3);
+            $detail['perbeforeyear']['amount'] = (($detail['collectmonth']['amount'] - $detail['beforeyear']['amount']) * 100) / $detail['beforeyear']['amount'];
 
-                            break;
-                        case 'ผลิตน้ำเชื้อแช่แข็ง' :
-                            $actually = SpermService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
-                            $beforeactually = SpermService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom'], $itemmaster['id'], 3);
+            $detail['perbeforeyear']['price_value'] = (($detail['collectmonth']['price_value'] - $detail['beforeyear']['price_value']) * 100) / $detail['beforeyear']['price_value'];
 
-                            break;
-                        case 'ท่องเที่ยว' :
-                            $actually = TravelService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id']);
-                            $beforeactually = TravelService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom'], $itemmaster['id']);
+            
+            $detail['yeartarget']['amount'] = 0;
+            $detail['targetoct']['amount'] = 0;
+            $detail['collectoct']['amount'] = 0;
+            $detail['peroct']['amount'] = 0;
+            
+            
+            
+            $detail['yeartarget']['price_value'] = 0;
+            $detail['targetoct']['price_value'] = 0;
+            $detail['collectoct']['price_value'] = 0;
+            $detail['peroct']['price_value'] = 0;
+            $detail['unit'] = 'ครั้ง';
+            array_push($data, $detail);
+            $detail = [];
 
-                            break;
-                        case 'ปัจจัยการเลี้ยงโค' :
-                            $actually = CowBreedService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
-                            $beforeactually = CowBreedService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom'], $itemmaster['id'], 3);
-
-                            break;
-                        case 'การผลิตน้ำนมของฟาร์ม อ.ส.ค.' :
-                            $actually = CowGroupService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
-                            $beforeactually = CowGroupService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom'], $itemmaster['id'], 3);
-
-                            break;
-                        case 'การฝึกอบรม' :
-                            $actually = TrainingCowBreedService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
-                            $beforeactually = TrainingCowBreedService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom'], $itemmaster['id'], 3);
-
-                            break;
-                        case 'ปริมาณการจำหน่ายแร่ธาตุ' :
-                            $actually = MineralService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
-                            $beforeactually = MineralService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom'], $itemmaster['id'], 3);
-
-                            break;
-                        case 'รายได้จากน้ำเชื้อแช่แข็ง' :
-                            $actually = SpermSaleService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], $itemmaster['id'], 3);
-                            $beforeactually = SpermSaleService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom'], $itemmaster['id'], 3);
-
-
-                            break;
-
-                        default : $result = null;
-                    }
-                    $detail['beforemonth']['amount'] += $beforeavg[0]['amount'];
-                    $detail['beforemonth']['price_value'] += $beforeavg[0]['price_value'] / 1000000;
-                    $detail['target']['amount'] += $avg[0]['amount'];
-                    $detail['target']['price_value'] += $avg[0]['price_value'] / 1000000;
-                    $detail['collectmonth']['amount'] += $actually['amount'];
-                    $detail['collectmonth']['price_value'] += $actually['price'] / 1000000;
-                    if ($detail['target']['amount'] > 0) {
-                        $detail['permonth']['amount'] += ($detail['collectmonth']['amount'] * 100) / $detail['target']['amount'];
-                    } else {
-                        $detail['permonth']['amount'] += 0;
-                    }
-                    if ($detail['target']['price_value'] > 0) {
-                        $detail['permonth']['price_value'] += ($detail['collectmonth']['price_value'] * 100) / $detail['target']['price_value'];
-                    } else {
-                        $detail['permonth']['price_value'] += 0;
-                    }
-//
-                    $detail['beforeyear']['amount'] += $beforeactually['amount'];
-                    $detail['beforeyear']['price_value'] += $beforeactually['price'] / 1000000;
-                    ;
-                    if ($detail['beforeyear']['amount'] > 0) {
-                        $detail['perbeforeyear']['amount'] += (($detail['collectmonth']['amount'] - $detail['beforeyear']['amount']) * 100) / $detail['beforeyear']['amount'];
-                    } else {
-                        $detail['perbeforeyear']['amount'] += 0;
-                    }
-                    if ($detail['beforeyear']['price_value'] > 0) {
-                        $detail['perbeforeyear']['price_value'] += (($detail['collectmonth']['price_value'] - $detail['beforeyear']['price_value']) * 100) / $detail['beforeyear']['price_value'];
-                    } else {
-                        $detail['perbeforeyear']['price_value'] += 0;
-                    }
-
-                    $detail['unit'] = $mission[0]['unit'];
-                    $detail['yeartarget']['amount'] += $mission[0]['amount'];
-                    $detail['yeartarget']['price_value'] += $mission[0]['price_value'];
-                    foreach ($monthList as $key => $ml) {
-                        $octavg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'] - $yearlist[$key], $ml);
-                        $detail['targetoct']['amount'] += $octavg[0]['amount'];
-                        $detail['targetoct']['price_value'] += $octavg[0]['price_value'];
-                        switch ($itemmaster['menu_type']) {
-                            case 'การบริการผสมเทียม' :
-                                $actually = VeterinaryService::getDetailmonthInsemination($condition['YearTo'] - $yearlist[$key], $ml, 3);
-                                break;
-                            case 'สัตวแพทย์' :
-                                $actually = VeterinaryService::getDetailmonth($condition['YearTo'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
-
-                                break;
-                            case 'ผลิตน้ำเชื้อแช่แข็ง' :
-                                $actually = SpermService::getDetailmonth($condition['YearTo'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
-
-                                break;
-                            case 'ท่องเที่ยว' :
-                                $actually = TravelService::getDetailmonth($condition['YearTo'] - $yearlist[$key], $ml, $itemmaster['id']);
-
-                                break;
-                            case 'ปัจจัยการเลี้ยงโค' :
-                                $actually = CowBreedService::getDetailmonth($condition['YearTo'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
-
-                                break;
-                            case 'การผลิตน้ำนมของฟาร์ม อ.ส.ค.' :
-                                $actually = CowGroupService::getDetailmonth($condition['YearTo'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
-                                break;
-                            case 'การฝึกอบรม' :
-                                $actually = TrainingCowBreedService::getDetailmonth($condition['YearTo'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
-                                break;
-                            case 'ปริมาณการจำหน่ายแร่ธาตุ' :
-                                $actually = MineralService::getDetailmonth($condition['YearTo'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
-
-                                break;
-                            case 'รายได้จากน้ำเชื้อแช่แข็ง' :
-                                $actually = SpermSaleService::getDetailmonth($condition['YearTo'] - $yearlist[$key], $condition['MonthFrom'], $itemmaster['id'], 3);
-                                break;
-
-                            default : $result = null;
-                        }
-                        $detail['collectoct']['amount'] += $actually['amount'];
-                        $detail['collectoct']['price_value'] += $actually['price'] / 1000000;
-                        ;
-                        if ($ml == $condition['MonthFrom']) {
-                            break;
-                        }
-                    }
-                    if ($detail['targetoct']['amount'] > 0) {
-                        $detail['peroct']['amount'] += ($detail['collectoct']['amount'] * 100) / $detail['targetoct']['amount'];
-                    } else {
-                        $detail['peroct']['amount'] += 0;
-                    }
-                    if ($detail['targetoct']['price_value'] > 0) {
-                        $detail['peroct']['price_value'] += ($detail['collectoct']['price_value'] * 100) / $detail['targetoct']['price_value'];
-                    } else {
-                        $detail['peroct']['price_value'] += 0;
-                    }
-
-
-
-
-
-                    // array_push($detail['data'], $detail2);
-                }
-                array_push($data, $detail);
-            }
-        } else {
-            $beforeQuarter = $condition['QuarterFrom'];
-            $year = $condition['YearFrom'];
-            $beforeyear = $condition['YearFrom'];
-            $loop = [10, 11, 12];
-            if ($condition['QuarterFrom'] == 1) {
-                $montharr = [10, 11, 12];
-                $beforemontharr = [7, 8, 9];
-                $year--;
-                $beforeyear--;
-                $beforeQuarter = 4;
-            } else if ($condition['QuarterFrom'] == 2) {
-                $montharr = [1, 2, 3];
-                $beforemontharr = [10, 11, 12];
-                $beforeyear--;
-                $loop = [10, 11, 12, 1, 2, 3];
-                $beforeQuarter--;
-            } else if ($condition['QuarterFrom'] == 3) {
-                $montharr = [4, 5, 6];
-                $beforemontharr = [1, 2, 3];
-                $loop = [10, 11, 12, 1, 2, 3, 4, 5, 6];
-                $beforeQuarter--;
-            } else if ($condition['QuarterFrom'] == 4) {
-                $montharr = [7, 8, 9];
-                $beforemontharr = [4, 5, 6];
-                $loop = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-                $beforeQuarter--;
-            }
-
-            $position = 1;
-            $objPHPExcel->getActiveSheet()->setCellValue('A2', $header);
-            $objPHPExcel->getActiveSheet()->setCellValue('A3', '1.ผลการดำเนินงานด้านกิจการโคนม');
-
-            $objPHPExcel->getActiveSheet()->setCellValue('A4', 'ไตรมาสที่ ' . $beforeQuarter . ' ' . ($year + 543));
-            $objPHPExcel->getActiveSheet()->mergeCells('A4:A5');
-            $objPHPExcel->getActiveSheet()->setCellValue('B4', 'เป้าหมาย ไตรมาสที่ ' . $condition['QuarterFrom'] . ' ' . ($condition['YearFrom'] + 543));
-
-            $objPHPExcel->getActiveSheet()->mergeCells('B4:B5');
-            $objPHPExcel->getActiveSheet()->setCellValue('C4', 'ผลการดำเนินงานสะสม');
-            $objPHPExcel->getActiveSheet()->mergeCells('C4:D4');
-            $objPHPExcel->getActiveSheet()->setCellValue('C5', 'ไตรมาสที่ ' . $condition['QuarterFrom'] . ' ' . ($condition['YearFrom'] + 543));
-            $objPHPExcel->getActiveSheet()->setCellValue('D5', '%เป้าหมาย ไตรมาสที่ ' . $condition['QuarterFrom'] . ' ' . ($condition['YearFrom'] + 543));
-
-            $objPHPExcel->getActiveSheet()->setCellValue('E4', 'ผลงานปีที่ผ่านมา');
-            $objPHPExcel->getActiveSheet()->mergeCells('E4:F4');
-            $objPHPExcel->getActiveSheet()->setCellValue('E5', 'ไตรมาสที่ ' . $condition['QuarterFrom'] . ' ' . ($condition['YearTo'] + 542));
-            $objPHPExcel->getActiveSheet()->setCellValue('F5', '%เพิ่ม/ลด ' . 'ไตรมาสที่ ' . $condition['QuarterFrom'] . ' ' . ($condition['YearTo'] + 542));
-            $objPHPExcel->getActiveSheet()->setCellValue('G4', 'กิจกรรม ');
-            $objPHPExcel->getActiveSheet()->mergeCells('G4:G5');
-            $objPHPExcel->getActiveSheet()->setCellValue('H4', 'หน่วย ');
-            $objPHPExcel->getActiveSheet()->mergeCells('H4:H5');
-            $objPHPExcel->getActiveSheet()->setCellValue('I4', 'เป้าหมายทั้งปี ');
-            $objPHPExcel->getActiveSheet()->mergeCells('I4:I5');
-            $objPHPExcel->getActiveSheet()->setCellValue('J4', 'เป้าหมาย ไตรมาสที่1 - ' . 'ไตรมาสที่ ' . $condition['QuarterFrom'] . ' ' . ($condition['YearTo'] + 543));
-            $objPHPExcel->getActiveSheet()->mergeCells('J4:J5');
-            $objPHPExcel->getActiveSheet()->setCellValue('K4', 'ผลการดำเนินงานสะสม');
-            $objPHPExcel->getActiveSheet()->mergeCells('K4:L4');
-            $objPHPExcel->getActiveSheet()->setCellValue('K5', 'ไตรมาสที่1 - ' . 'ไตรมาสที่ ' . $condition['QuarterFrom'] . ' ' . ($condition['YearTo'] + 543));
-            $objPHPExcel->getActiveSheet()->setCellValue('L5', '%/เป้าหมายสะสม');
-            $data = [];
-            $type['goal_type'] = DBI;
-
-            foreach ($mastername as $key => $item) {
-                $mastes = MasterGoalService::getList('Y', $item, $type);
-                $detail['name'] = $item;
-
-                $detail['beforemonth']['amount'] = 0;
-                $detail['target']['amount'] = 0;
-                $detail['collectmonth']['amount'] = 0;
-                $detail['permonth']['amount'] = 0;
-                $detail['beforeyear']['amount'] = 0;
-                $detail['perbeforeyear']['amount'] = 0;
-                $detail['yeartarget']['amount'] = 0;
-                $detail['targetoct']['amount'] = 0;
-                $detail['collectoct']['amount'] = 0;
-                $detail['peroct']['amount'] = 0;
-                $detail['beforemonth']['price_value'] = 0;
-                $detail['target']['price_value'] = 0;
-                $detail['collectmonth']['price_value'] = 0;
-                $detail['permonth']['price_value'] = 0;
-                $detail['beforeyear']['price_value'] = 0;
-                $detail['perbeforeyear']['price_value'] = 0;
-                $detail['yeartarget']['price_value'] = 0;
-                $detail['targetoct']['price_value'] = 0;
-                $detail['collectoct']['price_value'] = 0;
-                $detail['peroct']['price_value'] = 0;
-                $detail['unit'] = 0;
-                foreach ($mastes as $keyitem => $itemmaster) {
-
-                    $mission = GoalMissionService::getMission($itemmaster['id'], 3, $condition['YearFrom']);
-
-                    foreach ($beforemontharr as $bm) {
-                        $beforeavg = GoalMissionService::getMissionavg($mission[0]['id'], $beforeyear, $bm);
-                        $detail['beforemonth']['amount'] += $beforeavg[0]['amount'];
-                        $detail['beforemonth']['price_value'] += $beforeavg[0]['price_value'] / 1000000;
-                    }
-
-                    foreach ($montharr as $ma) {
-                        $avg = GoalMissionService::getMissionavg($mission[0]['id'], $year, $ma);
-                        switch ($itemmaster['menu_type']) {
-                            case 'การบริการผสมเทียม' :
-                                $actually = VeterinaryService::getDetailmonthInsemination($year, $ma, 3);
-                                $beforeactually = VeterinaryService::getDetailmonthInsemination($year - 1, $ma, 3);
-                                break;
-                            case 'สัตวแพทย์' :
-                                $actually = VeterinaryService::getDetailmonth($year, $ma, $itemmaster['id'], 3);
-                                $beforeactually = VeterinaryService::getDetailmonth($year - 1, $ma, $itemmaster['id'], 3);
-                                break;
-                            case 'ผลิตน้ำเชื้อแช่แข็ง' :
-                                $actually = SpermService::getDetailmonth($year, $ma, $itemmaster['id'], 3);
-                                $beforeactually = SpermService::getDetailmonth($year - 1, $ma, $itemmaster['id'], 3);
-                                break;
-                            case 'ท่องเที่ยว' :
-                                $actually = TravelService::getDetailmonth($year, $ma, $itemmaster['id']);
-                                $beforeactually = TravelService::getDetailmonth($year - 1, $ma, $itemmaster['id']);
-                                break;
-                            case 'ปัจจัยการเลี้ยงโค' :
-                                $actually = CowBreedService::getDetailmonth($year, $ma, $itemmaster['id'], 3);
-                                $beforeactually = CowBreedService::getDetailmonth($year - 1, $ma, $itemmaster['id'], 3);
-                                break;
-                            case 'การผลิตน้ำนมของฟาร์ม อ.ส.ค.' :
-                                $actually = CowGroupService::getDetailmonth($year, $ma, $itemmaster['id'], 3);
-                                $beforeactually = CowGroupService::getDetailmonth($year - 1, $ma, $itemmaster['id'], 3);
-                                break;
-                            case 'การฝึกอบรม' :
-                                $actually = TrainingCowBreedService::getDetailmonth($year, $ma, $itemmaster['id'], 3);
-                                $beforeactually = TrainingCowBreedService::getDetailmonth($year - 1, $ma, $itemmaster['id'], 3);
-                                break;
-                            case 'ปริมาณการจำหน่ายแร่ธาตุ' :
-                                $actually = MineralService::getDetailmonth($year, $ma, $itemmaster['id'], 3);
-                                $beforeactually = MineralService::getDetailmonth($year - 1, $ma, $itemmaster['id'], 3);
-
-                                break;
-                            case 'รายได้จากน้ำเชื้อแช่แข็ง' :
-                                $actually = SpermSaleService::getDetailmonth($year, $ma, $itemmaster['id'], 3);
-                                $beforeactually = SpermSaleService::getDetailmonth($year - 1, $ma, $itemmaster['id'], 3);
-                                break;
-
-                            default : $result = null;
-                        }
-
-                        $detail['target']['amount'] += $avg[0]['amount'];
-                        $detail['target']['price_value'] += $avg[0]['price_value'] / 1000000;
-                        ;
-                        $detail['collectmonth']['amount'] += $actually['amount'];
-                        $detail['collectmonth']['price_value'] += $actually['price'] / 1000000;
-                        ;
-                        if ($detail['target']['amount'] > 0) {
-                            $detail['permonth']['amount'] += ($detail['collectmonth']['amount'] * 100) / $detail['target']['amount'];
-                        } else {
-                            $detail['permonth']['amount'] += 0;
-                        }
-                        if ($detail['target']['price_value'] > 0) {
-                            $detail['permonth']['price_value'] += ($detail['collectmonth']['price_value'] * 100) / $detail['target']['price_value'];
-                        } else {
-                            $detail['permonth']['price_value'] += 0;
-                        }
-                        $detail['beforeyear']['amount'] += $beforeactually['amount'];
-                        $detail['beforeyear']['price_value'] += $beforeactually['price'] / 1000000;
-                        ;
-                        if ($detail['beforeyear']['amount'] > 0) {
-                            $detail['perbeforeyear']['amount'] += (($detail['collectmonth']['amount'] - $detail['beforeyear']['amount']) * 100) / $detail['beforeyear']['amount'];
-                        } else {
-                            $detail['perbeforeyear']['amount'] += 0;
-                        }
-                        if ($detail['beforeyear']['price_value'] > 0) {
-                            $detail['perbeforeyear']['price_value'] += (($detail['collectmonth']['price_value'] - $detail['beforeyear']['price_value']) * 100) / $detail['beforeyear']['price_value'];
-                        } else {
-                            $detail['perbeforeyear']['price_value'] += 0;
-                        }
-
-                        $detail['unit'] = $mission[0]['unit'];
-                        $detail['yeartarget']['amount'] += $mission[0]['amount'];
-                        $detail['yeartarget']['price_value'] += $mission[0]['price_value'] / 1000000;
-
-
-                        foreach ($loop as $key => $ml) {
-                            $octavg = GoalMissionService::getMissionavg($mission[0]['id'], $condition['YearTo'] - $yearlist[$key], $ml);
-                            $detail['targetoct']['amount'] += $octavg[0]['amount'];
-                            $detail['targetoct']['price_value'] += $octavg[0]['price_value'];
-                            switch ($itemmaster['menu_type']) {
-                                case 'การบริการผสมเทียม' :
-                                    $actually = VeterinaryService::getDetailmonthInsemination($condition['YearFrom'] - $yearlist[$key], $ml, 3);
-                                    break;
-                                case 'สัตวแพทย์' :
-                                    $actually = VeterinaryService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
-
-                                    break;
-                                case 'ผลิตน้ำเชื้อแช่แข็ง' :
-                                    $actually = SpermService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
-
-                                    break;
-                                case 'ท่องเที่ยว' :
-                                    $actually = TravelService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id']);
-
-                                    break;
-                                case 'ปัจจัยการเลี้ยงโค' :
-                                    $actually = CowBreedService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
-
-                                    break;
-                                case 'การผลิตน้ำนมของฟาร์ม อ.ส.ค.' :
-                                    $actually = CowGroupService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
-                                    break;
-                                case 'การฝึกอบรม' :
-                                    $actually = TrainingCowBreedService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
-                                    break;
-                                case 'ปริมาณการจำหน่ายแร่ธาตุ' :
-                                    $actually = MineralService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $ml, $itemmaster['id'], 3);
-
-                                    break;
-                                case 'รายได้จากน้ำเชื้อแช่แข็ง' :
-                                    $actually = SpermSaleService::getDetailmonth($condition['YearFrom'] - $yearlist[$key], $condition['MonthFrom'], $itemmaster['id'], 3);
-                                    break;
-
-                                default : $result = null;
-                            }
-                            $detail['collectoct']['amount'] += $actually['amount'];
-                            $detail['collectoct']['price_value'] += $actually['price'] / 1000000;
-                            ;
-                        }
-                        if ($detail['targetoct']['amount'] > 0) {
-                            $detail['peroct']['amount'] += ($detail['collectoct']['amount'] * 100) / $detail['targetoct']['amount'];
-                        } else {
-                            $detail['peroct']['amount'] += 0;
-                        }
-                        if ($detail['targetoct']['price_value'] > 0) {
-                            $detail['peroct']['price_value'] += ($detail['collectoct']['price_value'] * 100) / $detail['targetoct']['price_value'];
-                        } else {
-                            $detail['peroct']['price_value'] += 0;
-                        }
-                    }
-                }
-                array_push($data, $detail);
-            }
         }
 // print
 

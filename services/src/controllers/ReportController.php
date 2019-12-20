@@ -388,7 +388,7 @@ class ReportController extends Controller {
             $catch_result = \PHPExcel_Settings::setCacheStorageMethod($cacheMethod);
 
             $objPHPExcel = new PHPExcel();
-
+            $commentarr = [];
             switch ($condition['DisplayType']) {
                 case 'annually' :$header = 'ตารางข้อมูลรายงานด้าน รายได้กิจกรรมโคนม ปี ' . ($condition['YearFrom'] + 543);
                     foreach ($monthList as $key => $m) {
@@ -543,7 +543,7 @@ class ReportController extends Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(5);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(5);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D:' . $highestColumm)->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getStyle('A1:' . $highestColumm . '3')->applyFromArray(
                 array(
                     'fill' => array(
@@ -887,7 +887,7 @@ class ReportController extends Controller {
             $catch_result = \PHPExcel_Settings::setCacheStorageMethod($cacheMethod);
 
             $objPHPExcel = new PHPExcel();
-
+            $commentarr = [];
             switch ($condition['DisplayType']) {
                 case 'annually' :$header = 'รายงานผลการดำเนินงาน ฝ่ายท่องเที่ยวเชิงเกษตร ปี ' . ($data['Description']['years'] + 543);
                     foreach ($monthList as $key => $m) {
@@ -1391,7 +1391,7 @@ class ReportController extends Controller {
             $catch_result = \PHPExcel_Settings::setCacheStorageMethod($cacheMethod);
 
             $objPHPExcel = new PHPExcel();
-
+            $commentarr = [];
             switch ($condition['DisplayType']) {
                 case 'annually' :$header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม ปี ' . ($data['Description']['years'] + 543);
                     foreach ($monthList as $key => $m) {
@@ -1774,7 +1774,7 @@ class ReportController extends Controller {
             $catch_result = \PHPExcel_Settings::setCacheStorageMethod($cacheMethod);
 
             $objPHPExcel = new PHPExcel();
-
+            $commentarr = [];
             switch ($condition['DisplayType']) {
                 case 'annually' :$header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม ปี ' . ($data['Description']['years'] + 543);
                     foreach ($monthList as $key => $m) {
@@ -2161,7 +2161,7 @@ class ReportController extends Controller {
             $catch_result = \PHPExcel_Settings::setCacheStorageMethod($cacheMethod);
 
             $objPHPExcel = new PHPExcel();
-
+            $commentarr = [];
             switch ($condition['DisplayType']) {
                 case 'annually' :$header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม ปี ' . ($data['Description']['years'] + 543);
                     foreach ($monthList as $key => $m) {
@@ -2541,7 +2541,7 @@ class ReportController extends Controller {
             $catch_result = \PHPExcel_Settings::setCacheStorageMethod($cacheMethod);
 
             $objPHPExcel = new PHPExcel();
-
+            $commentarr = [];
             switch ($condition['DisplayType']) {
                 case 'annually' :$header = 'ฝ่ายวิจัยและพัฒนาการเลี้ยงโคนม ปี ' . ($data['Description']['years'] + 543);
                     foreach ($monthList as $key => $m) {
