@@ -426,6 +426,22 @@ class GoalMissionService {
                         ->toArray();
     }
 
+    public static function getMissionavgByMenuType($menu_type, $year, $month) {
+        if(strlen($month) == 1){
+            $month = '0'.$month;
+        }
+        $date = $year . '-' . $month . '-01';
+       
+        return GoalMissionAvg::select(DB::raw("SUM(mis_goal_mission_avg.amount + mis_goal_mission_avg.addon_amount) AS amount"), 
+                            DB::raw("SUM(mis_goal_mission_avg.price_value) AS price")
+                        )
+                        ->join('goal_mission', 'goal_mission.id', '=', 'goal_mission_avg.goal_mission_id')
+                        ->where('goal_mission.menu_type', $menu_type)
+                        ->where('goal_mission_avg.avg_date', $date)
+                        ->first()
+                        ->toArray();
+    }
+
     public static function getMissionavgquar($goal_mission_id, $year, $quar) {
 
         $month = [];
