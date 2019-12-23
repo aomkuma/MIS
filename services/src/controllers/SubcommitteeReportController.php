@@ -819,55 +819,607 @@ class SubcommitteeReportController extends Controller {
             // การบริการสัตวแพทย์
 
             $menu_type = 'บริการสัตวแพทย์';
-            $detail['name'] = 'บริการสัตวแพทย์';
+            $detail['name'] = 'การบริการสัตวแพทย์';
+            $dairy_farming_id = [1,4,20];
             // result before selected month 
-            $result = VeterinaryService::getDetailmonth($beforeYear, $beforemonth);
-            $detail['beforemonth']['amount'] = $result['amount'];
-            $result = VeterinaryService::getDetailmonthPrice($beforeYear, $beforemonth);
-            $detail['beforemonth']['price_value'] = $result['amount'];
+            $result = VeterinaryService::getDetailmonth($beforeYear, $beforemonth, '', '', $dairy_farming_id);
+            $detail['beforemonth']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $result = VeterinaryService::getDetailmonthPrice($beforeYear, $beforemonth, '', '', $dairy_farming_id);
+            $detail['beforemonth']['price_value'] = empty($result['amount'])?0:$result['amount'];
             // current month goal 
             $result = GoalMissionService::getMissionavgByMenuType($menu_type, $condition['YearTo'], $beforemonth);
-            $detail['target']['amount'] = $result['amount'];
-            $detail['target']['price_value'] = $result['price'];
+            $detail['target']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['target']['price_value'] = empty($result['price'])?0:$result['price'];
 
             // result selected month 
-            $result = VeterinaryService::getDetailmonth($condition['YearTo'], $condition['MonthFrom']);
-            $detail['collectmonth']['amount'] = $result['amount'];
-            $result = VeterinaryService::getDetailmonthPrice($condition['YearTo'], $condition['MonthFrom']);
-            $detail['collectmonth']['price_value'] = $result['amount'];
+            $result = VeterinaryService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], '', '', $dairy_farming_id);
+            $detail['collectmonth']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $result = VeterinaryService::getDetailmonthPrice($condition['YearTo'], $condition['MonthFrom'], '', '', $dairy_farming_id);
+            $detail['collectmonth']['price_value'] = empty($result['amount'])?0:$result['amount'];
 
             $detail['permonth']['amount'] = ($detail['collectmonth']['amount'] / $detail['target']['amount']) * 100;
             $detail['permonth']['price_value'] += ($detail['collectmonth']['price_value'] * 100) / $detail['target']['price_value'];
 
-            $result = VeterinaryService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom']);
-            $detail['beforeyear']['amount'] = $result['amount'];
-            $result = VeterinaryService::getDetailmonthPrice($condition['YearTo'] - 1, $condition['MonthFrom']);
-            $detail['beforeyear']['price_value'] = $result['amount'];
+            $result = VeterinaryService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom'], '', '', $dairy_farming_id);
+            $detail['beforeyear']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $result = VeterinaryService::getDetailmonthPrice($condition['YearTo'] - 1, $condition['MonthFrom'], '', '', $dairy_farming_id);
+            $detail['beforeyear']['price_value'] = empty($result['amount'])?0:$result['amount'];
 
-            $detail['perbeforeyear']['amount'] = (($detail['collectmonth']['amount'] - $detail['beforeyear']['amount']) * 100) / $detail['beforeyear']['amount'];
+            if(!empty($detail['beforeyear']['amount'])){
+                $detail['perbeforeyear']['amount'] = (($detail['collectmonth']['amount'] - $detail['beforeyear']['amount']) * 100) / $detail['beforeyear']['amount'];
+            }else{
+                $detail['perbeforeyear']['amount'] = 0;
+            }
+            
+            if(!empty($detail['beforeyear']['price_value'])){
+                $detail['perbeforeyear']['price_value'] = (($detail['collectmonth']['price_value'] - $detail['beforeyear']['price_value']) * 100) / $detail['beforeyear']['price_value'];
+            }else{
+                $detail['perbeforeyear']['price_value'] = 0;
+            }
+            
+            $result = GoalMissionService::getMissionYearByMenuType($menu_type, $condition['YearTo']);
+            $detail['yeartarget']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['yeartarget']['price_value'] = empty($result['price'])?0:$result['price'];
 
-            $detail['perbeforeyear']['price_value'] = (($detail['collectmonth']['price_value'] - $detail['beforeyear']['price_value']) * 100) / $detail['beforeyear']['price_value'];
+            $result = GoalMissionService::getMissionOctAvgByMenuType($menu_type, $condition['YearTo'], $condition['MonthFrom']);
+            $detail['targetoct']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['targetoct']['price_value'] = empty($result['price'])?0:$result['price'];
 
+
+            $loop_year = $condition['YearTo'] - 1;
+            $loop_month = 10;
+
+            while($loop_month != $condition['MonthFrom']){
+
+                $result = VeterinaryService::getDetailmonth($loop_year, $loop_month, '', '', $dairy_farming_id);
+                $detail['collectoct']['amount'] += empty($result['amount'])?0:$result['amount'];
+                $result = VeterinaryService::getDetailmonthPrice($loop_year, $loop_month, '', '', $dairy_farming_id);
+                $detail['collectoct']['price_value'] += empty($result['amount'])?0:$result['amount'];
+                $loop_month++;
+
+                if($loop_month > 12){
+                    $loop_month = 1;
+                    $loop_year += 1;
+                }
+            }
+
+            if(!empty($detail['targetoct']['amount'])){
+                $detail['peroct']['amount'] = ($detail['collectoct']['amount'] * 100) / $detail['targetoct']['amount'];
+            }else{
+                $detail['peroct']['amount'] = 0;
+            }
             
-            $detail['yeartarget']['amount'] = 0;
-            $detail['targetoct']['amount'] = 0;
-            $detail['collectoct']['amount'] = 0;
-            $detail['peroct']['amount'] = 0;
-            
-            
-            
-            $detail['yeartarget']['price_value'] = 0;
-            $detail['targetoct']['price_value'] = 0;
-            $detail['collectoct']['price_value'] = 0;
-            $detail['peroct']['price_value'] = 0;
-            $detail['unit'] = 'ครั้ง';
+            if(!empty($detail['targetoct']['price_value'])){
+                $detail['peroct']['price_value'] = ($detail['collectoct']['price_value'] * 100) / $detail['targetoct']['price_value'];
+            }else{
+                $detail['peroct']['price_value'] = 0;
+            }
+
+            $detail['unit_amount'] = 'ครั้ง';
+            $detail['unit_price'] = 'ล้านบาท';
+            $detail['type_amount'] = 'ปริมาณ';
+            $detail['type_price'] = 'มูลค่า';
             array_push($data, $detail);
             $detail = [];
+
+            // การบริการผสมเทียม
+
+            $menu_type = 'บริการสัตวแพทย์';
+            $detail['name'] = 'การบริการผสมเทียม';
+            $dairy_farming_id = [17, 29];
+            // result before selected month 
+            $result = VeterinaryService::getDetailmonth($beforeYear, $beforemonth, '', '', $dairy_farming_id);
+            $detail['beforemonth']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $result = VeterinaryService::getDetailmonthPrice($beforeYear, $beforemonth, '', '', $dairy_farming_id);
+            $detail['beforemonth']['price_value'] = empty($result['amount'])?0:$result['amount'];
+            // current month goal 
+            $result = GoalMissionService::getMissionavgByMenuType($menu_type, $condition['YearTo'], $beforemonth);
+            $detail['target']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['target']['price_value'] = empty($result['price'])?0:$result['price'];
+
+            // result selected month 
+            $result = VeterinaryService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], '', '', $dairy_farming_id);
+            $detail['collectmonth']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $result = VeterinaryService::getDetailmonthPrice($condition['YearTo'], $condition['MonthFrom'], '', '', $dairy_farming_id);
+            $detail['collectmonth']['price_value'] = empty($result['amount'])?0:$result['amount'];
+
+            $detail['permonth']['amount'] = ($detail['collectmonth']['amount'] / $detail['target']['amount']) * 100;
+            $detail['permonth']['price_value'] += ($detail['collectmonth']['price_value'] * 100) / $detail['target']['price_value'];
+
+            $result = VeterinaryService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom'], '', '', $dairy_farming_id);
+            $detail['beforeyear']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $result = VeterinaryService::getDetailmonthPrice($condition['YearTo'] - 1, $condition['MonthFrom'], '', '', $dairy_farming_id);
+            $detail['beforeyear']['price_value'] = empty($result['amount'])?0:$result['amount'];
+
+            if(!empty($detail['beforeyear']['amount'])){
+                $detail['perbeforeyear']['amount'] = (($detail['collectmonth']['amount'] - $detail['beforeyear']['amount']) * 100) / $detail['beforeyear']['amount'];
+            }else{
+                $detail['perbeforeyear']['amount'] = 0;
+            }
+            
+            if(!empty($detail['beforeyear']['price_value'])){
+                $detail['perbeforeyear']['price_value'] = (($detail['collectmonth']['price_value'] - $detail['beforeyear']['price_value']) * 100) / $detail['beforeyear']['price_value'];
+            }else{
+                $detail['perbeforeyear']['price_value'] = 0;
+            }
+
+            
+            $result = GoalMissionService::getMissionYearByMenuType($menu_type, $condition['YearTo']);
+            $detail['yeartarget']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['yeartarget']['price_value'] = empty($result['price'])?0:$result['price'];
+
+            $result = GoalMissionService::getMissionOctAvgByMenuType($menu_type, $condition['YearTo'], $condition['MonthFrom']);
+            $detail['targetoct']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['targetoct']['price_value'] = empty($result['price'])?0:$result['price'];
+
+
+            $loop_year = $condition['YearTo'] - 1;
+            $loop_month = 10;
+
+            while($loop_month != $condition['MonthFrom']){
+
+                $result = VeterinaryService::getDetailmonth($loop_year, $loop_month, '', '', $dairy_farming_id);
+                $detail['collectoct']['amount'] += empty($result['amount'])?0:$result['amount'];
+                $result = VeterinaryService::getDetailmonthPrice($loop_year, $loop_month, '', '', $dairy_farming_id);
+                $detail['collectoct']['price_value'] += empty($result['amount'])?0:$result['amount'];
+                $loop_month++;
+
+                if($loop_month > 12){
+                    $loop_month = 1;
+                    $loop_year += 1;
+                }
+            }
+
+            if(!empty($detail['targetoct']['amount'])){
+                $detail['peroct']['amount'] = ($detail['collectoct']['amount'] * 100) / $detail['targetoct']['amount'];
+            }else{
+                $detail['peroct']['amount'] = 0;
+            }
+            
+            if(!empty($detail['targetoct']['price_value'])){
+                $detail['peroct']['price_value'] = ($detail['collectoct']['price_value'] * 100) / $detail['targetoct']['price_value'];
+            }else{
+                $detail['peroct']['price_value'] = 0;
+            }
+
+            $detail['unit_amount'] = 'ครั้ง';
+            $detail['unit_price'] = 'ล้านบาท';
+            $detail['type_amount'] = 'ปริมาณ';
+            $detail['type_price'] = 'มูลค่า';
+            array_push($data, $detail);
+
+            $detail = [];
+
+            // การบริการจัดการฟาร์มและสหกรณ์
+
+            $menu_type = 'บริการสัตวแพทย์';
+            $detail['name'] = 'การบริการจัดการฟาร์มและสหกรณ์';
+            $dairy_farming_id = [13];
+            // result before selected month 
+            $result = VeterinaryService::getDetailmonth($beforeYear, $beforemonth, '', '', $dairy_farming_id);
+            $detail['beforemonth']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $result = VeterinaryService::getDetailmonthPrice($beforeYear, $beforemonth, '', '', $dairy_farming_id);
+            $detail['beforemonth']['price_value'] = empty($result['amount'])?0:$result['amount'];
+            // current month goal 
+            $result = GoalMissionService::getMissionavgByMenuType($menu_type, $condition['YearTo'], $beforemonth);
+            $detail['target']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['target']['price_value'] = empty($result['price'])?0:$result['price'];
+
+            // result selected month 
+            $result = VeterinaryService::getDetailmonth($condition['YearTo'], $condition['MonthFrom'], '', '', $dairy_farming_id);
+            $detail['collectmonth']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $result = VeterinaryService::getDetailmonthPrice($condition['YearTo'], $condition['MonthFrom'], '', '', $dairy_farming_id);
+            $detail['collectmonth']['price_value'] = empty($result['amount'])?0:$result['amount'];
+
+            $detail['permonth']['amount'] = ($detail['collectmonth']['amount'] / $detail['target']['amount']) * 100;
+            $detail['permonth']['price_value'] += ($detail['collectmonth']['price_value'] * 100) / $detail['target']['price_value'];
+
+            $result = VeterinaryService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom'], '', '', $dairy_farming_id);
+            $detail['beforeyear']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $result = VeterinaryService::getDetailmonthPrice($condition['YearTo'] - 1, $condition['MonthFrom'], '', '', $dairy_farming_id);
+            $detail['beforeyear']['price_value'] = empty($result['amount'])?0:$result['amount'];
+
+            if(!empty($detail['beforeyear']['amount'])){
+                $detail['perbeforeyear']['amount'] = (($detail['collectmonth']['amount'] - $detail['beforeyear']['amount']) * 100) / $detail['beforeyear']['amount'];
+            }else{
+                $detail['perbeforeyear']['amount'] = 0;
+            }
+            
+            if(!empty($detail['beforeyear']['price_value'])){
+                $detail['perbeforeyear']['price_value'] = (($detail['collectmonth']['price_value'] - $detail['beforeyear']['price_value']) * 100) / $detail['beforeyear']['price_value'];
+            }else{
+                $detail['perbeforeyear']['price_value'] = 0;
+            }
+
+            
+            $result = GoalMissionService::getMissionYearByMenuType($menu_type, $condition['YearTo']);
+            $detail['yeartarget']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['yeartarget']['price_value'] = empty($result['price'])?0:$result['price'];
+
+            $result = GoalMissionService::getMissionOctAvgByMenuType($menu_type, $condition['YearTo'], $condition['MonthFrom']);
+            $detail['targetoct']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['targetoct']['price_value'] = empty($result['price'])?0:$result['price'];
+
+
+            $loop_year = $condition['YearTo'] - 1;
+            $loop_month = 10;
+
+            while($loop_month != $condition['MonthFrom']){
+
+                $result = VeterinaryService::getDetailmonth($loop_year, $loop_month, '', '', $dairy_farming_id);
+                $detail['collectoct']['amount'] += empty($result['amount'])?0:$result['amount'];
+                $result = VeterinaryService::getDetailmonthPrice($loop_year, $loop_month, '', '', $dairy_farming_id);
+                $detail['collectoct']['price_value'] += empty($result['amount'])?0:$result['amount'];
+                $loop_month++;
+
+                if($loop_month > 12){
+                    $loop_month = 1;
+                    $loop_year += 1;
+                }
+            }
+
+            if(!empty($detail['targetoct']['amount'])){
+                $detail['peroct']['amount'] = ($detail['collectoct']['amount'] * 100) / $detail['targetoct']['amount'];
+            }else{
+                $detail['peroct']['amount'] = 0;
+            }
+            
+            if(!empty($detail['targetoct']['price_value'])){
+                $detail['peroct']['price_value'] = ($detail['collectoct']['price_value'] * 100) / $detail['targetoct']['price_value'];
+            }else{
+                $detail['peroct']['price_value'] = 0;
+            }
+
+            $detail['unit_amount'] = 'ครั้ง';
+            $detail['unit_price'] = 'ล้านบาท';
+            $detail['type_amount'] = 'ปริมาณ';
+            $detail['type_price'] = 'มูลค่า';
+            array_push($data, $detail);
+
+            $detail = [];
+
+            // การผลิตน้ำนมของฟาร์ม อ.ส.ค.
+
+            $menu_type = 'ข้อมูลฝูงโค';
+            $detail['name'] = 'การผลิตน้ำนมของฟาร์ม อ.ส.ค.';
+            $dairy_farming_id = [13];
+            // result before selected month 
+            $result = CowGroupService::getDetailmonth($beforeYear, $beforemonth);
+            $detail['beforemonth']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['beforemonth']['price_value'] = empty($result['price'])?0:$result['price'];
+            // current month goal 
+            $result = GoalMissionService::getMissionavgByMenuType($menu_type, $condition['YearTo'], $beforemonth);
+            $detail['target']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['target']['price_value'] = empty($result['price'])?0:$result['price'];
+
+            // result selected month 
+            $result = CowGroupService::getDetailmonth($condition['YearTo'], $condition['MonthFrom']);
+            $detail['collectmonth']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['collectmonth']['price_value'] = empty($result['price'])?0:$result['price'];
+
+            $detail['permonth']['amount'] = ($detail['collectmonth']['amount'] / $detail['target']['amount']) * 100;
+            $detail['permonth']['price_value'] += ($detail['collectmonth']['price_value'] * 100) / $detail['target']['price_value'];
+
+            $result = CowGroupService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom']);
+            $detail['beforeyear']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['beforeyear']['price_value'] = empty($result['price'])?0:$result['price'];
+
+            if(!empty($detail['beforeyear']['amount'])){
+                $detail['perbeforeyear']['amount'] = (($detail['collectmonth']['amount'] - $detail['beforeyear']['amount']) * 100) / $detail['beforeyear']['amount'];
+            }else{
+                $detail['perbeforeyear']['amount'] = 0;
+            }
+            
+            if(!empty($detail['beforeyear']['price_value'])){
+                $detail['perbeforeyear']['price_value'] = (($detail['collectmonth']['price_value'] - $detail['beforeyear']['price_value']) * 100) / $detail['beforeyear']['price_value'];
+            }else{
+                $detail['perbeforeyear']['price_value'] = 0;
+            }
+
+            
+            $result = GoalMissionService::getMissionYearByMenuType($menu_type, $condition['YearTo']);
+            $detail['yeartarget']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['yeartarget']['price_value'] = empty($result['price'])?0:$result['price'];
+
+            $result = GoalMissionService::getMissionOctAvgByMenuType($menu_type, $condition['YearTo'], $condition['MonthFrom']);
+            $detail['targetoct']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['targetoct']['price_value'] = empty($result['price'])?0:$result['price'];
+
+
+            $loop_year = $condition['YearTo'] - 1;
+            $loop_month = 10;
+
+            while($loop_month != $condition['MonthFrom']){
+
+                $result = CowGroupService::getDetailmonth($loop_year, $loop_month);
+                $detail['collectoct']['amount'] += empty($result['amount'])?0:$result['amount'];
+                $detail['collectoct']['price_value'] += empty($result['price'])?0:$result['price'];
+                $loop_month++;
+
+                if($loop_month > 12){
+                    $loop_month = 1;
+                    $loop_year += 1;
+                }
+            }
+
+            if(!empty($detail['targetoct']['amount'])){
+                $detail['peroct']['amount'] = ($detail['collectoct']['amount'] * 100) / $detail['targetoct']['amount'];
+            }else{
+                $detail['peroct']['amount'] = 0;
+            }
+            
+            if(!empty($detail['targetoct']['price_value'])){
+                $detail['peroct']['price_value'] = ($detail['collectoct']['price_value'] * 100) / $detail['targetoct']['price_value'];
+            }else{
+                $detail['peroct']['price_value'] = 0;
+            }
+
+            $detail['unit_amount'] = 'ตัน';
+            $detail['unit_price'] = 'ล้านบาท';
+
+            $detail['type_amount'] = 'ปริมาณ';
+            $detail['type_price'] = 'มูลค่า';
+            array_push($data, $detail);
+
+            $detail = [];
+
+            // การจำหน่ายอาหารสัตว์
+
+            $menu_type = 'แร่ธาตุ พรีมิกซ์ และอาหาร';
+            $detail['name'] = 'การจำหน่ายอาหารสัตว์ (แร่ธาตุ พรีมิกซ์)';
+            $dairy_farming_id = [13];
+            // result before selected month 
+            $result = MineralService::getDetailmonth($beforeYear, $beforemonth);
+            $detail['beforemonth']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['beforemonth']['price_value'] = empty($result['price'])?0:$result['price'];
+            // current month goal 
+            $result = GoalMissionService::getMissionavgByMenuType($menu_type, $condition['YearTo'], $beforemonth);
+            $detail['target']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['target']['price_value'] = empty($result['price'])?0:$result['price'];
+
+            // result selected month 
+            $result = MineralService::getDetailmonth($condition['YearTo'], $condition['MonthFrom']);
+            $detail['collectmonth']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['collectmonth']['price_value'] = empty($result['price'])?0:$result['price'];
+
+            $detail['permonth']['amount'] = ($detail['collectmonth']['amount'] / $detail['target']['amount']) * 100;
+            $detail['permonth']['price_value'] += ($detail['collectmonth']['price_value'] * 100) / $detail['target']['price_value'];
+
+            $result = MineralService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom']);
+            $detail['beforeyear']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['beforeyear']['price_value'] = empty($result['price'])?0:$result['price'];
+
+            if(!empty($detail['beforeyear']['amount'])){
+                $detail['perbeforeyear']['amount'] = (($detail['collectmonth']['amount'] - $detail['beforeyear']['amount']) * 100) / $detail['beforeyear']['amount'];
+            }else{
+                $detail['perbeforeyear']['amount'] = 0;
+            }
+            
+            if(!empty($detail['beforeyear']['price_value'])){
+                $detail['perbeforeyear']['price_value'] = (($detail['collectmonth']['price_value'] - $detail['beforeyear']['price_value']) * 100) / $detail['beforeyear']['price_value'];
+            }else{
+                $detail['perbeforeyear']['price_value'] = 0;
+            }
+
+            
+            $result = GoalMissionService::getMissionYearByMenuType($menu_type, $condition['YearTo']);
+            $detail['yeartarget']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['yeartarget']['price_value'] = empty($result['price'])?0:$result['price'];
+
+            $result = GoalMissionService::getMissionOctAvgByMenuType($menu_type, $condition['YearTo'], $condition['MonthFrom']);
+            $detail['targetoct']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['targetoct']['price_value'] = empty($result['price'])?0:$result['price'];
+
+
+            $loop_year = $condition['YearTo'] - 1;
+            $loop_month = 10;
+
+            while($loop_month != $condition['MonthFrom']){
+
+                $result = MineralService::getDetailmonth($loop_year, $loop_month);
+                $detail['collectoct']['amount'] += empty($result['amount'])?0:$result['amount'];
+                $detail['collectoct']['price_value'] += empty($result['price'])?0:$result['price'];
+                $loop_month++;
+
+                if($loop_month > 12){
+                    $loop_month = 1;
+                    $loop_year += 1;
+                }
+            }
+
+            if(!empty($detail['targetoct']['amount'])){
+                $detail['peroct']['amount'] = ($detail['collectoct']['amount'] * 100) / $detail['targetoct']['amount'];
+            }else{
+                $detail['peroct']['amount'] = 0;
+            }
+            
+            if(!empty($detail['targetoct']['price_value'])){
+                $detail['peroct']['price_value'] = ($detail['collectoct']['price_value'] * 100) / $detail['targetoct']['price_value'];
+            }else{
+                $detail['peroct']['price_value'] = 0;
+            }
+
+            $detail['unit_amount'] = 'ตัน';
+            $detail['unit_price'] = 'ล้านบาท';
+
+            $detail['type_amount'] = 'ปริมาณการจำหน่ายแร่ธาตุ';
+            $detail['type_price'] = 'รายได้การจำหน่ายแร่ธาตุ';
+            array_push($data, $detail);
+
+            $detail = [];
+
+            // การจำหน่ายอาหารสัตว์
+
+            $menu_type = 'แร่ธาตุ พรีมิกซ์ และอาหาร';
+            $detail['name'] = 'การจำหน่ายอาหารสัตว์ (อาหาร)';
+            $dairy_farming_id = [13];
+            // result before selected month 
+            $result = MineralService::getDetailmonthFood($beforeYear, $beforemonth);
+            $detail['beforemonth']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['beforemonth']['price_value'] = empty($result['price'])?0:$result['price'];
+            // current month goal 
+            $result = GoalMissionService::getMissionavgByMenuType($menu_type, $condition['YearTo'], $beforemonth);
+            $detail['target']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['target']['price_value'] = empty($result['price'])?0:$result['price'];
+
+            // result selected month 
+            $result = MineralService::getDetailmonthFood($condition['YearTo'], $condition['MonthFrom']);
+            $detail['collectmonth']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['collectmonth']['price_value'] = empty($result['price'])?0:$result['price'];
+
+            $detail['permonth']['amount'] = ($detail['collectmonth']['amount'] / $detail['target']['amount']) * 100;
+            $detail['permonth']['price_value'] += ($detail['collectmonth']['price_value'] * 100) / $detail['target']['price_value'];
+
+            $result = MineralService::getDetailmonthFood($condition['YearTo'] - 1, $condition['MonthFrom']);
+            $detail['beforeyear']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['beforeyear']['price_value'] = empty($result['price'])?0:$result['price'];
+
+            if(!empty($detail['beforeyear']['amount'])){
+                $detail['perbeforeyear']['amount'] = (($detail['collectmonth']['amount'] - $detail['beforeyear']['amount']) * 100) / $detail['beforeyear']['amount'];
+            }else{
+                $detail['perbeforeyear']['amount'] = 0;
+            }
+            
+            if(!empty($detail['beforeyear']['price_value'])){
+                $detail['perbeforeyear']['price_value'] = (($detail['collectmonth']['price_value'] - $detail['beforeyear']['price_value']) * 100) / $detail['beforeyear']['price_value'];
+            }else{
+                $detail['perbeforeyear']['price_value'] = 0;
+            }
+
+            
+            $result = GoalMissionService::getMissionYearByMenuType($menu_type, $condition['YearTo']);
+            $detail['yeartarget']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['yeartarget']['price_value'] = empty($result['price'])?0:$result['price'];
+
+            $result = GoalMissionService::getMissionOctAvgByMenuType($menu_type, $condition['YearTo'], $condition['MonthFrom']);
+            $detail['targetoct']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['targetoct']['price_value'] = empty($result['price'])?0:$result['price'];
+
+
+            $loop_year = $condition['YearTo'] - 1;
+            $loop_month = 10;
+
+            while($loop_month != $condition['MonthFrom']){
+
+                $result = MineralService::getDetailmonthFood($loop_year, $loop_month);
+                $detail['collectoct']['amount'] += empty($result['amount'])?0:$result['amount'];
+                $detail['collectoct']['price_value'] += empty($result['price'])?0:$result['price'];
+                $loop_month++;
+
+                if($loop_month > 12){
+                    $loop_month = 1;
+                    $loop_year += 1;
+                }
+            }
+
+            if(!empty($detail['targetoct']['amount'])){
+                $detail['peroct']['amount'] = ($detail['collectoct']['amount'] * 100) / $detail['targetoct']['amount'];
+            }else{
+                $detail['peroct']['amount'] = 0;
+            }
+            
+            if(!empty($detail['targetoct']['price_value'])){
+                $detail['peroct']['price_value'] = ($detail['collectoct']['price_value'] * 100) / $detail['targetoct']['price_value'];
+            }else{
+                $detail['peroct']['price_value'] = 0;
+            }
+
+            $detail['unit_amount'] = 'ตัน';
+            $detail['unit_price'] = 'ล้านบาท';
+
+            $detail['type_amount'] = 'ปริมาณการจำหน่ายอาหาร';
+            $detail['type_price'] = 'รายได้การจำหน่ายอาหาร';
+            array_push($data, $detail);
+
+            $detail = [];
+            // การจำหน่ายอาหารสัตว์
+
+            $menu_type = 'ฝึกอบรม';
+            $detail['name'] = 'การฝึกอบรม';
+            // result before selected month 
+            $result = TrainingCowBreedService::getDetailmonth($beforeYear, $beforemonth);
+            $detail['beforemonth']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['beforemonth']['price_value'] = empty($result['price'])?0:$result['price'];
+            // current month goal 
+            $result = GoalMissionService::getMissionavgByMenuType($menu_type, $condition['YearTo'], $beforemonth);
+            $detail['target']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['target']['price_value'] = empty($result['price'])?0:$result['price'];
+
+            // result selected month 
+            $result = TrainingCowBreedService::getDetailmonth($condition['YearTo'], $condition['MonthFrom']);
+            $detail['collectmonth']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['collectmonth']['price_value'] = empty($result['price'])?0:$result['price'];
+
+            $detail['permonth']['amount'] = ($detail['collectmonth']['amount'] / $detail['target']['amount']) * 100;
+            $detail['permonth']['price_value'] += ($detail['collectmonth']['price_value'] * 100) / $detail['target']['price_value'];
+
+            $result = TrainingCowBreedService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom']);
+            $detail['beforeyear']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['beforeyear']['price_value'] = empty($result['price'])?0:$result['price'];
+
+            if(!empty($detail['beforeyear']['amount'])){
+                $detail['perbeforeyear']['amount'] = (($detail['collectmonth']['amount'] - $detail['beforeyear']['amount']) * 100) / $detail['beforeyear']['amount'];
+            }else{
+                $detail['perbeforeyear']['amount'] = 0;
+            }
+            
+            if(!empty($detail['beforeyear']['price_value'])){
+                $detail['perbeforeyear']['price_value'] = (($detail['collectmonth']['price_value'] - $detail['beforeyear']['price_value']) * 100) / $detail['beforeyear']['price_value'];
+            }else{
+                $detail['perbeforeyear']['price_value'] = 0;
+            }
+
+            
+            $result = GoalMissionService::getMissionYearByMenuType($menu_type, $condition['YearTo']);
+            $detail['yeartarget']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['yeartarget']['price_value'] = empty($result['price'])?0:$result['price'];
+
+            $result = GoalMissionService::getMissionOctAvgByMenuType($menu_type, $condition['YearTo'], $condition['MonthFrom']);
+            $detail['targetoct']['amount'] = empty($result['amount'])?0:$result['amount'];
+            $detail['targetoct']['price_value'] = empty($result['price'])?0:$result['price'];
+
+
+            $loop_year = $condition['YearTo'] - 1;
+            $loop_month = 10;
+
+            while($loop_month != $condition['MonthFrom']){
+
+                $result = TrainingCowBreedService::getDetailmonth($loop_year, $loop_month);
+                $detail['collectoct']['amount'] += empty($result['amount'])?0:$result['amount'];
+                $detail['collectoct']['price_value'] += empty($result['price'])?0:$result['price'];
+                $loop_month++;
+
+                if($loop_month > 12){
+                    $loop_month = 1;
+                    $loop_year += 1;
+                }
+            }
+
+            if(!empty($detail['targetoct']['amount'])){
+                $detail['peroct']['amount'] = ($detail['collectoct']['amount'] * 100) / $detail['targetoct']['amount'];
+            }else{
+                $detail['peroct']['amount'] = 0;
+            }
+            
+            if(!empty($detail['targetoct']['price_value'])){
+                $detail['peroct']['price_value'] = ($detail['collectoct']['price_value'] * 100) / $detail['targetoct']['price_value'];
+            }else{
+                $detail['peroct']['price_value'] = 0;
+            }
+            
+
+            $detail['unit_amount'] = 'ราย';
+            $detail['unit_price'] = 'ล้านบาท';
+
+            $detail['type_amount'] = 'ปริมาณ';
+            $detail['type_price'] = 'รายได้';
+            array_push($data, $detail);
 
         }
 // print
 
         foreach ($data as $key => $itemdata) {
+            $index = $position + $key;
             $objPHPExcel->getActiveSheet()->setCellValue('G' . (6 + $row), ($position + $key) . '.' . $itemdata['name']);
             $objPHPExcel->getActiveSheet()->getStyle('G' . (6 + $row))->getFont()->setSize(14);
             $objPHPExcel->getActiveSheet()->getStyle('G' . (6 + $row))->getFont()->setBold(true);
@@ -879,8 +1431,8 @@ class SubcommitteeReportController extends Controller {
             $objPHPExcel->getActiveSheet()->setCellValue('D' . (6 + $row), $itemdata['permonth']['amount']);
             $objPHPExcel->getActiveSheet()->setCellValue('E' . (6 + $row), $itemdata['beforeyear']['amount']);
             $objPHPExcel->getActiveSheet()->setCellValue('F' . (6 + $row), $itemdata['perbeforeyear']['amount']);
-            $objPHPExcel->getActiveSheet()->setCellValue('G' . (6 + $row), '   จำนวน');
-            $objPHPExcel->getActiveSheet()->setCellValue('H' . (6 + $row), '   ' . $itemdata['unit']);
+            $objPHPExcel->getActiveSheet()->setCellValue('G' . (6 + $row), '   ' . $itemdata['type_amount']);
+            $objPHPExcel->getActiveSheet()->setCellValue('H' . (6 + $row), '   ' . $itemdata['unit_amount']);
             $objPHPExcel->getActiveSheet()->setCellValue('I' . (6 + $row), $itemdata['yeartarget']['amount']);
             $objPHPExcel->getActiveSheet()->setCellValue('J' . (6 + $row), $itemdata['targetoct']['amount']);
             $objPHPExcel->getActiveSheet()->setCellValue('K' . (6 + $row), $itemdata['collectoct']['amount']);
@@ -892,14 +1444,92 @@ class SubcommitteeReportController extends Controller {
             $objPHPExcel->getActiveSheet()->setCellValue('D' . (6 + $row), $itemdata['permonth']['price_value']);
             $objPHPExcel->getActiveSheet()->setCellValue('E' . (6 + $row), $itemdata['beforeyear']['price_value']);
             $objPHPExcel->getActiveSheet()->setCellValue('F' . (6 + $row), $itemdata['perbeforeyear']['price_value']);
-            $objPHPExcel->getActiveSheet()->setCellValue('G' . (6 + $row), '   รายได้');
-            $objPHPExcel->getActiveSheet()->setCellValue('H' . (6 + $row), '   ล้านบาท');
+            $objPHPExcel->getActiveSheet()->setCellValue('G' . (6 + $row), '   ' . $itemdata['type_price']);
+            $objPHPExcel->getActiveSheet()->setCellValue('H' . (6 + $row), '   ' . $itemdata['unit_price']);
             $objPHPExcel->getActiveSheet()->setCellValue('I' . (6 + $row), $itemdata['yeartarget']['price_value']);
             $objPHPExcel->getActiveSheet()->setCellValue('J' . (6 + $row), $itemdata['targetoct']['price_value']);
             $objPHPExcel->getActiveSheet()->setCellValue('K' . (6 + $row), $itemdata['collectoct']['price_value']);
             $objPHPExcel->getActiveSheet()->setCellValue('L' . (6 + $row), $itemdata['peroct']['price_value']);
             $row++;
         }
+
+        $detail = [];
+
+        // ปัจจัยการผลิต
+        $index++;
+        $menu_type = 'จำหน่ายน้ำเชื้อแช่แข็ง';
+        $detail['name'] = 'การจำหน่ายปัจจัยการผลิต';
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . (6 + $row), ($index) . '.' . $detail['name']);
+        $objPHPExcel->getActiveSheet()->getStyle('G' . (6 + $row))->getFont()->setSize(14);
+        $objPHPExcel->getActiveSheet()->getStyle('G' . (6 + $row))->getFont()->setBold(true);
+        $row++;
+        // result before selected month 
+        $result = SpermSaleService::getDetailmonth($beforeYear, $beforemonth);
+        $detail['beforemonth']['price_value'] = empty($result['price'])?0:$result['price'];
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . (6 + $row), $detail['beforemonth']['price_value']);
+            
+        // current month goal 
+        $result = GoalMissionService::getMissionavgByMenuType($menu_type, $condition['YearTo'], $beforemonth);
+        $detail['target']['price_value'] = empty($result['price'])?0:$result['price'];
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . (6 + $row), $detail['target']['price_value']);
+
+        // result selected month 
+        $result = SpermSaleService::getDetailmonth($condition['YearTo'], $condition['MonthFrom']);
+        $detail['collectmonth']['price_value'] = empty($result['price'])?0:$result['price'];
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . (6 + $row), $detail['collectmonth']['price_value']);
+
+        $detail['permonth']['amount'] = ($detail['collectmonth']['amount'] / $detail['target']['amount']) * 100;
+        $detail['permonth']['price_value'] += ($detail['collectmonth']['price_value'] * 100) / $detail['target']['price_value'];
+
+        $result = SpermSaleService::getDetailmonth($condition['YearTo'] - 1, $condition['MonthFrom']);
+        $detail['beforeyear']['price_value'] = empty($result['price'])?0:$result['price'];
+
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . (6 + $row), $detail['beforeyear']['price_value']);
+        
+        if(!empty($detail['beforeyear']['price_value'])){
+            $detail['perbeforeyear']['price_value'] = (($detail['collectmonth']['price_value'] - $detail['beforeyear']['price_value']) * 100) / $detail['beforeyear']['price_value'];
+        }else{
+            $detail['perbeforeyear']['price_value'] = 0;
+        }
+
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . (6 + $row), $detail['perbeforeyear']['price_value']);
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . (6 + $row), '    รายได้น้ำเชื้อแช่แข็ง');
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . (6 + $row), '    ล้านบาท');
+            
+        $result = GoalMissionService::getMissionYearByMenuType($menu_type, $condition['YearTo']);
+        $detail['yeartarget']['price_value'] = empty($result['price'])?0:$result['price'];
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . (6 + $row), $detail['yeartarget']['price_value']);
+
+        $result = GoalMissionService::getMissionOctAvgByMenuType($menu_type, $condition['YearTo'], $condition['MonthFrom']);
+        $detail['targetoct']['price_value'] = empty($result['price'])?0:$result['price'];
+        $objPHPExcel->getActiveSheet()->setCellValue('J' . (6 + $row), $detail['targetoct']['price_value']);
+            
+        $loop_year = $condition['YearTo'] - 1;
+        $loop_month = 10;
+
+        while($loop_month != $condition['MonthFrom']){
+
+            $result = TrainingCowBreedService::getDetailmonth($loop_year, $loop_month);
+            $detail['collectoct']['price_value'] += empty($result['price'])?0:$result['price'];
+            $loop_month++;
+
+            if($loop_month > 12){
+                $loop_month = 1;
+                $loop_year += 1;
+            }
+        }
+
+        $objPHPExcel->getActiveSheet()->setCellValue('K' . (6 + $row), $detail['collectoct']['price_value']);
+            
+        if(!empty($detail['targetoct']['price_value'])){
+            $detail['peroct']['price_value'] = ($detail['collectoct']['price_value'] * 100) / $detail['targetoct']['price_value'];
+        }else{
+            $detail['peroct']['price_value'] = 0;
+        }
+
+        $objPHPExcel->getActiveSheet()->setCellValue('L' . (6 + $row), $detail['peroct']['price_value']);
+        
+        $row++;
 
         // header style
 
