@@ -1,0 +1,624 @@
+﻿
+            <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+         
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+                <title></title>
+    </head>
+
+    <body>
+        <p style="text-align: center;"><strong>รายงานการสูญเสียระหว่างรอจำหน่ายประจำเดือน</strong></p>
+<p style="text-align: center;"><strong>สาขา สำนักงาน อ.ส.ค. ภาคตะวันออกเฉียงเหนือ ปีงบประมาณ 2563 ประจำเดือน กุมภาพันธ์</strong></p>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover" border="1">
+        <thead>
+            <tr class="info">
+                <th rowspan="2" style="text-align: center; vertical-align: middle; width: 29%;">รายการ</th>
+                <th colspan="2" style="text-align: center; vertical-align: middle; width: 16%;">เป้าหมายทั้งปี</th>
+                <th colspan="2" style="text-align: center; vertical-align: middle; width: 18%;">เป้าหมายประจำเดือน</th>
+                <th colspan="2" style="text-align: center; vertical-align: middle; width: 19%;">ผลดำเนินงานประจำเดือน</th>
+                <th colspan="2" style="text-align: center; vertical-align: middle; width: 18%;">เปรียบเทียบเป้าหมายประจำเดือน</th>
+
+            </tr>
+            <tr class="info">
+                <th style="text-align: center;">ลิตร</th>
+                <th style="text-align: center;">บาท</th>
+                <th style="text-align: center;">ลิตร</th>
+                <th style="text-align: center;">บาท</th>
+                <th style="text-align: center;">ลิตร</th>
+                <th style="text-align: center;">บาท</th>
+                <th style="text-align: center;">ลิตร</th>
+                <th style="text-align: center;">บาท</th>
+            </tr>
+        </thead>
+        <tbody>
+                        <tr>
+                <td style="text-align:center;"><strong>&nbsp;เสีย (เเตกรั่วในคลังสินค้า)</strong></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+ 
+            </tr>
+                        <tr>
+                <td style="text-align:left;"><strong>&nbsp;ตราไทย-เดนมาร์ค (วัวแดง) : นมพาณิชย์</strong></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+
+            </tr>
+                        <tr><!--กรอกแล้ว-->
+                <td style="text-align:left;">&nbsp;&nbsp;นม ยู.เอช.ที 125 ซีซี (1x48)&nbsp;&nbsp;จืด</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">6.00</td>
+                <td style="text-align:right;">222.72</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+
+            </tr>
+                        <tr><!--กรอกแล้ว-->
+                <td style="text-align:left;">&nbsp;&nbsp;นม ยู.เอช.ที 125 ซีซี (1x48)&nbsp;&nbsp;หวาน</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">12.00</td>
+                <td style="text-align:right;">441.63</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+
+            </tr>
+                        <tr><!--รวม OPtion-->
+                <td style="text-align:center;"><strong>รวม</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>18.00</strong></td>
+                <td style="text-align:right;"><strong>664.35</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+
+            </tr>
+                        <tr><!--กรอกแล้ว-->
+                <td style="text-align:left;">&nbsp;&nbsp;นม ยู.เอช.ที 200 ซีซี (1x36)&nbsp;&nbsp;จืด</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">1,389.60</td>
+                <td style="text-align:right;">48,963.39</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+
+            </tr>
+                        <tr><!--กรอกแล้ว-->
+                <td style="text-align:left;">&nbsp;&nbsp;นม ยู.เอช.ที 200 ซีซี (1x36)&nbsp;&nbsp;หวาน</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">64.80</td>
+                <td style="text-align:right;">2,102.80</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+
+            </tr>
+                        <tr><!--กรอกแล้ว-->
+                <td style="text-align:left;">&nbsp;&nbsp;นม ยู.เอช.ที 200 ซีซี (1x36)&nbsp;&nbsp;หวาน Export</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">43.20</td>
+                <td style="text-align:right;">1,364.46</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+
+            </tr>
+                        <tr><!--กรอกแล้ว-->
+                <td style="text-align:left;">&nbsp;&nbsp;นม ยู.เอช.ที 200 ซีซี (1x36)&nbsp;&nbsp;จืด Export</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">86.40</td>
+                <td style="text-align:right;">2,677.92</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+
+            </tr>
+                        <tr><!--รวม OPtion-->
+                <td style="text-align:center;"><strong>รวม</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>1,584.00</strong></td>
+                <td style="text-align:right;"><strong>55,108.57</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+
+            </tr>
+                        <tr><!--กรอกแล้ว-->
+                <td style="text-align:left;">&nbsp;&nbsp;นม ยู.เอช.ที 250 ซีซี (1x12)&nbsp;&nbsp;จืด</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">3.00</td>
+                <td style="text-align:right;">95.93</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+
+            </tr>
+                        <tr><!--รวม OPtion-->
+                <td style="text-align:center;"><strong>รวม</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>3.00</strong></td>
+                <td style="text-align:right;"><strong>95.93</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+
+            </tr>
+                        <tr><!--กรอกแล้ว-->
+                <td style="text-align:left;">&nbsp;&nbsp;นม ยู.เอช.ที 250 ซีซี (1x36)(เเพ็ค6)&nbsp;&nbsp;จืด</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">45.00</td>
+                <td style="text-align:right;">1,403.45</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+
+            </tr>
+                        <tr><!--กรอกแล้ว-->
+                <td style="text-align:left;">&nbsp;&nbsp;นม ยู.เอช.ที 250 ซีซี (1x36)(เเพ็ค6)&nbsp;&nbsp;หวาน Export</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">72.00</td>
+                <td style="text-align:right;">2,272.88</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+
+            </tr>
+                        <tr><!--กรอกแล้ว-->
+                <td style="text-align:left;">&nbsp;&nbsp;นม ยู.เอช.ที 250 ซีซี (1x36)(เเพ็ค6)&nbsp;&nbsp;จืด Export</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">27.00</td>
+                <td style="text-align:right;">842.07</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+
+            </tr>
+                        <tr><!--รวม OPtion-->
+                <td style="text-align:center;"><strong>รวม</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>144.00</strong></td>
+                <td style="text-align:right;"><strong>4,518.40</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+
+            </tr>
+                        <tr><!--กรอกแล้ว-->
+                <td style="text-align:left;">&nbsp;&nbsp;นม ยู.เอช.ที Lactose Free 200 ซีซี (1x36)&nbsp;&nbsp;จืด</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">57.60</td>
+                <td style="text-align:right;">1,882.96</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+
+            </tr>
+                        <tr><!--รวม OPtion-->
+                <td style="text-align:center;"><strong>รวม</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>57.60</strong></td>
+                <td style="text-align:right;"><strong>1,882.96</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+
+            </tr>
+                        <tr>
+                <td style="text-align:left;"><strong>&nbsp;ตรากลาง : นมโรงเรียน</strong></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+
+            </tr>
+                        <tr><!--กรอกแล้ว-->
+                <td style="text-align:left;">&nbsp;&nbsp;นม ยู.เอช.ที 200 ซีซี (1x36)&nbsp;&nbsp;จืด</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">619.20</td>
+                <td style="text-align:right;">18,591.48</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+
+            </tr>
+                        <tr><!--กรอกแล้ว-->
+                <td style="text-align:left;">&nbsp;&nbsp;นม ยู.เอช.ที 200 ซีซี (1x36)&nbsp;&nbsp;จืด Slim</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">2,044.80</td>
+                <td style="text-align:right;">59,309.42</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+
+            </tr>
+                        <tr><!--รวม OPtion-->
+                <td style="text-align:center;"><strong>รวม</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>2,664.00</strong></td>
+                <td style="text-align:right;"><strong>77,900.90</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+
+            </tr>
+                        <tr><!--รวมรายการ-->
+                <td style="text-align:center;"><strong>รวม&nbsp;เสีย (เเตกรั่วในคลังสินค้า)</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>4,470.60</strong></td>
+                <td style="text-align:right;"><strong>140,171.11</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+
+            </tr>
+            <tr><!--รวมรายการ-->
+                <td style="text-align:center;"><strong></strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong>0.10</strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+
+            </tr>
+                        <tr>
+                <td style="text-align:center;"><strong>&nbsp;ชดเชยลูกค้า</strong></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+ 
+            </tr>
+                        <tr>
+                <td style="text-align:left;"><strong>&nbsp;ตราไทย-เดนมาร์ค (วัวแดง) : นมพาณิชย์</strong></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+
+            </tr>
+                        <tr><!--กรอกแล้ว-->
+                <td style="text-align:left;">&nbsp;&nbsp;นม ยู.เอช.ที 125 ซีซี (1x48)&nbsp;&nbsp;จืด</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">426.00</td>
+                <td style="text-align:right;">15,813.12</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+
+            </tr>
+                        <tr><!--กรอกแล้ว-->
+                <td style="text-align:left;">&nbsp;&nbsp;นม ยู.เอช.ที 125 ซีซี (1x48)&nbsp;&nbsp;หวาน</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">180.00</td>
+                <td style="text-align:right;">6,624.48</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+
+            </tr>
+                        <tr><!--กรอกแล้ว-->
+                <td style="text-align:left;">&nbsp;&nbsp;นม ยู.เอช.ที 125 ซีซี (1x48)&nbsp;&nbsp;ช็อคโกเเลต</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">236.78</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+
+            </tr>
+                        <tr><!--รวม OPtion-->
+                <td style="text-align:center;"><strong>รวม</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>606.00</strong></td>
+                <td style="text-align:right;"><strong>22,674.38</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+
+            </tr>
+                        <tr><!--กรอกแล้ว-->
+                <td style="text-align:left;">&nbsp;&nbsp;นม ยู.เอช.ที 200 ซีซี (1x36)&nbsp;&nbsp;จืด</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">1,166.40</td>
+                <td style="text-align:right;">41,098.80</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+
+            </tr>
+                        <tr><!--กรอกแล้ว-->
+                <td style="text-align:left;">&nbsp;&nbsp;นม ยู.เอช.ที 200 ซีซี (1x36)&nbsp;&nbsp;หวาน</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">165.60</td>
+                <td style="text-align:right;">5,373.81</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+
+            </tr>
+                        <tr><!--กรอกแล้ว-->
+                <td style="text-align:left;">&nbsp;&nbsp;นม ยู.เอช.ที 200 ซีซี (1x36)&nbsp;&nbsp;ช็อคโกเเลต</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">7.20</td>
+                <td style="text-align:right;">244.91</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+
+            </tr>
+                        <tr><!--รวม OPtion-->
+                <td style="text-align:center;"><strong>รวม</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>1,339.20</strong></td>
+                <td style="text-align:right;"><strong>46,717.52</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+
+            </tr>
+                        <tr><!--กรอกแล้ว-->
+                <td style="text-align:left;">&nbsp;&nbsp;นม ยู.เอช.ที 250 ซีซี (1x36)(เเพ็ค6)&nbsp;&nbsp;จืด</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">18.00</td>
+                <td style="text-align:right;">561.38</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+
+            </tr>
+                        <tr><!--รวม OPtion-->
+                <td style="text-align:center;"><strong>รวม</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>18.00</strong></td>
+                <td style="text-align:right;"><strong>561.38</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+
+            </tr>
+                        <tr><!--กรอกแล้ว-->
+                <td style="text-align:left;">&nbsp;&nbsp;Value Adder Milk 125 ซีซี (นมคิดดี)&nbsp;&nbsp;จืด</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">8.00</td>
+                <td style="text-align:right;">2,192.64</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+
+            </tr>
+                        <tr><!--รวม OPtion-->
+                <td style="text-align:center;"><strong>รวม</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>8.00</strong></td>
+                <td style="text-align:right;"><strong>2,192.64</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+
+            </tr>
+                        <tr>
+                <td style="text-align:left;"><strong>&nbsp;ตรากลาง : นมโรงเรียน</strong></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+                <td style="text-align:right;"></td>
+
+            </tr>
+                        <tr><!--กรอกแล้ว-->
+                <td style="text-align:left;">&nbsp;&nbsp;นม ยู.เอช.ที 200 ซีซี (1x36)&nbsp;&nbsp;จืด Slim</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">244.80</td>
+                <td style="text-align:right;">7,100.42</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+
+            </tr>
+                        <tr><!--รวม OPtion-->
+                <td style="text-align:center;"><strong>รวม</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>244.80</strong></td>
+                <td style="text-align:right;"><strong>7,100.42</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+
+            </tr>
+                        <tr><!--กรอกแล้ว-->
+                <td style="text-align:left;">&nbsp;&nbsp;นมพาสเจอร์ไรส์ (บรรจุถุง) 200 ซีซี&nbsp;&nbsp;จืด</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">4.12</td>
+                <td style="text-align:right;">1,016.75</td>
+                <td style="text-align:right;">0.00</td>
+                <td style="text-align:right;">0.00</td>
+
+            </tr>
+                        <tr><!--รวม OPtion-->
+                <td style="text-align:center;"><strong>รวม</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>4.12</strong></td>
+                <td style="text-align:right;"><strong>1,016.75</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+
+            </tr>
+                        <tr><!--รวมรายการ-->
+                <td style="text-align:center;"><strong>รวม&nbsp;ชดเชยลูกค้า</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>2,220.12</strong></td>
+                <td style="text-align:right;"><strong>80,263.09</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+
+            </tr>
+            <tr><!--รวมรายการ-->
+                <td style="text-align:center;"><strong></strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong>0.05</strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+
+            </tr>
+             
+            <tr><!--รวมรายการ-->
+                <td style="text-align:center;"><strong>รวมทั้งสิ้น</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>6,690.72</strong></td>
+                <td style="text-align:right;"><strong>220,434.20</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+                <td style="text-align:right;"><strong>0.00</strong></td>
+
+            </tr>
+            <tr><!--รวมรายการ-->
+                <td style="text-align:center;"><strong>ผลิตภัณฑ์ที่ผลิตได้ทั้งสิ้น</strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong>4,297,785.95</strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+
+            </tr>
+            <tr><!--รวมรายการ-->
+                <td style="text-align:center;"><strong>สูญเสียร้อยละของผลิตภัณฑ์ที่ผลิตได้</strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong>0.16</strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+                <td style="text-align:right;"><strong></strong></td>
+
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="row" style="padding-left: 25px;">
+    <p>หมายเหตุ :-</p>
+    <div style="padding-left: 50px;">
+            </div>
+</div>    </body>
+</html>
+

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en-US" ng-app="e-homework">
+	<head>
+		<meta charset="utf-8">
+
+		<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
+		Remove this if you use the .htaccess -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+		<title>Management Infomation System (MIS)</title>
+		<meta name="description" content="">
+		<meta name="author" content="AOMKUMA">
+
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+		<link rel="shortcut icon" type="image/png" href="favicon.ico"/>
+		<!-- include js -->
+		<script type="text/javascript" src='scripts/node_modules/angular/angular.min.js' charset="utf-8"></script>
+		<script type="text/javascript" src='scripts/node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js' charset="utf-8"></script>
+		<script type="text/javascript" src='scripts/node_modules/angular-route/angular-route.min.js' charset="utf-8"></script>
+		<script type="text/javascript" src='scripts/node_modules/angular-animate/angular-animate.min.js' charset="utf-8"></script>
+		<script type="text/javascript" src="scripts/node_modules/angular-cookies/angular-cookies.min.js"></script>
+		<script type="text/javascript" src="scripts/node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
+		<script type="text/javascript" src="scripts/node_modules/oclazyload/dist/ocLazyLoad.min.js"></script>
+		<script type="text/javascript" src="scripts/node_modules/ng-file-upload/dist/ng-file-upload.min.js"></script>
+		<script type="text/javascript" src="scripts/node_modules/ng-file-upload/dist/ng-file-upload-shim.min.js"></script>
+		<script type="text/javascript" src="scripts/node_modules/angular-bind-html-compile-ci-dev/angular-bind-html-compile.min.js"></script>
+
+		<script type="text/javascript" src="scripts/node_modules/chart.js/dist/Chart.bundle.min.js"></script>
+
+		<script type="text/javascript" src='scripts/e-homework-main.js?version=19239a98asdasd9818472983234' charset="utf-8"></script>
+		<script type="text/javascript" src='scripts/e-homework-on-go.js?version=19239a98asdasd9818472983234' charset="utf-8"></script>
+		<script type="text/javascript" src='scripts/factory.js?version=19239a98asdasd9818472983234' charset="utf-8"></script>
+		<script type="text/javascript" src='scripts/util.js?version=19239a98asdasd9818472983234' charset="utf-8"></script>
+
+		<script src="scripts/ckeditor/ckeditor.js"></script>
+		<script src="scripts/ckeditor_sdk/samples/assets/picoModal-2.0.1.min.js"></script>
+		<script src="scripts/ckeditor_sdk/samples/assets/contentloaded.js"></script>
+		<script src="scripts/ckeditor_sdk/samples/assets/beautify-html.js"></script>
+		<!-- include js end -->
+
+		<!-- include css -->
+		<link rel="stylesheet" href="scripts/node_modules/bootstrap/dist/css/bootstrap.min.css">
+		<link rel="stylesheet" href="scripts/node_modules/angular-ui-bootstrap/dist/ui-bootstrap-csp.css">
+		<!-- include css end -->
+	</head>
+
+	<body ng-controller="AppController">
+		
+		<div class="overlay" ng-show="overlay.overlay" style="padding-top: 0px;"><img src="img/spin.gif"  style="width:10%; margin: 0 auto; margin-top:20%; padding-top 50%;" /></div>
+		<div class="ng-view container"></div>
+		<div class="container">
+			<div class="row form-group" style="height: 100px;">
+				<div class="col-lg-12 text-center">
+					Version : 1.3 , Update ล่าสุดเมื่อวันที่ 5/8/2562
+				</div>
+			</div>
+		</div> 
+		 
+	</body>
+	<style type="text/css" media="screen">
+		.overlay{
+		    margin:0 auto;
+		    position: fixed;
+		    height: 100%;
+		    width: 100%;
+		    z-index: 1000000;
+		    opacity:8.0;
+		    filter:alpha(opacity=80);
+		    background-color: rgba(0, 0, 0, 0.05);
+		    text-align:center;   
+		}
+	</style>
+	<script src="scripts/jquery.min.js"></script>
+	<script src="scripts/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="css/custom-theme.css">
+</html>
