@@ -146,8 +146,11 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
                 SpermDetailList[i].travel_date = makeSQLDate(SpermDetailList[i].travel_date);
             }
         }
+<<<<<<< HEAD
 
         $scope.Saving = true;
+=======
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
         var params = {'Data' : Sperm, 'Detail' : SpermDetailList};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('travel/update', params).then(function(result){
@@ -155,7 +158,11 @@ angular.module('e-homework').controller('UpdateTVController', function($scope, $
                 //alert('save success');
                 // if($scope.ID !== undefined && $scope.ID !== null){
                     alert('บันทึกสำเร็จ');
+<<<<<<< HEAD
                     window.location.href = '#/travel';///update/' + result.data.DATA.id;
+=======
+                    window.location.href = '#/travel/update/' + result.data.DATA.id;
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
                 // }else{
                 //     location.reload();    
                 // }

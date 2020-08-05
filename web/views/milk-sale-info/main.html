@@ -111,7 +111,11 @@
 			<div class="col-lg-ๅ/" style="padding: 20px; border:solid 1px #000;">
 				ปริมาณการจำหน่าย &nbsp; {{numberFormat(SummaryData.SummaryAmount)}} กิโลกรัม
 				<br>
+<<<<<<< HEAD
 				มูลค่า &nbsp; {{(SummaryData.SummaryValue) | number:4}} บาท
+=======
+				มูลค่า &nbsp; {{numberFormatComma(SummaryData.SummaryValue)}} บาท
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 			</div>
 			
 		</div>
@@ -150,12 +154,21 @@
 				<td>{{data.RegionName}}</td>
 				<td>{{data.Month}}</td>
 				<td class="text-right">{{numberFormat(data.CurrentAmount)}}</td>
+<<<<<<< HEAD
 				<td class="text-right">{{(data.CurrentBaht) | number:4}}</td>
 				<td class="text-right">{{numberFormat(data.BeforeAmount)}}</td>
 				<td class="text-right">{{(data.BeforeBaht) | number:4}}</td>
 				<td class="text-right">{{numberFormat(data.DiffAmount)}}</td>
 				<td class="text-right">{{numberFormatComma(data.DiffAmountPercentage)}}</td>
 				<td class="text-right">{{(data.DiffBaht) | number:4}}</td>
+=======
+				<td class="text-right">{{numberFormatComma(data.CurrentBaht)}}</td>
+				<td class="text-right">{{numberFormat(data.BeforeAmount)}}</td>
+				<td class="text-right">{{numberFormatComma(data.BeforeBaht)}}</td>
+				<td class="text-right">{{numberFormat(data.DiffAmount)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffAmountPercentage)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffBaht)}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				<td class="text-right">{{numberFormatComma(data.DiffBahtPercentage)}}</td>
 				<td>
 					<button class="btn btn-success" ng-click="viewDetail(data.RegionName, data.Description)">
@@ -201,12 +214,21 @@
 				<td>{{data.RegionName}}</td>
 				<td>{{data.Month}}</td>
 				<td>{{numberFormat(data.CurrentAmount)}}</td>
+<<<<<<< HEAD
 				<td>{{(data.CurrentBaht) | number:4}}</td>
 				<td>{{numberFormat(data.BeforeAmount)}}</td>
 				<td>{{(data.BeforeBaht) | number:4}}</td>
 				<td>{{numberFormat(data.DiffAmount)}}</td>
 				<td>{{numberFormatComma(data.DiffAmountPercentage)}}</td>
 				<td>{{(data.DiffBaht) | number:4}}</td>
+=======
+				<td>{{numberFormatComma(data.CurrentBaht)}}</td>
+				<td>{{numberFormat(data.BeforeAmount)}}</td>
+				<td>{{numberFormatComma(data.BeforeBaht)}}</td>
+				<td>{{numberFormat(data.DiffAmount)}}</td>
+				<td>{{numberFormatComma(data.DiffAmountPercentage)}}</td>
+				<td>{{numberFormatComma(data.DiffBaht)}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				<td>{{numberFormatComma(data.DiffBahtPercentage)}}</td>
 				<td>
 					<button class="btn btn-success" ng-click="viewDetail(data.RegionName, data.Description)">
@@ -250,12 +272,21 @@
 			<tr ng-repeat="data in List">
 				<td>{{data.RegionName}}</td>
 				<td>{{numberFormat(data.CurrentAmount)}}</td>
+<<<<<<< HEAD
 				<td>{{(data.CurrentBaht) | number:4}}</td>
 				<td>{{numberFormat(data.BeforeAmount)}}</td>
 				<td>{{(data.BeforeBaht) | number:4}}</td>
 				<td>{{numberFormat(data.DiffAmount)}}</td>
 				<td>{{numberFormatComma(data.DiffAmountPercentage)}}</td>
 				<td>{{(data.DiffBaht) | number:4}}</td>
+=======
+				<td>{{numberFormatComma(data.CurrentBaht)}}</td>
+				<td>{{numberFormat(data.BeforeAmount)}}</td>
+				<td>{{numberFormatComma(data.BeforeBaht)}}</td>
+				<td>{{numberFormat(data.DiffAmount)}}</td>
+				<td>{{numberFormatComma(data.DiffAmountPercentage)}}</td>
+				<td>{{numberFormatComma(data.DiffBaht)}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				<td>{{numberFormatComma(data.DiffBahtPercentage)}}</td>
 				<td>
 					<button class="btn btn-success" ng-click="viewDetail(data.RegionName, data.Description)">
@@ -297,12 +328,21 @@
 			<tr ng-repeat="data in DetailList" style="background-color: {{data.bg_color}};">
 				<td>{{data.Month}}</td>
 				<td>{{numberFormat(data.CurrentAmount)}}</td>
+<<<<<<< HEAD
 				<td>{{(data.CurrentBaht) | number:4}}</td>
 				<td>{{numberFormat(data.BeforeAmount)}}</td>
 				<td>{{(data.BeforeBaht) | number:4}}</td>
 				<td>{{numberFormat(data.DiffAmount)}}</td>
 				<td>{{numberFormatComma(data.DiffAmountPercentage)}}</td>
 				<td>{{(data.DiffBaht) | number:4}}</td>
+=======
+				<td>{{numberFormatComma(data.CurrentBaht)}}</td>
+				<td>{{numberFormat(data.BeforeAmount)}}</td>
+				<td>{{numberFormatComma(data.BeforeBaht)}}</td>
+				<td>{{numberFormat(data.DiffAmount)}}</td>
+				<td>{{numberFormatComma(data.DiffAmountPercentage)}}</td>
+				<td>{{numberFormatComma(data.DiffBaht)}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				<td>{{numberFormatComma(data.DiffBahtPercentage)}}</td>
 			</tr>
 		</tbody>
@@ -344,7 +384,11 @@
 				<td>{{numberFormat(data.TotalMOUAmount)}}</td>
 				<td>{{numberFormatComma(data.TotalMOUBaht)}}</td>
 				<td>{{numberFormatComma(data.TotalDataAmount)}}</td>
+<<<<<<< HEAD
 				<td>{{(data.TotalDataBaht) | number:4}}</td>
+=======
+				<td>{{numberFormatComma(data.TotalDataBaht)}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				<td>
 					<button class="btn btn-info" ng-click="viewMOUDetail(data.Description)"  ng-show="($index + 1) < MOUList.length">
 						<span class="glyphicon glyphicon-zoom-in"></span> 
@@ -393,7 +437,11 @@
 				<td>{{numberFormatComma(data.TotalMOUAmount)}}</td>
 				<td>{{numberFormatComma(data.TotalMOUBaht)}}</td>
 				<td>{{numberFormatComma(data.TotalDataAmount)}}</td>
+<<<<<<< HEAD
 				<td>{{(data.TotalDataBaht) | number:4}}</td>
+=======
+				<td>{{numberFormatComma(data.TotalDataBaht)}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				<td>
 					<button class="btn btn-info" ng-click="viewMOUDetail(data.Description)"  ng-show="($index + 1) < MOUList.length">
 						<span class="glyphicon glyphicon-zoom-in"></span> 
@@ -440,7 +488,11 @@
 				<td>{{numberFormat(data.TotalMOUAmount)}}</td>
 				<td>{{numberFormatComma(data.TotalMOUBaht)}}</td>
 				<td>{{numberFormatComma(data.TotalDataAmount)}}</td>
+<<<<<<< HEAD
 				<td>{{(data.TotalDataBaht) | number:4}}</td>
+=======
+				<td>{{numberFormatComma(data.TotalDataBaht)}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				<td>
 					<button class="btn btn-info" ng-click="viewMOUDetail(data.Description)"  ng-show="($index + 1) < MOUList.length">
 						<span class="glyphicon glyphicon-zoom-in"></span> 
@@ -477,7 +529,11 @@
 				<td>{{numberFormatComma(data.MOUBaht)}}</td>
 				<td>{{numberFormat(data.AVGBaht)}}</td>
 				<td>{{numberFormatComma(data.DataAmount)}}</td>
+<<<<<<< HEAD
 				<td>{{(data.DataBaht) | number:4}}</td>
+=======
+				<td>{{numberFormat(data.DataBaht)}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				</td>
 			</tr>
 		</tbody>
@@ -508,7 +564,11 @@
 				<td>{{numberFormatComma(data.MOUBaht)}}</td>
 				<td>{{numberFormat(data.AVGBaht)}}</td>
 				<td>{{numberFormatComma(data.DataAmount)}}</td>
+<<<<<<< HEAD
 				<td>{{(data.DataBaht) | number:4}}</td>
+=======
+				<td>{{numberFormat(data.DataBaht)}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				</td>
 			</tr>
 		</tbody>
@@ -539,7 +599,11 @@
 				<td>{{numberFormatComma(data.MOUBaht)}}</td>
 				<td>{{numberFormat(data.AVGBaht)}}</td>
 				<td>{{numberFormatComma(data.DataAmount)}}</td>
+<<<<<<< HEAD
 				<td>{{(data.DataBaht) | number:4}}</td>
+=======
+				<td>{{numberFormat(data.DataBaht)}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				</td>
 			</tr>
 		</tbody>

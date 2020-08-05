@@ -211,14 +211,22 @@ angular.module('e-homework').controller('MainMBIController', function($scope, $c
         // console.log($scope.DetailList);
     }
 
+<<<<<<< HEAD
     $scope.viewMOU = function(RegionName){
         $scope.RegionName = RegionName;
+=======
+    $scope.viewMOU = function(){
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
         $scope.ViewType = 'MOU';
         $scope.loadListMOU('mbi/list/milk-buy-info/mou');
     }
 
+<<<<<<< HEAD
     $scope.viewMOUDetail = function(condition, RegionName){
         $scope.RegionName = RegionName;
+=======
+    $scope.viewMOUDetail = function(condition){
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
         $scope.ViewType = 'MOU-DETAIL';
         $scope.loadListMOUDetail('mbi/list/milk-buy-info/mou/detail', condition);
     }

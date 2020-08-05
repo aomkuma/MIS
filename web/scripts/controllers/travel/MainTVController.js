@@ -139,14 +139,22 @@ angular.module('e-homework').controller('MainTVController', function($scope, $co
         HTTPService.clientRequest('travel/list/detail', params).then(function(result){
             if(result.data.STATUS == 'OK'){
                 $scope.DetailList = result.data.DATA.DataList;
+<<<<<<< HEAD
                 $scope.DetailLabel = result.data.DATA.Labels;
                 $scope.DetailLabel2 = result.data.DATA.Labels2;
                 // console.log($scope.DetailList);
+=======
+                // $scope.SummaryData = result.data.DATA.Summary;
+                console.log($scope.DetailList);
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
             }
             IndexOverlayFactory.overlayHide();
         });
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
     $scope.exportReport = function(data,condition){
        // console.log(DetailList, $scope.data_description);
         // return;
@@ -200,9 +208,15 @@ angular.module('e-homework').controller('MainTVController', function($scope, $co
     $scope.condition = {
                         'Region':null
                         ,'DisplayType':'monthly'
+<<<<<<< HEAD
                         ,'MonthFrom' : curDate.getMonth()
                         ,'YearFrom': curDate.getFullYear()
                         ,'MonthTo' : curDate.getMonth()
+=======
+                        ,'MonthFrom' : 1//curDate.getMonth()
+                        ,'YearFrom': curDate.getFullYear()
+                        ,'MonthTo' : 4//curDate.getMonth()
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
                         ,'YearTo': curDate.getFullYear()
                         ,'QuarterFrom':'1'
                         ,'QuarterTo':'4'

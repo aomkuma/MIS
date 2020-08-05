@@ -148,8 +148,12 @@ angular.module('e-homework').controller('MainMNController', function($scope, $co
     }
 
 
+<<<<<<< HEAD
     $scope.viewDetail = function(region, description){
         $scope.RegionName = region;
+=======
+    $scope.viewDetail = function(description){
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
         $scope.ViewType = 'DETAIL';
         console.log($scope.DetailList);
         $scope.loadListDetail('mineral/list/detail', description);
@@ -199,7 +203,11 @@ angular.module('e-homework').controller('MainMNController', function($scope, $co
         if(num == null){
             return '';
         }
+<<<<<<< HEAD
         return num.toFixed(4).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+=======
+        return num.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
     }
 
     $scope.Header = [];

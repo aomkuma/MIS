@@ -100,7 +100,10 @@ angular.module('e-homework').controller('UpdateCGFController', function($scope, 
                 'cooperative_id' : $scope.Sperm.cooperative_id
                 ,'months' : $scope.Sperm.months
                 ,'years' : $scope.Sperm.years
+<<<<<<< HEAD
                 ,'cow_group_name' : $scope.Sperm.cow_group_name
+=======
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
             };
         }
         
@@ -109,9 +112,13 @@ angular.module('e-homework').controller('UpdateCGFController', function($scope, 
             if(result.data.STATUS == 'OK' && result.data.DATA.Data != null){
                 $scope.Sperm = result.data.DATA.Data;
                 $scope.Sperm.cooperative_id = parseInt($scope.Sperm.cooperative_id);
+<<<<<<< HEAD
                 $scope.SpermDetailList = $scope.Sperm.cowgroup_father_detail;
 
                 console.log($scope.SpermDetailList);
+=======
+                $scope.SpermDetailList = $scope.Sperm.cow_group_detail;
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
                 // load sub dar=iry farming
                 // for(var i =0; i < $scope.SpermDetailList.length; i++){
                 //     $scope.loadDairyFarming('CHILD', $scope.SpermDetailList[i].dairy_farming_id);
@@ -151,7 +158,11 @@ angular.module('e-homework').controller('UpdateCGFController', function($scope, 
     }
 
     $scope.save = function(Sperm, SpermDetailList){
+<<<<<<< HEAD
         $scope.Saving = true;
+=======
+        
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
         var params = {'Data' : Sperm, 'Detail' : SpermDetailList};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('cow-group-father/update', params).then(function(result){
@@ -159,7 +170,11 @@ angular.module('e-homework').controller('UpdateCGFController', function($scope, 
                 //alert('save success');
                 // if($scope.ID !== undefined && $scope.ID !== null){
                     alert('บันทึกสำเร็จ');
+<<<<<<< HEAD
                     window.location.href = '#/cow-group-father';///update/' + result.data.DATA.id;
+=======
+                    window.location.href = '#/cow-group-father/update/' + result.data.DATA.id;
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
                 // }else{
                 //     location.reload();    
                 // }
@@ -340,7 +355,10 @@ angular.module('e-homework').controller('UpdateCGFController', function($scope, 
     $scope.setSperm = function(){
         $scope.Sperm = {
             'id':''
+<<<<<<< HEAD
             , 'cow_group_name' : 'ฝูงโคพ่อพันธุ์'
+=======
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
             , 'cooperative_id':null
             , 'region_id':null
             , 'months':curDate.getMonth() + 1
@@ -463,8 +481,11 @@ angular.module('e-homework').controller('UpdateCGFController', function($scope, 
         return parseFloat(values);
     }
 
+<<<<<<< HEAD
     $scope.Sperm = {'cow_group_name' : 'ฝูงโคพ่อพันธุ์'};
 
+=======
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
     $scope.setSperm();
     $scope.loadCooperative();
     $scope.loadMasterGoalList();

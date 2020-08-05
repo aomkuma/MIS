@@ -35,7 +35,11 @@
 				</select>
 		  	</div>
 			<!--<div class="form-group">
+<<<<<<< HEAD
 			    <label for="exampleInputName2">&nbsp; ปีงบประมาณ : </label>
+=======
+			    <label for="exampleInputName2">&nbsp; ปี : </label>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 			    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearFrom" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
 					<option value="">กรุณาเลือก..</option>
 				</select>
@@ -50,7 +54,11 @@
 				</select>
 		  	</div>
 			<div class="form-group">
+<<<<<<< HEAD
 			    <label for="exampleInputName2">&nbsp; ปีงบประมาณ : </label>
+=======
+			    <label for="exampleInputName2">&nbsp; ปี : </label>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 			    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearTo" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
 					<option value="">กรุณาเลือก..</option>
 				</select>
@@ -92,7 +100,11 @@
 			<td class="text-right">{{SummaryCow}}</td>
 			<td class="text-right">{{SummaryCowBeeb}}</td>
 			<td class="text-right">{{SummaryMilkAmount}}</td>
+<<<<<<< HEAD
 			<td class="text-right">{{ SummaryValues | number:4 }}</td>
+=======
+			<td class="text-right">{{SummaryValues}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 		</tr>
 	</table>
 </div>
@@ -138,9 +150,15 @@
 				<td class="text-right">{{numberFormat(data.TotalPersonSent)}}</td>
 				<td class="text-right">{{numberFormat(data.TotalCow)}}</td>
 				<td class="text-right">{{numberFormat(data.TotalCowBeeb)}}</td>
+<<<<<<< HEAD
 				<td class="text-right">{{(data.TotalMilkAmount) | number:4}}</td>
 				<td class="text-right">{{data.TotalValues  | number:4}}</td>
 				<td class="text-right">{{data.AverageValues | number:4}}</td>
+=======
+				<td class="text-right">{{numberFormatComma(data.TotalMilkAmount)}}</td>
+				<td class="text-right">{{numberFormatComma(data.TotalValues)}}</td>
+				<td class="text-right">{{numberFormatComma(data.AverageValues)}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				<td>{{data.CreateDate}}</td>
 				<td>{{data.ApproveDate}}</td>
 				<td>{{data.Status}}</td>
@@ -191,9 +209,15 @@
 				<td>{{data.TotalMilkSent}}</td>
 				<td>{{data.TotalMilkBeeb}}</td>
 				<td>{{data.TotalMilkBeebSent}}</td>
+<<<<<<< HEAD
 				<td>{{data.TotalMilkAmount | number:4}}</td>
 				<td>{{data.TotalValues | number:4}}</td>
 				<td>{{data.AverageValues | number:4}}</td>
+=======
+				<td>{{data.TotalMilkAmount}}</td>
+				<td>{{data.TotalValues}}</td>
+				<td>{{data.AverageValues}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				
 			</tr>
 		</tbody>

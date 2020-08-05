@@ -146,6 +146,7 @@ angular.module('e-homework').controller('MainLMPController', function($scope, $c
         
     }
 
+<<<<<<< HEAD
     $scope.createToMasterGoal = function(id){
 
         $scope.alertMessage = 'ต้องการสร้างข้อมูลนี้ไปยังรายการเป้า ใช่หรือไม่ ?';
@@ -178,6 +179,8 @@ angular.module('e-homework').controller('MainLMPController', function($scope, $c
         });
     }
 
+=======
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
     $scope.Data = {'factory_id' : null, 'loss_id' : null, 'loss_type' : '', 'product_milk_id' : null, 'subproduct_milk_id' : null};
 
     $scope.loadData();

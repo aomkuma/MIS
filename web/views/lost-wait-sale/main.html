@@ -123,9 +123,15 @@
 		</div>
 		<div class="row" style="">
 			<div class="col-lg-12" style="padding: 20px; border:solid 1px #000;">
+<<<<<<< HEAD
 				ปริมาณ &nbsp; {{(SummaryData.SummaryAmount) | number:4}}
 				<br>
 				มูลค่า &nbsp; {{(SummaryData.SummaryBaht) | number:4}}
+=======
+				ปริมาณ &nbsp; {{numberFormat(SummaryData.SummaryAmount)}}
+				<br>
+				มูลค่า &nbsp; {{numberFormatComma(SummaryData.SummaryBaht)}}
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 			</div>
 			
 		</div>
@@ -138,7 +144,11 @@
 		</caption>
 		<thead style="background-color: #BD1212; color: #FFF;">
 			<tr>
+<<<<<<< HEAD
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">รายการ</th>
+=======
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">รายการจำหน่าย</th>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">เดือน</th>
 				<th colspan="2" style="text-align: center; vertical-align: middle;">{{CurYear}}</th>
 				<th colspan="2" style="text-align: center; vertical-align: middle;">{{LastYear}}</th>
@@ -165,6 +175,7 @@
 			<tr ng-repeat="data in List" style="background-color: {{data.bg_color}};">
 				<td>{{data.LostWaitSaleName}}</td>
 				<td>{{data.Month}}</td>
+<<<<<<< HEAD
 				<td class="text-right">{{(data.CurrentAmount) | number:4}}</td>
 				<td class="text-right">{{(data.CurrentBaht) | number:4}}</td>
 				<td class="text-right">{{(data.BeforeAmount) | number:4}}</td>
@@ -173,6 +184,16 @@
 				<td class="text-right">{{(data.DiffAmountPercentage) | number:4}}</td>
 				<td class="text-right">{{(data.DiffBaht) | number:4}}</td>
 				<td class="text-right">{{(data.DiffBahtPercentage) | number:4}}</td>
+=======
+				<td class="text-right">{{numberFormat(data.CurrentAmount)}}</td>
+				<td class="text-right">{{numberFormatComma(data.CurrentBaht)}}</td>
+				<td class="text-right">{{numberFormat(data.BeforeAmount)}}</td>
+				<td class="text-right">{{numberFormatComma(data.BeforeBaht)}}</td>
+				<td class="text-right">{{numberFormat(data.DiffAmount)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffAmountPercentage)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffBaht)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffBahtPercentage)}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				<td>{{data.CreateDate}}</td>
 				<td>{{data.ApproveDate}}</td>
 				<td>{{data.Status}}</td>
@@ -213,6 +234,7 @@
 			<tr ng-repeat="data in List" style="background-color: {{data.bg_color}};">
 				<td>{{data.LostWaitSaleName}}</td>
 				<td>{{data.Quarter}}</td>
+<<<<<<< HEAD
 				<td>{{data.CurrentAmount | number:4}}</td>
 				<td>{{data.CurrentBaht | number:4}}</td>
 				<td>{{data.BeforeAmount | number:4}}</td>
@@ -221,6 +243,16 @@
 				<td>{{data.DiffAmountPercentage | number:4}}</td>
 				<td>{{data.DiffBaht | number:4}}</td>
 				<td>{{data.DiffBahtPercentage | number:4}}</td>
+=======
+				<td>{{data.CurrentAmount}}</td>
+				<td>{{data.CurrentBaht}}</td>
+				<td>{{data.BeforeAmount}}</td>
+				<td>{{data.BeforeBaht}}</td>
+				<td>{{data.DiffAmount}}</td>
+				<td>{{data.DiffAmountPercentage}}</td>
+				<td>{{data.DiffBaht}}</td>
+				<td>{{data.DiffBahtPercentage}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				
 			</tr>
 		</tbody>
@@ -254,12 +286,21 @@
 			<tr ng-repeat="data in List" style="background-color: {{data.bg_color}};">
 				<td>{{data.LostWaitSaleName}}</td>
 				<td>{{data.Year}}</td>
+<<<<<<< HEAD
 				<td>{{data.CurrentAmount | number:4}}</td>
 				<td>{{data.CurrentBaht | number:4}}</td>
 				<td>{{data.DiffAmount | number:4}}</td>
 				<td>{{data.DiffAmountPercentage | number:4}}</td>
 				<td>{{data.DiffBaht | number:4}}</td>
 				<td>{{data.DiffBahtPercentage | number:4}}</td>
+=======
+				<td>{{data.CurrentAmount}}</td>
+				<td>{{data.CurrentBaht}}</td>
+				<td>{{data.DiffAmount}}</td>
+				<td>{{data.DiffAmountPercentage}}</td>
+				<td>{{data.DiffBaht}}</td>
+				<td>{{data.DiffBahtPercentage}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				
 			</tr>
 		</tbody>
@@ -291,14 +332,22 @@
 			<tr ng-repeat="data in DetailList"">
 				<td>{{data.RegionName}}</td>
 				<td ng-repeat="item in data.ValueList" style="text-align: center; vertical-align: middle;">
+<<<<<<< HEAD
 					{{item.values | number:4}}
+=======
+					{{item.values}}
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				</td>
 			</tr>
 		</tbody>
 		<tr>
 			<td>รวม</td>
 			<td ng-repeat="data in DetailSummary" style="text-align: center; vertical-align: middle;">
+<<<<<<< HEAD
 				{{data.values | number:4}}
+=======
+				{{data.values}}
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 			</td>
 		</tr>
 	</table>

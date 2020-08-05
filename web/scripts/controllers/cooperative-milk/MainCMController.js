@@ -127,7 +127,11 @@ angular.module('e-homework').controller('MainCMController', function($scope, $co
                 $scope.SummaryCow = $scope.SummaryCow.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
                 $scope.SummaryCowBeeb = $scope.SummaryCowBeeb.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
                 $scope.SummaryMilkAmount = $scope.SummaryMilkAmount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+<<<<<<< HEAD
                 $scope.SummaryValues = $scope.SummaryValues.toFixed(4);//.replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+=======
+                $scope.SummaryValues = $scope.SummaryValues.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 
                 $scope.SummaryData = result.data.DATA.Summary;
                 console.log($scope.List);
@@ -180,7 +184,11 @@ angular.module('e-homework').controller('MainCMController', function($scope, $co
         if(num == null){
             return '';
         }
+<<<<<<< HEAD
         return num.toFixed(4).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+=======
+        return num.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
     }
 
     $scope.Header = [];

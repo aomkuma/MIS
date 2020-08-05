@@ -39,7 +39,11 @@
 					</select>
 			  	</div>
 		<!--		<div class="form-group">
+<<<<<<< HEAD
 				    <label for="exampleInputName2">&nbsp; ปีงบประมาณ : </label>
+=======
+				    <label for="exampleInputName2">&nbsp; ปี : </label>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearFrom" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
 						<option value="">กรุณาเลือก..</option>
 					</select>
@@ -54,7 +58,11 @@
 					</select>
 			  	</div>
 				<div class="form-group">
+<<<<<<< HEAD
 				    <label for="exampleInputName2">&nbsp; ปีงบประมาณ : </label>
+=======
+				    <label for="exampleInputName2">&nbsp; ปี : </label>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearTo" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
 						<option value="">กรุณาเลือก..</option>
 					</select>
@@ -148,6 +156,7 @@
 		</div>
 		<div class="row" style="">
 			<div class="col-lg-6" style="padding: 20px; border:solid 1px #000;">
+<<<<<<< HEAD
 				จำนวนโคที่รับบริการ &nbsp; {{(SummaryData.SummaryCurrentCow) | number:4}}
 				<br>
 				รายได้จากค่าบริการ &nbsp; {{(SummaryData.SummaryCurrentService) | number:4}}
@@ -156,6 +165,16 @@
 				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{(SummaryData.SummaryCowPercentage) | number:4}} %
 				<br>
 				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{(SummaryData.SummaryServicePercentage) | number:4}} %
+=======
+				จำนวนโคที่รับบริการ &nbsp; {{numberFormat(SummaryData.SummaryCurrentCow)}}
+				<br>
+				รายได้จากค่าบริการ &nbsp; {{numberFormatComma(SummaryData.SummaryCurrentService)}}
+			</div>
+			<div class="col-lg-6" style="padding: 20px; border:solid 1px #000;">
+				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{numberFormatComma(SummaryData.SummaryCowPercentage)}} %
+				<br>
+				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{numberFormatComma(SummaryData.SummaryServicePercentage)}} %
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 			</div>
 		</div>
 	</div>
@@ -201,6 +220,7 @@
 			<tr ng-repeat="data in List">
 				<td>{{data.RegionName}}</td>
 				<td>{{data.Month}}</td>
+<<<<<<< HEAD
 				<td class="text-right">{{(data.CurrentCowData) | number:4}}</td>
 				<td class="text-right">{{(data.CurrentServiceData) | number:4}}</td>
 				<td class="text-right">{{(data.CurrentCowInsData) | number:4}}</td>
@@ -217,11 +237,33 @@
 				<td class="text-right">{{(data.DiffCowInsDataPercentage) | number:4}}</td>
 				<td class="text-right">{{(data.DiffServiceInsData) | number:4}}</td>
 				<td class="text-right">{{(data.DiffServiceInsDataPercentage) | number:4}}</td>
+=======
+				<td class="text-right">{{numberFormat(data.CurrentCowData)}}</td>
+				<td class="text-right">{{numberFormatComma(data.CurrentServiceData)}}</td>
+				<td class="text-right">{{numberFormat(data.CurrentCowInsData)}}</td>
+				<td class="text-right">{{numberFormatComma(data.CurrentServiceInsData)}}</td>
+				<td class="text-right">{{numberFormat(data.BeforeCowData)}}</td>
+				<td class="text-right">{{numberFormatComma(data.BeforeServiceData)}}</td>
+				<td class="text-right">{{numberFormat(data.BeforeCowInsData)}}</td>
+				<td class="text-right">{{numberFormatComma(data.BeforeServiceInsData)}}</td>
+				<td class="text-right">{{numberFormat(data.DiffCowData)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffCowDataPercentage)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffServiceData)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffServiceDataPercentage)}}</td>
+				<td class="text-right">{{numberFormat(data.DiffCowInsData)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffCowInsDataPercentage)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffServiceInsData)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffServiceInsDataPercentage)}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				<td>{{data.CreateDate}}</td>
 				<td>{{data.ApproveDate}}</td>
 				<td>{{data.Status}}</td>
 				<td>
+<<<<<<< HEAD
 					<button class="btn btn-success" ng-click="viewDetail(data.RegionName, data.Description)">
+=======
+					<button class="btn btn-success" ng-click="viewDetail(data.Description)">
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 						<span class="glyphicon glyphicon-zoom-in"></span> 
 						รายละเอียด
 					</button>
@@ -270,6 +312,7 @@
 			<tr ng-repeat="data in List">
 				<td>{{data.RegionName}}</td>
 				<td>{{data.Quarter}}</td>
+<<<<<<< HEAD
 				<td>{{(data.CurrentCowData) | number:4}}</td>
 				<td>{{(data.CurrentServiceData) | number:4}}</td>
 				<td>{{(data.BeforeCowData) | number:4}}</td>
@@ -278,11 +321,25 @@
 				<td>{{(data.DiffCowDataPercentage) | number:4}}</td>
 				<td>{{(data.DiffServiceData) | number:4}}</td>
 				<td>{{(data.DiffServiceDataPercentage) | number:4}}</td>
+=======
+				<td>{{numberFormat(data.CurrentCowData)}}</td>
+				<td>{{numberFormatComma(data.CurrentServiceData)}}</td>
+				<td>{{numberFormat(data.BeforeCowData)}}</td>
+				<td>{{numberFormatComma(data.BeforeServiceData)}}</td>
+				<td>{{numberFormat(data.DiffCowData)}}</td>
+				<td>{{numberFormatComma(data.DiffCowDataPercentage)}}</td>
+				<td>{{numberFormatComma(data.DiffServiceData)}}</td>
+				<td>{{numberFormatComma(data.DiffServiceDataPercentage)}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				<td>{{data.CreateDate}}</td>
 				<td>{{data.ApproveDate}}</td>
 				<td>{{data.Status}}</td>
 				<td>
+<<<<<<< HEAD
 					<button class="btn btn-success" ng-click="viewDetail(data.RegionName, data.Description)">
+=======
+					<button class="btn btn-success" ng-click="viewDetail(data.Description)">
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 						<span class="glyphicon glyphicon-zoom-in"></span> 
 						รายละเอียด
 					</button>
@@ -322,17 +379,30 @@
 			<tr ng-repeat="data in List">
 				<td>{{data.RegionName}}</td>
 				<td>{{data.Year}}</td>
+<<<<<<< HEAD
 				<td>{{(data.CurrentCowData) | number:4}}</td>
 				<td>{{(data.CurrentServiceData) | number:4}}</td>
 				<td>{{(data.DiffCowData) | number:4}}</td>
 				<td>{{(data.DiffCowDataPercentage) | number:4}}</td>
 				<td>{{(data.DiffServiceData) | number:4}}</td>
 				<td>{{(data.DiffServiceDataPercentage) | number:4}}</td>
+=======
+				<td>{{numberFormat(data.CurrentCowData)}}</td>
+				<td>{{numberFormatComma(data.CurrentServiceData)}}</td>
+				<td>{{numberFormat(data.DiffCowData)}}</td>
+				<td>{{numberFormatComma(data.DiffCowDataPercentage)}}</td>
+				<td>{{numberFormatComma(data.DiffServiceData)}}</td>
+				<td>{{numberFormatComma(data.DiffServiceDataPercentage)}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				<td>{{data.CreateDate}}</td>
 				<td>{{data.ApproveDate}}</td>
 				<td>{{data.Status}}</td>
 				<td>
+<<<<<<< HEAD
 					<button class="btn btn-success" ng-click="viewDetail(data.RegionName, data.Description)">
+=======
+					<button class="btn btn-success" ng-click="viewDetail(data.Description)">
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 						<span class="glyphicon glyphicon-zoom-in"></span> 
 						รายละเอียด
 					</button>
@@ -343,10 +413,15 @@
 </div>
 
 <div class="col-lg-12 table-responsive" ng-show="ViewType == 'DETAIL'">
+<<<<<<< HEAD
 	<div class="page-header text-center"><h3>{{ RegionName }}</h3></div>
 	<table class="table table-bordered table-striped">
 		<caption class="caption-bg">
 
+=======
+	<table class="table table-bordered table-striped">
+		<caption class="caption-bg">
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 			<!--<a class="pull-right" style="padding-right: 20px;" href="../files/files/download/Export-veretinary.xlsx" target="_self" download="Export-สัตว์แพทย์.xlsx"><img src="../files/img/excel.png" style="height: 40px;"></a>-->
 			<a class="pull-right" style="padding-right: 20px;" ng-click="exportReport(DetailList, CooperativeList)"><img src="../files/img/excel.png" style="height: 40px;"></a>
 		</caption>
@@ -365,15 +440,25 @@
 		</thead>
 		<tbody ng-repeat="data in DetailList">
 			<tr style="background-color: {{data.BGColor}}; padding: 5px;">
+<<<<<<< HEAD
 				<td colspan="{{DetailList.length + 4}}">{{data.DairyFarmingName}}</td>
+=======
+				<td colspan="30">{{data.DairyFarmingName}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 			</tr>
 			<tr ng-repeat="sub_data in data.Data">
 				<td>{{sub_data.ItemName}}</td>
 				<td>{{sub_data.Unit}}</td>
 				<td ng-repeat="item in sub_data.Dataset" style="text-align: center; vertical-align: middle;">
+<<<<<<< HEAD
 					{{(item.Amount) | number:4}}
 				</td>
 				<td>{{(sub_data.Summary) | number:4}}</td>
+=======
+					{{numberFormatComma(item.Amount)}}
+				</td>
+				<td>{{numberFormatComma(sub_data.Summary)}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				
 			</tr>
 		</tbody>
@@ -381,7 +466,10 @@
 </div>
 
 <div class="col-lg-12 table-responsive" ng-show="ViewType == 'DETAIL2'">
+<<<<<<< HEAD
 	<div class="page-header text-center"><h3>{{ RegionName }}</h3></div>
+=======
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 	<table class="table table-bordered table-striped">
 		<caption>
 			
@@ -407,9 +495,15 @@
 				<td>{{sub_data.ItemName}}</td>
 				<td>{{sub_data.Unit}}</td>
 				<td ng-repeat="item in sub_data.Dataset">
+<<<<<<< HEAD
 					{{(item.Amount) | number:4}}
 				</td>
 				<td>{{(sub_data.Summary) | number:4}}</td>
+=======
+					{{numberFormatComma(item.Amount)}}
+				</td>
+				<td>{{numberFormatComma(sub_data.Summary)}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				
 			</tr>
 		</tbody>

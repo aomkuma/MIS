@@ -173,7 +173,11 @@ angular.module('e-homework').controller('MainCBController', function($scope, $co
         if(num == null){
             return '';
         }
+<<<<<<< HEAD
         return num.toFixed(4).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+=======
+        return num.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
     }
 
     $scope.Header = [];

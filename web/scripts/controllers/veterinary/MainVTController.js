@@ -181,7 +181,11 @@ angular.module('e-homework').controller('MainVTController', function($scope, $co
         if(num == null){
             return '';
         }
+<<<<<<< HEAD
         return num.toFixed(4).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+=======
+        return num.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
     }
 
     $scope.viewDetail2 = function(cooperative_id, description){
@@ -620,8 +624,12 @@ angular.module('e-homework').controller('MainVTController', function($scope, $co
         $scope.loadListSubDetail('veterinary/list/subdetail', cooperative_id, description);
     }
 
+<<<<<<< HEAD
     $scope.viewDetail = function(region, description){
         $scope.RegionName = region;
+=======
+    $scope.viewDetail = function(description){
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
         $scope.ViewType = 'DETAIL';
         $scope.description = description;
         $scope.loadListDetail('veterinary/list/detail', description);
@@ -644,9 +652,13 @@ angular.module('e-homework').controller('MainVTController', function($scope, $co
         console.log(DetailList, CooperativeList, $scope.data_description);
         // return;
         IndexOverlayFactory.overlayHide();
+<<<<<<< HEAD
         $scope.condition['region_name'] = $scope.getRegionName($scope.data_description.region_id);
         var params = {
 
+=======
+        var params = {
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
             'DetailList' : DetailList
             , 'CooperativeList' : CooperativeList
             , 'data_description' : $scope.data_description

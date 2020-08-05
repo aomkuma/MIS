@@ -155,7 +155,11 @@
 				มูลค่า (ต่อปี)
 			</div>
 			<div class="col-lg-6 col-md-6 col-sm-10 col-xs-10">
+<<<<<<< HEAD
 				<input type="number" class="form-control" ng-model="Data.price_value">
+=======
+				<input type="number" class="form-control" ng-model="Data.price_value" required="required">
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 			</div>
 			<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
 				บาท
@@ -163,7 +167,11 @@
 		</div>
 		<div class="row form-group">
 			<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 col-lg-offset-2 col-md-offset-2">
+<<<<<<< HEAD
 				<button class="btn btn-info" ng-click="avgData(Data)" ng-disabled="Data.amount == null">
+=======
+				<button class="btn btn-info" ng-click="avgData(Data)" ng-disabled="Data.amount == null || Data.price_value == null">
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 					กำหนดรายเดือน
 				</button>
 			</div>
@@ -190,6 +198,7 @@
 					<span class="pull-right">{{getMonthYearText(data.avg_date)}}</span>
 				</div>
 				<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+<<<<<<< HEAD
 					<input type="number" class="form-control" ng-model="data.amount" required="required" ng-keyup="reCalcAmount()" ><!-- ng-focus="data.amount == 0? data.amount = null: data.amount" ng-blur="data.amount == 0? data.amount = null: data.amount"-->
 				</div>
 				<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" ng-show="Data.menu_type == 'ข้อมูลการขาย'">
@@ -197,6 +206,15 @@
 				</div>
 				<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 					<input type="number" class="form-control" ng-model="data.price_value" required="required" ng-keyup="reCalcPrice()" > <!-- ng-focus="data.price_value == 0? data.price_value = null: data.price_value" ng-blur="data.price_value == 0? data.price_value = null: data.price_value" -->
+=======
+					<input type="number" class="form-control" ng-model="data.amount" required="required" ng-keyup="reCalcAmount()" ng-focus="data.amount == 0? data.amount = null: data.amount" ng-blur="data.amount == 0? data.amount = null: data.amount">
+				</div>
+				<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" ng-show="Data.menu_type == 'ข้อมูลการขาย'">
+					<input type="number" class="form-control" ng-model="data.addon_amount" required="required" ng-keyup="reCalcAddonAmount()" ng-focus="data.addon_amount == 0? data.addon_amount = null: data.addon_amount" ng-blur="data.addon_amount == 0? data.addon_amount = null: data.addon_amount">
+				</div>
+				<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+					<input type="number" class="form-control" ng-model="data.price_value" required="required" ng-keyup="reCalcPrice()" ng-focus="data.price_value == 0? data.price_value = null: data.price_value" ng-blur="data.price_value == 0? data.price_value = null: data.price_value">
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				</div>
 			</div>
 			<div class="row form-group">

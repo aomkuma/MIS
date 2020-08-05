@@ -10,6 +10,7 @@ angular.module('e-homework').controller('HomeController', function($scope, $cook
        window.location.replace('#/guest/logon');
     }
 
+<<<<<<< HEAD
     $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));   
 
     if($scope.$parent.Menu == undefined || $scope.$parent.Menu == null || $scope.$parent.Menu.length == 0){
@@ -20,6 +21,9 @@ angular.module('e-homework').controller('HomeController', function($scope, $cook
             return;
         });
     }
+=======
+    $scope.$parent.Menu = angular.fromJson(sessionStorage.getItem('menu_session'));    
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 
     var ctx = null;
     var myChart = null;

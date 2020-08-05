@@ -45,7 +45,11 @@
 					</select>
 			  	</div>
 				<!--<div class="form-group">
+<<<<<<< HEAD
 				    <label for="exampleInputName2">&nbsp; ปีงบประมาณ : </label>
+=======
+				    <label for="exampleInputName2">&nbsp; ปี : </label>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearFrom" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
 						<option value="">กรุณาเลือก..</option>
 					</select>
@@ -60,7 +64,11 @@
 					</select>
 			  	</div>
 				<div class="form-group">
+<<<<<<< HEAD
 				    <label for="exampleInputName2">&nbsp; ปีงบประมาณ : </label>
+=======
+				    <label for="exampleInputName2">&nbsp; ปี : </label>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearTo" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
 						<option value="">กรุณาเลือก..</option>
 					</select>
@@ -165,9 +173,15 @@
 		</div>
 		<div class="row" style="">
 			<div class="col-lg-6" style="padding: 20px; border:solid 1px #000;">
+<<<<<<< HEAD
 				จำนวนนักท่องเที่ยว &nbsp; {{(SummaryData.SummaryCurrentTravelAmount) | number:4}}
 				<br>
 				รายได้จากค่าบริการ &nbsp; {{(SummaryData.SummaryCurrentTravelIncome) | number:4}}
+=======
+				จำนวนนักท่องเที่ยว &nbsp; {{numberFormat(SummaryData.SummaryCurrentTravelAmount)}}
+				<br>
+				รายได้จากค่าบริการ &nbsp; {{numberFormatComma(SummaryData.SummaryCurrentTravelIncome)}}
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 			</div>
 			<div class="col-lg-6" style="padding: 20px; border:solid 1px #000;">
 				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{numberFormatComma(SummaryData.SummaryTravelAmountPercentage)}} %
@@ -217,6 +231,7 @@
 			<tr ng-repeat="data in List">
 				<td>{{data.RegionName}}</td>
 				<td>{{data.Month}}</td>
+<<<<<<< HEAD
 				<td class="text-right">{{(data.CurrentAmount) | number:4}}</td>
 				<td class="text-right">{{(data.CurrentBaht) | number:4}}</td>
 				<td class="text-right">{{(data.BeforeAmount) | number:4}}</td>
@@ -225,6 +240,16 @@
 				<td class="text-right">{{(data.DiffAmountPercentage) | number:4}}</td>
 				<td class="text-right">{{(data.DiffBaht) | number:4}}</td>
 				<td class="text-right">{{(data.DiffBahtPercentage) | number:4}}</td>
+=======
+				<td class="text-right">{{numberFormat(data.CurrentAmount)}}</td>
+				<td class="text-right">{{numberFormatComma(data.CurrentBaht)}}</td>
+				<td class="text-right">{{numberFormat(data.BeforeAmount)}}</td>
+				<td class="text-right">{{numberFormatComma(data.BeforeBaht)}}</td>
+				<td class="text-right">{{numberFormat(data.DiffAmount)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffAmountPercentage)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffBaht)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffBahtPercentage)}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				<td>{{data.CreateDate}}</td>
 				<td>{{data.ApproveDate}}</td>
 				<td>{{data.Status}}</td>
@@ -243,22 +268,50 @@
 		<thead style="background-color: #BD1212; color: #FFF;">
 			<tr>
 				<th rowspan="2" style="text-align: center; vertical-align: middle;">วันที่</th>
+<<<<<<< HEAD
 				<th colspan="4" style="text-align: center; vertical-align: middle;" ng-repeat="data in DetailLabel">
+=======
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">หน่วยงานที่เข้าชม</th>
+				<th rowspan="2" style="text-align: center; vertical-align: middle;">ส่วนลด</th>
+				<th colspan="{{data.unit.length}}" style="text-align: center; vertical-align: middle;" ng-repeat="data in Item">
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 					{{data.label}}
 				</th>
 			</tr>
 			<tr>
+<<<<<<< HEAD
 				<th style="text-align: center; vertical-align: middle;" ng-repeat="data in DetailLabel2">
+=======
+				<th style="text-align: center; vertical-align: middle;" ng-repeat="data in ItemUnit">
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 					{{data.label}}
 				</th>
 			</tr>
 		</thead>
 		<tbody >
+<<<<<<< HEAD
 			<tr ng-repeat="data in DetailList">
 				<td ng-repeat="det in data.detail">{{det.label}}</td>
 			</tr>
 		</tbody>
 		
+=======
+			<tr ng-repeat="data in DetailList"">
+				<td>{{data.TravelDate}}</td>
+				<td>{{data.Organization}}</td>
+				<td>{{data.Discount}}</td>
+				<td ng-repeat="item in data.ValueList" style="text-align: center; vertical-align: middle;">
+					{{item.values}}
+				</td>
+			</tr>
+		</tbody>
+		<tr>
+			<td>รวม</td>
+			<td ng-repeat="data in DetailSummary" style="text-align: center; vertical-align: middle;">
+				{{data.values}}
+			</td>
+		</tr>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 	</table>
 </div>
 <div class="page-header">

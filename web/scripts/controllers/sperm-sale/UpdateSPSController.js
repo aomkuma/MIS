@@ -137,7 +137,11 @@ angular.module('e-homework').controller('UpdateSPSController', function($scope, 
     }
 
     $scope.save = function(Sperm, SpermDetailList){
+<<<<<<< HEAD
         $scope.Saving = true;
+=======
+        
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
         var params = {'Data' : Sperm, 'Detail' : SpermDetailList};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('sperm-sale/update', params).then(function(result){
@@ -145,7 +149,11 @@ angular.module('e-homework').controller('UpdateSPSController', function($scope, 
                 //alert('save success');
                 // if($scope.ID !== undefined && $scope.ID !== null){
                     alert('บันทึกสำเร็จ');
+<<<<<<< HEAD
                     window.location.href = '#/sperm-sale';///update/' + result.data.DATA.id;
+=======
+                    window.location.href = '#/sperm-sale/update/' + result.data.DATA.id;
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
                 // }else{
                 //     location.reload();    
                 // }

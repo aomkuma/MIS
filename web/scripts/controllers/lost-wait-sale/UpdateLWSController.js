@@ -152,7 +152,11 @@ angular.module('e-homework').controller('UpdateLWSController', function($scope, 
     }
 
     $scope.save = function(Data, DataDetailList){
+<<<<<<< HEAD
         $scope.Saving = true;
+=======
+        
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
         var params = {'Data' : Data, 'Detail' : DataDetailList};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('lost-wait-sale/update', params).then(function(result){

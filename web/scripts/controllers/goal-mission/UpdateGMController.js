@@ -113,7 +113,11 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
             alert('ผลรวมของจำนวนเฉลี่ยไม่เท่ากับจำนวนเป้ารายปี กรุณาตรวจสอบข้อมูล');
             return false;
         }
+<<<<<<< HEAD
         if($scope.Data.price_value != null && $scope.totalPriceValue != $scope.Data.price_value){
+=======
+        if($scope.totalPriceValue != $scope.Data.price_value){
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
             alert('ผลรวมของมูลค่าเฉลี่ยไม่เท่ากับมูลค่าเป้ารายปี กรุณาตรวจสอบข้อมูล');
             return false;
         }
@@ -366,9 +370,15 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
         , 'years':curDate.getFullYear()
         , 'region_id':$scope.PersonRegion[0].RegionID
         , 'goal_id':null
+<<<<<<< HEAD
         , 'amount':0
         , 'unit':null
         , 'price_value':0
+=======
+        , 'amount':null
+        , 'unit':null
+        , 'price_value':null
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
         , 'editable':'Y'
         , 'actives':'Y'
         , 'create_date':''
@@ -381,13 +391,22 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
     $scope.historyList = [];
 
     $scope.ShowMenuTypeList = [];
+<<<<<<< HEAD
     $scope.MenuTypeList = [{'type':'DBI', 'value':'บริการสัตวแพทย์และผสมเทียม', 'name' : 'บริการสัตวแพทย์และผสมเทียม'}
+=======
+    $scope.MenuTypeList = [{'type':'DBI', 'value':'บริการสัตวแพทย์', 'name' : 'บริการสัตวแพทย์และผสมเทียม'}
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
                             // ,{'type':'DBI', 'value':'ผสมเทียม', 'name' : 'ผสมเทียม'}
                             ,{'type':'DBI', 'value':'แร่ธาตุ พรีมิกซ์ และอาหาร', 'name' : 'แร่ธาตุ พรีมิกซ์ และอาหาร'}
                             ,{'type':'DBI', 'value':'ผลิตน้ำเชื้อแช่แข็ง', 'name' : 'ผลิตน้ำเชื้อแช่แข็ง'}
                             ,{'type':'DBI', 'value':'จำหน่ายน้ำเชื้อแช่แข็ง', 'name' : 'จำหน่ายน้ำเชื้อแช่แข็ง'}
+<<<<<<< HEAD
                             ,{'type':'DBI', 'value':'วัสดุผสมเทียมและเวชภัณฑ์ยาสัตว์', 'name' : 'วัสดุผสมเทียมและเวชภัณฑ์ยาสัตว์'}
                             ,{'type':'DBI', 'value':'ปัจจัยการเลี้ยงดูโค (เคมีภัณฑ์)', 'name' : 'ปัจจัยการเลี้ยงดูโค (เคมีภัณฑ์)'}
+=======
+                            ,{'type':'DBI', 'value':'วัสดุผสมเทียมและอื่นๆ', 'name' : 'วัสดุผสมเทียมและอื่นๆ'}
+                            ,{'type':'DBI', 'value':'ปัจจัยการเลี้ยงโค', 'name' : 'ปัจจัยการเลี้ยงโค'}
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
                             ,{'type':'DBI', 'value':'ฝึกอบรม', 'name' : 'ฝึกอบรม'}
                             ,{'type':'DBI', 'value':'ท่องเที่ยว', 'name' : 'ท่องเที่ยว'}
                             ,{'type':'DBI', 'value':'สหกรณ์และปริมาณน้ำนม', 'name' : 'สหกรณ์และปริมาณน้ำนม'}
@@ -395,8 +414,13 @@ angular.module('e-homework').controller('UpdateGMController', function($scope, $
                             ,{'type':'DBI', 'value':'ข้อมูลฝูงโคพ่อพันธุ์', 'name' : 'ข้อมูลฝูงโคพ่อพันธุ์'}
                             ,{'type':'II', 'value':'ข้อมูลการผลิต', 'name' : 'ข้อมูลการผลิต'}
                             ,{'type':'II', 'value':'ข้อมูลการขาย', 'name' : 'ข้อมูลการขาย'}
+<<<<<<< HEAD
                             ,{'type':'II', 'value':'ข้อมูลรับซื้อน้ำนม', 'name' : 'รับซื้อน้ำนมดิบ (ERP)'}
                             ,{'type':'II', 'value':'ข้อมูลจำหน่ายน้ำนม', 'name' : 'จำหน่ายน้ำนมดิบ (ERP)'}
+=======
+                            ,{'type':'II', 'value':'ข้อมูลรับซื้อน้ำนม', 'name' : 'ข้อมูลรับซื้อน้ำนม'}
+                            ,{'type':'II', 'value':'ข้อมูลจำหน่ายน้ำนม', 'name' : 'ข้อมูลจำหน่ายน้ำนม'}
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
                             ,{'type':'II', 'value':'การสูญเสียในกระบวนการ', 'name' : 'การสูญเสียในกระบวนการ'}
                             ,{'type':'II', 'value':'การสูญเสียหลังกระบวนการ', 'name' : 'การสูญเสียหลังกระบวนการ'}
                             ,{'type':'II', 'value':'การสูญเสียรอจำหน่าย', 'name' : 'การสูญเสียรอจำหน่าย'}

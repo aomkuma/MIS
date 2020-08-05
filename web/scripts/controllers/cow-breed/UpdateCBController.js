@@ -75,7 +75,11 @@ angular.module('e-homework').controller('UpdateCBController', function($scope, $
     }
 
     $scope.loadMasterGoalList = function(){
+<<<<<<< HEAD
         var params = {'actives':'Y', 'menu_type' : 'ปัจจัยการเลี้ยงดูโค (เคมีภัณฑ์)'};
+=======
+        var params = {'actives':'Y', 'menu_type' : 'ปัจจัยการเลี้ยงโค'};
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('master-goal/list', params).then(function(result){
             if(result.data.STATUS == 'OK'){
@@ -153,7 +157,11 @@ angular.module('e-homework').controller('UpdateCBController', function($scope, $
                 //alert('save success');
                 // if($scope.ID !== undefined && $scope.ID !== null){
                     alert('บันทึกสำเร็จ');
+<<<<<<< HEAD
                     window.location.href = '#/cow-breed';///update/' + result.data.DATA.id;
+=======
+                    window.location.href = '#/cow-breed/update/' + result.data.DATA.id;
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
                 // }else{
                 //     location.reload();    
                 // }

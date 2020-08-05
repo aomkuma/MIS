@@ -219,7 +219,11 @@ angular.module('e-homework').controller('UpdatePFController', function($scope, $
     }
 
     $scope.save = function(Data, DataDetailList){
+<<<<<<< HEAD
         $scope.Saving = true;
+=======
+        
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
         var params = {'Data' : Data, 'Detail' : DataDetailList};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('production-info/update', params).then(function(result){
@@ -227,7 +231,11 @@ angular.module('e-homework').controller('UpdatePFController', function($scope, $
                 //alert('save success');
                 // if($scope.ID !== undefined && $scope.ID !== null){
                     alert('บันทึกสำเร็จ');
+<<<<<<< HEAD
                     window.location.href = '#/production-info';///update/' + result.data.DATA.id;
+=======
+                    window.location.href = '#/production-info/update/' + result.data.DATA.id;
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
                 // }else{
                 //     location.reload();    
                 // }

@@ -75,7 +75,11 @@ angular.module('e-homework').controller('UpdateMTController', function($scope, $
     }
 
     $scope.loadMasterGoalList = function(){
+<<<<<<< HEAD
         var params = {'actives':'Y', 'menu_type' : 'วัสดุผสมเทียมและเวชภัณฑ์ยาสัตว์'};
+=======
+        var params = {'actives':'Y', 'menu_type' : 'วัสดุผสมเทียมและอื่นๆ'};
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('master-goal/list', params).then(function(result){
             if(result.data.STATUS == 'OK'){
@@ -146,7 +150,11 @@ angular.module('e-homework').controller('UpdateMTController', function($scope, $
     }
 
     $scope.save = function(Sperm, SpermDetailList){
+<<<<<<< HEAD
         $scope.Saving = true;
+=======
+        
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
         var params = {'Data' : Sperm, 'Detail' : SpermDetailList};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('material/update', params).then(function(result){
@@ -154,7 +162,11 @@ angular.module('e-homework').controller('UpdateMTController', function($scope, $
                 //alert('save success');
                 // if($scope.ID !== undefined && $scope.ID !== null){
                     alert('บันทึกสำเร็จ');
+<<<<<<< HEAD
                     window.location.href = '#/material';///update/' + result.data.DATA.id;
+=======
+                    window.location.href = '#/material/update/' + result.data.DATA.id;
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
                 // }else{
                 //     location.reload();    
                 // }

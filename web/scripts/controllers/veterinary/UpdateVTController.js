@@ -137,7 +137,11 @@ angular.module('e-homework').controller('UpdateVTController', function($scope, $
     }
 
     $scope.save = function(Veterinary, VeterinaryDetailList){
+<<<<<<< HEAD
         $scope.Saving = true;
+=======
+        
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
         var params = {'Veterinary' : Veterinary, 'VeterinaryDetailList' : VeterinaryDetailList};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('veterinary/update', params).then(function(result){
@@ -145,7 +149,11 @@ angular.module('e-homework').controller('UpdateVTController', function($scope, $
                 //alert('save success');
                 // if($scope.ID !== undefined && $scope.ID !== null){
                     alert('บันทึกสำเร็จ');
+<<<<<<< HEAD
                     window.location.href = '#/veterinary';///update/' + result.data.DATA.id;
+=======
+                    window.location.href = '#/veterinary/update/' + result.data.DATA.id;
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
                 // }else{
                 //     location.reload();    
                 // }

@@ -89,8 +89,12 @@ angular.module('e-homework').controller('UpdateCGController', function($scope, $
         
         
         var params = {
+<<<<<<< HEAD
             'cow_group_name' :$scope.Sperm. cow_group_name
             ,'cooperative_id' : $scope.Sperm.cooperative_id
+=======
+            'cooperative_id' : $scope.Sperm.cooperative_id
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
             ,'months' : $scope.Sperm.months
             ,'years' : $scope.Sperm.years
         };
@@ -98,8 +102,12 @@ angular.module('e-homework').controller('UpdateCGController', function($scope, $
             params = {'id':id};
         }else{
             params = {
+<<<<<<< HEAD
                 'cow_group_name' :$scope.Sperm. cow_group_name
                 ,'cooperative_id' : $scope.Sperm.cooperative_id
+=======
+                'cooperative_id' : $scope.Sperm.cooperative_id
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
                 ,'months' : $scope.Sperm.months
                 ,'years' : $scope.Sperm.years
             };
@@ -150,7 +158,11 @@ angular.module('e-homework').controller('UpdateCGController', function($scope, $
     }
 
     $scope.save = function(Sperm, SpermDetailList){
+<<<<<<< HEAD
         $scope.Saving = true;
+=======
+        
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
         var params = {'Data' : Sperm, 'Detail' : SpermDetailList};
         IndexOverlayFactory.overlayShow();
         HTTPService.clientRequest('cow-group/update', params).then(function(result){
@@ -158,7 +170,11 @@ angular.module('e-homework').controller('UpdateCGController', function($scope, $
                 //alert('save success');
                 // if($scope.ID !== undefined && $scope.ID !== null){
                     alert('บันทึกสำเร็จ');
+<<<<<<< HEAD
                     window.location.href = '#/cow-group';///update/' + result.data.DATA.id;
+=======
+                    window.location.href = '#/cow-group/update/' + result.data.DATA.id;
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
                 // }else{
                 //     location.reload();    
                 // }
@@ -424,10 +440,18 @@ angular.module('e-homework').controller('UpdateCGController', function($scope, $
     $scope.DairyFarmingList = [];
     $scope.SpermDetailList = [];
     $scope.SpermList = [
+<<<<<<< HEAD
         {'id':1, 'name':'ฝูงโคเพศเมีย (โคทดแทน)'}
         ,{'id':2, 'name':'ฝูงโคฟาร์มพัฒนาการเลี้ยงโคนม (1962)'}
         ,{'id':3, 'name':'ฝูงโคฟาร์ม 3 (โคนมอินทรีย์)'}
         ,{'id':4, 'name':'ฝูงโคเพศผู้'}
+=======
+        {'id':1, 'name':'ฝูงโคต้นงวด'}
+        ,{'id':2, 'name':'โคเพิ่ม'}
+        ,{'id':3, 'name':'โคลด'}
+        ,{'id':4, 'name':'ฝูงโคปลายงวด'}
+        ,{'id':5, 'name':'การจำหน่ายโค'}
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
     ];
     $scope.CowGroupList = [
             {'id':1, 'name':'ฝูงโค 1'}

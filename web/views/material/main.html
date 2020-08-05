@@ -45,7 +45,11 @@
 					</select>
 			  	</div>
 			<!--	<div class="form-group">
+<<<<<<< HEAD
 				    <label for="exampleInputName2">&nbsp; ปีงบประมาณ : </label>
+=======
+				    <label for="exampleInputName2">&nbsp; ปี : </label>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearFrom" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
 						<option value="">กรุณาเลือก..</option>
 					</select>
@@ -60,7 +64,11 @@
 					</select>
 			  	</div>
 				<div class="form-group">
+<<<<<<< HEAD
 				    <label for="exampleInputName2">&nbsp; ปีงบประมาณ : </label>
+=======
+				    <label for="exampleInputName2">&nbsp; ปี : </label>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				    &nbsp; <select name="Year" class="form-control" ng-model="condition.YearTo" ng-options="year.yearText as year.yearValue for year in YearList" required="required">
 						<option value="">กรุณาเลือก..</option>
 					</select>
@@ -153,6 +161,7 @@
 		</div>
 		<div class="row" style="">
 			<div class="col-lg-6" style="padding: 20px; border:solid 1px #000;">
+<<<<<<< HEAD
 				จำนวนโคที่รับบริการ &nbsp; {{(SummaryData.SummaryCurrentMaterialAmount) | number:4}}
 				<br>
 				รายได้จากค่าบริการ &nbsp; {{(SummaryData.SummaryCurrentMaterialIncome | number:4)}}
@@ -161,6 +170,16 @@
 				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{(SummaryData.SummaryMaterialAmountPercentage) | number:4}} %
 				<br>
 				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{(SummaryData.SummaryMaterialIncomePercentage) | number:4}} %
+=======
+				จำนวนโคที่รับบริการ &nbsp; {{numberFormat(SummaryData.SummaryCurrentMaterialAmount)}}
+				<br>
+				รายได้จากค่าบริการ &nbsp; {{numberFormatComma(SummaryData.SummaryCurrentMaterialIncome)}}
+			</div>
+			<div class="col-lg-6" style="padding: 20px; border:solid 1px #000;">
+				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{numberFormatComma(SummaryData.SummaryMaterialAmountPercentage)}} %
+				<br>
+				เปอร์เซ็นต์การเติบโตเมื่อเทียบกับปีก่อนหน้า &nbsp; {{numberFormatComma(SummaryData.SummaryMaterialIncomePercentage)}} %
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 			</div>
 		</div>
 	</div>
@@ -202,6 +221,7 @@
 				<td>{{data.RegionName}}</td>
 				<td>{{data.MaterialName}}</td>
 				<td>{{data.Month}}</td>
+<<<<<<< HEAD
 				<td class="text-right">{{(data.CurrentAmount) | number:4}}</td>
 				<td class="text-right">{{(data.CurrentBaht) | number:4}}</td>
 				<td class="text-right">{{(data.BeforeAmount) | number:4}}</td>
@@ -210,6 +230,16 @@
 				<td class="text-right">{{(data.DiffAmountPercentage) | number:4}}</td>
 				<td class="text-right">{{(data.DiffBaht) | number:4}}</td>
 				<td class="text-right">{(data.DiffBahtPercentage) | number:4}}</td>
+=======
+				<td class="text-right">{{numberFormat(data.CurrentAmount)}}</td>
+				<td class="text-right">{{numberFormatComma(data.CurrentBaht)}}</td>
+				<td class="text-right">{{numberFormat(data.BeforeAmount)}}</td>
+				<td class="text-right">{{numberFormatComma(data.BeforeBaht)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffAmount)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffAmountPercentage)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffBaht)}}</td>
+				<td class="text-right">{{numberFormatComma(data.DiffBahtPercentage)}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				<td>{{data.CreateDate}}</td>
 				<td>{{data.ApproveDate}}</td>
 				<td>{{data.Status}}</td>
@@ -255,6 +285,7 @@
 				<td>{{data.RegionName}}</td>
 				<td>{{data.MaterialName}}</td>
 				<td>{{data.Quarter}}</td>
+<<<<<<< HEAD
 				<td>{{(data.CurrentAmount) | number:4}}</td>
 				<td>{{(data.CurrentBaht) | number:4}}</td>
 				<td>{{(data.BeforeAmount) | number:4}}</td>
@@ -263,6 +294,16 @@
 				<td>{{(data.DiffAmountPercentage) | number:4}}</td>
 				<td>{{(data.DiffBaht) | number:4}}</td>
 				<td>{{(data.DiffBahtPercentage) | number:4}}</td>
+=======
+				<td>{{numberFormat(data.CurrentAmount)}}</td>
+				<td>{{numberFormatComma(data.CurrentBaht)}}</td>
+				<td>{{numberFormat(data.BeforeAmount)}}</td>
+				<td>{{numberFormatComma(data.BeforeBaht)}}</td>
+				<td>{{numberFormatComma(data.DiffAmount)}}</td>
+				<td>{{numberFormatComma(data.DiffAmountPercentage)}}</td>
+				<td>{{numberFormatComma(data.DiffBaht)}}</td>
+				<td>{{numberFormatComma(data.DiffBahtPercentage)}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				<td>
 					<a class="pull-right" style="padding-right: 20px;" ng-click="exportReport(data,condition)"><img src="../files/img/excel.png" style="height: 40px;"></a>
 				</td>
@@ -301,12 +342,21 @@
 				<td>{{data.RegionName}}</td>
 				<td>{{data.MaterialName}}</td>
 				<td>{{data.Year}}</td>
+<<<<<<< HEAD
 				<td>{{(data.CurrentAmount) | number:4}}</td>
 				<td>{{(data.CurrentBaht) | number:4}}</td>
 				<td>{{(data.DiffAmount) | number:4}}</td>
 				<td>{{(data.DiffAmountPercentage) | number:4}}</td>
 				<td>{{(data.DiffBaht) | number:4}}</td>
 				<td>{{(data.DiffBahtPercentage) | number:4}}</td>
+=======
+				<td>{{numberFormat(data.CurrentAmount)}}</td>
+				<td>{{numberFormatComma(data.CurrentBaht)}}</td>
+				<td>{{numberFormatComma(data.DiffAmount)}}</td>
+				<td>{{numberFormatComma(data.DiffAmountPercentage)}}</td>
+				<td>{{numberFormatComma(data.DiffBaht)}}</td>
+				<td>{{numberFormatComma(data.DiffBahtPercentage)}}</td>
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				<td>
 					<a class="pull-right" style="padding-right: 20px;" ng-click="exportReport(data,condition)"><img src="../files/img/excel.png" style="height: 40px;"></a>
 				</td>
@@ -340,14 +390,22 @@
 			<tr ng-repeat="data in DetailList"">
 				<td>{{data.RegionName}}</td>
 				<td ng-repeat="item in data.ValueList" style="text-align: center; vertical-align: middle;">
+<<<<<<< HEAD
 					{{item.values | number:4}}
+=======
+					{{item.values}}
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 				</td>
 			</tr>
 		</tbody>
 		<tr>
 			<td>รวม</td>
 			<td ng-repeat="data in DetailSummary" style="text-align: center; vertical-align: middle;">
+<<<<<<< HEAD
 				{{data.values | number:4}}
+=======
+				{{data.values}}
+>>>>>>> 9da7afdec46f86177916355623d6f21ea74d641a
 			</td>
 		</tr>
 	</table>
